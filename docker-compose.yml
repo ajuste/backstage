@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+
+  db:
+    environment:
+      POSTGRES_USER: backstage
+      POSTGRES_DB: backstage
+      PGDATA: /var/lib/postgresql/data
+      POSTGRES_HOST_AUTH_METHOD: trust
+    image: postgres:14
+    command: ['postgres']
+    restart: always
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  local:
+    image: backstage:latest
+    command: node packages/backend --config app-config.yaml --config app-config.local.yaml
+    depends_on:
+      - db
+    ports:
+      - '7007:7007'
+      - '3000:3000'
+    stdin_open: true
+    tty: true
+    # environment:
+    #   DB_HOST: db
+    #   DB_PORT: 5432
+    #   DB_USER: backstage
+    restart: always
+    # volumes:
+    #   - ./packages/app:/app
+
+volumes:
+  db_data:
+    driver: local

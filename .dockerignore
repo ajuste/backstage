@@ -1,0 +1,7 @@
+.git
+node_modules
+node_modules/
+/node_modules
+packages/*/src
+packages/*/node_modules
+plugins
