@@ -50,6 +50,7 @@ group "backend" {
 {{ with secret "secret/${app}/github" }}
 AUTH_GITHUB_CLIENT_ID="{{ .Data.client_id }}"
 AUTH_GITHUB_CLIENT_SECRET="{{ .Data.client_secret }}"
+GITHUB_ACCESS_TOKEN="{{ .Data.access_token }}"
 {{ end }}
 {{ range ls "${app}/backend/env" }}
 {{ .Key|toUpper }}="{{ .Value }}"{{ end }}

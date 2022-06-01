@@ -6,6 +6,11 @@ auth:
         clientId: ${AUTH_GITHUB_CLIENT_ID}
         clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
 
+integrations:
+  github:
+    - host: github.com
+      token: ${GITHUB_ACCESS_TOKEN}
+
 catalog:
   locations:
 

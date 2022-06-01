@@ -16,7 +16,9 @@ safely added under app-config.local.yaml since its ignored by git.
 
 * Use app-config.local-skeleton.yaml to initialize content of app-config.local.yaml
 * Register a backstage application under your github account
-  following (this)[https://backstage.io/docs/auth/github/provider] instructions.
+  following (these)[https://backstage.io/docs/auth/github/provider] instructions.
+* Create a Personal access token following (these)[="{{ .Data.client_secret }}"] instructions
+  and set it in your app-config.local.yaml replacing GITHUB_ACCESS_TOKEN key.
   **Important**: secrets can only be included **in**
 * Make sure to add a new entry of your user under ./local/users.yaml
   that matches your github username.
