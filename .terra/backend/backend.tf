@@ -98,7 +98,6 @@ data "template_file" "nomad_group" {
     aws_region    = "${var.aws_region}"
     count         = "${lookup(local.container_count, var.env)}"
     database_host = "${lookup(local.database_host, var.env)}"
-    elastic_url   = "${lookup(local.elastic_url, var.env)}"
     ecr_url       = "${var.ecr_url}"
     env           = "${var.env}"
     git_sha       = "${var.git_sha}"
