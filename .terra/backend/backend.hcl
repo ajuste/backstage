@@ -68,16 +68,11 @@ EOH
 
   task "filebeat" {
     driver         = "docker"
-    shutdown_delay = "10s"
-
-    meta {
-      lang = "uwsgi"
-    }
 
     env {
       common_name = "${app}.$${NOMAD_GROUP_NAME}.$${NOMAD_TASK_NAME}"
       index_name  = "${app}-$${NOMAD_GROUP_NAME}"
-      task_log    = "uwsgi"
+      task_log    = "${app}-$${NOMAD_GROUP_NAME}"
     }
 
     config {
