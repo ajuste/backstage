@@ -15,7 +15,7 @@ group "backend" {
       "packages/backend",
       "--config app-config.yaml",
       "--config",
-      "${config_file}"]
+      "${config_file}"
     ]
 
     config {
