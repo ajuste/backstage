@@ -9,17 +9,17 @@ group "backend" {
   task "backend" {
     driver         = "docker"
     shutdown_delay = "10s"
-    command = "node"
-
-    args = [
-      "packages/backend",
-      "--config app-config.yaml",
-      "--config",
-      "${config_file}"
-    ]
 
     config {
       image   = "${ecr_url}/zf/${app}:${git_sha}"
+      command = "node"
+
+      args = [
+        "packages/backend",
+        "--config app-config.yaml",
+        "--config",
+        "${config_file}"
+      ]
     }
 
     resources {
@@ -46,7 +46,7 @@ group "backend" {
     }
 
     template {
-      data = <<EOH
+      data        = <<EOH
 {{ with secret "secret/${app}/github" }}
 AUTH_GITHUB_CLIENT_ID="{{ .Data.client_id }}"
 AUTH_GITHUB_CLIENT_SECRET="{{ .Data.client_secret }}"
@@ -71,7 +71,7 @@ EOH
     shutdown_delay = "10s"
 
     meta {
-      lang  = "uwsgi"
+      lang = "uwsgi"
     }
 
     env {
