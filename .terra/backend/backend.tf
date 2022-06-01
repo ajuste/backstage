@@ -84,7 +84,6 @@ data "terraform_remote_state" "global" {
 resource "consul_keys" "main" {
   datacenter = "aws-${var.aws_region}"
   token      = "${var.consul_token}"
-
 }
 
 //<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>>
