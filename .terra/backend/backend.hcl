@@ -47,6 +47,10 @@ group "backend" {
 
     template {
       data = <<EOH
+{{ with secret "secret/${app}/github" }}
+AUTH_GITHUB_CLIENT_ID="{{ .Data.client_id }}"
+AUTH_GITHUB_CLIENT_SECRET="{{ .Data.client_secret }}"
+{{ end }}
 {{ range ls "${app}/backend/env" }}
 {{ .Key|toUpper }}="{{ .Value }}"{{ end }}
       destination = "$${NOMAD_SECRETS_DIR}/env"

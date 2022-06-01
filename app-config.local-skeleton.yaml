@@ -1,0 +1,20 @@
+auth:
+  environment: development
+  providers:
+    github:
+      development:
+        clientId: ${AUTH_GITHUB_CLIENT_ID}
+        clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
+
+catalog:
+  locations:
+
+    - type: file
+      target: ../../local/user-groups.yaml
+      rules:
+        - allow: [Group]
+
+    - type: file
+      target: ../../local/users.yaml
+      rules:
+        - allow: [User]

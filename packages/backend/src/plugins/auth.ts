@@ -3,7 +3,7 @@ import {
   providers,
   defaultAuthProviderFactories,
 } from '@backstage/plugin-auth-backend';
-import { Router } from 'express';
+import { query, Router } from 'express';
 import { PluginEnvironment } from '../types';
 
 export default async function createPlugin(
@@ -27,9 +27,9 @@ export default async function createPlugin(
       //
       //   https://backstage.io/docs/auth/identity-resolver
       github: providers.github.create({
-        // signIn: {
-        //   resolver: providers.github.resolvers.usernameMatchingUserEntityName(),
-        // },
+        signIn: {
+          resolver: providers.github.resolvers.usernameMatchingUserEntityName(),
+        },
       }),
     },
   });
