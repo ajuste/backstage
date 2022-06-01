@@ -1,5 +1,7 @@
-# backend-build:
-# 	yarn install && yarn tsc && yarn build
+backend-build:
+	yarn install && yarn tsc && yarn build
 
-# image: backend-build
-# 	yarn build-image
+build: backend-build
+
+image: build
+	yarn build-image
