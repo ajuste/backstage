@@ -91,7 +91,7 @@ resource "consul_keys" "main" {
 //<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>>
 
 data "template_file" "nomad_group" {
-  template = "${file("./web-server/web-server.nomad.hcl")}"
+  template = "${file("./backend/backend.nomad.hcl")}"
 
   vars {
     app           = "${var.app}"
