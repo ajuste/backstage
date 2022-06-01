@@ -95,4 +95,5 @@ module "nomad-job" {
   git_sha           = "${var.git_sha}"
   rendered_template = "${data.template_file.nomad_job_spec.rendered}"
   docker_file       = "./packages/backend/Dockerfile"
+  relative_path     = "../"
 }
