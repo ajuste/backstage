@@ -1,16 +1,5 @@
 kind: pipeline
 type: docker
-name: code
-
-steps:
-  - name: build
-    pull: if-not-exists
-    image: node:16
-    commands:
-      - make build
----
-kind: pipeline
-type: docker
 name: terra
 
 steps:
