@@ -3,7 +3,9 @@ FROM node:16-bullseye-slim as builder
 WORKDIR /app
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends build-essential make
+    apt-get install -y --no-install-recommends libsqlite3-dev python3 build-essential procps make && \
+    rm -rf /var/lib/apt/lists/* && \
+    yarn config set python /usr/bin/python3
 
 COPY . .
 RUN make backend-build
@@ -12,7 +14,7 @@ FROM node:16-bullseye-slim
 WORKDIR /app
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends libsqlite3-dev python3 build-essential procps && \
+    apt-get install -y --no-install-recommends libsqlite3-dev python3 build-essential procps make && \
     rm -rf /var/lib/apt/lists/* && \
     yarn config set python /usr/bin/python3
     
