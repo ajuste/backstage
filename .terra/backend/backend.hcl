@@ -3,7 +3,7 @@ group "backend" {
 
   meta {
     group = "$${NOMAD_GROUP_NAME}"
-    lang  = "python"
+    lang  = "typescript"
   }
 
   task "backend" {
@@ -45,12 +45,17 @@ group "backend" {
       }
     }
 
+    vault {
+      policies    = ["${app}"]
+      change_mode = "restart"
+    }
+
     template {
       data        = <<EOH
-{{ with secret "secret/${app}/github" }}
-AUTH_GITHUB_CLIENT_ID="{{ .Data.client_id }}"
-AUTH_GITHUB_CLIENT_SECRET="{{ .Data.client_secret }}"
-GITHUB_ACCESS_TOKEN="{{ .Data.access_token }}"
+{{ with secret "secret/${app}" }}
+AUTH_GITHUB_CLIENT_ID="{{ .Data.github_client_id }}"
+AUTH_GITHUB_CLIENT_SECRET="{{ .Data.github_client_secret }}"
+GITHUB_ACCESS_TOKEN="{{ .Data.github_access_token }}"
 {{ end }}
 {{ range ls "${app}/backend/env" }}
 {{ .Key|toUpper }}="{{ .Value }}"{{ end }}
@@ -58,11 +63,6 @@ EOH
       destination = "$${NOMAD_SECRETS_DIR}/env"
       change_mode = "restart"
       env         = true
-    }
-
-    vault {
-      policies    = ["${app}"]
-      change_mode = "restart"
     }
   }
 
