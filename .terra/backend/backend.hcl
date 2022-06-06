@@ -16,7 +16,8 @@ group "backend" {
 
       args = [
         "packages/backend",
-        "--config app-config.yaml",
+        "--config",
+        "app-config.yaml",
         "--config",
         "${config_file}"
       ]
