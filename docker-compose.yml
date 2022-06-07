@@ -18,7 +18,7 @@ services:
 
   local:
     image: backstage:latest
-    command: node packages/backend --config app-config.yaml --config app-config.local.yaml
+    command: yarn dev
     depends_on:
       - db
     ports:
@@ -26,14 +26,14 @@ services:
       - '3000:3000'
     stdin_open: true
     tty: true
-    # environment:
-    #   DB_HOST: db
-    #   DB_PORT: 5432
-    #   DB_USER: backstage
+    environment:
+      APP_CONFIG_backend_database_client: pg
+      APP_CONFIG_backend_database_connection_host: db
+      APP_CONFIG_backend_database_connection_port: 5432
+      APP_CONFIG_backend_database_connection_user: backstage
     restart: always
-    # volumes:
-    #   - ./packages/app:/app
-
+    volumes:
+       - .:/app
 volumes:
   db_data:
     driver: local

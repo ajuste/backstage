@@ -14,6 +14,11 @@ group "backend" {
       image   = "${ecr_url}/zf/${app}:${git_sha}"
       command = "node"
 
+      port_map = {
+        app = 3000
+        backend = 7007
+      }
+
       args = [
         "packages/backend",
         "--config",
@@ -29,7 +34,8 @@ group "backend" {
 
       network {
         mbits = 1
-        port "http" {}
+        port "app" {}
+        port "backend" {}
       }
     }
 
