@@ -15,7 +15,7 @@ group "backend" {
       command = "node"
 
       port_map = {
-        app = 3000
+        app     = 3000
         backend = 7007
       }
 
@@ -41,7 +41,21 @@ group "backend" {
 
     service {
       name = "${app}-$${NOMAD_TASK_NAME}"
-      tags = ["no-scrape"]
+      port = "backend"
+      tags = [
+        "https",
+        "cs=zerofox",
+        "urlprefix-input.zerofox.com/ proto=http",
+        "urlprefix-input-${app}.zerofox.com/ proto=http",
+        "urlprefix-external-input.zerofox.com/ proto=http",
+        "urlprefix-external-input-${app}.zerofox.com/ proto=http",
+        "traefik.http.routers.${app}-$${NOMAD_TASK_NAME}.rule=Host(`input-${app}.zerofox.com`) || Host(`external-input-${app}.zerofox.com`) || Host(`input.zerofox.com`) || Host(`external-input.zerofox.com`)",
+        "traefik.http.routers.${app}-$${NOMAD_TASK_NAME}.service=${app}-$${NOMAD_TASK_NAME}",
+        "traefik.http.routers.${app}-$${NOMAD_TASK_NAME}-https.rule=Host(`input-${app}.zerofox.com`) || Host(`external-input-${app}.zerofox.com`) || Host(`input.zerofox.com`) || Host(`external-input.zerofox.com`)",
+        "traefik.http.routers.${app}-$${NOMAD_TASK_NAME}-https.service=${app}-$${NOMAD_TASK_NAME}",
+        "traefik.http.routers.${app}-$${NOMAD_TASK_NAME}-https.tls=true",
+        "no-scrape"
+      ]
 
       check {
         type     = "script"
@@ -74,7 +88,7 @@ EOH
   }
 
   task "filebeat" {
-    driver         = "docker"
+    driver = "docker"
 
     env {
       common_name = "${app}.$${NOMAD_GROUP_NAME}.$${NOMAD_TASK_NAME}"
