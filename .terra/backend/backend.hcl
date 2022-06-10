@@ -45,13 +45,11 @@ group "backend" {
       tags = [
         "https",
         "cs=zerofox",
-        "urlprefix-input.zerofox.com/ proto=http",
-        "urlprefix-input-${app}.zerofox.com/ proto=http",
-        "urlprefix-external-input.zerofox.com/ proto=http",
-        "urlprefix-external-input-${app}.zerofox.com/ proto=http",
-        "traefik.http.routers.${app}-$${NOMAD_TASK_NAME}.rule=Host(`input-${app}.zerofox.com`) || Host(`external-input-${app}.zerofox.com`) || Host(`input.zerofox.com`) || Host(`external-input.zerofox.com`)",
+        "urlprefix-devportal-${env}.zerofox.com/ proto=http",
+        "traefik.http.routers.${app}-$${NOMAD_TASK_NAME}=redirect-to-https@file",
+        "traefik.http.routers.${app}-$${NOMAD_TASK_NAME}.rule=Host(`devportal-${env}.zerofox.com`)",
         "traefik.http.routers.${app}-$${NOMAD_TASK_NAME}.service=${app}-$${NOMAD_TASK_NAME}",
-        "traefik.http.routers.${app}-$${NOMAD_TASK_NAME}-https.rule=Host(`input-${app}.zerofox.com`) || Host(`external-input-${app}.zerofox.com`) || Host(`input.zerofox.com`) || Host(`external-input.zerofox.com`)",
+        "traefik.http.routers.${app}-$${NOMAD_TASK_NAME}-https.rule=Host(`devportal-${env}.zerofox.com`)",
         "traefik.http.routers.${app}-$${NOMAD_TASK_NAME}-https.service=${app}-$${NOMAD_TASK_NAME}",
         "traefik.http.routers.${app}-$${NOMAD_TASK_NAME}-https.tls=true",
         "no-scrape"
@@ -73,10 +71,10 @@ group "backend" {
 
     template {
       data        = <<EOH
-{{ with secret "secret/${app}" }}
-AUTH_GITHUB_CLIENT_ID="{{ .Data.github_client_id }}"
-AUTH_GITHUB_CLIENT_SECRET="{{ .Data.github_client_secret }}"
-GITHUB_ACCESS_TOKEN="{{ .Data.github_access_token }}"
+{{ with secret "secret/${app}/github" }}
+AUTH_GITHUB_CLIENT_ID="{{ .Data.client_id }}"
+AUTH_GITHUB_CLIENT_SECRET="{{ .Data.client_secret }}"
+GITHUB_ACCESS_TOKEN="{{ .Data.access_token }}"
 {{ end }}
 {{ range ls "${app}/backend/env" }}
 {{ .Key|toUpper }}="{{ .Value }}"{{ end }}
