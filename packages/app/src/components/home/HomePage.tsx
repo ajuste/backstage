@@ -4,7 +4,6 @@ import {
 } from '@backstage/plugin-search';
 import { Grid, makeStyles } from '@material-ui/core';
 import React from 'react';
-import LogoFull from '../Root/LogoFull';
 import { getAllTools } from '../toolkit';
 
 const useStyles = makeStyles(theme => ({
