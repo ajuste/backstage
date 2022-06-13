@@ -43,10 +43,16 @@ export const HomePage = () => {
                         />
                     </Grid>
                     <Grid container item xs={12}>
-                        <Grid item xs={12} md={12}>
+                        <Grid item xs={12} md={6}>
                             <InfoCard title="Toolbox" className={classes.toolkit} cardClassName={classes.toolkit}>
                                 <div className={classes.toolkitContainer}>
                                     {getAllTools().map(t => t())}
+                                </div>
+                            </InfoCard>
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <InfoCard title="Announcements" className={classes.toolkit} cardClassName={classes.toolkit}>
+                                <div>
                                 </div>
                             </InfoCard>
                         </Grid>
