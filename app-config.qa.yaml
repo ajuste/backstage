@@ -32,6 +32,9 @@ backend:
     store: memory
 
 catalog:
+  rules:
+    - allow: [Component, System, API, Resource, Location, User, Group, Template]
+
   locations:
     # users
     - type: url
