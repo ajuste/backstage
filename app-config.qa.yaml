@@ -106,6 +106,18 @@ catalog:
     # templates
     - type: url
       target: https://github.com/ajuste/backstage-poc-config/blob/main/form-detection/.backstage/templates.yaml
+      rules:
+        - allow: [Template]
+      
+    - type: url
+      target: https://github.com/backstage/software-templates/blob/main/scaffolder-templates/docs-template/template.yaml
+      rules:
+        - allow: [Template]
+    
+    - type: url
+      target: https://github.com/backstage/software-templates/blob/main/scaffolder-templates/create-react-app/template.yaml
+      rules:
+        - allow: [Template]
 
   # # config options: https://node-postgres.com/api/client
   # database:
