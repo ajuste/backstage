@@ -13,21 +13,23 @@ RUN make backend-build
 FROM node:16-bullseye-slim
 WORKDIR /app
 
-# (libsqlite3-dev, curl, ca-certificates, gnupg, lsb-release) can be removed when dropping docker (used for POC only)
+# (libsqlite3-dev, curl, ca-certificates, gnupg, lsb-release, update && apt-get install -y python3 python3-pip) can be removed when dropping docker (used for POC only)
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends libsqlite3-dev python3 build-essential procps make curl ca-certificates gnupg lsb-release && \
+    apt-get install -y --no-install-recommends libsqlite3-dev python3 build-essential procps make python3-pip && \
+    # REMOVE THIS LINE POC:
+    pip3 install mkdocs-techdocs-core==1.0.1 && \
     rm -rf /var/lib/apt/lists/* && \
     yarn config set python /usr/bin/python3
 
 # docker begin
-RUN mkdir -p /etc/apt/keyrings
-RUN curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-RUN echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian \
-  $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
-RUN apt-get update
-RUN apt-get -y --no-install-recommends install docker-ce
-# docker end
+# RUN mkdir -p /etc/apt/keyrings
+# RUN curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+# RUN echo \
+#   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian \
+#   $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+# RUN apt-get update
+# RUN apt-get -y --no-install-recommends install docker-ce
+# # docker end
     
 COPY --from=builder /app/yarn.lock /app/package.json /app/packages/backend/dist/skeleton.tar.gz ./
 RUN tar xzf skeleton.tar.gz && rm skeleton.tar.gz

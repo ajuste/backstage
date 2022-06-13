@@ -31,6 +31,13 @@ backend:
   cache:
     store: memory
 
+techdocs:
+  builder: 'local' # Alternatives - 'external'
+  generator:
+    runIn: 'local' # Alternatives - 'local'
+  publisher:
+    type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
+
 catalog:
   rules:
     - allow: [Component, System, API, Resource, Location, User, Group, Template, Domain]
