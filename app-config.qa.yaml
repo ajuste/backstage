@@ -96,17 +96,9 @@ catalog:
     - type: url
       target: https://github.com/ajuste/architecture/blob/master/catalog-info.yaml
 
-    # Local example template
-    - type: file
-      target: ../../examples/template/template.yaml
-      rules:
-        - allow: [Template]
-
-    # Local example template
-    - type: file
-      target: ../../examples/template/template.yaml
-      rules:
-        - allow: [Template]
+    # templates
+    - type: url
+      target: https://github.com/ajuste/backstage-poc-config/blob/main/form-detection/.backstage/templates.yaml
 
   # # config options: https://node-postgres.com/api/client
   # database:
