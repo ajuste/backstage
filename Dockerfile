@@ -29,5 +29,6 @@ RUN tar xzf bundle.tar.gz && rm bundle.tar.gz
 
 EXPOSE 7007
 EXPOSE 3000
+EXPOSE 8080
 
 CMD ["node", "packages/backend", "--config", "app-config.yaml"]

@@ -15,8 +15,9 @@ group "backend" {
       command = "node"
 
       port_map = {
-        app     = 3000
-        backend = 7007
+        app         = 3000
+        backend     = 7007
+        backend_web = 8080
       }
 
       args = [

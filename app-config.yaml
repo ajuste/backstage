@@ -70,7 +70,7 @@ scaffolder:
   # see https://backstage.io/docs/features/software-templates/configuration for software template options
 
 catalog:
-  readOnly: true
+  readOnly: false
   import:
     entityFilename: catalog-info.yaml
     pullRequestBranchName: backstage-integration
@@ -97,6 +97,10 @@ catalog:
       target: ../../examples/org.yaml
       rules:
         - allow: [User, Group]
+
+    # golden paths
+    - type: url
+      target: https://github.com/ajuste/backstage-poc-config/tree/main/org/users.yaml
 
     ## Uncomment these lines to add more example data
     # - type: url
