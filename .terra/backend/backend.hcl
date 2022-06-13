@@ -79,7 +79,7 @@ GITHUB_ACCESS_TOKEN="{{ .Data.access_token }}"
 GITHUB_TOKEN="{{ .Data.access_token }}"
 {{ end }}
 {{ range ls "${app}/backend/env" }}
-{{ .Key|toUpper }}="{{ .Value }}"{{ end }}
+{{ .Key }}="{{ .Value }}"{{ end }}
 EOH
       destination = "$${NOMAD_SECRETS_DIR}/env"
       change_mode = "restart"

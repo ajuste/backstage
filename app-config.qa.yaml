@@ -16,7 +16,7 @@ backend:
   # reachable not just from within the backend host, but from all of your
   # callers. When its value is "http://localhost:7007", it's strictly private
   # and can't be reached by others.
-  baseUrl: https://devportal-qa.zerofox.com/api
+  baseUrl: https://devportal-qa.zerofox.com
   listen:
     port: 7007
     # The following host directive binds to all IPv4 interfaces when its value
@@ -31,74 +31,74 @@ backend:
   cache:
     store: memory
 
-# catalog:
-#   rules:
-#     - allow: [Component, System, API, Resource, Location, User, Group, Template, Domain]
+catalog:
+  rules:
+    - allow: [Component, System, API, Resource, Location, User, Group, Template, Domain]
 
-#   locations:
-#     # users
-#     - type: url
-#       target: https://github.com/ajuste/backstage-poc-config/tree/main/org/users.yaml
+  locations:
+    # users
+    - type: url
+      target: https://github.com/ajuste/backstage-poc-config/tree/main/org/users.yaml
 
-#     # # domains
-#     - type: url
-#       target: https://github.com/ajuste/backstage-poc-config/tree/main/org/domains.yaml
+    # # domains
+    - type: url
+      target: https://github.com/ajuste/backstage-poc-config/tree/main/org/domains.yaml
 
-#     # headless-browser
-#     - type: url
-#       target: https://github.com/ajuste/backstage-poc-config/blob/main/headless-browser/.backstage/backstage.yaml
+    # headless-browser
+    - type: url
+      target: https://github.com/ajuste/backstage-poc-config/blob/main/headless-browser/.backstage/backstage.yaml
 
-#     # headless-browser-analysis
-#     - type: url
-#       target: https://github.com/ajuste/backstage-poc-config/blob/main/headless-browser-analysis/.backstage/backstage.yaml
+    # headless-browser-analysis
+    - type: url
+      target: https://github.com/ajuste/backstage-poc-config/blob/main/headless-browser-analysis/.backstage/backstage.yaml
 
-#     # zf-api
-#     - type: url
-#       target: https://github.com/ajuste/API/blob/backstage/backstage.yaml
+    # zf-api
+    - type: url
+      target: https://github.com/ajuste/API/blob/backstage/backstage.yaml
 
-#     # intel-api
-#     - type: url
-#       target: https://github.com/ajuste/intel-api/blob/backstage/backstage.yaml
+    # intel-api
+    - type: url
+      target: https://github.com/ajuste/intel-api/blob/backstage/backstage.yaml
 
-#     # alert-creator
-#     - type: url
-#       target: https://github.com/ajuste/backstage-poc-config/blob/main/alert-creator/.backstage/backstage.yaml
+    # alert-creator
+    - type: url
+      target: https://github.com/ajuste/backstage-poc-config/blob/main/alert-creator/.backstage/backstage.yaml
 
-#     # rule-engine
-#     - type: url
-#       target: https://github.com/ajuste/backstage-poc-config/blob/main/rule-engine/.backstage/backstage.yaml
+    # rule-engine
+    - type: url
+      target: https://github.com/ajuste/backstage-poc-config/blob/main/rule-engine/.backstage/backstage.yaml
 
-#     # ml-enricher
-#     - type: url
-#       target: https://github.com/ajuste/backstage-poc-config/blob/main/ml-enricher/.backstage/backstage.yaml
+    # ml-enricher
+    - type: url
+      target: https://github.com/ajuste/backstage-poc-config/blob/main/ml-enricher/.backstage/backstage.yaml
 
-#     # go-dm
-#     - type: url
-#       target: https://github.com/ajuste/go-dm/blob/backstage/backstage.yaml
+    # go-dm
+    - type: url
+      target: https://github.com/ajuste/go-dm/blob/backstage/backstage.yaml
 
-#     # form-detection
-#     - type: url
-#       target: https://github.com/ajuste/backstage-poc-config/blob/main/form-detection/.backstage/backstage.yaml
+    # form-detection
+    - type: url
+      target: https://github.com/ajuste/backstage-poc-config/blob/main/form-detection/.backstage/backstage.yaml
 
-#     # email-analysis
-#     - type: url
-#       target: https://github.com/ajuste/backstage-poc-config/blob/main/email-analysis/.backstage/backstage.yaml
+    # email-analysis
+    - type: url
+      target: https://github.com/ajuste/backstage-poc-config/blob/main/email-analysis/.backstage/backstage.yaml
 
-#     # ocr-analysis
-#     - type: url
-#       target: https://github.com/ajuste/backstage-poc-config/blob/main/ocr-analysis/.backstage/backstage.yaml
+    # ocr-analysis
+    - type: url
+      target: https://github.com/ajuste/backstage-poc-config/blob/main/ocr-analysis/.backstage/backstage.yaml
 
-#     # cve-api
-#     - type: url
-#       target: https://github.com/ajuste/cve-api/blob/apidocs_poc/backstage.yaml
+    # cve-api
+    - type: url
+      target: https://github.com/ajuste/cve-api/blob/apidocs_poc/backstage.yaml
 
-#     # architecture
-#     - type: url
-#       target: https://github.com/ajuste/architecture/blob/master/catalog-info.yaml
+    # architecture
+    - type: url
+      target: https://github.com/ajuste/architecture/blob/master/catalog-info.yaml
 
-#     # templates
-#     - type: url
-#       target: https://github.com/ajuste/backstage-poc-config/blob/main/form-detection/.backstage/templates.yaml
+    # templates
+    - type: url
+      target: https://github.com/ajuste/backstage-poc-config/blob/main/form-detection/.backstage/templates.yaml
 
   # # config options: https://node-postgres.com/api/client
   # database:
