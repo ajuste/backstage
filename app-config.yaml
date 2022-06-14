@@ -5,6 +5,20 @@ app:
 organization:
   name: Zerofox
 
+proxy:
+  '/jira/api':
+    target: https://zf.atlassian.net
+    headers:
+      Authorization:
+        $env: JIRA_TOKEN
+      Accept: 'application/json'
+      Content-Type: 'application/json'
+      X-Atlassian-Token: 'no-check'
+      User-Agent: "AnyRandomString"
+
+jira:
+  proxyPath: /jira/api
+
 backend:
   # Used for enabling authentication, secret is shared by all backend plugins
   # See https://backstage.io/docs/tutorials/backend-to-backend-auth for
