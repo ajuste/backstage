@@ -67,6 +67,10 @@ import {
   RELATION_PART_OF,
   RELATION_PROVIDES_API,
 } from '@backstage/catalog-model';
+import {
+  EntityJiraOverviewCard,
+  isJiraAvailable,
+} from '@roadiehq/backstage-plugin-jira';
 
 const cicdContent = (
   // This is an example of how you can implement your company's logic in entity page.
@@ -131,6 +135,13 @@ const overviewContent = (
     <Grid item md={8} xs={12}>
       <EntityHasSubcomponentsCard variant="gridItem" />
     </Grid>
+    <EntitySwitch>
+      <EntitySwitch.Case if={isJiraAvailable}>
+        <Grid item md={6}>
+          <EntityJiraOverviewCard />
+        </Grid>
+      </EntitySwitch.Case>
+    </EntitySwitch>
   </Grid>
 );
 

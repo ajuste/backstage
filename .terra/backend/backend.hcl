@@ -78,6 +78,9 @@ AUTH_GITHUB_CLIENT_SECRET="{{ .Data.client_secret }}"
 GITHUB_ACCESS_TOKEN="{{ .Data.access_token }}"
 GITHUB_TOKEN="{{ .Data.access_token }}"
 {{ end }}
+{{ with secret "secret/${app}/jira" }}
+JIRA_TOKEN="{{ .Data.token }}"
+{{ end }}
 {{ range ls "${app}/backend/env" }}
 {{ .Key }}="{{ .Value }}"{{ end }}
 EOH
