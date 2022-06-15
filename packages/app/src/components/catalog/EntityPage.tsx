@@ -71,6 +71,7 @@ import {
   EntityJiraOverviewCard,
   isJiraAvailable,
 } from '@roadiehq/backstage-plugin-jira';
+import { EntityCodeCoverageContent } from '@backstage/plugin-code-coverage';
 
 const cicdContent = (
   // This is an example of how you can implement your company's logic in entity page.
@@ -177,6 +178,10 @@ const serviceEntityPage = (
       </Grid>
     </EntityLayout.Route>
 
+    <EntityLayout.Route path="/code-coverage" title="Code Coverage">
+      <EntityCodeCoverageContent />
+    </EntityLayout.Route>
+
     <EntityLayout.Route path="/docs" title="Docs">
       <EntityTechdocsContent />
     </EntityLayout.Route>
@@ -202,6 +207,10 @@ const websiteEntityPage = (
           <EntityDependsOnResourcesCard variant="gridItem" />
         </Grid>
       </Grid>
+    </EntityLayout.Route>
+
+    <EntityLayout.Route path="/code-coverage" title="Code Coverage">
+      <EntityCodeCoverageContent />
     </EntityLayout.Route>
 
     <EntityLayout.Route path="/docs" title="Docs">
