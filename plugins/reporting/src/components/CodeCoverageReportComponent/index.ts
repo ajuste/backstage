@@ -1,0 +1,1 @@
+export { CodeCoverageReportComponent } from './CodeCoverageReportComponent';

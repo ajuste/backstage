@@ -36,6 +36,7 @@ import { PermissionedRoute } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
 import { HomepageCompositionRoot } from '@backstage/plugin-home';
 import { HomePage } from './components/home/HomePage';
+import { ReportingPage, CodeCoveragePage } from 'plugin-reporting';
 
 const app = createApp({
   apis,
@@ -96,6 +97,8 @@ const routes = (
     </Route>
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
+    <Route path="/reporting" element={<ReportingPage />}/>
+    <Route path="/reporting/code-coverage" element={<CodeCoveragePage />}/>
   </FlatRoutes>
 );
 

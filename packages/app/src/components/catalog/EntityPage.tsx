@@ -69,6 +69,7 @@ import {
 } from '@backstage/catalog-model';
 import {
   EntityJiraOverviewCard,
+  JiraCard,
   isJiraAvailable,
 } from '@roadiehq/backstage-plugin-jira';
 import { EntityCodeCoverageContent } from '@backstage/plugin-code-coverage';
@@ -139,6 +140,7 @@ const overviewContent = (
     <EntitySwitch>
       <EntitySwitch.Case if={isJiraAvailable}>
         <Grid item md={6}>
+          <JiraCard></JiraCard>
           <EntityJiraOverviewCard />
         </Grid>
       </EntitySwitch.Case>

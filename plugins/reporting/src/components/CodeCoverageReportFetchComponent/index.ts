@@ -1,0 +1,1 @@
+export { CodeCoverageReportFetchComponent } from './CodeCoverageReportFetchComponent';
