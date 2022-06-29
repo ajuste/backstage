@@ -39,7 +39,7 @@
     "@vscode/sqlite3": "^5.0.8",
     "better-sqlite3": "^7.5.3",
     "history": "^5.0.0",
-    "plugin-reporting": "file:../../plugins/reporting",
+    "plugin-reporting": "^0.1.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router": "6.0.0-beta.0",

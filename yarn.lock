@@ -6050,7 +6050,6 @@ anymatch@^3.0.3, anymatch@~3.1.2:
     "@vscode/sqlite3" "^5.0.8"
     better-sqlite3 "^7.5.3"
     history "^5.0.0"
-    plugin-reporting "file:plugins/reporting"
     react "^17.0.2"
     react-dom "^17.0.2"
     react-router "6.0.0-beta.0"
@@ -15351,17 +15350,6 @@ pkginfo@0.4.x:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/pkginfo/-/pkginfo-0.4.1.tgz#b5418ef0439de5425fc4995042dced14fb2a84ff"
   integrity sha512-8xCNE/aT/EXKenuMDZ+xTVwkT8gsoHN2z/Q29l80u0ppGEXVvsKRzNMbtKhg8LS8k1tJLAHHylf6p4VFmP6XUQ==
-
-"plugin-reporting@file:plugins/reporting":
-  version "0.1.0"
-  dependencies:
-    "@backstage/core-components" "^0.9.5"
-    "@backstage/core-plugin-api" "^1.0.3"
-    "@backstage/theme" "^0.2.15"
-    "@material-ui/core" "^4.9.13"
-    "@material-ui/icons" "^4.9.1"
-    "@material-ui/lab" "4.0.0-alpha.57"
-    react-use "^17.2.4"
 
 pluralize@^8.0.0:
   version "8.0.0"

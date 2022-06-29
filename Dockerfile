@@ -10,7 +10,18 @@ RUN apt-get update && \
 
 WORKDIR /builder
 COPY . .
-RUN make backend-build
+#RUN yarn install
+
+# Register every plugin like this
+WORKDIR /builder/plugins/reporting
+RUN yarn link
+
+WORKDIR /builder/packages/app
+# Link every plugin here:
+RUN yarn link "plugin-reporting"
+
+WORKDIR /builder
+RUN yarn install && yarn tsc && yarn build
 
 WORKDIR /app
 RUN cp /builder/yarn.lock /builder/package.json /builder/packages/backend/dist/skeleton.tar.gz ./
