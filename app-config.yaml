@@ -1,6 +1,6 @@
 app:
   title: Zerofox Dev Portal
-  baseUrl: http://localhost:3000
+  baseUrl: http://localhost:3003
 
 organization:
   name: Zerofox
@@ -26,7 +26,7 @@ backend:
     # Content-Security-Policy directives follow the Helmet format: https://helmetjs.github.io/#reference
     # Default Helmet Content-Security-Policy values can be removed by setting the key to false
   cors:
-    origin: http://localhost:3000
+    origin: http://localhost:3003
     methods: [GET, POST, PUT, DELETE]
     credentials: true
   # This is for local developement only, it is not recommended to use this in production
@@ -91,8 +91,8 @@ catalog:
   locations:
     
     # users
-    - type: url
-      target: https://github.com/riskive/backstage/blob/master/users.yaml
+    - type: file
+      target: ../../local/users.yaml
       
     # Local example data, file locations are relative to the backend process, typically `packages/backend`
     - type: file
@@ -111,8 +111,8 @@ catalog:
         - allow: [User, Group]
 
     # golden paths
-    - type: url
-      target: https://github.com/ajuste/backstage-poc-config/tree/main/org/users.yaml
+    # - type: url
+    #   target: https://github.com/ajuste/backstage-poc-config/tree/main/org/users.yaml
 
     ## Uncomment these lines to add more example data
     # - type: url
