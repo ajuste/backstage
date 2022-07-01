@@ -43,13 +43,25 @@ catalog:
     - allow: [Component, System, API, Resource, Location, User, Group, Template, Domain]
 
   locations:
-    # users
-    - type: url
-      target: https://github.com/ajuste/backstage-poc-config/tree/main/org/users.yaml
+    - type: file
+      target: ../../examples/roles.yaml
+      rules:
+        - allow: [Group]
 
-    # # domains
-    - type: url
-      target: https://github.com/ajuste/backstage-poc-config/tree/main/org/domains.yaml
+    - type: file
+      target: ../../examples/teams.yaml
+      rules:
+        - allow: [Group]
+        
+    - type: file
+      target: ../../examples/users.yaml
+      rules:
+        - allow: [User]
+        
+    - type: file
+      target: ../../examples/domains.yaml
+      rules:
+        - allow: [Domain]
 
     # headless-browser
     - type: url
@@ -62,10 +74,14 @@ catalog:
     # zf-api
     - type: url
       target: https://github.com/ajuste/API/blob/backstage/backstage.yaml
+      rules:
+        - allow: [Component, API, Group, System]
 
     # intel-api
     - type: url
       target: https://github.com/ajuste/intel-api/blob/backstage/backstage.yaml
+      rules:
+        - allow: [Component, API, Group, System]
 
     # alert-creator
     - type: url
@@ -77,7 +93,9 @@ catalog:
 
     # ml-enricher
     - type: url
-      target: https://github.com/ajuste/backstage-poc-config/blob/main/ml-enricher/.backstage/backstage.yaml
+      target: https://github.com/ajuste/ml-enricher/blob/master/catalog-info.yaml
+      rules:
+        - allow: [Component, API, Group, System]
 
     # go-dm
     - type: url
@@ -85,19 +103,27 @@ catalog:
 
     # form-detection
     - type: url
-      target: https://github.com/ajuste/backstage-poc-config/blob/main/form-detection/.backstage/backstage.yaml
+      target: https://github.com/ajuste/form-detection/blob/master/catalog-info.yaml
+      rules:
+        - allow: [Component, API, Group, System]
 
     # email-analysis
     - type: url
-      target: https://github.com/ajuste/backstage-poc-config/blob/main/email-analysis/.backstage/backstage.yaml
+      target: https://github.com/ajuste/email-analysis/blob/master/catalog-info.yaml
+      rules:
+        - allow: [Component, API, Group, System]
 
     # ocr-analysis
     - type: url
-      target: https://github.com/ajuste/backstage-poc-config/blob/main/ocr-analysis/.backstage/backstage.yaml
+      target: https://github.com/ajuste/ocr-analysis/blob/master/catalog-info.yaml
+      rules:
+        - allow: [Component, API, Group, System]
 
     # cve-api
     - type: url
       target: https://github.com/ajuste/cve-api/blob/apidocs_poc/backstage.yaml
+      rules:
+        - allow: [Component, API, Group, System]
 
     # architecture
     - type: url

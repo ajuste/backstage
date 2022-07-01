@@ -1,0 +1,65 @@
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: product-owners
+spec:
+  profile:
+    displayName: Product Owners
+  type: team
+  children: []
+  members: [jvidmar, pblanton, jsumpter, ccherry, soneill, bsnowdon, bbuttonow, nanderson, jvergara, zwolf, ehall]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: scrum-masters
+spec:
+  profile:
+    displayName: Scrum Masters
+  type: team
+  children: []
+  members: [aflano, evinciguerra, mriveros, mmenafra, jalvarez, acaballero, dbano, lramirez, nalvear, rcalvo, jprotzman, evillalobos, scornejo, xzantello]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: tech-leads
+spec:
+  profile:
+    displayName: Tech Leads
+  type: team
+  children: []
+  members: [rpena, shanna, rroman, ktak, jurbina, okhan, selgueda, skhan, kmceachern, pfrias, tceruti, rvillablanca, jpietrzak, cmoran]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: managers
+spec:
+  profile:
+    displayName: Managers
+  type: team
+  children: []
+  members: [cyuseff, cholter, ddannunzio, mlang, kmceachern, rjackson]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: architects
+spec:
+  profile:
+    displayName: Architects
+  type: team
+  children: []
+  members: [rmorton, abrewer]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: mentors
+spec:
+  profile:
+    displayName: Mentors
+  type: team
+  children: []
+  members: [cyuseff, rjackson, ddannunzio, mlang, skhan, cholter, zwolf, kmceachern]

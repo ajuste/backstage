@@ -19,9 +19,9 @@ import { Link, makeStyles } from '@material-ui/core';
 import HomeIcon from '@material-ui/icons/Home';
 import ExtensionIcon from '@material-ui/icons/Extension';
 import MapIcon from '@material-ui/icons/MyLocation';
+import ExploreIcon from '@material-ui/icons/Map';
 import LibraryBooks from '@material-ui/icons/LibraryBooks';
 import ReportingIcon from '@material-ui/icons/Assessment';
-import CreateComponentIcon from '@material-ui/icons/AddCircleOutline';
 import CategoryIcon from '@material-ui/icons/Category';
 import LogoFull from './LogoFull';
 import LogoIcon from './LogoIcon';
@@ -89,13 +89,12 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
       <SidebarGroup label="Menu" icon={<MenuIcon />}>
         {/* Global nav, not org-specific */}
         <SidebarItem icon={HomeIcon} to="/" text="Home" />
+        <SidebarItem icon={ExploreIcon} to="explore" text="Explore" />
         <SidebarItem icon={CategoryIcon} to="catalog" text="Catalog" />
         <SidebarItem icon={ExtensionIcon} to="api-docs" text="APIs" />
         <SidebarItem icon={LibraryBooks} to="docs" text="Docs" />
-        {/* <SidebarItem icon={NetworkCell} to="catalog-graph" text="Graph" /> */}
         <SidebarItem icon={ReportingIcon} to="reporting" text="Reporting" />
-        <SidebarItem icon={CreateComponentIcon} to="create" text="Create..." />
-        
+
         {/* End global nav */}
         <SidebarDivider />
         <SidebarScrollWrapper>
