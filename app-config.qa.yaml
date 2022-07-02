@@ -45,22 +45,22 @@ catalog:
 
   locations:
     - type: file
-      target: ../../examples/roles.yaml
+      target: ./examples/roles.yaml
       rules:
         - allow: [Group]
 
     - type: file
-      target: ../../examples/teams.yaml
+      target: ./examples/teams.yaml
       rules:
         - allow: [Group]
         
     - type: file
-      target: ../../examples/users.yaml
+      target: ./examples/users.yaml
       rules:
         - allow: [User]
         
     - type: file
-      target: ../../examples/domains.yaml
+      target: ./examples/domains.yaml
       rules:
         - allow: [Domain]
 
