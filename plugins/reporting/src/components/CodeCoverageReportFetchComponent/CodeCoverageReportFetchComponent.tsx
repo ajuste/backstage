@@ -3,11 +3,12 @@ import { Table, TableColumn, Progress, TrendLine, Link } from '@backstage/core-c
 import Alert from '@material-ui/lab/Alert';
 import useAsync from 'react-use/lib/useAsync';
 import { codeCoveragePlugin } from '@backstage/plugin-code-coverage';
-import { useApi, ApiRef } from '@backstage/core-plugin-api';
+import { useApi, ApiRef, useRouteRef } from '@backstage/core-plugin-api';
 import { CatalogApi } from '@backstage/catalog-client';
-import { catalogApiRef } from '@backstage/plugin-catalog-react';
+import { catalogApiRef, entityRouteParams, entityRouteRef } from '@backstage/plugin-catalog-react';
 import { CodeCoverageApi, JsonCoverageHistory } from "../../types";
 import { Entity, CompoundEntityRef } from '@backstage/catalog-model';
+
 
 const GetCoverageMaxRetries = 10
 const GetCoveragePageSize = 10
@@ -65,7 +66,8 @@ export const DenseTable = ({ entities }: DenseTableProps) => {
   ];
 
   const data = entities.map(entity => {
-    const catalogLink = `/catalog/${entity.metadata.namespace || "default"}/${entity.kind}/${entity.metadata.name}`
+    const catalogEntityRoute = useRouteRef(entityRouteRef);
+    const catalogLink =  catalogEntityRoute(entityRouteParams(entity));
     return {
       name: (
         <Link to={catalogLink} target="_blank">{entity.metadata.name}</Link>

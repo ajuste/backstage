@@ -37,7 +37,7 @@ import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/
 import { HomepageCompositionRoot } from '@backstage/plugin-home';
 import { HomePage } from './components/home/HomePage';
 import { ReportingPage, CodeCoveragePage } from 'plugin-reporting';
-import { ExplorePage, explorePlugin } from '@backstage/plugin-explore';
+import { ExplorePage, explorePage } from './components/explore/ExplorePage';
 
 
 const app = createApp({
@@ -55,9 +55,6 @@ const app = createApp({
     });
     bind(orgPlugin.externalRoutes, {
       catalogIndex: catalogPlugin.routes.catalogIndex,
-    });
-    bind(explorePlugin.externalRoutes, {
-      catalogEntity: catalogPlugin.routes.catalogEntity,
     });
   },
 });
@@ -104,7 +101,9 @@ const routes = (
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
     <Route path="/reporting" element={<ReportingPage />} />
     <Route path="/reporting/code-coverage" element={<CodeCoveragePage />} />
-    <Route path="/explore" element={<ExplorePage />} />
+    <Route path="/explore" element={<ExplorePage />}>
+      {explorePage}
+    </Route>
   </FlatRoutes>
 );
 

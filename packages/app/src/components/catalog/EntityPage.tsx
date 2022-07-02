@@ -74,6 +74,8 @@ import {
 } from '@roadiehq/backstage-plugin-jira';
 import { EntityCodeCoverageContent } from '@backstage/plugin-code-coverage';
 
+
+
 const cicdContent = (
   // This is an example of how you can implement your company's logic in entity page.
   // You can for example enforce that all components of type 'service' should use GitHubActions
@@ -128,7 +130,21 @@ const overviewContent = (
       <EntityAboutCard variant="gridItem" />
     </Grid>
     <Grid item md={6} xs={12}>
-      <EntityCatalogGraphCard variant="gridItem" height={400} />
+      <EntityCatalogGraphCard
+        variant="gridItem"
+        direction={Direction.TOP_BOTTOM}
+        height={400}
+        relations={[
+          RELATION_PART_OF,
+          RELATION_HAS_PART,
+          RELATION_API_CONSUMED_BY,
+          RELATION_API_PROVIDED_BY,
+          RELATION_CONSUMES_API,
+          RELATION_PROVIDES_API,
+          RELATION_DEPENDENCY_OF,
+          RELATION_DEPENDS_ON,
+        ]}
+      />
     </Grid>
 
     <Grid item md={4} xs={12}>

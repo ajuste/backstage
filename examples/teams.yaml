@@ -3,6 +3,8 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-contig-automation
+  tags: ["scrum-team"]
+  description: "Everything related to automating customer experience"
 spec:
   profile:
     displayName: Config Automation
@@ -14,6 +16,8 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-cti-collection
+  tags: ["scrum-team"]
+  description: "Everything CTI data collection"
 spec:
   profile:
     displayName: CTI Collection
@@ -25,6 +29,8 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-cti-engagement
+  tags: ["scrum-team"]
+  description: "Everything related to increasing customer engagement with CTI"
 spec:
   profile:
     displayName: CTI Engagement
@@ -36,6 +42,8 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-cti-search
+  tags: ["scrum-team"]
+  description: "Everything related to searching among CTI collections"
 spec:
   profile:
     displayName: CTI Search
@@ -47,6 +55,8 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-customer-commits
+  tags: ["scrum-team"]
+  description: "Everything related to improving customer experience"
 spec:
   profile:
     displayName: Customer Commits
@@ -58,6 +68,8 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-disruption
+  tags: ["scrum-team"]
+  description: "Everything related to "
 spec:
   profile:
     displayName: Disruption
@@ -69,6 +81,8 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-domains
+  tags: ["scrum-team"]
+  description: "Everything related to domain scanning and phishing"
 spec:
   profile:
     displayName: Domains
@@ -80,6 +94,8 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-domains-search
+  tags: ["scrum-team"]
+  description: "Everything related to implementing domain search"
 spec:
   profile:
     displayName: Domains Search
@@ -91,6 +107,8 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-drp-analysis
+  tags: ["scrum-team"]
+  description: "Everything related to DRP"
 spec:
   profile:
     displayName: DRP Analysis
@@ -102,6 +120,8 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-platform-maturity
+  tags: ["scrum-team"]
+  description: "Everything related to platform maturity"
 spec:
   profile:
     displayName: Platform Maturity
@@ -116,6 +136,8 @@ metadata:
 spec:
   profile:
     displayName: SRE
+  tags: ["scrum-team"]
+  description: "Everything related to Site Reliability Eng"
   type: team
   children: []
   members: [zwolf, jprotzman, tceruti, craborg, zwolf]
@@ -127,6 +149,8 @@ metadata:
 spec:
   profile:
     displayName: Triage & PDS
+  tags: ["scrum-team"]
+  description: "Everything related to triaing alerts"
   type: team
   children: []
   members: [dgerber, evillalobos, rvillablanca, jbahamonde, mlang]
@@ -138,6 +162,8 @@ metadata:
 spec:
   profile:
     displayName: DevSecOps
+  tags: ["scrum-team"]
+  description: "Everything related to dev sec ops"
   type: team
   children: []
   members: [ehall, scornejo, jpietrzak, ljeter, zwolf]
@@ -149,6 +175,8 @@ metadata:
 spec:
   profile:
     displayName: DevOps
+  tags: ["scrum-team"]
+  description: "Everything related to devops"
   type: team
   children: []
   members: [zwolf, xzantello, cmoran, fvidela, vvalderrama, ynakshin, zwolf]
