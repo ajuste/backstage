@@ -348,9 +348,6 @@ const systemPage = (
         <Grid item md={6}>
           <EntityAboutCard variant="gridItem" />
         </Grid>
-        <Grid item md={6} xs={12}>
-          <EntityCatalogGraphCard variant="gridItem" height={400} />
-        </Grid>
         <Grid item md={6}>
           <EntityHasComponentsCard variant="gridItem" />
         </Grid>
@@ -378,6 +375,7 @@ const systemPage = (
           RELATION_DEPENDENCY_OF,
           RELATION_DEPENDS_ON,
         ]}
+        mergeRelations={true}
         unidirectional={false}
       />
     </EntityLayout.Route>

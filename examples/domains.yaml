@@ -33,3 +33,12 @@ metadata:
   description: Everything related to remediating alerts such as domain takedown, etc.
 spec:
   owner: domainowner
+---
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  title: Twitter
+  name: twitter
+  description: Everything related to Twitter.
+spec:
+  owner: domainowner

@@ -38,28 +38,29 @@ techdocs:
   publisher:
     type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
 
+
 catalog:
   rules:
     - allow: [Component, System, API, Resource, Location, User, Group, Template, Domain]
 
   locations:
     - type: file
-      target: ./examples/roles.yaml
+      target: ../../examples/roles.yaml
       rules:
         - allow: [Group]
 
     - type: file
-      target: ./examples/teams.yaml
+      target: ../../examples/teams.yaml
       rules:
         - allow: [Group]
         
     - type: file
-      target: ./examples/users.yaml
+      target: ../../examples/users.yaml
       rules:
         - allow: [User]
         
     - type: file
-      target: ./examples/domains.yaml
+      target: ../../examples/domains.yaml
       rules:
         - allow: [Domain]
 
@@ -83,17 +84,51 @@ catalog:
       rules:
         - allow: [Component, API, Group, System]
 
+    # intel-backend
+    - type: url
+      target: https://github.com/ajuste/intel-backend/blob/master/catalog-info.yaml
+      rules:
+        - allow: [Component, API, Group, System]
+
+    # acs
+    - type: url
+      target: https://github.com/ajuste/alert-content-service/blob/master/catalog-info.yaml
+      rules:
+        - allow: [Component, API, Group, System]
+
+    # search-engine
+    - type: url
+      target: https://github.com/ajuste/search-engine/blob/master/catalog-info.yaml
+      rules:
+        - allow: [Component, API, Group, System]
+
+    # scrapy
+    - type: url
+      target: https://github.com/ajuste/scrapy/blob/master/catalog-info.yaml
+      rules:
+        - allow: [Component, API, Group, System]
+
     # alert-creator
     - type: url
-      target: https://github.com/ajuste/backstage-poc-config/blob/main/alert-creator/.backstage/backstage.yaml
+      target: https://github.com/ajuste/alert-creator/blob/master/catalog-info.yaml
+      rules:
+        - allow: [Component, API, Group, System]
 
     # rule-engine
     - type: url
-      target: https://github.com/ajuste/backstage-poc-config/blob/main/rule-engine/.backstage/backstage.yaml
+      target: https://github.com/ajuste/rule-engine/blob/master/catalog-info.yaml
+      rules:
+        - allow: [Component, API, Group, System]
 
     # ml-enricher
     - type: url
       target: https://github.com/ajuste/ml-enricher/blob/master/catalog-info.yaml
+      rules:
+        - allow: [Component, API, Group, System]
+
+    # ml-enricher
+    - type: url
+      target: https://github.com/ajuste/DC/blob/master/catalog-info.yaml
       rules:
         - allow: [Component, API, Group, System]
 
@@ -112,6 +147,17 @@ catalog:
       target: https://github.com/ajuste/email-analysis/blob/master/catalog-info.yaml
       rules:
         - allow: [Component, API, Group, System]
+
+    # go-twitter
+    - type: url
+      target: https://github.com/ajuste/go-twitter/blob/master/catalog-info.yaml
+      rules:
+        - allow: [Component, API, Group, System]
+
+    # zf-twitter
+    - type: url
+      target: https://github.com/ajuste/zf-twitter/blob/master/catalog-info.yaml
+      rules:
 
     # ocr-analysis
     - type: url
