@@ -51,8 +51,10 @@ export const HomePage = () => {
                         </Grid>
                         <Grid item xs={12} md={6}>
                             <InfoCard title="Announcements" className={classes.toolkit} cardClassName={classes.toolkit}>
-                                <div>
-                                </div>
+                                <ul>
+                                    <li>Backstage.io demo 4th July week</li>
+                                    <li>POC available on https://devportal-qa.zerofox.com</li>
+                                </ul>
                             </InfoCard>
                         </Grid>
                     </Grid>

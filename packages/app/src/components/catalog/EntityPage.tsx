@@ -73,6 +73,7 @@ import {
   isJiraAvailable,
 } from '@roadiehq/backstage-plugin-jira';
 import { EntityCodeCoverageContent } from '@backstage/plugin-code-coverage';
+import { EntityTechInsightsScorecardContent, EntityTechInsightsScorecardCard } from '@backstage/plugin-tech-insights';
 
 
 
@@ -202,6 +203,12 @@ const serviceEntityPage = (
 
     <EntityLayout.Route path="/docs" title="Docs">
       <EntityTechdocsContent />
+    </EntityLayout.Route>
+    <EntityLayout.Route path="/tech-insights" title="Scorecards">
+      <EntityTechInsightsScorecardContent
+        title="Service discoverability"
+        description="Items required for service to be discoverable"
+      />
     </EntityLayout.Route>
   </EntityLayout>
 );
