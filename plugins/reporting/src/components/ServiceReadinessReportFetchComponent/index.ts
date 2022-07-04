@@ -1,0 +1,1 @@
+export { ServiceReadinessReportComponentFetchComponent } from './ServiceReadinessReportComponentFetchComponent';

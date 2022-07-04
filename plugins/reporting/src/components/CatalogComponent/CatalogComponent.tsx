@@ -26,13 +26,26 @@ export const CatalogComponent = () => (
       <ItemCardGrid>
         <Card key="code-coverage">
           <CardMedia>
-            <ItemCardHeader title="Code coverage" subtitle="testing" />
+            <ItemCardHeader title="Code coverage" subtitle="quality" />
           </CardMedia>
           <CardContent>
-            Generate code coverage for components in the system.
+            Generate code coverage report.
           </CardContent>
           <CardActions>
             <Button color="primary" to="/reporting/code-coverage">
+              See report
+            </Button>
+          </CardActions>
+        </Card>
+        <Card key="service-readiness">
+          <CardMedia>
+            <ItemCardHeader title="Service Readiness" subtitle="quality" />
+          </CardMedia>
+          <CardContent>
+            Generate service rediness report.
+          </CardContent>
+          <CardActions>
+            <Button color="primary" to="/reporting/service-readiness">
               See report
             </Button>
           </CardActions>

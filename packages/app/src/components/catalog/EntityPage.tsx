@@ -73,7 +73,7 @@ import {
   isJiraAvailable,
 } from '@roadiehq/backstage-plugin-jira';
 import { EntityCodeCoverageContent } from '@backstage/plugin-code-coverage';
-import { EntityTechInsightsScorecardContent, EntityTechInsightsScorecardCard } from '@backstage/plugin-tech-insights';
+import { EntityTechInsightsScorecardContent } from '@backstage/plugin-tech-insights';
 
 
 

@@ -171,6 +171,18 @@ catalog:
       rules:
         - allow: [Component, API, Group, System]
 
+    # onboarding
+    - type: url
+      target: https://github.com/ajuste/onboarding-tldr-engineers/blob/master/catalog-info.yaml
+      rules:
+        - allow: [Component]
+
+    # laptop setup
+    - type: url
+      target: https://github.com/ajuste/zfe-100-laptop-setup/blob/master/catalog-info.yaml
+      rules:
+        - allow: [Component]
+
     # architecture
     - type: url
       target: https://github.com/ajuste/architecture/blob/master/catalog-info.yaml
