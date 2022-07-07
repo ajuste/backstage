@@ -82,7 +82,7 @@ GITHUB_TOKEN="{{ .Data.access_token }}"
 JIRA_TOKEN="{{ .Data.token }}"
 {{ end }}
 {{ with secret "secret/${app}/grafana" }}
-GRAFANA_TOKEN=="{{ .Data.token }}"
+GRAFANA_TOKEN="{{ .Data.token }}"
 {{ end }}
 {{ range ls "${app}/backend/env" }}
 {{ .Key }}="{{ .Value }}"{{ end }}
