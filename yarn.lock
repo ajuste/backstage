@@ -3306,6 +3306,21 @@
   resolved "https://registry.yarnpkg.com/@juggle/resize-observer/-/resize-observer-3.3.1.tgz#b50a781709c81e10701004214340f25475a171a0"
   integrity sha512-zMM9Ds+SawiUkakS7y94Ymqx+S0ORzpG3frZirN3l+UlXUmSUR7hF4wxCVqW+ei94JzV5kt0uXBcoOEAuiydrw==
 
+"@k-phoen/backstage-plugin-grafana@^0.1.12":
+  version "0.1.12"
+  resolved "https://registry.yarnpkg.com/@k-phoen/backstage-plugin-grafana/-/backstage-plugin-grafana-0.1.12.tgz#74938adc880c114263e2f407c4775ae514e22221"
+  integrity sha512-XqSCIW2h7GTZXxE+Pd2iDq+XUDLRmtBh9jCr8uSM6cqoLN+MuGzWpHX9Oxtmti/1S42NfrDlwq0Wu/MVZv/yAQ==
+  dependencies:
+    "@backstage/catalog-model" "^1.0.2"
+    "@backstage/core-components" "^0.9.4"
+    "@backstage/core-plugin-api" "^1.0.2"
+    "@backstage/plugin-catalog-react" "^1.1.0"
+    "@backstage/theme" "^0.2.15"
+    "@material-ui/core" "^4.12.2"
+    "@material-ui/icons" "^4.9.1"
+    "@material-ui/lab" "4.0.0-alpha.45"
+    react-use "^17.2.4"
+
 "@keyv/redis@^2.2.3":
   version "2.3.6"
   resolved "https://registry.yarnpkg.com/@keyv/redis/-/redis-2.3.6.tgz#462991af60b5b35af4e9ac8d05ad99a08ae2cfc2"
@@ -4092,6 +4107,17 @@
   dependencies:
     "@babel/runtime" "^7.4.4"
 
+"@material-ui/lab@4.0.0-alpha.45":
+  version "4.0.0-alpha.45"
+  resolved "https://registry.yarnpkg.com/@material-ui/lab/-/lab-4.0.0-alpha.45.tgz#6e1abbdd6e44b9ef7b3eff8ef892a3da5dc52f10"
+  integrity sha512-zT6kUU87SHsPukiu3tlWg8V6o0tGS38c1b/xst/kPqX6eLbfqrROyxhHn1A8ZtHmqga1AKQdv/1llQoG80Afww==
+  dependencies:
+    "@babel/runtime" "^7.4.4"
+    "@material-ui/utils" "^4.7.1"
+    clsx "^1.0.4"
+    prop-types "^15.7.2"
+    react-is "^16.8.0"
+
 "@material-ui/lab@4.0.0-alpha.57":
   version "4.0.0-alpha.57"
   resolved "https://registry.yarnpkg.com/@material-ui/lab/-/lab-4.0.0-alpha.57.tgz#e8961bcf6449e8a8dabe84f2700daacfcafbf83a"
@@ -4152,7 +4178,7 @@
   resolved "https://registry.yarnpkg.com/@material-ui/types/-/types-5.1.0.tgz#efa1c7a0b0eaa4c7c87ac0390445f0f88b0d88f2"
   integrity sha512-7cqRjrY50b8QzRSYyhSpx4WRw2YuO0KKIGQEVk5J8uoz2BanawykgZGoWEqKm7pVIbzFDN0SpPcVV4IhOFkl8A==
 
-"@material-ui/utils@^4.11.2", "@material-ui/utils@^4.11.3":
+"@material-ui/utils@^4.11.2", "@material-ui/utils@^4.11.3", "@material-ui/utils@^4.7.1":
   version "4.11.3"
   resolved "https://registry.yarnpkg.com/@material-ui/utils/-/utils-4.11.3.tgz#232bd86c4ea81dab714f21edad70b7fdf0253942"
   integrity sha512-ZuQPV4rBK/V1j2dIkSSEcH5uT6AaHuKWFfotADHsC0wVL1NLd2WkFCm4ZZbX33iO4ydl6V0GPngKm8HZQ2oujg==
@@ -6146,6 +6172,7 @@ anymatch@^3.0.3, anymatch@~3.1.2:
     "@backstage/plugin-scaffolder" "^1.2.0"
     "@backstage/plugin-search" "^0.8.1"
     "@backstage/plugin-search-react" "^0.2.0"
+    "@backstage/plugin-tech-insights" "^0.2.2"
     "@backstage/plugin-tech-radar" "^0.5.12"
     "@backstage/plugin-techdocs" "^1.1.1"
     "@backstage/plugin-techdocs-module-addons-contrib" "^1.0.0"
@@ -16343,7 +16370,7 @@ react-inspector@^5.1.1:
     is-dom "^1.0.0"
     prop-types "^15.0.0"
 
-react-is@^16.12.0, react-is@^16.13.1, react-is@^16.7.0, react-is@^16.9.0:
+react-is@^16.12.0, react-is@^16.13.1, react-is@^16.7.0, react-is@^16.8.0, react-is@^16.9.0:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==

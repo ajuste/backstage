@@ -8,6 +8,9 @@ organization:
 jira:
   proxyPath: /jira/api
 
+grafana:
+  domain: https://grafana-qa.zerofox.com
+
 backend:
   # Used for enabling authentication, secret is shared by all backend plugins
   # See https://backstage.io/docs/tutorials/backend-to-backend-auth for
@@ -62,6 +65,10 @@ proxy:
       Content-Type: 'application/json'
       X-Atlassian-Token: 'no-check'
       User-Agent: "AnyRandomString"
+  '/grafana/api':
+    target: https://grafana-qa.zerofox.com
+    headers:
+      Authorization: Bearer ${GRAFANA_TOKEN}
 
 # Reference documentation http://backstage.io/docs/features/techdocs/configuration
 # Note: After experimenting with basic setup, use CI/CD to generate docs

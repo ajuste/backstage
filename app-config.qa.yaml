@@ -171,6 +171,12 @@ catalog:
       rules:
         - allow: [Component, API, Group, System]
 
+    # ecr
+    - type: url
+      target: https://github.com/ajuste/entity-content-locker/blob/master/catalog-info.yaml
+      rules:
+        - allow: [Component, API, Group, System]
+
     # onboarding
     - type: url
       target: https://github.com/ajuste/onboarding-tldr-engineers/blob/master/catalog-info.yaml

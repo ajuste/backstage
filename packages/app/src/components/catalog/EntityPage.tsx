@@ -74,7 +74,9 @@ import {
 } from '@roadiehq/backstage-plugin-jira';
 import { EntityCodeCoverageContent } from '@backstage/plugin-code-coverage';
 import { EntityTechInsightsScorecardContent } from '@backstage/plugin-tech-insights';
-
+import {
+  EntityGrafanaDashboardsCard,
+} from '@k-phoen/backstage-plugin-grafana';
 
 
 const cicdContent = (
@@ -352,10 +354,10 @@ const systemPage = (
     <EntityLayout.Route path="/" title="Overview">
       <Grid container spacing={3} alignItems="stretch">
         {entityWarningContent}
-        <Grid item md={6}>
+        <Grid item md={4}>
           <EntityAboutCard variant="gridItem" />
         </Grid>
-        <Grid item md={6}>
+        <Grid item md={8}>
           <EntityHasComponentsCard variant="gridItem" />
         </Grid>
         <Grid item md={6}>
@@ -389,6 +391,10 @@ const systemPage = (
 
     <EntityLayout.Route path="/code-coverage" title="Code Coverage">
       <EntityCodeCoverageContent />
+    </EntityLayout.Route>
+
+    <EntityLayout.Route path="/grafana" title="Grafana">
+      <EntityGrafanaDashboardsCard />
     </EntityLayout.Route>
   </EntityLayout>
 );
