@@ -1,13 +1,4 @@
-FROM node:16-bullseye-slim
-
-# (libsqlite3-dev, curl, ca-certificates, gnupg, lsb-release, update && apt-get install -y python3 python3-pip) can be removed when dropping docker (used for POC only)
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends libsqlite3-dev python3 build-essential procps make python3-pip && \
-    # REMOVE THIS LINE POC:
-    pip3 install mkdocs-techdocs-core==1.0.1 && \
-    rm -rf /var/lib/apt/lists/* && \
-    yarn config set python /usr/bin/python3
-
+FROM 012321959326.dkr.ecr.us-west-2.amazonaws.com/zf/backstage-deps:latest
 WORKDIR /builder
 COPY . .
 #RUN yarn install
