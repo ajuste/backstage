@@ -38,8 +38,7 @@ techdocs:
   publisher:
     type: 'awsS3'
     awsS3:
-      bucketName: qa-backstage
-      bucketRootPath: '/techdocs'
+      bucketName: ${TECHDOCS_AWSS3_BUCKET_NAME}
 
 catalog:
   rules:

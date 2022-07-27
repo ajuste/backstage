@@ -7,15 +7,14 @@ import {
   CATALOG_FILTER_EXISTS,
 } from '@backstage/plugin-catalog-react';
 import { TechDocsSearchResultListItem } from '@backstage/plugin-techdocs';
-
+import { SearchType } from '@backstage/plugin-search';
 import {
+  DefaultResultListItem,
   SearchBar,
   SearchFilter,
   SearchResult,
-  SearchType,
-  DefaultResultListItem,
-} from '@backstage/plugin-search';
-import { useSearch } from '@backstage/plugin-search-react';
+  useSearch,
+} from '@backstage/plugin-search-react';
 import {
   CatalogIcon,
   Content,
@@ -112,7 +111,7 @@ const SearchPage = () => {
             <SearchResult>
               {({ results }) => (
                 <List>
-                  {results.map(({ type, document, highlight }) => {
+                  {results.map(({ type, document, highlight, rank }) => {
                     switch (type) {
                       case 'software-catalog':
                         return (
@@ -120,6 +119,7 @@ const SearchPage = () => {
                             key={document.location}
                             result={document}
                             highlight={highlight}
+                            rank={rank}
                           />
                         );
                       case 'techdocs':
@@ -128,6 +128,7 @@ const SearchPage = () => {
                             key={document.location}
                             result={document}
                             highlight={highlight}
+                            rank={rank}
                           />
                         );
                       default:
@@ -136,6 +137,7 @@ const SearchPage = () => {
                             key={document.location}
                             result={document}
                             highlight={highlight}
+                            rank={rank}
                           />
                         );
                     }

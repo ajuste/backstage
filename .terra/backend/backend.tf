@@ -39,8 +39,8 @@ locals {
 
   config_file = {
     qa   = "app-config.qa.yaml"
-    stag = "app-config.stag.yaml"
-    prod = "app-config.prod.yaml"
+    stag = "app-config.staging.yaml"
+    prod = "app-config.production.yaml"
   }
 }
 
@@ -96,6 +96,24 @@ resource "aws_s3_bucket" "backstage" {
   }
 }
 
+resource "aws_s3_bucket" "techdocs" {
+  acl    = "private"
+  bucket = "${var.env}-backstage-docs"
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
+
+  tags = {
+    Application = "${var.app}"
+    Environment = "${var.env}"
+  }
+}
+
 //<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>>
 // Consul keys
 //<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>>
@@ -120,8 +138,8 @@ data "template_file" "nomad_group" {
     env           = "${var.env}"
     git_sha       = "${var.git_sha}"
     config_file   = "${lookup(local.config_file, var.env)}"
-    bucket_name   = "${aws_s3_bucket.backstage.id}"
-    bucket_region = "${aws_s3_bucket.backstage.region}"
+    bucket_name   = "${aws_s3_bucket.techdocs.id}"
+    bucket_region = "${aws_s3_bucket.techdocs.region}"
     subdomain     = "${lookup(local.subdomain, var.env)}"
   }
 }

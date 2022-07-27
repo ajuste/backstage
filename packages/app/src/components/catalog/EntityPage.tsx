@@ -51,7 +51,6 @@ import {
   EntityMembersListCard,
   EntityOwnershipCard,
 } from '@backstage/plugin-org';
-import { EntityTechdocsContent } from '@backstage/plugin-techdocs';
 import { EmptyState } from '@backstage/core-components';
 import {
   Direction,
@@ -77,6 +76,16 @@ import { EntityTechInsightsScorecardContent } from '@backstage/plugin-tech-insig
 import {
   EntityGrafanaDashboardsCard,
 } from '@k-phoen/backstage-plugin-grafana';
+import { EntityTechdocsContent } from '@backstage/plugin-techdocs';
+import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
+import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
+const techdocsContent = (
+  <EntityTechdocsContent>
+    <TechDocsAddons>
+      <ReportIssue />
+    </TechDocsAddons>
+  </EntityTechdocsContent>
+);
 
 
 const cicdContent = (
@@ -204,7 +213,7 @@ const serviceEntityPage = (
     </EntityLayout.Route>
 
     <EntityLayout.Route path="/docs" title="Docs">
-      <EntityTechdocsContent />
+      {techdocsContent}
     </EntityLayout.Route>
     <EntityLayout.Route path="/tech-insights" title="Scorecards">
       <EntityTechInsightsScorecardContent
@@ -241,7 +250,7 @@ const websiteEntityPage = (
     </EntityLayout.Route>
 
     <EntityLayout.Route path="/docs" title="Docs">
-      <EntityTechdocsContent />
+      {techdocsContent}
     </EntityLayout.Route>
   </EntityLayout>
 );
@@ -260,7 +269,7 @@ const defaultEntityPage = (
     </EntityLayout.Route>
 
     <EntityLayout.Route path="/docs" title="Docs">
-      <EntityTechdocsContent />
+      {techdocsContent}
     </EntityLayout.Route>
   </EntityLayout>
 );
