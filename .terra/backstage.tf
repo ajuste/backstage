@@ -45,6 +45,22 @@ provider "nomad" {
 }
 
 //<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>>
+// Database
+//<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>>
+
+locals {
+  db_instance_identifier = {
+    qa   = "backstage-qa"
+    stag = "backstage-stag"
+    prod = "backstage-prod"
+  }
+}
+
+data "aws_db_instance" "backstage" {
+  db_instance_identifier = "${lookup(local.db_instance_identifier, var.env)}"
+}
+
+//<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>>
 // Providers
 //<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>>
 
@@ -71,6 +87,7 @@ module "backend" {
   ecr_url      = "${var.ecr_url}"
   env          = "${var.env}"
   git_sha      = "${var.git_sha}"
+  db_endpoint  = "${data.aws_db_instance.backstage.endpoint}"
 }
 
 //<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>>

@@ -73,7 +73,8 @@ group "backend" {
     template {
       data        = <<EOH
 {{ range ls "${app}/backend/env" }}
-{{ .Key }}="{{ .Value }}"{{ end }}
+{{ .Key }}="{{ .Value }}"
+{{ end }}
 TECHDOCS_AWSS3_BUCKET_NAME=${bucket_name}
 {{ with secret "secret/${app}/github" }}
 AUTH_GITHUB_CLIENT_ID="{{ .Data.client_id }}"
@@ -92,6 +93,11 @@ AWS_REGION="us-west-2"
 AWS_ACCESS_KEY_ID="{{ .Data.access_key }}"
 AWS_SECRET_ACCESS_KEY="{{ .Data.secret_key }}"
 AWS_SESSION_TOKEN="{{ .Data.security_token }}"
+{{ end }}
+{{ with secret "database/backstage/creds/admin" }}
+DB_HOST=${db_endpoint}
+DB_USER="{{ .Data.username }}"
+DB_PASSWORD="{{ .Data.password }}"
 {{ end }}
 EOH
       destination = "$${NOMAD_SECRETS_DIR}/env"
