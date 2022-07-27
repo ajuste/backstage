@@ -25,10 +25,10 @@ locals {
     prod = 2
   }
 
-  hostname = {
-    qa   = "backstage-qa"
-    stag = "backstage-stag"
-    prod = "backstage"
+  subdomain = {
+    qa   = "devportal-qa"
+    stag = "devportal-stag"
+    prod = "devportal"
   }
 
   database_host = {
@@ -39,8 +39,8 @@ locals {
 
   config_file = {
     qa   = "app-config.qa.yaml"
-    stag = "app-config.staging.yaml"
-    prod = "app-config.production.yaml"
+    stag = "app-config.stag.yaml"
+    prod = "app-config.prod.yaml"
   }
 }
 
@@ -78,6 +78,24 @@ data "terraform_remote_state" "global" {
   }
 }
 
+resource "aws_s3_bucket" "backstage" {
+  acl    = "private"
+  bucket = "${var.env}-backstage"
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
+
+  tags = {
+    Application = "${var.app}"
+    Environment = "${var.env}"
+  }
+}
+
 //<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>>
 // Consul keys
 //<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>>
@@ -102,6 +120,9 @@ data "template_file" "nomad_group" {
     env           = "${var.env}"
     git_sha       = "${var.git_sha}"
     config_file   = "${lookup(local.config_file, var.env)}"
+    bucket_name   = "${aws_s3_bucket.backstage.id}"
+    bucket_region = "${aws_s3_bucket.backstage.region}"
+    subdomain     = "${lookup(local.subdomain, var.env)}"
   }
 }
 

@@ -46,11 +46,11 @@ group "backend" {
       tags = [
         "https",
         "cs=zerofox",
-        "urlprefix-devportal-${env}.zerofox.com/ proto=http",
+        "urlprefix-${subdomain}.zerofox.com/ proto=http",
         "traefik.http.routers.${app}-$${NOMAD_TASK_NAME}=redirect-to-https@file",
-        "traefik.http.routers.${app}-$${NOMAD_TASK_NAME}.rule=Host(`devportal-${env}.zerofox.com`)",
+        "traefik.http.routers.${app}-$${NOMAD_TASK_NAME}.rule=Host(`${subdomain}.zerofox.com`)",
         "traefik.http.routers.${app}-$${NOMAD_TASK_NAME}.service=${app}-$${NOMAD_TASK_NAME}",
-        "traefik.http.routers.${app}-$${NOMAD_TASK_NAME}-https.rule=Host(`devportal-${env}.zerofox.com`)",
+        "traefik.http.routers.${app}-$${NOMAD_TASK_NAME}-https.rule=Host(`${subdomain}.zerofox.com`)",
         "traefik.http.routers.${app}-$${NOMAD_TASK_NAME}-https.service=${app}-$${NOMAD_TASK_NAME}",
         "traefik.http.routers.${app}-$${NOMAD_TASK_NAME}-https.tls=true",
         "no-scrape"
@@ -72,6 +72,9 @@ group "backend" {
 
     template {
       data        = <<EOH
+{{ range ls "${app}/backend/env" }}
+{{ .Key }}="{{ .Value }}"{{ end }}
+TECHDOCS_AWSS3_BUCKET_NAME=${bucket_name}
 {{ with secret "secret/${app}/github" }}
 AUTH_GITHUB_CLIENT_ID="{{ .Data.client_id }}"
 AUTH_GITHUB_CLIENT_SECRET="{{ .Data.client_secret }}"
@@ -84,8 +87,12 @@ JIRA_TOKEN="{{ .Data.token }}"
 {{ with secret "secret/${app}/grafana" }}
 GRAFANA_TOKEN="{{ .Data.token }}"
 {{ end }}
-{{ range ls "${app}/backend/env" }}
-{{ .Key }}="{{ .Value }}"{{ end }}
+{{ with secret "aws/sts/backstage" "ttl=24h" }}
+AWS_REGION="us-west-2"
+AWS_ACCESS_KEY_ID="{{ .Data.access_key }}"
+AWS_SECRET_ACCESS_KEY="{{ .Data.secret_key }}"
+AWS_SESSION_TOKEN="{{ .Data.security_token }}"
+{{ end }}
 EOH
       destination = "$${NOMAD_SECRETS_DIR}/env"
       change_mode = "restart"
