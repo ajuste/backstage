@@ -14,7 +14,7 @@ variable "env" {}
 
 variable "git_sha" {}
 
-variable "db_endpoint" {}
+variable "db_address" {}
 
 //<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>>
 // Locals
@@ -143,7 +143,11 @@ data "template_file" "nomad_group" {
     bucket_name   = "${aws_s3_bucket.techdocs.id}"
     bucket_region = "${aws_s3_bucket.techdocs.region}"
     subdomain     = "${lookup(local.subdomain, var.env)}"
+<<<<<<< HEAD
     db_endpoint   = "${var.db_endpoint}"
+=======
+    db_address    = "${var.db_address}"
+>>>>>>> 6fcc4c3 (Configure db connection for qa/stag/prod)
   }
 }
 

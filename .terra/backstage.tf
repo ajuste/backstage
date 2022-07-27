@@ -87,7 +87,7 @@ module "backend" {
   ecr_url      = "${var.ecr_url}"
   env          = "${var.env}"
   git_sha      = "${var.git_sha}"
-  db_endpoint  = "${data.aws_db_instance.backstage.endpoint}"
+  db_address   = "${data.aws_db_instance.backstage.address}"
 }
 
 //<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>>

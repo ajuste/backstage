@@ -95,7 +95,7 @@ AWS_SECRET_ACCESS_KEY="{{ .Data.secret_key }}"
 AWS_SESSION_TOKEN="{{ .Data.security_token }}"
 {{ end }}
 {{ with secret "database/backstage/creds/admin" }}
-DB_HOST=${db_endpoint}
+DB_HOST=${db_address}
 DB_USER="{{ .Data.username }}"
 DB_PASSWORD="{{ .Data.password }}"
 {{ end }}
