@@ -97,42 +97,23 @@ catalog:
     - allow: [Component, System, API, Resource, Location]
   locations:
     
-    # users
     - type: file
-      target: ../../local/users.yaml
-      
-    # Local example data, file locations are relative to the backend process, typically `packages/backend`
-    - type: file
-      target: ../../examples/domains.yaml
+      target: ./examples/roles.yaml
       rules:
-        - allow: [Domain]
-      
-    # Local example data, file locations are relative to the backend process, typically `packages/backend`
-    - type: file
-      target: ../../examples/entities.yaml
+        - allow: [Group]
 
-    # Local example template
     - type: file
-      target: ../../examples/template/template.yaml
+      target: ./examples/teams.yaml
       rules:
-        - allow: [Template]
-
-    # Local example organizational data
+        - allow: [Group]
+        
     - type: file
-      target: ../../examples/org.yaml
+      target: ./examples/users.yaml
       rules:
-        - allow: [User, Group]
+        - allow: [User]
 
-    # golden paths
-    # - type: url
-    #   target: https://github.com/ajuste/backstage-poc-config/tree/main/org/users.yaml
-
-    ## Uncomment these lines to add more example data
-    # - type: url
-    #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all.yaml
-
-    ## Uncomment these lines to add an example org
-    # - type: url
-    #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/acme-corp.yaml
-    #   rules:
-    #     - allow: [User, Group]
+    # cs-takedown-api
+    - type: url
+      target: https://github.com/riskive/cs-takedown-api/blob/master/catalog-info.yaml
+      rules:
+        - allow: [Component, API, Group, System]

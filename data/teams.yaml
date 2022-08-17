@@ -1,0 +1,182 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-contig-automation
+  tags: ["scrum-team"]
+  description: "Everything related to automating customer experience"
+spec:
+  profile:
+    displayName: Config Automation
+  type: team
+  children: []
+  members: [aflano, jvidmar, rpena, fcano, cyuseff, ahewett]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-cti-collection
+  tags: ["scrum-team"]
+  description: "Everything CTI data collection"
+spec:
+  profile:
+    displayName: CTI Collection
+  type: team
+  children: []
+  members: [pblanton, evinciguerra, shanna, rreeves, bconley, rjackson]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-cti-engagement
+  tags: ["scrum-team"]
+  description: "Everything related to increasing customer engagement with CTI"
+spec:
+  profile:
+    displayName: CTI Engagement
+  type: team
+  children: []
+  members: [jsumpter, mriveros, rroman, ajuste, aaldunate, rjackson]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-cti-search
+  tags: ["scrum-team"]
+  description: "Everything related to searching among CTI collections"
+spec:
+  profile:
+    displayName: CTI Search
+  type: team
+  children: []
+  members: [ccherry, mmenafra, ktak, jholyoak, jrodriguez, rjackson]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-customer-commits
+  tags: ["scrum-team"]
+  description: "Everything related to improving customer experience"
+spec:
+  profile:
+    displayName: Customer Commits
+  type: team
+  children: []
+  members: [soneill, jalvarez, jurbina, dvalenzuela, hcampusano, ddannunzio]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-disruption
+  tags: ["scrum-team"]
+  description: "Everything related to "
+spec:
+  profile:
+    displayName: Disruption
+  type: team
+  children: []
+  members: [dgerber, acaballero, okhan, gwurman, ljury, mlang]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-domains
+  tags: ["scrum-team"]
+  description: "Everything related to domain scanning and phishing"
+spec:
+  profile:
+    displayName: Domains
+  type: team
+  children: []
+  members: [bsnowdon, dbarria, selgueda, jcollins, skhan, cholter]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-domains-search
+  tags: ["scrum-team"]
+  description: "Everything related to implementing domain search"
+spec:
+  profile:
+    displayName: Domains Search
+  type: team
+  children: []
+  members: [bbuttonow, lramirez, skhan, fbravo, rmorton, ddannunzio]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-drp-analysis
+  tags: ["scrum-team"]
+  description: "Everything related to DRP"
+spec:
+  profile:
+    displayName: DRP Analysis
+  type: team
+  children: []
+  members: [nanderson, nalvear, kmceachern, smaldonado]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-platform-maturity
+  tags: ["scrum-team"]
+  description: "Everything related to platform maturity"
+spec:
+  profile:
+    displayName: Platform Maturity
+  type: team
+  children: []
+  members: [jvergara, rcalvo, pfrias, orencoret, dbano, cholter]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-sre
+spec:
+  profile:
+    displayName: SRE
+  tags: ["scrum-team"]
+  description: "Everything related to Site Reliability Eng"
+  type: team
+  children: []
+  members: [zwolf, jprotzman, tceruti, craborg, zwolf]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-triage-pds
+spec:
+  profile:
+    displayName: Triage & PDS
+  tags: ["scrum-team"]
+  description: "Everything related to triaing alerts"
+  type: team
+  children: []
+  members: [dgerber, evillalobos, rvillablanca, jbahamonde, mlang]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-devsecops
+spec:
+  profile:
+    displayName: DevSecOps
+  tags: ["scrum-team"]
+  description: "Everything related to dev sec ops"
+  type: team
+  children: []
+  members: [ehall, scornejo, jpietrzak, ljeter, zwolf]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-devops
+spec:
+  profile:
+    displayName: DevOps
+  tags: ["scrum-team"]
+  description: "Everything related to devops"
+  type: team
+  children: []
+  members: [zwolf, xzantello, cmoran, fvidela, vvalderrama, ynakshin, zwolf]

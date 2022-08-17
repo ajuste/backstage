@@ -20,7 +20,7 @@ RUN tar xzf skeleton.tar.gz && rm skeleton.tar.gz
 
 RUN yarn install --frozen-lockfile --production --network-timeout 300000 && rm -rf "$(yarn cache dir)"
 RUN cp /builder/packages/backend/dist/bundle.tar.gz /builder/app-config*.yaml ./
-COPY ./examples ./examples
+COPY ./data ./data
 RUN tar xzf bundle.tar.gz && rm bundle.tar.gz
 RUN rm -rf /builder
 
