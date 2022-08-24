@@ -14,6 +14,26 @@ and structure of the documentation is specified using [mkdocs](https://www.mkdoc
    - Even README.md, its fine, github will be able to find it under `docs` folder.
 3. Create a `mkdocs.yml` file at the root of your repo that describes
    documentation inside you `docs` folder.
+   - You can add any tree structure
+   - Make sure to add `site_name` and `repo_url`
+
+A functional mkdocs file would looks like this:
+```
+site_name: 'Backstage devportal'
+repo_url: https://github.com/riskive/backstage/
+
+nav:
+  - Home: README.md
+  - Contributing: CONTRIBUTING.md
+  - Golden paths:
+    - Adding documentation: goldenpath-add_documentation.md
+  - Playbooks:
+    - Developement:
+      - Running locally: playbook-running_locally.md
+    
+plugins:
+  - techdocs-core
+```
 
 ## Catalog changes
 
@@ -41,6 +61,7 @@ metadata:
 ## Troubleshooting
 
 * **When accessing documentation on backstage it fails to generate it:**
-  - Make sure that your `mkdocs.yml` exist in the root of your repo.
-  - Make sure paths described `mkdocs.yml` are relative to
+  1. Make sure that your `mkdocs.yml` exist in the root of your repo.
+  2. Make sure paths described `mkdocs.yml` are relative to
     files under `docs` folder.
+  3. Make sure `site_name` and `repo_url` are defined mkdocs file.

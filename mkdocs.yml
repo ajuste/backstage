@@ -1,5 +1,5 @@
-ite_name: 'Alert Content Service'
-repo_url: https://github.com/ajuste/go-dm/
+site_name: 'Backstage devportal'
+repo_url: https://github.com/riskive/backstage/
 
 nav:
   - Home: README.md
