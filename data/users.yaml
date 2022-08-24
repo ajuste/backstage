@@ -370,12 +370,12 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: User
 metadata:
-  name: lramirez
+  name: eramirez
 spec:
   memberOf: []
   profile:
     displayName: Lalo Ramirez
-    email: lramirez@zerofox.com
+    email: eramirez@zerofox.com
 ---
 apiVersion: backstage.io/v1alpha1
 kind: User
@@ -726,3 +726,113 @@ spec:
   profile:
     displayName: Aaron Brewer
     email: abrewer@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: afarrel
+spec:
+  memberOf: []
+  profile:
+    displayName: Alex Farrel
+    email: afarrel@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: cmunoz
+spec:
+  memberOf: []
+  profile:
+    displayName: Cristobal Muñoz
+    email: cmunoz@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: hcovington
+spec:
+  memberOf: []
+  profile:
+    displayName: Cristobal Muñoz
+    email: cmunoz@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: nschlotterbeck@zerofox.com
+spec:
+  memberOf: []
+  profile:
+    displayName: Nicolás Schlotterbeck
+    email: nschlotterbeck@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: ahenriquez@zerofox.com
+spec:
+  memberOf: []
+  profile:
+    displayName: Alfonso Henriquez
+    email: ahenriquez@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: overa@zerofox.com
+spec:
+  memberOf: []
+  profile:
+    displayName: Octavio Vera
+    email: overa@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: iparada@zerofox.com
+spec:
+  memberOf: []
+  profile:
+    displayName: Ignacio Parada
+    email: iparada@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: gnegrete@zerofox.com
+spec:
+  memberOf: []
+  profile:
+    displayName: Guillermo Negrete
+    email: gnegrete@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: gnegrete@zerofox.com
+spec:
+  memberOf: []
+  profile:
+    displayName: Guillermo Negrete
+    email: gnegrete@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: clundstedt@zerofox.com
+spec:
+  memberOf: []
+  profile:
+    displayName: Christian Lundstedt
+    email: clundstedt@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: amason@zerofox.com
+spec:
+  memberOf: []
+  profile:
+    displayName: Andrew Mason
+    email: amason@zerofox.com

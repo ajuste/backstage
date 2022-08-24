@@ -41,12 +41,12 @@ catalog:
 
   locations:
     
-    - type: file
+    - type: url
       target: https://github.com/riskive/backstage/blob/master/data/roles.yaml
       rules:
         - allow: [Group]
 
-    - type: file
+    - type: url
       target: https://github.com/riskive/backstage/blob/master/data/teams.yaml
       rules:
         - allow: [Group]
