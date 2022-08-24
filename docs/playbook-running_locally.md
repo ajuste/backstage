@@ -1,18 +1,4 @@
----
-Service Owner:
-  - Alvaro Juste (@ajuste)
-Secondaries:
----
-
-# Backstage
-
-Developer portal based on [Backstage.io](https://backstage.io/)
-
-
 # Local development
-
-**Important**: Never commit secrets. Secrets for local development can be 
-safely added under app-config.local.yaml since its ignored by git.
 
 * Create a Personal access token following [these instructions](https://backstage.io/docs/getting-started/configuration#setting-up-a-github-integration). And add your token to your `.bash_profile`
 ```sh
@@ -29,7 +15,6 @@ This suits most of the use-cases when developing, its pretty straightforward and
   * A memory DB is used.
   * In this case its suggested to run `yarn dev` directly on the root of the repo.
     This way you get hot reloads for changes on the react application.
-
 
 ## Postgres database
 

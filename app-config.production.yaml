@@ -42,19 +42,25 @@ catalog:
   locations:
     
     - type: file
-      target: ./examples/roles.yaml
+      target: https://github.com/riskive/backstage/blob/master/data/roles.yaml
       rules:
         - allow: [Group]
 
     - type: file
-      target: ./examples/teams.yaml
+      target: https://github.com/riskive/backstage/blob/master/data/teams.yaml
       rules:
         - allow: [Group]
         
-    - type: file
-      target: ./examples/users.yaml
+    - type: url
+      target: https://github.com/riskive/backstage/blob/master/data/users.yaml
       rules:
         - allow: [User]
+
+    # backstage
+    - type: url
+      target: https://github.com/riskive/backstage/blob/master/catalog-info.yaml
+      rules:
+        - allow: [Component, API, Group, System]
 
     # cs-takedown-api
     - type: url

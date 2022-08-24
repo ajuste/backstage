@@ -1,0 +1,14 @@
+ite_name: 'Alert Content Service'
+repo_url: https://github.com/ajuste/go-dm/
+
+nav:
+  - Home: README.md
+  - Contributing: CONTRIBUTING.md
+  - Golden paths:
+    - Adding documentation: goldenpath-add_documentation.md
+  - Playbooks:
+    - Developement:
+      - Running locally: playbook-running_locally.md
+    
+plugins:
+  - techdocs-core
