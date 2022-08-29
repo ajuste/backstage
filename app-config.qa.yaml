@@ -61,6 +61,16 @@ catalog:
       rules:
         - allow: [Component, API, Group, System]
 
+    # backstage golden paths
+    - type: url
+      target: https://github.com/riskive/backstage-docs/blob/master/goldenpath-creating_goldenpaths/catalog-info.yaml
+      rules:
+        - allow: [Component]
+    - type: url
+      target: https://github.com/riskive/backstage-docs/blob/master/goldenpath-add_documentation/catalog-info.yaml
+      rules:
+        - allow: [Component]
+
     # cs-takedown-api
     - type: url
       target: https://github.com/riskive/cs-takedown-api/blob/master/catalog-info.yaml
