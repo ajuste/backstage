@@ -13,6 +13,7 @@ import {
   SearchBar,
   SearchFilter,
   SearchResult,
+  SearchPagination,
   useSearch,
 } from '@backstage/plugin-search-react';
 import {
@@ -108,6 +109,7 @@ const SearchPage = () => {
             </Paper>
           </Grid>
           <Grid item xs={9}>
+            <SearchPagination />
             <SearchResult>
               {({ results }) => (
                 <List>

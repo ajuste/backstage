@@ -1,10 +1,9 @@
 import React from 'react';
-import { Route } from 'react-router';
+import { Route, Navigate } from 'react-router';
 import { apiDocsPlugin, ApiExplorerPage } from '@backstage/plugin-api-docs';
 
 import {
   CatalogEntityPage,
-  CatalogIndexPage,
   catalogPlugin,
 } from '@backstage/plugin-catalog';
 import {
@@ -32,7 +31,7 @@ import { AlertDisplay, OAuthRequestDialog } from '@backstage/core-components';
 import { createApp } from '@backstage/app-defaults';
 import { FlatRoutes } from '@backstage/core-app-api';
 import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
-import { PermissionedRoute } from '@backstage/plugin-permission-react';
+import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
 import { HomepageCompositionRoot } from '@backstage/plugin-home';
 import { HomePage } from './components/home/HomePage';
@@ -67,7 +66,7 @@ const routes = (
     <Route path="/" element={<HomepageCompositionRoot />}>
       <HomePage />
     </Route>
-    <Route path="/catalog" element={<CatalogIndexPage />} />
+    <Route path="/" element={<Navigate to="catalog" />} />
     <Route
       path="/catalog/:namespace/:kind/:name"
       element={<CatalogEntityPage />}
@@ -89,10 +88,13 @@ const routes = (
       path="/tech-radar"
       element={<TechRadarPage width={1500} height={800} />}
     />
-    <PermissionedRoute
+    <Route
       path="/catalog-import"
-      permission={catalogEntityCreatePermission}
-      element={<CatalogImportPage />}
+      element={
+        <RequirePermission permission={catalogEntityCreatePermission}>
+          <CatalogImportPage />
+        </RequirePermission>
+      }
     />
     <Route path="/search" element={<SearchPage />}>
       {searchPage}
