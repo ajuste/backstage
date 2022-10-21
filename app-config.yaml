@@ -89,12 +89,9 @@ scaffolder:
   # see https://backstage.io/docs/features/software-templates/configuration for software template options
 
 catalog:
-  readOnly: false
-  import:
-    entityFilename: catalog-info.yaml
-    pullRequestBranchName: backstage-integration
   rules:
-    - allow: [Component, System, API, Resource, Location]
+    - allow: [Component, System, API, Resource, Location, User, Group, Template, Domain]
+
   locations:
     
     - type: url
@@ -111,6 +108,11 @@ catalog:
       target: https://github.com/riskive/backstage/blob/master/data/users.yaml
       rules:
         - allow: [User]
+        
+    - type: url
+      target: https://github.com/riskive/backstage/blob/master/data/domains.yaml
+      rules:
+        - allow: [Domain]
 
     # backstage
     - type: url

@@ -21,7 +21,7 @@
     "@backstage/plugin-catalog-import": "^0.9.0",
     "@backstage/plugin-catalog-react": "^1.2.0",
     "@backstage/plugin-code-coverage": "^0.2.0",
-    "@backstage/plugin-explore": "^0.3.37",
+    "@backstage/plugin-explore": "^0.3.41",
     "@backstage/plugin-github-actions": "^0.5.10",
     "@backstage/plugin-org": "^0.5.10",
     "@backstage/plugin-permission-react": "^0.4.6",
@@ -35,9 +35,11 @@
     "@backstage/plugin-techdocs-react": "^1.0.5",
     "@backstage/plugin-user-settings": "^0.5.0",
     "@backstage/theme": "^0.2.15",
-    "@k-phoen/backstage-plugin-grafana": "^0.1.12",
+    "@k-phoen/backstage-plugin-grafana": "^0.1.16",
     "@material-ui/core": "^4.12.2",
     "@material-ui/icons": "^4.9.1",
+    "@roadiehq/backstage-plugin-github-insights": "^2.0.6",
+    "@roadiehq/backstage-plugin-github-pull-requests": "^2.2.8",
     "@roadiehq/backstage-plugin-jira": "^2.1.1",
     "@vscode/sqlite3": "^5.0.8",
     "better-sqlite3": "^7.5.3",
@@ -46,7 +48,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router": "^6.3.0",
-    "react-router-dom":  "^6.3.0",
+    "react-router-dom": "^6.3.0",
     "react-use": "^17.2.4"
   },
   "devDependencies": {
@@ -60,6 +62,17 @@
     "cypress": "^7.3.0",
     "eslint-plugin-cypress": "^2.10.3",
     "start-server-and-test": "^1.10.11"
+  },
+  "scripts": {
+    "start": "backstage-cli package start",
+    "build": "backstage-cli package build",
+    "clean": "backstage-cli package clean",
+    "test": "backstage-cli package test",
+    "lint": "backstage-cli package lint",
+    "test:e2e": "start-server-and-test start http://localhost:3000 cy:dev",
+    "test:e2e:ci": "start-server-and-test start http://localhost:3000 cy:run",
+    "cy:dev": "cypress open",
+    "cy:run": "cypress run"
   },
   "browserslist": {
     "production": [

@@ -1,8 +1,9 @@
 import React from 'react';
-import { Route, Navigate } from 'react-router';
+import { Route } from 'react-router';
 import { apiDocsPlugin, ApiExplorerPage } from '@backstage/plugin-api-docs';
 
 import {
+  CatalogIndexPage,
   CatalogEntityPage,
   catalogPlugin,
 } from '@backstage/plugin-catalog';
@@ -33,14 +34,15 @@ import { FlatRoutes } from '@backstage/core-app-api';
 import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
-import { HomepageCompositionRoot } from '@backstage/plugin-home';
 import { HomePage } from './components/home/HomePage';
 import { ReportingPage, CodeCoveragePage } from 'plugin-reporting';
-import { ExplorePage, explorePage } from './components/explore/ExplorePage';
+import { ExplorePage } from './components/explore/ExplorePage';
+import * as plugins from './plugins';
 
 
 const app = createApp({
   apis,
+  plugins: Object.values(plugins),
   bindRoutes({ bind }) {
     bind(catalogPlugin.externalRoutes, {
       createComponent: scaffolderPlugin.routes.root,
@@ -63,10 +65,12 @@ const AppRouter = app.getRouter();
 
 const routes = (
   <FlatRoutes>
-    <Route path="/" element={<HomepageCompositionRoot />}>
-      <HomePage />
+    <Route path="/" element={<HomePage />}>
     </Route>
-    <Route path="/" element={<Navigate to="catalog" />} />
+    <Route
+      path="/catalog"
+      element={<CatalogIndexPage initialKind='system' />}>
+    </Route>
     <Route
       path="/catalog/:namespace/:kind/:name"
       element={<CatalogEntityPage />}
@@ -103,9 +107,7 @@ const routes = (
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
     <Route path="/reporting" element={<ReportingPage />} />
     <Route path="/reporting/code-coverage" element={<CodeCoveragePage />} />
-    <Route path="/explore" element={<ExplorePage />}>
-      {explorePage}
-    </Route>
+    <Route path="/explore" element={<ExplorePage />} />
   </FlatRoutes>
 );
 

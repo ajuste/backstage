@@ -34,6 +34,15 @@ techdocs:
     awsS3:
       bucketName: ${TECHDOCS_AWSS3_BUCKET_NAME}
 
+grafana:
+  domain: https://grafana.zerofox.com
+
+proxy:
+  '/grafana/api':
+    target: https://grafana.zerofox.com
+    headers:
+      Authorization: Bearer ${GRAFANA_TOKEN}
+
 catalog:
   rules:
     - allow: [Component, System, API, Resource, Location, User, Group, Template, Domain]
@@ -54,6 +63,11 @@ catalog:
       target: https://github.com/riskive/backstage/blob/master/data/users.yaml
       rules:
         - allow: [User]
+        
+    - type: url
+      target: https://github.com/riskive/backstage/blob/master/data/domains.yaml
+      rules:
+        - allow: [Domain]
 
     # backstage
     - type: url

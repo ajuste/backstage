@@ -55,6 +55,11 @@ catalog:
       target: https://github.com/riskive/backstage/blob/master/data/users.yaml
       rules:
         - allow: [User]
+        
+    - type: url
+      target: https://github.com/riskive/backstage/blob/master/data/domains.yaml
+      rules:
+        - allow: [Domain]
 
     # backstage
     - type: url

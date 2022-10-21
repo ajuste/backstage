@@ -1,0 +1,37 @@
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: domain-protection
+  title: Domain Protection
+  description: Everything related to domain protection such as domain scan, phishing detection, etc.
+spec:
+  owner: domainowner
+---
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: alerting
+  title: Alerting
+  description: Everything related to alerting such as entities, enterprises, alerts, policies, etc.
+spec:
+  owner: domainowner
+---
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: cti
+  title: CTI
+  description: Everything related to cyber threat intelligence.
+spec:
+  owner: domainowner
+---
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  title: Disruption
+  name: disruption
+  description: Everything related to remediating alerts such as domain takedown, etc.
+  annotations:
+    grafana/tag-selector: disruption
+spec:
+  owner: domainowner

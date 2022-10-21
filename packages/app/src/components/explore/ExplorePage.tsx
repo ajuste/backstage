@@ -22,7 +22,6 @@ export const ExplorePage = () => {
             <ExploreLayout.Route path="/scrum-teams" title="Scrum Teams">
                 <TeamsExplorerComponent />
             </ExploreLayout.Route>
-
         </ExploreLayout>
     );
 };
