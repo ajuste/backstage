@@ -154,9 +154,9 @@ EOH
     }
 
     template {
-      source      = "/nomad/templates/vault.crt.ctmpl"
+      source      = "/nomad/templates/vault-core.crt.ctmpl"
       destination = "$${NOMAD_TASK_DIR}/vault.crt"
-      change_mode = "restart"
+      change_mode = "noop"
     }
   }
 }
