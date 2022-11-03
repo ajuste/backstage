@@ -84,9 +84,3 @@ catalog:
       target: https://github.com/riskive/backstage-docs/blob/master/goldenpath-add_documentation/catalog-info.yaml
       rules:
         - allow: [Component]
-
-    # cs-takedown-api
-    - type: url
-      target: https://github.com/riskive/cs-takedown-api/blob/master/catalog-info.yaml
-      rules:
-        - allow: [Component, API, Group, System]

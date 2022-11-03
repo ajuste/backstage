@@ -3010,17 +3010,17 @@
     react-use "^17.2.4"
     zen-observable "^0.8.15"
 
-"@backstage/plugin-code-coverage-backend@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@backstage/plugin-code-coverage-backend/-/plugin-code-coverage-backend-0.2.0.tgz#e131d029c2c1c07d494d4a79a03d3c43176e737a"
-  integrity sha512-t91qxNjyy07HGljjBO3wH4DYoM2BYnYx+ovQlIuXsdYy4stQlIJOa+ThyO1J1xUx3KsUgGuqQtDb/HvwM1sncA==
+"@backstage/plugin-code-coverage-backend@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@backstage/plugin-code-coverage-backend/-/plugin-code-coverage-backend-0.2.3.tgz#e4a6cb9d0de5af55e2922985ceb0a7745c3a0a59"
+  integrity sha512-rtup5cNs1CXmNmYfAzjo8/qmwlxb0QO0yfVASW8SLsXHjSXgM0Wg5r9B6iKMssVGzQxPKVxYYTQ3YgBjs/V50A==
   dependencies:
-    "@backstage/backend-common" "^0.14.1"
-    "@backstage/catalog-client" "^1.0.4"
-    "@backstage/catalog-model" "^1.1.0"
-    "@backstage/config" "^1.0.1"
-    "@backstage/errors" "^1.1.0"
-    "@backstage/integration" "^1.2.2"
+    "@backstage/backend-common" "^0.15.2"
+    "@backstage/catalog-client" "^1.1.1"
+    "@backstage/catalog-model" "^1.1.2"
+    "@backstage/config" "^1.0.3"
+    "@backstage/errors" "^1.1.2"
+    "@backstage/integration" "^1.3.2"
     "@types/express" "^4.17.6"
     express "^4.17.1"
     express-promise-router "^4.1.0"
@@ -3053,12 +3053,26 @@
     react-use "^17.2.4"
     recharts "^1.8.5"
 
-"@backstage/plugin-explore-react@^0.0.19":
-  version "0.0.19"
-  resolved "https://registry.yarnpkg.com/@backstage/plugin-explore-react/-/plugin-explore-react-0.0.19.tgz#d8c1fe0602b2a17845a25d80192bc4f3783ef808"
-  integrity sha512-ZCjwPlx8+95/SFg5cTXN/cMMMuc74nzNPtAF1A6JeTna2fs3hRiGEzEAZ/oLWlEMijFEK7MwiL/c1aZjUwlxAA==
+"@backstage/plugin-code-coverage@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@backstage/plugin-code-coverage/-/plugin-code-coverage-0.2.3.tgz#c51d643762fbf760fb1447bf02a0e410e69d5909"
+  integrity sha512-UDAHQblUea2M7kgtB/1ALt31BZonQlmpycQm10xq3PLnOUcdt3xL604PkSMtL69GnvO0d4caF7b4JOS8UvIjEg==
   dependencies:
-    "@backstage/core-plugin-api" "^1.0.4"
+    "@backstage/catalog-model" "^1.1.2"
+    "@backstage/config" "^1.0.3"
+    "@backstage/core-components" "^0.11.2"
+    "@backstage/core-plugin-api" "^1.0.7"
+    "@backstage/errors" "^1.1.2"
+    "@backstage/plugin-catalog-react" "^1.2.0"
+    "@backstage/theme" "^0.2.16"
+    "@material-ui/core" "^4.12.2"
+    "@material-ui/icons" "^4.9.1"
+    "@material-ui/lab" "4.0.0-alpha.57"
+    "@material-ui/styles" "^4.11.0"
+    highlight.js "^10.6.0"
+    luxon "^3.0.0"
+    react-use "^17.2.4"
+    recharts "^1.8.5"
 
 "@backstage/plugin-explore-react@^0.0.22":
   version "0.0.22"
@@ -3066,25 +3080,6 @@
   integrity sha512-ZpRRodIGShck2c3hwXWQyBNi64j4umvhgiqxTiZIFlsyCnlWrYNm3URsstPiL2bfp2Qfcjo3M9GWwDiD3+vP9Q==
   dependencies:
     "@backstage/core-plugin-api" "^1.0.7"
-
-"@backstage/plugin-explore@^0.3.37":
-  version "0.3.38"
-  resolved "https://registry.yarnpkg.com/@backstage/plugin-explore/-/plugin-explore-0.3.38.tgz#429187d1fdb9ba463ea40faa44bd63670b6db67b"
-  integrity sha512-rv3lMSW2eDFwfz9InpGfZDdXdqr2pZJ5DtZVQVlefxOUTKWc1ekiq1d4Ry+fD9shThq6/oqgatLKq0xwydZI2g==
-  dependencies:
-    "@backstage/catalog-model" "^1.1.0"
-    "@backstage/core-components" "^0.10.0"
-    "@backstage/core-plugin-api" "^1.0.4"
-    "@backstage/plugin-catalog-react" "^1.1.2"
-    "@backstage/plugin-explore-react" "^0.0.19"
-    "@backstage/theme" "^0.2.16"
-    "@material-ui/core" "^4.12.2"
-    "@material-ui/icons" "^4.9.1"
-    "@material-ui/lab" "4.0.0-alpha.57"
-    classnames "^2.2.6"
-    react-router "6.0.0-beta.0"
-    react-router-dom "6.0.0-beta.0"
-    react-use "^17.2.4"
 
 "@backstage/plugin-explore@^0.3.41":
   version "0.3.41"
@@ -8113,7 +8108,7 @@ anymatch@^3.0.3, anymatch@~3.1.2:
     "@backstage/plugin-catalog-import" "^0.9.0"
     "@backstage/plugin-catalog-react" "^1.2.0"
     "@backstage/plugin-code-coverage" "^0.2.0"
-    "@backstage/plugin-explore" "^0.3.37"
+    "@backstage/plugin-explore" "^0.3.41"
     "@backstage/plugin-github-actions" "^0.5.10"
     "@backstage/plugin-org" "^0.5.10"
     "@backstage/plugin-permission-react" "^0.4.6"

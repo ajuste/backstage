@@ -15,7 +15,6 @@ import {
   EntityHasComponentsCard,
   EntityHasResourcesCard,
   EntityHasSubcomponentsCard,
-  EntityHasSystemsCard,
   EntityLayout,
   EntityLinksCard,
   EntitySwitch,
@@ -25,6 +24,7 @@ import {
   isKind,
   hasCatalogProcessingErrors,
   isOrphan,
+  EntityHasSystemsCard,
 } from '@backstage/plugin-catalog';
 import {
   isGithubActionsAvailable,
@@ -66,7 +66,7 @@ import {
 import { EntityTechdocsContent } from '@backstage/plugin-techdocs';
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
-import { DocumentsComponent } from '../domain/DocumentsComponent';
+import { DocumentsComponent, EntityHasUisCard, DomainHasApisCard, } from '../domain';
 
 const techdocsContent = (
   <EntityTechdocsContent>
@@ -410,6 +410,10 @@ const systemPage = (
       />
     </EntityLayout.Route>
 
+    <EntityLayout.Route path="/code-coverage" title="Code Coverage">
+      <EntityCodeCoverageContent />
+    </EntityLayout.Route>
+
     <EntityLayout.Route path="/grafana" title="Grafana" if={isDashboardSelectorAvailable}>
       <HealthContent />
     </EntityLayout.Route>
@@ -428,7 +432,13 @@ const domainPage = (
           <EntityCatalogGraphCard variant="gridItem" height={400} />
         </Grid>
         <Grid item md={6}>
-          <EntityHasSystemsCard variant="gridItem" />
+          <EntityHasSystemsCard></EntityHasSystemsCard>
+        </Grid>
+        <Grid item md={6}>
+          <DomainHasApisCard></DomainHasApisCard>
+        </Grid>
+        <Grid item md={6}>
+          <EntityHasUisCard></EntityHasUisCard>
         </Grid>
       </Grid>
     </EntityLayout.Route>

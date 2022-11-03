@@ -12,14 +12,43 @@ integrations:
       token: ${GITHUB_ACCESS_TOKEN}
 
 catalog:
-  locations:
+  rules:
+    - allow: [Component, System, API, Resource, Location, User, Group, Template, Domain]
 
-    - type: file
-      target: ../../local/user-groups.yaml
+  locations:
+    
+    - type: url
+      target: https://github.com/riskive/backstage/blob/master/data/roles.yaml
       rules:
         - allow: [Group]
 
-    - type: file
-      target: ../../local/users.yaml
+    - type: url
+      target: https://github.com/riskive/backstage/blob/master/data/teams.yaml
+      rules:
+        - allow: [Group]
+        
+    - type: url
+      target: https://github.com/riskive/backstage/blob/master/data/users.yaml
       rules:
         - allow: [User]
+        
+    - type: url
+      target: https://github.com/riskive/backstage/blob/master/data/domains.yaml
+      rules:
+        - allow: [Domain]
+
+    # backstage
+    - type: url
+      target: https://github.com/riskive/backstage/blob/master/catalog-info.yaml
+      rules:
+        - allow: [Component, API, Group, System]
+
+    # backstage golden paths
+    - type: url
+      target: https://github.com/riskive/backstage-docs/blob/master/goldenpath-creating_goldenpaths/catalog-info.yaml
+      rules:
+        - allow: [Component]
+    - type: url
+      target: https://github.com/riskive/backstage-docs/blob/master/goldenpath-add_documentation/catalog-info.yaml
+      rules:
+        - allow: [Component]
