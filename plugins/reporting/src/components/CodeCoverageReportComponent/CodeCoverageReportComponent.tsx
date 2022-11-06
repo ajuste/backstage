@@ -20,7 +20,7 @@ export const CodeCoverageReportComponent = () => (
         <Grid item>
           <InfoCard title="Description">
             <Typography variant="body1">
-              Listing of coverage by component in the system. It shows branch and line coverage along with trends.
+              Listing of coverage by component in the system. It shows branch and line coverage.
             </Typography>
           </InfoCard>
         </Grid>

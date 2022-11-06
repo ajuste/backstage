@@ -53,47 +53,98 @@ type DenseTableProps = {
   entities: EntityWithCoverage[];
 };
 
-export const DenseTable = ({ entities }: DenseTableProps) => {
-  //const classes = useStyles();
+const sortName = (data1: RowProps, data2: RowProps): number => {
+  return data1.rawName < data2.rawName ? -1 : 1;
+}
 
-  const columns: TableColumn[] = [
-    { title: 'Name', field: 'name' },
-    { title: 'Kind', field: 'kind' },
-    { title: 'Branch Coverage Trend', field: 'branchCoverageTrend', width: '15%' },
-    { title: 'Line Coverage Trend', field: 'lineCoverageTrend', width: '15%' },
-    { title: 'Line Coverage', field: 'lineCoverage' },
-    { title: 'Branch Coverage', field: 'branchCoverage' },
+type RowProps = {
+  rawName: string;
+  name: any;
+  kind: string;
+  lineCoverageTrend: any;
+  branchCoverageTrend: any;
+  lineCoverage: string;
+  branchCoverage: string;
+};
+
+export const DenseTable = ({ entities }: DenseTableProps) => {
+
+  const columns: TableColumn<RowProps>[] = [
+    { title: 'Name', field: 'rawName', hidden: true, searchable: true, export: true },
+    { title: 'Name', field: 'name', width: '70%', customSort: sortName, export: false },
+    { title: 'Line Coverage', field: 'lineCoverage', width: '10%', export: false },
+    { title: 'Branch Coverage', field: 'branchCoverage', width: '10%', export: false },
+    { title: 'Line Coverage', field: 'rawLineCoverage', hidden: true, export: true },
+    { title: 'Branch Coverage', field: 'rawBranchCoverage', hidden: true, export: true },
   ];
 
   const data = entities.map(entity => {
     const catalogEntityRoute = useRouteRef(entityRouteRef);
-    const catalogLink =  catalogEntityRoute(entityRouteParams(entity));
+    const catalogLink = catalogEntityRoute(entityRouteParams(entity));
+    const minLineCoverage = entity.coverageHistory.map(h => h.line.percentage).reduce((min, cur) => cur < min ? cur : min, 100) - 25
+    const maxLineCoverage = entity.coverageHistory.map(h => h.line.percentage).reduce((min, cur) => cur > min ? cur : min, 0) + 25
+    const minBranchCoverage = entity.coverageHistory.map(h => h.branch.percentage).reduce((min, cur) => cur < min ? cur : min, 100) - 25
+    const maxBranchCoverage = entity.coverageHistory.map(h => h.branch.percentage).reduce((min, cur) => cur > min ? cur : min, 0) + 25
+
     return {
+      rawName: entity.metadata.name,
       name: (
         <Link to={catalogLink} target="_blank">{entity.metadata.name}</Link>
       ),
       kind: entity.kind,
       lineCoverageTrend: (
         <TrendLine
+          margin={0}
+          height={15}
+          style={{ padding: 0, margin: 0, border: 0 }}
           title='Line coverage trend'
+          min={minLineCoverage}
+          max={maxLineCoverage}
           data={entity.coverageHistory.map(h => h.line.percentage)}
         />
       ),
       branchCoverageTrend: (
         <TrendLine
+          margin={0}
+          height={15}
+          style={{ padding: 0, margin: 0, border: 0 }}
           title='Branch coverage trend'
+          min={minBranchCoverage}
+          max={maxBranchCoverage}
           data={entity.coverageHistory.map(h => h.branch.percentage)}
         />
       ),
       lineCoverage: entity.coverageHistory?.length ? `${entity.coverageHistory[entity.coverageHistory.length - 1].line?.percentage}%` : "n/a",
       branchCoverage: entity.coverageHistory?.length ? `${entity.coverageHistory[entity.coverageHistory.length - 1].branch?.percentage}%` : "n/a",
+      rawLineCoverage: entity.coverageHistory?.length ? entity.coverageHistory[entity.coverageHistory.length - 1].line?.percentage / 100 : null,
+      rawBranchCoverage: entity.coverageHistory?.length ? entity.coverageHistory[entity.coverageHistory.length - 1].branch?.percentage / 100 : null,
     };
   });
+
+  const csvExport = (columns: any[], renderData: any[]): void => {
+    const data = [columns.map(({ title }) => title).join(",")]
+    let csvData = data.concat(renderData.map((rowData) => (rowData.map((v: string) => v ? `\"${v}\"` : "")).join(","))).join('\r\n');
+
+    const file = new File([csvData], 'coverage.csv', {
+      type: 'text/csv',
+    })
+
+    const link = document.createElement('a')
+    const url = URL.createObjectURL(file)
+
+    link.href = url
+    link.download = file.name
+    document.body.appendChild(link)
+    link.click()
+
+    document.body.removeChild(link)
+    window.URL.revokeObjectURL(url)
+  }
 
   return (
     <Table
       title="Coverage by component"
-      options={{ search: false, paging: false }}
+      options={{ paging: false, padding: 'dense', exportAllData: true, exportMenu: [{ label: "As CSV", exportFunc: csvExport }] }}
       columns={columns}
       data={data}
     />
