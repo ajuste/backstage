@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react';
-import { Link, makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 import HomeIcon from '@material-ui/icons/Home';
 import ExtensionIcon from '@material-ui/icons/Extension';
 import MapIcon from '@material-ui/icons/MyLocation';
@@ -9,7 +9,6 @@ import ReportingIcon from '@material-ui/icons/Assessment';
 import CategoryIcon from '@material-ui/icons/Category';
 import LogoFull from './LogoFull';
 import LogoIcon from './LogoIcon';
-import { NavLink } from 'react-router-dom';
 import {
   Settings as SidebarSettings,
   UserSettingsSignInAvatar,
@@ -24,7 +23,8 @@ import {
   SidebarPage,
   SidebarScrollWrapper,
   SidebarSpace,
-  useSidebarOpenState
+  useSidebarOpenState,
+  Link,
 } from '@backstage/core-components';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
@@ -50,13 +50,7 @@ const SidebarLogo = () => {
 
   return (
     <div className={classes.root}>
-      <Link
-        component={NavLink}
-        to="/"
-        underline="none"
-        className={classes.link}
-        aria-label="Home"
-      >
+      <Link to="/" underline="none" className={classes.link} aria-label="Home">
         {isOpen ? <LogoFull /> : <LogoIcon />}
       </Link>
     </div>

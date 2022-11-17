@@ -6,13 +6,13 @@ import {
     entityMetadataFactRetriever,
     techdocsFactRetriever,
 } from '@backstage/plugin-tech-insights-backend';
+import githubFactRetriever from './facts/githubFactRetriever';
 import { Router } from 'express';
 import { PluginEnvironment } from '../types';
 import {
     JsonRulesEngineFactCheckerFactory,
     JSON_RULE_ENGINE_CHECK_TYPE,
 } from '@backstage/plugin-tech-insights-backend-module-jsonfc';
-import {githubFactRetriever} from '@internal/plugin-zf-tech-insights-backend';
 
 const ttlTwoWeeks = { timeToLive: { weeks: 2 } };
 
@@ -28,22 +28,22 @@ export default async function createPlugin(
         scheduler: env.scheduler,
         factRetrievers: process.env.NOMAD_ALLOC_INDEX !== "0" ? [] : [
             createFactRetrieverRegistration({
-                cadence: '0 */6 * * *', // Run every 6 hours - https://crontab.guru/#0_*/6_*_*_*
+                cadence: '0 1 * * *',
                 factRetriever: entityOwnershipFactRetriever,
                 lifecycle: ttlTwoWeeks,
             }),
             createFactRetrieverRegistration({
-                cadence: '0 */6 * * *',
+                cadence: '0 2 * * *',
                 factRetriever: entityMetadataFactRetriever,
                 lifecycle: ttlTwoWeeks,
             }),
             createFactRetrieverRegistration({
-                cadence: '0 */6 * * *',
+                cadence: '0 3 * * *',
                 factRetriever: techdocsFactRetriever,
                 lifecycle: ttlTwoWeeks,
             }),
             createFactRetrieverRegistration({
-                cadence: '0 */6 * * *',
+                cadence: '0 4 * * *',
                 factRetriever: githubFactRetriever,
                 lifecycle: ttlTwoWeeks,
             })
@@ -103,6 +103,25 @@ export default async function createPlugin(
                                     fact: 'hasAnnotationBackstageIoTechdocsRef',
                                     operator: 'equal',
                                     value: true,
+                                },
+                            ],
+                        },
+                    },
+                },
+                {
+                    id: 'staleRepoCheck',
+                    type: JSON_RULE_ENGINE_CHECK_TYPE,
+                    name: 'Stale repo check',
+                    description:
+                        'Verifies if an entity repository is stale',
+                    factIds: ['githubFactRetriever'],
+                    rule: {
+                        conditions: {
+                            all: [
+                                {
+                                    fact: 'msSinceLastCommit',
+                                    operator: 'greaterThan',
+                                    value: 6 * 30 * 24 * 60 * 60 * 1000,
                                 },
                             ],
                         },

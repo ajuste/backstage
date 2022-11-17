@@ -21,4 +21,4 @@ WORKDIR /builder/packages/app
 RUN yarn link "plugin-reporting"
 
 WORKDIR /builder
-RUN yarn install && yarn tsc && yarn build
+RUN yarn install && yarn tsc && yarn build:backend
