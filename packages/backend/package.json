@@ -37,6 +37,7 @@
     "@backstage/plugin-tech-insights-backend": "^0.5.0",
     "@backstage/plugin-tech-insights-backend-module-jsonfc": "^0.1.17",
     "@backstage/plugin-techdocs-backend": "^1.4.0",
+    "@internal/plugin-zf-tech-insights-backend": "^0.1.0",
     "@vscode/sqlite3": "^5.0.8",
     "app": "link:../app",
     "better-sqlite3": "^7.5.0",

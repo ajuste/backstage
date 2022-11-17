@@ -159,7 +159,7 @@ const fetchCoverageForEntity = (entity: Entity, coverageApiClient: CodeCoverageA
           kind: entity.kind,
           namespace: entity.metadata.namespace || "default",
           name: entity.metadata.name,
-        }, 10)
+        }, 1)
         res(coverageRes)
       } catch (err) {
         console.warn(`Intent ${intent} failed to get coverage for ${entity.metadata.name}`)
@@ -171,7 +171,7 @@ const fetchCoverageForEntity = (entity: Entity, coverageApiClient: CodeCoverageA
 const fetchCoverageForEntitiesPages = async (entities: Entity[], coverageApiClient: CodeCoverageApi) => {
   const results: JsonCoverageHistory[] = [];
   for (let page = 0; page < entities.length / GetCoveragePageSize; page++) {
-    const entitiesPage = entities.slice(page * GetCoveragePageSize, (page + 1) * GetCoveragePageSize - 1);
+    const entitiesPage = entities.slice(page * GetCoveragePageSize, (page + 1) * GetCoveragePageSize);
     const coveragePage = await Promise.all(entitiesPage.map(e => fetchCoverageForEntity(e, coverageApiClient)))
     results.push(...coveragePage)
   }

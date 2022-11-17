@@ -7,9 +7,13 @@ COPY . .
 WORKDIR /builder/plugins/reporting
 RUN yarn link
 
+WORKDIR /builder/plugins/zf-tech-insights-backend
+RUN yarn link
+
 WORKDIR /builder/packages/app
 # Link every plugin here:
 RUN yarn link "plugin-reporting"
+RUN yarn link @internal/plugin-zf-tech-insights-backend
 
 WORKDIR /builder
 RUN yarn install && yarn tsc && yarn build

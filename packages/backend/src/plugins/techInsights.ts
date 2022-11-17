@@ -12,6 +12,7 @@ import {
     JsonRulesEngineFactCheckerFactory,
     JSON_RULE_ENGINE_CHECK_TYPE,
 } from '@backstage/plugin-tech-insights-backend-module-jsonfc';
+import {githubFactRetriever} from '@internal/plugin-zf-tech-insights-backend';
 
 const ttlTwoWeeks = { timeToLive: { weeks: 2 } };
 
@@ -41,6 +42,11 @@ export default async function createPlugin(
                 factRetriever: techdocsFactRetriever,
                 lifecycle: ttlTwoWeeks,
             }),
+            createFactRetrieverRegistration({
+                cadence: '0 */6 * * *',
+                factRetriever: githubFactRetriever,
+                lifecycle: ttlTwoWeeks,
+            })
         ],
         factCheckerFactory: new JsonRulesEngineFactCheckerFactory({
             logger: env.logger,

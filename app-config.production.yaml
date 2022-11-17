@@ -35,11 +35,11 @@ techdocs:
       bucketName: ${TECHDOCS_AWSS3_BUCKET_NAME}
 
 grafana:
-  domain: https://grafana.zerofox.com
+  domain: https://grafana-prod.zerofox.com
 
 proxy:
   '/grafana/api':
-    target: https://grafana.zerofox.com
+    target: https://grafana-prod.zerofox.com
     headers:
       Authorization: Bearer ${GRAFANA_TOKEN}
 

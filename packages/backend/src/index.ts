@@ -30,9 +30,12 @@ import techdocs from './plugins/techdocs';
 import search from './plugins/search';
 import codeCoverage from './plugins/codecoverage';
 import techInsights from './plugins/techInsights';
+import zfTechInsights from './plugins/zfTechInsights';
 import { PluginEnvironment } from './types';
 import { ServerPermissionClient } from '@backstage/plugin-permission-node';
 import { DefaultIdentityClient } from '@backstage/plugin-auth-node';
+
+
 
 function makeCreateEnv(config: Config) {
   const root = getRootLogger();
@@ -88,6 +91,7 @@ async function main() {
   const searchEnv = useHotMemoize(module, () => createEnv('search'));
   const codeCoverageEnv = useHotMemoize(module, () => createEnv('code-coverage'));
   const appEnv = useHotMemoize(module, () => createEnv('app'));
+  const zfTechInsightsEnv = useHotMemoize(module, () => createEnv('zf-tech-insights'));
 
   const apiRouter = Router();
   apiRouter.use('/tech-insights', await techInsights(techInsightsEnv));
@@ -98,6 +102,7 @@ async function main() {
   apiRouter.use('/proxy', await proxy(proxyEnv));
   apiRouter.use('/search', await search(searchEnv));
   apiRouter.use('/code-coverage', await codeCoverage(codeCoverageEnv));
+  apiRouter.use('/zf-tech-insights', await zfTechInsights(zfTechInsightsEnv));
 
   // Add backends ABOVE this line; this 404 handler is the catch-all fallback
   apiRouter.use(notFoundHandler());
