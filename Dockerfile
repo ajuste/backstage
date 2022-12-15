@@ -7,9 +7,20 @@ COPY . .
 WORKDIR /builder/plugins/reporting
 RUN yarn link
 
+WORKDIR /builder/plugins/github-resource-fetcher-backend
+RUN yarn link
+
+WORKDIR /builder/plugins/github-resource-fetcher
+RUN yarn link
+
+# Link every backend plugin from zerofox here
+WORKDIR /builder/packages/backend
+RUN yarn link "@internal/plugin-github-resource-fetcher-backend"
+
+# Link every frontend plugin from zerofox here
 WORKDIR /builder/packages/app
-# Link every plugin here:
 RUN yarn link "plugin-reporting"
+RUN yarn link "@internal/plugin-github-resource-fetcher"
 
 WORKDIR /builder
 RUN yarn install && yarn tsc && yarn build:backend

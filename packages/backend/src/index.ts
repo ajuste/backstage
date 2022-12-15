@@ -30,11 +30,10 @@ import techdocs from './plugins/techdocs';
 import search from './plugins/search';
 import codeCoverage from './plugins/codecoverage';
 import techInsights from './plugins/techInsights';
+import githubResourceFetcher from './plugins/githubResourceFetcher';
 import { PluginEnvironment } from './types';
 import { ServerPermissionClient } from '@backstage/plugin-permission-node';
 import { DefaultIdentityClient } from '@backstage/plugin-auth-node';
-
-
 
 function makeCreateEnv(config: Config) {
   const root = getRootLogger();
@@ -82,14 +81,21 @@ async function main() {
   const createEnv = makeCreateEnv(config);
 
   const catalogEnv = useHotMemoize(module, () => createEnv('catalog'));
-  const techInsightsEnv = useHotMemoize(module, () => createEnv('tech_insights'));
+  const techInsightsEnv = useHotMemoize(module, () =>
+    createEnv('tech_insights'),
+  );
   const scaffolderEnv = useHotMemoize(module, () => createEnv('scaffolder'));
   const authEnv = useHotMemoize(module, () => createEnv('auth'));
   const proxyEnv = useHotMemoize(module, () => createEnv('proxy'));
   const techdocsEnv = useHotMemoize(module, () => createEnv('techdocs'));
   const searchEnv = useHotMemoize(module, () => createEnv('search'));
-  const codeCoverageEnv = useHotMemoize(module, () => createEnv('code-coverage'));
+  const codeCoverageEnv = useHotMemoize(module, () =>
+    createEnv('code-coverage'),
+  );
   const appEnv = useHotMemoize(module, () => createEnv('app'));
+  const githubResourceFetcherEnv = useHotMemoize(module, () =>
+    createEnv('github-resource-fetcher'),
+  );
 
   const apiRouter = Router();
   apiRouter.use('/tech-insights', await techInsights(techInsightsEnv));
@@ -100,6 +106,10 @@ async function main() {
   apiRouter.use('/proxy', await proxy(proxyEnv));
   apiRouter.use('/search', await search(searchEnv));
   apiRouter.use('/code-coverage', await codeCoverage(codeCoverageEnv));
+  apiRouter.use(
+    '/github-resource-fetcher',
+    await githubResourceFetcher(githubResourceFetcherEnv),
+  );
 
   // Add backends ABOVE this line; this 404 handler is the catch-all fallback
   apiRouter.use(notFoundHandler());

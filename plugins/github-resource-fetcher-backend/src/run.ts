@@ -14,7 +14,20 @@
  * limitations under the License.
  */
 
-// TODO(Rugvip): This plugin is currently not part of the app element tree,
-//               ideally we have an API for the context menu that permits that.
-export { grafanaPlugin } from '@k-phoen/backstage-plugin-grafana';
-export { githubResourceFetcherPlugin } from '@internal/plugin-github-resource-fetcher';
+import { getRootLogger } from '@backstage/backend-common';
+import yn from 'yn';
+import { startStandaloneServer } from './service/standaloneServer';
+
+const port = process.env.PLUGIN_PORT ? Number(process.env.PLUGIN_PORT) : 7007;
+const enableCors = yn(process.env.PLUGIN_CORS, { default: false });
+const logger = getRootLogger();
+
+startStandaloneServer({ port, enableCors, logger }).catch(err => {
+  logger.error(err);
+  process.exit(1);
+});
+
+process.on('SIGINT', () => {
+  logger.info('CTRL+C pressed; exiting.');
+  process.exit(0);
+});

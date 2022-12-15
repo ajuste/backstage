@@ -37,6 +37,7 @@
     "@backstage/plugin-tech-insights-backend": "^0.5.4",
     "@backstage/plugin-tech-insights-backend-module-jsonfc": "^0.1.22",
     "@backstage/plugin-techdocs-backend": "^1.4.1",
+    "@internal/plugin-github-resource-fetcher-backend": "^0.1.0",
     "@octokit/graphql": "^5.0.4",
     "@vscode/sqlite3": "^5.0.8",
     "app": "link:../app",
