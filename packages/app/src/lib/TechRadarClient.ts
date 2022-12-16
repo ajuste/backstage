@@ -48,7 +48,7 @@ export class TechRadarClient implements TechRadarApi {
           path: '.backstage/radars/zerofox.json',
           owner: 'riskive',
           repo: 'ui-architecture',
-          branch: 'feat/tech-radar',
+          branch: 'master',
         };
       default:
         throw new Error('No repo details found');
