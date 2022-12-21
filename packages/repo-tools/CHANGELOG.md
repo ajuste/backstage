@@ -1,5 +1,11 @@
 # @backstage/repo-tools
 
+## 0.1.1-next.0
+
+### Patch Changes
+
+- 75275b0b0b: Updated dependency `@microsoft/tsdoc-config` to `0.16.2`.
+
 ## 0.1.0
 
 ### Minor Changes

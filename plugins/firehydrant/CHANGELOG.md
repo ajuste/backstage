@@ -1,5 +1,12 @@
 # @backstage/plugin-firehydrant
 
+## 0.1.30-next.0
+
+### Patch Changes
+
+- Updated dependencies
+  - @backstage/plugin-catalog-react@1.2.3-next.0
+
 ## 0.1.29
 
 ### Patch Changes

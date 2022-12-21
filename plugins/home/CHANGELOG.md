@@ -1,5 +1,13 @@
 # @backstage/plugin-home
 
+## 0.4.29-next.0
+
+### Patch Changes
+
+- Updated dependencies
+  - @backstage/plugin-catalog-react@1.2.3-next.0
+  - @backstage/plugin-stack-overflow@0.1.9-next.0
+
 ## 0.4.28
 
 ### Patch Changes

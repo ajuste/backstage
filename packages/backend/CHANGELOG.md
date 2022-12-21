@@ -1,5 +1,27 @@
 # example-backend
 
+## 0.2.79-next.0
+
+### Patch Changes
+
+- Updated dependencies
+  - @backstage/catalog-client@1.3.0-next.0
+  - @backstage/plugin-explore-backend@0.0.2-next.0
+  - @backstage/plugin-catalog-backend@1.7.0-next.0
+  - example-app@0.2.79-next.0
+  - @backstage/plugin-auth-backend@0.17.3-next.0
+  - @backstage/plugin-badges-backend@0.1.34-next.0
+  - @backstage/plugin-catalog-node@1.3.1-next.0
+  - @backstage/plugin-code-coverage-backend@0.2.6-next.0
+  - @backstage/plugin-jenkins-backend@0.1.30-next.0
+  - @backstage/plugin-kubernetes-backend@0.9.1-next.0
+  - @backstage/plugin-playlist-backend@0.2.3-next.0
+  - @backstage/plugin-scaffolder-backend@1.9.1-next.0
+  - @backstage/plugin-tech-insights-backend@0.5.6-next.0
+  - @backstage/plugin-techdocs-backend@1.5.1-next.0
+  - @backstage/plugin-todo-backend@0.1.37-next.0
+  - @backstage/plugin-scaffolder-backend-module-rails@0.4.8-next.0
+
 ## 0.2.78
 
 ### Patch Changes

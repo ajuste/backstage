@@ -1,5 +1,12 @@
 # @backstage/plugin-jenkins-backend
 
+## 0.1.30-next.0
+
+### Patch Changes
+
+- Updated dependencies
+  - @backstage/catalog-client@1.3.0-next.0
+
 ## 0.1.29
 
 ### Patch Changes

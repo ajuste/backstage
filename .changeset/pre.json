@@ -194,5 +194,13 @@
     "@backstage/plugin-vault-backend": "0.2.5",
     "@backstage/plugin-xcmetrics": "0.2.32"
   },
-  "changesets": []
+  "changesets": [
+    "create-app-1671634454",
+    "eight-dragons-accept",
+    "fifty-zoos-nail",
+    "fluffy-forks-happen",
+    "renovate-968149a",
+    "silver-chicken-travel",
+    "tasty-impalas-mix"
+  ]
 }

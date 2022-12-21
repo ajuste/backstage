@@ -1,5 +1,11 @@
 # @backstage/catalog-client
 
+## 1.3.0-next.0
+
+### Minor Changes
+
+- f75bf76330: Implemented support for the `order` directive on `getEntities`
+
 ## 1.2.0
 
 ### Minor Changes

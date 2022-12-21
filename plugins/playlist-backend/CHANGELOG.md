@@ -1,5 +1,12 @@
 # @backstage/plugin-playlist-backend
 
+## 0.2.3-next.0
+
+### Patch Changes
+
+- Updated dependencies
+  - @backstage/catalog-client@1.3.0-next.0
+
 ## 0.2.2
 
 ### Patch Changes

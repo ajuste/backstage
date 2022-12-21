@@ -1,5 +1,12 @@
 # @backstage/plugin-techdocs-backend
 
+## 1.5.1-next.0
+
+### Patch Changes
+
+- Updated dependencies
+  - @backstage/catalog-client@1.3.0-next.0
+
 ## 1.5.0
 
 ### Minor Changes

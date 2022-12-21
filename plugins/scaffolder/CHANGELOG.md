@@ -1,5 +1,15 @@
 # @backstage/plugin-scaffolder
 
+## 1.9.1-next.0
+
+### Patch Changes
+
+- 3c112f6967: rollback `@rjsf/validator-ajv8` to `@rjsf/validator-v6`
+- Updated dependencies
+  - @backstage/catalog-client@1.3.0-next.0
+  - @backstage/plugin-catalog-react@1.2.3-next.0
+  - @backstage/integration-react@1.1.7
+
 ## 1.9.0
 
 ### Minor Changes

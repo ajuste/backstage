@@ -1,5 +1,18 @@
 # @backstage/plugin-catalog-backend
 
+## 1.7.0-next.0
+
+### Minor Changes
+
+- f75bf76330: Implemented server side ordering in the entities endpoint
+
+### Patch Changes
+
+- d136793ff0: Fixed an issue where internal references in the catalog would stick around for longer than expected, causing entities to not be deleted or orphaned as expected.
+- Updated dependencies
+  - @backstage/catalog-client@1.3.0-next.0
+  - @backstage/plugin-catalog-node@1.3.1-next.0
+
 ## 1.6.0
 
 ### Minor Changes
