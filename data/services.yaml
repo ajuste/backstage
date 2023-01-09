@@ -1,0 +1,160 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: crawlera
+  namespace: services
+spec:
+  lifecycle: production
+  type: service
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: godaddy
+  namespace: services
+spec:
+  lifecycle: production
+  type: service
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: cloudflare
+  namespace: services
+spec:
+  lifecycle: production
+  type: service
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: sendgrid
+  namespace: services
+spec:
+  lifecycle: production
+  type: service
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: twitter
+  namespace: services
+spec:
+  lifecycle: production
+  type: service
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: webrisk
+  namespace: services
+spec:
+  lifecycle: production
+  type: service
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: facebook
+  namespace: services
+spec:
+  lifecycle: production
+  type: service
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: linkedin
+  namespace: services
+spec:
+  lifecycle: production
+  type: service
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: salesforce
+  namespace: services
+spec:
+  lifecycle: production
+  type: service
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: instagram
+  namespace: services
+spec:
+  lifecycle: production
+  type: service
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: mapbox
+  namespace: services
+spec:
+  lifecycle: production
+  type: service
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: youtube
+  namespace: services
+spec:
+  lifecycle: production
+  type: service
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: msteams
+  namespace: services
+spec:
+  lifecycle: production
+  type: service
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: snapchat
+  namespace: services
+spec:
+  lifecycle: production
+  type: service
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: slack
+  namespace: services
+spec:
+  lifecycle: production
+  type: service
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: whoxy
+  namespace: services
+spec:
+  lifecycle: production
+  type: service
+  children: []
+---
