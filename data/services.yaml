@@ -174,3 +174,14 @@ spec:
   type: service
   children: []
 ---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: thumbio
+  namespace: services
+spec:
+  owner: na
+  lifecycle: production
+  type: service
+  children: []
+---
