@@ -27,6 +27,9 @@ backend:
     connect-src: ["'self'", 'http:', 'https:']
     # Content-Security-Policy directives follow the Helmet format: https://helmetjs.github.io/#reference
     # Default Helmet Content-Security-Policy values can be removed by setting the key to false
+    script-src: ["'self'", "'unsafe-eval'", 'https://www.google-analytics.com']
+    img-src: ["'self'", 'data:', 'https://www.google-analytics.com']
+
   cors:
     origin: http://localhost:3003
     methods: [GET, HEAD, PATCH, POST, PUT, DELETE]

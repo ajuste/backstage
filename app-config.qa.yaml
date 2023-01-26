@@ -9,6 +9,9 @@
 app:
   # Should be the same as backend.baseUrl when using the `app-backend` plugin.
   baseUrl: https://devportal-qa.zerofox.com
+  analytics:
+    ga:
+      trackingId: G-RFJJ8NHFYP
 
 backend:
   baseUrl: https://devportal-qa.zerofox.com

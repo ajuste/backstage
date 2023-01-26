@@ -8,11 +8,14 @@ import {
   AnyApiFactory,
   configApiRef,
   createApiFactory,
+  analyticsApiRef,
+  identityApiRef,
 } from '@backstage/core-plugin-api';
 
 import { techRadarApiRef } from '@backstage/plugin-tech-radar';
 import { TechRadarClient } from './lib/TechRadarClient';
 import { githubResourceFetcherApiRef } from '@internal/plugin-github-resource-fetcher';
+import { GoogleAnalytics } from '@backstage/plugin-analytics-module-ga';
 
 export const apis: AnyApiFactory[] = [
   createApiFactory({
@@ -29,5 +32,14 @@ export const apis: AnyApiFactory[] = [
     factory: ({ githubResourceFetcherApi }) => {
       return new TechRadarClient(githubResourceFetcherApi);
     },
+  }),
+  //Instantiate and register the GA Analytics API Implementation.
+  createApiFactory({
+    api: analyticsApiRef,
+    deps: { configApi: configApiRef, identityApi: identityApiRef },
+    factory: ({ configApi, identityApi }) =>
+      GoogleAnalytics.fromConfig(configApi, {
+        identityApi,
+      }),
   }),
 ];
