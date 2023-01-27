@@ -23,6 +23,8 @@ import {
   SidebarPage,
   SidebarScrollWrapper,
   SidebarSpace,
+  SidebarSubmenu,
+  SidebarSubmenuItem,
   useSidebarOpenState,
   Link,
 } from '@backstage/core-components';
@@ -77,7 +79,11 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
         {/* End global nav */}
         <SidebarDivider />
         <SidebarScrollWrapper>
-          <SidebarItem icon={MapIcon} to="tech-radar" text="Tech Radar" />
+          <SidebarItem icon={MapIcon} text="Tech Radars">
+            <SidebarSubmenu title="Tech Radars">
+              <SidebarSubmenuItem icon={MapIcon} to="tech-radar" title="UI" />
+            </SidebarSubmenu>
+          </SidebarItem>
         </SidebarScrollWrapper>
       </SidebarGroup>
       <SidebarSpace />
