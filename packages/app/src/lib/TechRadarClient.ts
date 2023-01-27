@@ -43,9 +43,16 @@ export class TechRadarClient implements TechRadarApi {
 
   getRepoDetails(id: string | undefined): GithubRepoDetails {
     switch (id) {
-      case 'ui-arch':
+      case 'ui-e':
         return {
-          path: '.backstage/radars/zerofox.json',
+          path: '.backstage/radars/ui-e.json',
+          owner: 'riskive',
+          repo: 'ui-architecture',
+          branch: 'master',
+        };
+      case 'qa':
+        return {
+          path: '.backstage/radars/test-quality.json',
           owner: 'riskive',
           repo: 'ui-architecture',
           branch: 'master',

@@ -39,7 +39,6 @@ import { ReportingPage, CodeCoveragePage } from 'plugin-reporting';
 import { ExplorePage } from './components/explore/ExplorePage';
 import * as plugins from './plugins';
 
-
 const app = createApp({
   apis,
   plugins: Object.values(plugins),
@@ -65,12 +64,11 @@ const AppRouter = app.getRouter();
 
 const routes = (
   <FlatRoutes>
-    <Route path="/" element={<HomePage />}>
-    </Route>
+    <Route path="/" element={<HomePage />} />
     <Route
       path="/catalog"
-      element={<CatalogIndexPage initialKind='system' />}>
-    </Route>
+      element={<CatalogIndexPage initialKind="system" />}
+    />
     <Route
       path="/catalog/:namespace/:kind/:name"
       element={<CatalogEntityPage />}
@@ -89,8 +87,30 @@ const routes = (
     <Route path="/create" element={<ScaffolderPage />} />
     <Route path="/api-docs" element={<ApiExplorerPage />} />
     <Route
-      path="/tech-radar"
-      element={<TechRadarPage id="ui-arch" width={1500} height={800} title="UI Radar - ZeroFox" />}
+      path="/tech-radars/ui-e"
+      element={
+        <TechRadarPage
+          id="ui-e"
+          width={1500}
+          height={800}
+          title="UI - East"
+          subtitle="Use this radar to determine recommended technologies for new and existing frontend projects."
+          pageTitle="UI-East"
+        />
+      }
+    />
+    <Route
+      path="/tech-radars/qa"
+      element={
+        <TechRadarPage
+          id="qa"
+          width={1500}
+          height={800}
+          title="Testing & Quality"
+          subtitle="Use this radar to determine recommended technologies for testing and quality purposes."
+          pageTitle="QA"
+        />
+      }
     />
     <Route
       path="/catalog-import"
