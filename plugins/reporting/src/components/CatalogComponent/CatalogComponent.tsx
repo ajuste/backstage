@@ -24,7 +24,7 @@ export const CatalogComponent = () => (
     <Content>
       <ContentHeader title="Available reports" />
       <ItemCardGrid>
-        <Card key="code-coverage">
+        <Card key="code-coverage" data-testid='code-coverage'>
           <CardMedia>
             <ItemCardHeader title="Code coverage" subtitle="quality" />
           </CardMedia>
@@ -32,20 +32,20 @@ export const CatalogComponent = () => (
             Generate code coverage report.
           </CardContent>
           <CardActions>
-            <Button color="primary" to="/reporting/code-coverage">
+            <Button color="primary" to="/reporting/code-coverage" data-testid='code-coverage-link'>
               See report
             </Button>
           </CardActions>
         </Card>
-        <Card key="service-readiness">
+        <Card key="service-staleness" data-testid='service-staleness'>
           <CardMedia>
-            <ItemCardHeader title="Service Readiness" subtitle="quality" />
+            <ItemCardHeader title="Service Staleness" subtitle="quality" />
           </CardMedia>
           <CardContent>
-            Generate service rediness report.
+            Understand which services have not been updated in a while.
           </CardContent>
           <CardActions>
-            <Button color="primary" to="/reporting/service-readiness">
+            <Button color="primary" to="/reporting/service-staleness" data-testid='service-staleness-link'>
               See report
             </Button>
           </CardActions>

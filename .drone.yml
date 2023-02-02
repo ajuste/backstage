@@ -28,3 +28,19 @@ steps:
       - make -C .terra/ init
       - make -C .terra/ validate
       - make -C .terra/ plan
+---
+kind: pipeline
+type: docker
+name: test
+
+steps:
+  - name: build
+    pull: if-not-exists
+    image: node:16-bullseye-slim
+    commands:
+      - apt-get update
+      - apt-get install -y --no-install-recommends python3 build-essential procps make python3-pip git
+      - yarn config set python /usr/bin/python3
+      - yarn install
+      - yarn tsc
+      - yarn test

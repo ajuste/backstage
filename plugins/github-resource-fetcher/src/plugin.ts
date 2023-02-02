@@ -1,6 +1,5 @@
 import {
   createPlugin,
-  createRoutableExtension,
   createApiFactory,
   discoveryApiRef,
 } from '@backstage/core-plugin-api';
@@ -26,12 +25,3 @@ export const githubResourceFetcherPlugin = createPlugin({
     }),
   ],
 });
-
-export const GithubResourceFetcherPage = githubResourceFetcherPlugin.provide(
-  createRoutableExtension({
-    name: 'GithubResourceFetcherPage',
-    component: () =>
-      import('./components/ExampleComponent').then(m => m.ExampleComponent),
-    mountPoint: rootRouteRef,
-  }),
-);

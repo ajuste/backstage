@@ -1,2 +1,2 @@
-export { githubResourceFetcherPlugin, GithubResourceFetcherPage } from './plugin';
+export { githubResourceFetcherPlugin } from './plugin';
 export * from './api';

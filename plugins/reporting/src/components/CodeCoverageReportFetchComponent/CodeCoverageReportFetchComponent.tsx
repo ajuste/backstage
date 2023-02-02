@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, TableColumn, Progress, TrendLine, Link } from '@backstage/core-components';
+import { Table, TableColumn, Progress, Link } from '@backstage/core-components';
 import Alert from '@material-ui/lab/Alert';
 import useAsync from 'react-use/lib/useAsync';
 import { codeCoveragePlugin } from '@backstage/plugin-code-coverage';
@@ -22,7 +22,7 @@ const getCoverageApiRef = (): ApiRef<CodeCoverageApi> => {
   throw new Error(`Coverate API factory not found.`);
 };
 
-const coverageApiRef = getCoverageApiRef()
+export const coverageApiRef = getCoverageApiRef()
 
 type CoverageHistory = {
   entity: CompoundEntityRef;
@@ -61,8 +61,6 @@ type RowProps = {
   rawName: string;
   name: any;
   kind: string;
-  lineCoverageTrend: any;
-  branchCoverageTrend: any;
   lineCoverage: string;
   branchCoverage: string;
 };
@@ -70,7 +68,7 @@ type RowProps = {
 export const DenseTable = ({ entities }: DenseTableProps) => {
 
   const columns: TableColumn<RowProps>[] = [
-    { title: 'Name', field: 'rawName', hidden: true, searchable: true, export: true },
+    { title: 'Name', field: 'rawName', hidden: true, searchable: true, export: true, },
     { title: 'Name', field: 'name', width: '70%', customSort: sortName, export: false },
     { title: 'Line Coverage', field: 'lineCoverage', width: '10%', export: false },
     { title: 'Branch Coverage', field: 'branchCoverage', width: '10%', export: false },
@@ -81,10 +79,13 @@ export const DenseTable = ({ entities }: DenseTableProps) => {
   const data = entities.map(entity => {
     const catalogEntityRoute = useRouteRef(entityRouteRef);
     const catalogLink = catalogEntityRoute(entityRouteParams(entity));
-    const minLineCoverage = entity.coverageHistory.map(h => h.line.percentage).reduce((min, cur) => cur < min ? cur : min, 100) - 25
-    const maxLineCoverage = entity.coverageHistory.map(h => h.line.percentage).reduce((min, cur) => cur > min ? cur : min, 0) + 25
-    const minBranchCoverage = entity.coverageHistory.map(h => h.branch.percentage).reduce((min, cur) => cur < min ? cur : min, 100) - 25
-    const maxBranchCoverage = entity.coverageHistory.map(h => h.branch.percentage).reduce((min, cur) => cur > min ? cur : min, 0) + 25
+
+    let lastCoverage = null;
+    if (entity.coverageHistory?.length) {
+      lastCoverage = entity.coverageHistory[entity.coverageHistory.length - 1];
+    }
+    const branchCoverage = lastCoverage?.branch?.percentage;
+    const lineCoverage = lastCoverage?.line?.percentage;
 
     return {
       rawName: entity.metadata.name,
@@ -92,32 +93,10 @@ export const DenseTable = ({ entities }: DenseTableProps) => {
         <Link to={catalogLink} target="_blank">{entity.metadata.name}</Link>
       ),
       kind: entity.kind,
-      lineCoverageTrend: (
-        <TrendLine
-          margin={0}
-          height={15}
-          style={{ padding: 0, margin: 0, border: 0 }}
-          title='Line coverage trend'
-          min={minLineCoverage}
-          max={maxLineCoverage}
-          data={entity.coverageHistory.map(h => h.line.percentage)}
-        />
-      ),
-      branchCoverageTrend: (
-        <TrendLine
-          margin={0}
-          height={15}
-          style={{ padding: 0, margin: 0, border: 0 }}
-          title='Branch coverage trend'
-          min={minBranchCoverage}
-          max={maxBranchCoverage}
-          data={entity.coverageHistory.map(h => h.branch.percentage)}
-        />
-      ),
-      lineCoverage: entity.coverageHistory?.length ? `${entity.coverageHistory[entity.coverageHistory.length - 1].line?.percentage}%` : "n/a",
-      branchCoverage: entity.coverageHistory?.length ? `${entity.coverageHistory[entity.coverageHistory.length - 1].branch?.percentage}%` : "n/a",
-      rawLineCoverage: entity.coverageHistory?.length ? entity.coverageHistory[entity.coverageHistory.length - 1].line?.percentage / 100 : null,
-      rawBranchCoverage: entity.coverageHistory?.length ? entity.coverageHistory[entity.coverageHistory.length - 1].branch?.percentage / 100 : null,
+      lineCoverage: !lineCoverage && lineCoverage !== 0 ? "n/a" : `${lineCoverage}%`,
+      branchCoverage: !branchCoverage && branchCoverage !== 0 ? "n/a" : `${branchCoverage}%`,
+      rawLineCoverage: !lineCoverage && lineCoverage !== 0 ? null : lineCoverage / 100,
+      rawBranchCoverage: !branchCoverage && branchCoverage !== 0 ? null : branchCoverage / 100,
     };
   });
 

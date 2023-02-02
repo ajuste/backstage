@@ -31,7 +31,7 @@ export const HomePage = () => {
         <Page themeId="home">
             <Content>
                 <Grid item xs={12} md={6}>
-                    <InfoCard title="Toolbox" className={classes.toolkit} cardClassName={classes.toolkit}>
+                    <InfoCard title="Toolbox" className={classes.toolkit} cardClassName={classes.toolkit} key="tools">
                         <div className={classes.toolkitContainer}>
                             {getAllTools().map(t => t())}
                         </div>

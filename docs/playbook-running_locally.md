@@ -21,14 +21,37 @@ This suits most of the use-cases when developing, its pretty straightforward and
 Backstage runs in non local environment using pgsql database.
 In case you need to test with a real instance you can follow these steps:
 
+
+### docker-compose
+
+In order to get docker-compose running follow these steps:
+```sh
+# First we need to install awscli for authenticating against AWS ECR (Elastic Container Registry)
+# This will be needed to pull the gold-docker base image
+pip install awscli
+
+# Then we must provide credentials for awscli
+# These can be generated via https://vault-qa.zerofox.com/ui/vault/secrets/aws/credentials/aws-ecr-ro
+# MUST access vault through VPN
+# Hint: Authenticate to Vault using a Github token!
+# Github > Profile > Developer Settings > Personal Access Tokens > Permissions ['read:user', 'read:email', 'read:follow']
+aws configure
+
+# Then we can authenticate against ECR and supply credentials to docker
+aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 012321959326.dkr.ecr.us-west-2.amazonaws.com
+
+# Finally we can run docker-compose (make sure to use the right ssh key)
+SSH_PRIVATE_KEY="$(< ~/.ssh/id_ed25519)" docker-compose up local
+```
+
 ### Run trusted mode (Backstage's db user has access to everything)
-* Run `docker-compose up local`
+* Run docker compose following instructions from docker-compose section.
 * pginstance will be available at `localhost:5432`
 * Backstage will be accessible under `http://localhost:7007`
   
 ### Run with same permission from prod:
-* Run `docker-compose up local`
-  * **Important:** Make sure `POSTGRES_HOST_AUTH_METHOD: trust`
+* Run docker compose following instructions from docker-compose section.
+  * **Important:** Make sure `POSTGRES_HOST_AUTH_METHOD: trust`.
   is set on docker-compose file for db instance.
 * Connect to pginstance using username & passowrd=`backstage` under `localhost:5432` and create a role using this script:
   ```

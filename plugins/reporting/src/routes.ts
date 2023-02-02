@@ -7,3 +7,7 @@ export const rootRouteRef = createRouteRef({
 export const codeCoverageRouteRef = createRouteRef({
   id: 'code-coverage',
 });
+
+export const serviceStalenessRouteRef = createRouteRef({
+  id: 'service-staleness',
+});

@@ -7,11 +7,11 @@ import {
   Content,
   HeaderLabel,
 } from '@backstage/core-components';
-import { ServiceReadinessReportComponentFetchComponent } from '../ServiceReadinessReportFetchComponent';
+import { ComponentStalenessReportFetchComponent } from '../ComponentStalenessReportFetchComponent';
 
-export const ServiceReadinessReportComponent = () => (
+export const ComponentStalenessReportComponent = () => (
   <Page themeId="tool">
-    <Header title="Code coverage report" subtitle="Optional subtitle">
+    <Header title="Component staleness report">
       <HeaderLabel label="Owner" value="Team X" />
       <HeaderLabel label="Lifecycle" value="Alpha" />
     </Header>
@@ -20,12 +20,12 @@ export const ServiceReadinessReportComponent = () => (
         <Grid item>
           <InfoCard title="Description">
             <Typography variant="body1">
-              Listing of coverage by component in the system. It shows branch and line coverage along with trends.
+              Lists component with latest commit information to hosting repo and if it fulifills staleness criteria.
             </Typography>
           </InfoCard>
         </Grid>
         <Grid item>
-          <ServiceReadinessReportComponentFetchComponent />
+          <ComponentStalenessReportFetchComponent />
         </Grid>
       </Grid>
     </Content>

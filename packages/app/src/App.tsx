@@ -35,7 +35,7 @@ import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
 import { HomePage } from './components/home/HomePage';
-import { ReportingPage, CodeCoveragePage } from 'plugin-reporting';
+import { ReportingPage, CodeCoveragePage, StalenessPage } from 'plugin-reporting';
 import { ExplorePage } from './components/explore/ExplorePage';
 import * as plugins from './plugins';
 
@@ -127,6 +127,7 @@ const routes = (
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
     <Route path="/reporting" element={<ReportingPage />} />
     <Route path="/reporting/code-coverage" element={<CodeCoveragePage />} />
+    <Route path="/reporting/service-staleness" element={<StalenessPage />} />
     <Route path="/explore" element={<ExplorePage />} />
   </FlatRoutes>
 );

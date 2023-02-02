@@ -1,1 +1,1 @@
-export { reportingPlugin, ReportingPage, CodeCoveragePage } from './plugin';
+export { reportingPlugin, ReportingPage, CodeCoveragePage, StalenessPage } from './plugin';

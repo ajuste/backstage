@@ -123,7 +123,7 @@ const githubFactRetriever: FactRetriever = {
                             },
                             facts: {
                                 lastCommit: lastCommit ? DateTime.fromISO(lastCommit) : DateTime.fromMillis(0),
-                                msSinceLastCommit: lastCommit ? DateTime.fromISO(lastCommit).diffNow().as('milliseconds') : null,
+                                msSinceLastCommit: lastCommit ? Math.abs(DateTime.fromISO(lastCommit).diffNow().as('milliseconds')) : null,
                             },
                         })
 
@@ -135,4 +135,6 @@ const githubFactRetriever: FactRetriever = {
     },
 };
 
-export default githubFactRetriever;
+export function getGithubFactRetriever() {
+    return githubFactRetriever;
+}

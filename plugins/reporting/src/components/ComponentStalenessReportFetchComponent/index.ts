@@ -1,0 +1,1 @@
+export { ComponentStalenessReportFetchComponent } from './ComponentStalenessReportFetchComponent';

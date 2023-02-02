@@ -26,10 +26,13 @@
     "@backstage/core-components": "^0.12.0",
     "@backstage/core-plugin-api": "^1.1.0",
     "@backstage/plugin-tech-insights": "^0.3.3",
+    "@backstage/test-utils": "^1.2.4",
     "@backstage/theme": "^0.2.16",
     "@material-ui/core": "^4.9.13",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "4.0.0-alpha.57",
+    "@mswjs/interceptors": "^0.17.7",
+    "headers-polyfill": "^3.1.2",
     "react-use": "^17.2.4"
   },
   "peerDependencies": {
@@ -46,7 +49,7 @@
     "@types/jest": "*",
     "@types/node": "*",
     "cross-fetch": "^3.1.5",
-    "msw": "^0.42.0"
+    "msw": "1.0.0"
   },
   "files": [
     "dist"

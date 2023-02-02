@@ -83,7 +83,7 @@ export const Tool = ({ title, image, linksText, links }: Props) => () => {
     switch (links?.length) {
         case 1:
             const [{ text, link }] = links;
-            bottomEls = [<Link target="_blank" href={link}>{text}</Link>]
+            bottomEls = [<Link target="_blank" href={link} key={`tool-link-${title}`}>{text}</Link>]
             break;
         case null:
         case undefined:
@@ -92,13 +92,15 @@ export const Tool = ({ title, image, linksText, links }: Props) => () => {
             bottomEls = [(
                 <div>
                     <Button
+                        key={`tool-menu-button-${title}`}
                         style={{ height: '20px' }}
                         aria-haspopup="true"
                         aria-expanded={menuOpen ? 'true' : undefined}
                         onClick={handleMenuClick}>
-                        <div className={classes.bottom}>{linksText}<ArrowDropDownIcon className={classes.dropdownIcon} /></div>
+                        <div className={classes.bottom}>{linksText}<ArrowDropDownIcon className={classes.dropdownIcon} key={`tool-menu-button-bottom-${title}`} /></div>
                     </Button>
                     <Menu
+                        key={`tool-menu-${title}`}
                         anchorEl={menuAnchorEl}
                         open={menuOpen}
                         onClose={handleMenuClose}
@@ -112,7 +114,7 @@ export const Tool = ({ title, image, linksText, links }: Props) => () => {
                         }}>
                         {
                             links?.map(({ text, link }: Link) =>
-                                <MenuItem onClick={handleMenuClose}>
+                                <MenuItem onClick={handleMenuClose} key={`tool-menu-item-${title}-${title}`}>
                                     <Link target="_blank" href={link}><div className={classes.bottom}>{text}</div></Link>
                                 </MenuItem>)
                         }
@@ -122,16 +124,16 @@ export const Tool = ({ title, image, linksText, links }: Props) => () => {
     }
 
     return (
-        <Card className={classes.card}>
-            <CardContent className={classes.content}>
-                <div className={classes.title}>{title}</div>
-                <hr className={classes.line} />
-                <div className={classes.iconContainer}>
-                    <img src={image} className={classes.icon} ></img>
-                </div>
-                <hr className={classes.line} />
-                <div className={classes.bottom}>{bottomEls}</div>
-            </CardContent>
-        </Card>
+        <Card className={classes.card} key={`tool-${title}`}>
+            <CardContent className={classes.content} key={`tool-content-${title}`}>
+            <div className={classes.title} key={`tool-title-${title}`}>{title}</div>
+            <hr className={classes.line} key={`tool-line-0-${title}`} />
+            <div className={classes.iconContainer} key={`tool-icon-${title}`}>
+                <img src={image} className={classes.icon} ></img>
+            </div>
+            <hr className={classes.line} key={`tool-line-${title}`} />
+            <div className={classes.bottom}>{bottomEls} key={`tool-bottom-buttons-${title}`}</div>
+        </CardContent>
+        </Card >
     );
 };
