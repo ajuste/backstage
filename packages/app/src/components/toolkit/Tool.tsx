@@ -90,7 +90,7 @@ export const Tool = ({ title, image, linksText, links }: Props) => () => {
             break;
         default:
             bottomEls = [(
-                <div>
+                <div key={`tool-bottom-element-buttons-${title}`}>
                     <Button
                         key={`tool-menu-button-${title}`}
                         style={{ height: '20px' }}
@@ -132,7 +132,7 @@ export const Tool = ({ title, image, linksText, links }: Props) => () => {
                 <img src={image} className={classes.icon} ></img>
             </div>
             <hr className={classes.line} key={`tool-line-${title}`} />
-            <div className={classes.bottom}>{bottomEls} key={`tool-bottom-buttons-${title}`}</div>
+            <div className={classes.bottom} key={`tool-bottom-buttons-${title}`}>{bottomEls}</div>
         </CardContent>
         </Card >
     );
