@@ -9,7 +9,6 @@ import {
   EntityProvidingComponentsCard,
 } from '@backstage/plugin-api-docs';
 import {
-  EntityAboutCard,
   EntityDependsOnComponentsCard,
   EntityDependsOnResourcesCard,
   EntityHasComponentsCard,
@@ -67,6 +66,8 @@ import { EntityTechdocsContent } from '@backstage/plugin-techdocs';
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
 import { DocumentsComponent, EntityHasUisCard, DomainHasApisCard, } from '../domain';
+
+import { PillarAwareAboutCard } from './PillarAwareAboutCard';
 
 const techdocsContent = (
   <EntityTechdocsContent>
@@ -151,7 +152,7 @@ const overviewContent = (
   <Grid container spacing={3} alignItems="stretch">
     {entityWarningContent}
     <Grid item md={6}>
-      <EntityAboutCard variant="gridItem" />
+      <PillarAwareAboutCard variant="gridItem" />
     </Grid>
     <Grid item md={6} xs={12}>
       <EntityCatalogGraphCard
@@ -306,7 +307,7 @@ const apiPage = (
       <Grid container spacing={3}>
         {entityWarningContent}
         <Grid item md={6}>
-          <EntityAboutCard />
+          <PillarAwareAboutCard />
         </Grid>
         <Grid item md={6} xs={12}>
           <EntityCatalogGraphCard variant="gridItem" height={400} />
@@ -376,7 +377,7 @@ const systemPage = (
       <Grid container spacing={3} alignItems="stretch">
         {entityWarningContent}
         <Grid item md={4}>
-          <EntityAboutCard variant="gridItem" />
+          <PillarAwareAboutCard variant="gridItem" />
         </Grid>
         <Grid item md={8}>
           <EntityHasComponentsCard variant="gridItem" />
@@ -426,7 +427,7 @@ const domainPage = (
       <Grid container spacing={3} alignItems="stretch">
         {entityWarningContent}
         <Grid item md={6}>
-          <EntityAboutCard variant="gridItem" />
+          <PillarAwareAboutCard variant="gridItem" />
         </Grid>
         <Grid item md={6} xs={12}>
           <EntityCatalogGraphCard variant="gridItem" height={400} />
