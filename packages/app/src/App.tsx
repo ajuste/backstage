@@ -26,6 +26,7 @@ import { UserSettingsPage } from '@backstage/plugin-user-settings';
 import { apis } from './apis';
 import { entityPage } from './components/catalog/EntityPage';
 import { searchPage } from './components/search/SearchPage';
+import { PillarAwareCatalogPage } from './components/catalog/PillarAwareCatalogPage'
 import { Root } from './components/Root';
 
 import { AlertDisplay, OAuthRequestDialog } from '@backstage/core-components';
@@ -68,7 +69,9 @@ const routes = (
     <Route
       path="/catalog"
       element={<CatalogIndexPage initialKind="system" />}
-    />
+    >
+      <PillarAwareCatalogPage />
+    </Route>
     <Route
       path="/catalog/:namespace/:kind/:name"
       element={<CatalogEntityPage />}
