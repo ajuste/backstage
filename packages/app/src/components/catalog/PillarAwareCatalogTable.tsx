@@ -33,6 +33,7 @@ export const PillarAwareCatalogTable = (props: CatalogTableProps) => {
     return [
       CatalogTable.columns.createTitleColumn({hidden: true}),
       CatalogTable.columns.createNameColumn({defaultKind: filters.kind?.value}),
+      pillarAwareColumnFactories.createPillarColumn(),
       ...createEntitySpecificColumns(),
       CatalogTable.columns.createMetadataDescriptionColumn(),
       CatalogTable.columns.createTagsColumn(),
@@ -44,7 +45,7 @@ export const PillarAwareCatalogTable = (props: CatalogTableProps) => {
           return [];
         case 'domain':
         case 'system':
-          return [pillarAwareColumnFactories.createPillarColumn(), CatalogTable.columns.createOwnerColumn()];
+          return [CatalogTable.columns.createOwnerColumn()];
         case 'group':
         case 'template':
           return [CatalogTable.columns.createSpecTypeColumn()];
