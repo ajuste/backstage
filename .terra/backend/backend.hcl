@@ -83,6 +83,9 @@ AUTH_GITHUB_CLIENT_SECRET="{{ .Data.client_secret }}"
 GITHUB_ACCESS_TOKEN="{{ .Data.access_token }}"
 GITHUB_TOKEN="{{ .Data.access_token }}"
 {{ end }}
+{{ with secret "secret/${app}/azure" }}
+AZURE_TOKEN="{{ .Data.azure_access_token }}"
+{{ end }}
 {{ with secret "secret/${app}/jira" }}
 JIRA_TOKEN="{{ .Data.token }}"
 {{ end }}
