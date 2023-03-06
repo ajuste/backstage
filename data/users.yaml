@@ -760,7 +760,7 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: User
 metadata:
-  name: nschlotterbeck@zerofox.com
+  name: nschlotterbeck
 spec:
   memberOf: []
   profile:
@@ -770,7 +770,7 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: User
 metadata:
-  name: ahenriquez@zerofox.com
+  name: ahenriquez
 spec:
   memberOf: []
   profile:
@@ -780,7 +780,7 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: User
 metadata:
-  name: overa@zerofox.com
+  name: overa
 spec:
   memberOf: []
   profile:
@@ -790,7 +790,7 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: User
 metadata:
-  name: iparada@zerofox.com
+  name: iparada
 spec:
   memberOf: []
   profile:
@@ -800,7 +800,7 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: User
 metadata:
-  name: gnegrete@zerofox.com
+  name: gnegrete
 spec:
   memberOf: []
   profile:
@@ -810,7 +810,7 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: User
 metadata:
-  name: gnegrete@zerofox.com
+  name: gnegrete
 spec:
   memberOf: []
   profile:
@@ -820,7 +820,7 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: User
 metadata:
-  name: clundstedt@zerofox.com
+  name: clundstedt
 spec:
   memberOf: []
   profile:
@@ -830,7 +830,7 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: User
 metadata:
-  name: amason@zerofox.com
+  name: amason
 spec:
   memberOf: []
   profile:
@@ -840,7 +840,7 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: User
 metadata:
-  name: rvasquez@zerofox.com
+  name: rvasquez
 spec:
   memberOf: []
   profile:
@@ -850,7 +850,7 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: User
 metadata:
-  name: mwatkins@zerofox.com
+  name: mwatkins
 spec:
   memberOf: []
   profile:
@@ -865,12 +865,12 @@ spec:
   memberOf: []
   profile:
     displayName: Eric Moody
-    email: emoody@zerofox.com
+    email: emoody
 ---
 apiVersion: backstage.io/v1alpha1
 kind: User
 metadata:
-  name: erutz@zerofox.com
+  name: erutz
 spec:
   memberOf: []
   profile:
