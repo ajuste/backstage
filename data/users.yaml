@@ -836,3 +836,43 @@ spec:
   profile:
     displayName: Andrew Mason
     email: amason@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: rvasquez@zerofox.com
+spec:
+  memberOf: []
+  profile:
+    displayName: Ricardo Vasquez
+    email: rvasquez@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: mwatkins@zerofox.com
+spec:
+  memberOf: []
+  profile:
+    displayName: Matthew Watkins
+    email: mwatkins@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: emoody@zerofox.com
+spec:
+  memberOf: []
+  profile:
+    displayName: Eric Moody
+    email: emoody@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: erutz@zerofox.com
+spec:
+  memberOf: []
+  profile:
+    displayName: Eric Rutz
+    email: erutz@zerofox.com

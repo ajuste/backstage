@@ -205,4 +205,4 @@ spec:
     displayName: "SRE"
   type: team
   children: []
-  members: [zwolf, jpietrzak, tceruti, ynakshin, craborg]
+  members: [zwolf, jpietrzak, craborg, rvasquez, mwatkins, emoody]
