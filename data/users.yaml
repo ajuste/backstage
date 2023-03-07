@@ -860,12 +860,12 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: User
 metadata:
-  name: emoody@zerofox.com
+  name: emoody
 spec:
   memberOf: []
   profile:
     displayName: Eric Moody
-    email: emoody
+    email: emoody@zerofox.com
 ---
 apiVersion: backstage.io/v1alpha1
 kind: User
