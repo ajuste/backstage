@@ -35,7 +35,7 @@ export const PillarAwareCatalogPage = (props: DefaultCatalogPageProps): JSX.Elem
   const {
     actions,
     initiallySelectedFilter = 'owned',
-    initialKind = 'component',
+    initialKind = 'system',
     tableOptions = {},
     emptyContent,
   } = props;
