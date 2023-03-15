@@ -20,16 +20,6 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: User
 metadata:
-  name: aflano
-spec:
-  memberOf: []
-  profile:
-    displayName: Alvaro Flaño
-    email: aflano@zerofox.com
----
-apiVersion: backstage.io/v1alpha1
-kind: User
-metadata:
   name: rpena
 spec:
   memberOf: []
@@ -66,16 +56,6 @@ spec:
   profile:
     displayName: Aaron Hewett
     email: ahewett@zerofox.com
----
-apiVersion: backstage.io/v1alpha1
-kind: User
-metadata:
-  name: pblanton
-spec:
-  memberOf: []
-  profile:
-    displayName: Patrick Blanton
-    email: pblanton@zerofox.com
 ---
 apiVersion: backstage.io/v1alpha1
 kind: User
@@ -200,42 +180,12 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: User
 metadata:
-  name: jholyoak
-spec:
-  memberOf: []
-  profile:
-    displayName: Jeff Holyoak
-    email: jholyoak@zerofox.com
----
-apiVersion: backstage.io/v1alpha1
-kind: User
-metadata:
   name: jrodriguez
 spec:
   memberOf: []
   profile:
     displayName: Javier Rodriguez
     email: jrodriguez@zerofox.com
----
-apiVersion: backstage.io/v1alpha1
-kind: User
-metadata:
-  name: soneill
-spec:
-  memberOf: []
-  profile:
-    displayName: Sowjanya O'Neill
-    email: soneill@zerofox.com
----
-apiVersion: backstage.io/v1alpha1
-kind: User
-metadata:
-  name: jalvarez
-spec:
-  memberOf: []
-  profile:
-    displayName: Jorge Alvarez
-    email: jalvarez@zerofox.com
 ---
 apiVersion: backstage.io/v1alpha1
 kind: User
@@ -276,16 +226,6 @@ spec:
   profile:
     displayName: Devon Gerber
     email: dgerber@zerofox.com
----
-apiVersion: backstage.io/v1alpha1
-kind: User
-metadata:
-  name: acaballero
-spec:
-  memberOf: []
-  profile:
-    displayName: Alejandro Caballero
-    email: acaballero@zerofox.com
 ---
 apiVersion: backstage.io/v1alpha1
 kind: User
@@ -350,26 +290,6 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: User
 metadata:
-  name: jcollins
-spec:
-  memberOf: []
-  profile:
-    displayName: James Collins
-    email: jcollins@zerofox.com
----
-apiVersion: backstage.io/v1alpha1
-kind: User
-metadata:
-  name: bbuttonow
-spec:
-  memberOf: []
-  profile:
-    displayName: Brian Buttonow
-    email: bbuttonow@zerofox.com
----
-apiVersion: backstage.io/v1alpha1
-kind: User
-metadata:
   name: eramirez
 spec:
   memberOf: []
@@ -396,16 +316,6 @@ spec:
   profile:
     displayName: Fabian Bravo
     email: fbravo@zerofox.com
----
-apiVersion: backstage.io/v1alpha1
-kind: User
-metadata:
-  name: nanderson
-spec:
-  memberOf: []
-  profile:
-    displayName: Nate Anderson
-    email: nanderson@zerofox.com
 ---
 apiVersion: backstage.io/v1alpha1
 kind: User
@@ -456,16 +366,6 @@ spec:
   profile:
     displayName: Rafa Calvo
     email: rcalvo@zerofox.com
----
-apiVersion: backstage.io/v1alpha1
-kind: User
-metadata:
-  name: pfrias
-spec:
-  memberOf: []
-  profile:
-    displayName: Paolo Frias
-    email: pfrias@zerofox.com
 ---
 apiVersion: backstage.io/v1alpha1
 kind: User
@@ -540,16 +440,6 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: User
 metadata:
-  name: evillalobos
-spec:
-  memberOf: []
-  profile:
-    displayName: Esteban Villalobos
-    email: evillalobos@zerofox.com
----
-apiVersion: backstage.io/v1alpha1
-kind: User
-metadata:
   name: rvillablanca
 spec:
   memberOf: []
@@ -580,32 +470,12 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: User
 metadata:
-  name: scornejo
-spec:
-  memberOf: []
-  profile:
-    displayName: Sebastián Cornejo
-    email: scornejo@zerofox.com
----
-apiVersion: backstage.io/v1alpha1
-kind: User
-metadata:
   name: jpietrzak
 spec:
   memberOf: []
   profile:
     displayName: Jason Pietrzak
     email: jpietrzak@zerofox.com
----
-apiVersion: backstage.io/v1alpha1
-kind: User
-metadata:
-  name: ljeter
-spec:
-  memberOf: []
-  profile:
-    displayName: Luke Jeter
-    email: ljeter@zerofox.com
 ---
 apiVersion: backstage.io/v1alpha1
 kind: User
@@ -626,16 +496,6 @@ spec:
   profile:
     displayName: Carlos Moran
     email: cmoran@zerofox.com
----
-apiVersion: backstage.io/v1alpha1
-kind: User
-metadata:
-  name: fvidela
-spec:
-  memberOf: []
-  profile:
-    displayName: Fede Videla
-    email: fvidela@zerofox.com
 ---
 apiVersion: backstage.io/v1alpha1
 kind: User
@@ -754,8 +614,8 @@ metadata:
 spec:
   memberOf: []
   profile:
-    displayName: Cristobal Muñoz
-    email: cmunoz@zerofox.com
+    displayName: Henry Covington
+    email: hcovington@zerofox.com
 ---
 apiVersion: backstage.io/v1alpha1
 kind: User
@@ -810,16 +670,6 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: User
 metadata:
-  name: gnegrete
-spec:
-  memberOf: []
-  profile:
-    displayName: Guillermo Negrete
-    email: gnegrete@zerofox.com
----
-apiVersion: backstage.io/v1alpha1
-kind: User
-metadata:
   name: clundstedt
 spec:
   memberOf: []
@@ -840,39 +690,59 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: User
 metadata:
-  name: rvasquez
+  name: efarley
 spec:
   memberOf: []
   profile:
-    displayName: Ricardo Vasquez
-    email: rvasquez@zerofox.com
+    displayName: Eric Farley
+    email: efarley@zerofox.com
 ---
 apiVersion: backstage.io/v1alpha1
 kind: User
 metadata:
-  name: mwatkins
+  name: jsuarez
 spec:
   memberOf: []
   profile:
-    displayName: Matthew Watkins
-    email: mwatkins@zerofox.com
+    displayName: Johan Suarez
+    email: jsuarez@zerofox.com
 ---
 apiVersion: backstage.io/v1alpha1
 kind: User
 metadata:
-  name: emoody
+  name: cbarajas
 spec:
   memberOf: []
   profile:
-    displayName: Eric Moody
-    email: emoody@zerofox.com
+    displayName: Christian Barajas
+    email: cbarajas@zerofox.com
 ---
 apiVersion: backstage.io/v1alpha1
 kind: User
 metadata:
-  name: erutz
+  name: mcovington
 spec:
   memberOf: []
   profile:
-    displayName: Eric Rutz
-    email: erutz@zerofox.com
+    displayName: Matt Covington
+    email: mcovington@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: rnaranjo
+spec:
+  memberOf: []
+  profile:
+    displayName: Rodrigo Naranjo
+    email: rnaranjo@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: tmcphillips
+spec:
+  memberOf: []
+  profile:
+    displayName: Tommy McPhillips
+    email: tmcphillips@zerofox.com

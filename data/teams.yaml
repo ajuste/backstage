@@ -206,3 +206,42 @@ spec:
   type: team
   children: []
   members: [zwolf, jprotzman, craborg, rvasquez, mwatkins, emoody]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-configuration
+  tags: ["scrum-team"]
+  description: ""
+spec:
+  profile:
+    displayName: "Configuration"
+  type: team
+  children: []
+  members: [bsnowdon, dvalenzuela, efarley, cmunoz, cyuseff, abrewer, ddannunzio]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-impersonations
+  tags: ["scrum-team"]
+  description: ""
+spec:
+  profile:
+    displayName: "Impersonations"
+  type: team
+  children: []
+  members: [mcovington, iparada, hcampuzano, rnaranjo, tmcphillips, abrewer, ddannunzio]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-physical-security
+  tags: ["scrum-team"]
+  description: ""
+spec:
+  profile:
+    displayName: "Physical Security"
+  type: team
+  children: []
+  members: [mcovington, jurbina, fcano, jsuarez, cbarajas, abrewer, ddannunzio]
