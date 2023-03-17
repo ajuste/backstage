@@ -2,6 +2,19 @@ app:
   title: Zerofox Dev Portal
   baseUrl: http://localhost:3003
 
+auth:
+  environment: development
+  providers:
+    github:
+      development:
+        clientId: ${AUTH_GITHUB_CLIENT_ID}
+        clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
+    okta:
+      development:
+        clientId: ${AUTH_OKTA_CLIENT_ID}
+        clientSecret: ${AUTH_OKTA_CLIENT_SECRET}
+        audience: https://zerofox.okta.com
+
 organization:
   name: Zerofox
 
@@ -82,10 +95,6 @@ techdocs:
     runIn: 'docker' # Alternatives - 'local'
   publisher:
     type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
-
-auth:
-  # see https://backstage.io/docs/auth/ to learn about auth providers
-  providers: {}
 
 scaffolder:
   # see https://backstage.io/docs/features/software-templates/configuration for software template options

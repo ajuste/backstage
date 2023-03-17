@@ -29,7 +29,7 @@ import { searchPage } from './components/search/SearchPage';
 import { PillarAwareCatalogPage } from './components/catalog/PillarAwareCatalogPage'
 import { Root } from './components/Root';
 
-import { AlertDisplay, OAuthRequestDialog } from '@backstage/core-components';
+import { AlertDisplay, OAuthRequestDialog, SignInPage } from '@backstage/core-components';
 import { createApp } from '@backstage/app-defaults';
 import { FlatRoutes } from '@backstage/core-app-api';
 import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
@@ -38,11 +38,28 @@ import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/
 import { HomePage } from './components/home/HomePage';
 import { ReportingPage, CodeCoveragePage, StalenessPage } from 'plugin-reporting';
 import { ExplorePage } from './components/explore/ExplorePage';
+import { oktaAuthApiRef } from '@backstage/core-plugin-api';
+
 import * as plugins from './plugins';
 
 const app = createApp({
   apis,
   plugins: Object.values(plugins),
+  components: {
+    SignInPage: props => (
+      <SignInPage
+        {...props}
+        providers={[
+          {
+            id: 'okta-auth-provider',
+            title: 'Okta',
+            message: 'Sign in using Okta',
+            apiRef: oktaAuthApiRef,
+          },
+        ]}
+      />
+    ),
+  },
   bindRoutes({ bind }) {
     bind(catalogPlugin.externalRoutes, {
       createComponent: scaffolderPlugin.routes.root,

@@ -99,6 +99,10 @@ DB_HOST=${db_address}
 DB_USER="{{ .Data.username }}"
 DB_PASSWORD="{{ .Data.password }}"
 {{ end }}
+{{ with secret "secret/${app}/okta" }}
+AUTH_OKTA_CLIENT_ID="{{ .Data.client_id }}"
+AUTH_OKTA_CLIENT_SECRET="{{ .Data.client_secret }}"
+{{ end }}
 EOH
       destination = "$${NOMAD_SECRETS_DIR}/env"
       change_mode = "restart"
