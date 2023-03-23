@@ -335,7 +335,7 @@ spec:
   memberOf: []
   profile:
     displayName: Kavan McEachern
-    email: kmceachern@zerofox.com
+    email: kav@zerofox.com
 ---
 apiVersion: backstage.io/v1alpha1
 kind: User
