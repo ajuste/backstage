@@ -49,12 +49,6 @@ export default async function createPlugin(
           // resolver: providers.github.resolvers.usernameMatchingUserEntityName(),
         },
       }),
-      okta: providers.okta.create({
-        signIn: {
-          resolver:
-            providers.okta.resolvers.emailMatchingUserEntityProfileEmail(),
-        },
-      }),
     },
   });
 }

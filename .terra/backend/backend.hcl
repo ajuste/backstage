@@ -75,6 +75,7 @@ group "backend" {
 {{ range ls "${app}/backend/env" }}
 {{ .Key }}="{{ .Value }}"
 {{ end }}
+ENV=${env}
 TECHDOCS_AWSS3_BUCKET_NAME=${bucket_name}
 {{ with secret "secret/${app}/github" }}
 AUTH_GITHUB_CLIENT_ID="{{ .Data.client_id }}"

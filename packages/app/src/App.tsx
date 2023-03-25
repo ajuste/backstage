@@ -36,11 +36,14 @@ import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
 import { HomePage } from './components/home/HomePage';
-import { ReportingPage, CodeCoveragePage, StalenessPage } from 'plugin-reporting';
+import { ReportingPage, CodeCoveragePage, StalenessPage, PillarAdoptionRatioPage } from 'plugin-reporting';
 import { ExplorePage } from './components/explore/ExplorePage';
 import { oktaAuthApiRef } from '@backstage/core-plugin-api';
 
 import * as plugins from './plugins';
+
+const GuestDisabledEnvs = ['qa', 'stag', 'prod'];
+const env = process.env.ENV || '';
 
 const app = createApp({
   apis,
@@ -49,14 +52,23 @@ const app = createApp({
     SignInPage: props => (
       <SignInPage
         {...props}
-        providers={[
-          {
-            id: 'okta-auth-provider',
-            title: 'Okta',
-            message: 'Sign in using Okta',
-            apiRef: oktaAuthApiRef,
-          },
-        ]}
+        providers={
+          env in GuestDisabledEnvs ? [
+            {
+              id: 'okta-auth-provider',
+              title: 'Okta',
+              message: 'Sign in using Okta',
+              apiRef: oktaAuthApiRef,
+            }
+          ] : [
+            'guest',
+            {
+              id: 'okta-auth-provider',
+              title: 'Okta',
+              message: 'Sign in using Okta',
+              apiRef: oktaAuthApiRef,
+            }]
+        }
       />
     ),
   },
@@ -148,6 +160,7 @@ const routes = (
     <Route path="/reporting" element={<ReportingPage />} />
     <Route path="/reporting/code-coverage" element={<CodeCoveragePage />} />
     <Route path="/reporting/service-staleness" element={<StalenessPage />} />
+    <Route path="/reporting/pillar-adoption-ratio" element={<PillarAdoptionRatioPage />} />
     <Route path="/explore" element={<ExplorePage />} />
   </FlatRoutes>
 );

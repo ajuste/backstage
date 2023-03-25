@@ -50,6 +50,19 @@ export const CatalogComponent = () => (
             </Button>
           </CardActions>
         </Card>
+        <Card key="pillar-adoption-ratio" data-testid='pillar-adoption-ratio'>
+          <CardMedia>
+            <ItemCardHeader title="Pillar transition ratio" subtitle="pillar" />
+          </CardMedia>
+          <CardContent>
+            % of services with changes in the past 180 days that are assigned to a pillar and have at least one SO within the pillar.
+          </CardContent>
+          <CardActions>
+            <Button color="primary" to="/reporting/pillar-adoption-ratio" data-testid='pillar-adoption-ratio-link'>
+              See report
+            </Button>
+          </CardActions>
+        </Card>
       </ItemCardGrid>
     </Content>
   </Page>

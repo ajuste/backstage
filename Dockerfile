@@ -16,15 +16,24 @@ RUN yarn link
 WORKDIR /builder/plugins/zf-tech-insights-backend
 RUN yarn link
 
+WORKDIR /builder/plugins/reporting-backend
+RUN yarn link
+
+WORKDIR /builder/plugins/reporting-common
+RUN yarn link
+
 # Link every backend plugin from zerofox here
 WORKDIR /builder/packages/backend
 RUN yarn link "@internal/plugin-github-resource-fetcher-backend"
+RUN yarn link "@internal/plugin-reporting-common"
+RUN yarn link "@internal/plugin-reporting-backend"
 
 # Link every frontend plugin from zerofox here
 WORKDIR /builder/packages/app
 RUN yarn link "plugin-reporting"
 RUN yarn link "@internal/plugin-github-resource-fetcher"
 RUN yarn link "@internal/plugin-zf-tech-insights-backend"
+
 
 WORKDIR /builder
 RUN yarn install && yarn tsc && yarn build:backend

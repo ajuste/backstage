@@ -11,3 +11,7 @@ export const codeCoverageRouteRef = createRouteRef({
 export const serviceStalenessRouteRef = createRouteRef({
   id: 'service-staleness',
 });
+
+export const pillarAdoptionRatioRouteRef = createRouteRef({
+  id: 'pillar-adoption-ratio',
+});

@@ -31,6 +31,7 @@ import search from './plugins/search';
 import codeCoverage from './plugins/codecoverage';
 import techInsights from './plugins/techInsights';
 import githubResourceFetcher from './plugins/githubResourceFetcher';
+import reporting from './plugins/reporting';
 import { PluginEnvironment } from './types';
 import { ServerPermissionClient } from '@backstage/plugin-permission-node';
 import { DefaultIdentityClient } from '@backstage/plugin-auth-node';
@@ -96,6 +97,7 @@ async function main() {
   const githubResourceFetcherEnv = useHotMemoize(module, () =>
     createEnv('github-resource-fetcher'),
   );
+  const reportingEnv = useHotMemoize(module, () => createEnv('reporting'));
 
   const apiRouter = Router();
   apiRouter.use('/tech-insights', await techInsights(techInsightsEnv));
@@ -106,6 +108,7 @@ async function main() {
   apiRouter.use('/proxy', await proxy(proxyEnv));
   apiRouter.use('/search', await search(searchEnv));
   apiRouter.use('/code-coverage', await codeCoverage(codeCoverageEnv));
+  apiRouter.use('/reporting', await reporting(reportingEnv));
   apiRouter.use(
     '/github-resource-fetcher',
     await githubResourceFetcher(githubResourceFetcherEnv),
