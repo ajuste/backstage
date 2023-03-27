@@ -6,5 +6,6 @@ export default async function createPlugin(env: PluginEnvironment) {
     config: env.config,
     logger: env.logger,
     discovery: env.discovery,
+    tokenManager: env.tokenManager,
   });
 }

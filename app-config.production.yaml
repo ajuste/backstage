@@ -2,6 +2,9 @@ app:
   # Should be the same as backend.baseUrl when using the `app-backend` plugin.
   baseUrl: https://devportal.zerofox.com
 
+auth:
+  environment: prod
+
 backend:
   baseUrl: https://devportal.zerofox.com
   listen:

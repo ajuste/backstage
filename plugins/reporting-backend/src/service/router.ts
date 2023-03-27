@@ -21,12 +21,14 @@ import Router from 'express-promise-router';
 import { Logger } from 'winston';
 import { ConfigApi } from '@backstage/core-plugin-api';
 import { CatalogClient } from '@backstage/catalog-client';
+import { TokenManager } from '@backstage/backend-common';
 import PillarAdoptionService from './PillarAdoptionService';
 
 export interface RouterOptions {
   logger: Logger;
   config: ConfigApi;
   discovery: PluginEndpointDiscovery;
+  tokenManager: TokenManager;
 }
 
 export async function createRouter(
@@ -42,10 +44,8 @@ export async function createRouter(
     response.json({ status: 'ok' });
   });
 
-  router.get('/pillar-adoption/ratio', (request, response) => {
-    logger.info(
-      `Fetching resource pillar adoption ratio`,
-    );
+  router.get('/pillar-adoption/ratio', (_, response) => {
+    logger.info(`Fetching resource pillar adoption ratio`);
 
     const catalogClient = new CatalogClient({
       discoveryApi: options.discovery,
@@ -55,6 +55,7 @@ export async function createRouter(
       options.config,
       options.logger,
       catalogClient,
+      options.tokenManager,
     );
 
     gh.getTransitionRatioReport()

@@ -5,6 +5,9 @@ app:
     ga:
       trackingId: G-RFJJ8NHFYP
 
+auth:
+  environment: qa
+
 backend:
   baseUrl: https://devportal-qa.zerofox.com
   listen:

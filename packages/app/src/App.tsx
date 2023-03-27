@@ -38,39 +38,41 @@ import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/
 import { HomePage } from './components/home/HomePage';
 import { ReportingPage, CodeCoveragePage, StalenessPage, PillarAdoptionRatioPage } from 'plugin-reporting';
 import { ExplorePage } from './components/explore/ExplorePage';
-import { oktaAuthApiRef } from '@backstage/core-plugin-api';
+import { oktaAuthApiRef, configApiRef, useApi } from '@backstage/core-plugin-api';
 
 import * as plugins from './plugins';
 
 const GuestDisabledEnvs = ['qa', 'stag', 'prod'];
-const env = process.env.ENV || '';
 
 const app = createApp({
   apis,
   plugins: Object.values(plugins),
   components: {
-    SignInPage: props => (
-      <SignInPage
-        {...props}
-        providers={
-          env in GuestDisabledEnvs ? [
-            {
-              id: 'okta-auth-provider',
-              title: 'Okta',
-              message: 'Sign in using Okta',
-              apiRef: oktaAuthApiRef,
-            }
-          ] : [
-            'guest',
-            {
+    SignInPage: props => {
+      const configApi = useApi(configApiRef);
+      if (!GuestDisabledEnvs.includes(configApi.getOptionalString('auth.environment') || "")) {
+        return (
+          <SignInPage
+            {...props}
+            providers={['guest', {
               id: 'okta-auth-provider',
               title: 'Okta',
               message: 'Sign in using Okta',
               apiRef: oktaAuthApiRef,
             }]
-        }
-      />
-    ),
+            }
+          />);
+      }
+      return <SignInPage
+        {...props}
+        provider={{
+          id: 'okta-auth-provider',
+          title: 'Okta',
+          message: 'Sign in using Okta',
+          apiRef: oktaAuthApiRef,
+        }}
+      />;
+    },
   },
   bindRoutes({ bind }) {
     bind(catalogPlugin.externalRoutes, {

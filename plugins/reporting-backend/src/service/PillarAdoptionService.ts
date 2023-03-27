@@ -1,23 +1,57 @@
 import { ConfigApi } from '@backstage/core-plugin-api';
 import { SingleInstanceGithubCredentialsProvider } from '@backstage/integration';
 import { ScmIntegrations, GithubCredentials } from '@backstage/integration';
-import { Octokit } from '@octokit/core';
+import { Octokit, RestEndpointMethodTypes } from '@octokit/rest';
 import { Logger } from 'winston';
 import {
   PillarAdoptionReport,
   PillarAdoptionServiceAPI,
 } from '@internal/plugin-reporting-common';
-import { CatalogClient } from '@backstage/catalog-client';
+import { TokenManager } from '@backstage/backend-common';
+import {
+  CatalogClient,
+  GetEntitiesResponse,
+  GetEntityAncestorsResponse,
+} from '@backstage/catalog-client';
+import {
+  Entity,
+  GroupEntity,
+  UserEntity,
+  stringifyEntityRef,
+} from '@backstage/catalog-model';
+
+type RepoAdoptionAnalysis = {
+  repo: string;
+  entities: Entity[];
+  hasPillar: boolean;
+  owner: Entity | undefined;
+  ownerInPillar: boolean;
+};
+
+const DaysThreshold = 180;
+
+type Commit =
+  RestEndpointMethodTypes['repos']['listCommits']['response']['data'][0];
+type Repo =
+  RestEndpointMethodTypes['repos']['listForOrg']['response']['data'][0];
+type CommitsPerRepo = [Repo, Commit[]];
 
 export default class PillarAdoptionService implements PillarAdoptionServiceAPI {
   private config: ConfigApi;
   private logger: Logger;
   private catalogClient: CatalogClient;
+  private tokenManager: TokenManager;
 
-  constructor(config: ConfigApi, logger: Logger, catalogClient: CatalogClient) {
+  constructor(
+    config: ConfigApi,
+    logger: Logger,
+    catalogClient: CatalogClient,
+    tokenManager: TokenManager,
+  ) {
     this.config = config;
     this.logger = logger;
     this.catalogClient = catalogClient;
+    this.tokenManager = tokenManager;
   }
 
   protected async getGithubCredentials(): Promise<GithubCredentials> {
@@ -46,26 +80,53 @@ export default class PillarAdoptionService implements PillarAdoptionServiceAPI {
     });
 
     const pageSize = 100;
-    let page = 0;
+    let page = 1;
     let repos: string[] = [];
-    this.logger.info('>>>>here');
 
     while (true) {
-      const { data } = await octokit.request('GET /orgs/{org}/repos', {
+      const { data } = await octokit.repos.listForOrg({
         org: 'riskive',
-        type: 'all',
         per_page: pageSize,
         page: page,
       });
 
-      repos = repos.concat(data.map(({ full_name }) => full_name));
+      const commitsPerRepo = await Promise.all(
+        data
+          .filter(repo => !repo.archived)
+          .map(
+            repo =>
+              new Promise((res, _) => {
+                octokit.repos
+                  .listCommits({
+                    owner: 'riskive',
+                    repo: repo.name,
+                    per_page: 1,
+                    sha: repo.default_branch,
+                    since: new Date(
+                      new Date().setDate(new Date().getDate() - DaysThreshold),
+                    ).toISOString(),
+                  })
+                  .then(({ data }) => res([repo, data] as CommitsPerRepo))
+                  .catch(err => {
+                    this.logger.error(
+                      `Error getting commits for repo ${repo.full_name}: ${err}`,
+                    );
+                    res([repo, []] as CommitsPerRepo);
+                  });
+              }),
+          ) as Promise<CommitsPerRepo>[],
+      );
+
+      // has 1 commit in the last 180 days.
+      repos = repos.concat(
+        commitsPerRepo.filter(c => c[1].length > 0).map(c => c[0].full_name),
+      );
 
       if (data.length < pageSize) {
         break;
       }
       page++;
     }
-    this.logger.info('>>>>here' + JSON.stringify(repos));
 
     return Promise.resolve(repos);
   }
@@ -78,32 +139,280 @@ export default class PillarAdoptionService implements PillarAdoptionServiceAPI {
     const githubRepos = await this.listAllGithubRepos();
     const azureRepos = await this.listAllAzureRepos();
 
-    this.logger.info('>>>>githubRepos' + JSON.stringify(githubRepos));
-    this.logger.info('>>>>new Set([...githubRepos, ...azureRepos])' + JSON.stringify(new Set([...githubRepos, ...azureRepos])));
-
     return new Set([...githubRepos, ...azureRepos]);
   }
 
-  protected async getAdoptingRepos(repos: Set<string>): Promise<string[]> {
-    return Promise.resolve([]);
+  protected async getComponentsPerUser(): Promise<Map<string, string[]>> {
+    const { token } = await this.tokenManager.getToken();
+    const allUsers = await this.catalogClient.getEntities(
+      { filter: [{ kind: 'User' }] },
+      { token },
+    );
+
+    // get owned entities request for each user.
+    const componentsPerUserGets = allUsers.items
+      .map(user => user as UserEntity)
+      .map(user => [
+        user as UserEntity,
+        user.relations
+          ?.filter(
+            ({ type, targetRef }) =>
+              type === 'memberOf' && targetRef.startsWith('group'),
+          )
+          .map(({ targetRef }) => targetRef)
+          .flat() as string[],
+      ])
+      .map(
+        ([user, teamRefs]) =>
+          [
+            user,
+            this.catalogClient.getEntities(
+              {
+                filter: [
+                  { kind: 'System' },
+                  { kind: 'Component' },
+                  { kind: 'API' },
+                  ...(teamRefs as string[]).map((ref: string) => {
+                    return { 'relations.ownedBy': ref };
+                  }),
+                ],
+              },
+              { token },
+            ),
+          ] as [UserEntity, Promise<GetEntitiesResponse>],
+      );
+
+    // get owner entities for each user
+    return new Map<string, string[]>(
+      (await Promise.all(componentsPerUserGets.map(([_, get]) => get)))
+        .map(
+          (entities, i) =>
+            [
+              componentsPerUserGets[i][0],
+              (entities as GetEntitiesResponse).items,
+            ] as [UserEntity, Entity[]],
+        )
+        .map(
+          ([user, entities]) =>
+            [
+              user.metadata?.name,
+              entities.map(entity => stringifyEntityRef(entity)).flat(),
+            ] as [string, string[]],
+        ),
+    );
   }
 
-  protected async getNoAdoptingRepos(repos: Set<string>): Promise<string[]> {
-    return Promise.resolve([]);
+  protected async getUsernamesPerPillar(): Promise<Map<string, string[]>> {
+    const { token } = await this.tokenManager.getToken();
+    const pillarTeams = await this.catalogClient.getEntities(
+      {
+        filter: [
+          { kind: 'Group', 'metadata.tags': 'pillar-team', type: 'team' },
+        ],
+      },
+      { token },
+    );
+
+    const pillarTeamToPillar = new Map<string, string>(
+      pillarTeams.items.map(team => [
+        stringifyEntityRef(team),
+        team.metadata?.annotations?.['zerofox.com/pillar'] as string,
+      ]),
+    );
+
+    const getAncestorsRequests = pillarTeams.items
+      .filter(team => pillarTeamToPillar.has(stringifyEntityRef(team)))
+      .map((team: Entity) =>
+        this.catalogClient.getEntityAncestors(
+          { entityRef: stringifyEntityRef(team) },
+          { token },
+        ),
+      );
+
+    // const pillarToTeams = new Map<string, string[]>(
+    //   (await Promise.all(getAncestorsRequests)).map(
+    //     (res: GetEntityAncestorsResponse) => [
+    //       teamToPillar.get(res.rootEntityRef) as string,
+    //       res.items
+    //         .filter(e => e.entity?.kind == 'Group')
+    //         .map(e => e.entity?.relations)
+    //         .flat()
+    //         .filter(r => r?.type == 'parentOf')
+    //         .map(e => e?.targetRef) as string[],
+    //     ],
+    //   ),
+    // );
+
+    const teamToPillar = new Map<string, string>(
+      (await Promise.all(getAncestorsRequests))
+        .map((res: GetEntityAncestorsResponse) =>
+          res.items
+            .filter(e => e.entity?.kind == 'Group')
+            .map(e => e.entity?.relations)
+            .flat()
+            .filter(r => r?.type == 'parentOf')
+            .map(e => [
+              e?.targetRef,
+              pillarTeamToPillar.get(res.rootEntityRef),
+            ]),
+        )
+        .flat() as [string, string][],
+    );
+
+    const allTeams = await this.catalogClient.getEntities(
+      {
+        filter: [{ kind: 'Group', type: 'team' }],
+      },
+      { token },
+    );
+
+    return new Map<string, string[]>(
+      allTeams.items
+        .filter(team => teamToPillar.has(stringifyEntityRef(team)))
+        .map(team => team as GroupEntity)
+        .map(team => [
+          teamToPillar.get(stringifyEntityRef(team)),
+          team.spec?.members,
+        ])
+        .flat() as [string, string[]][],
+    );
+  }
+
+  protected async getCapableOfRepoEntities(): Promise<GetEntitiesResponse> {
+    const { token } = await this.tokenManager.getToken();
+    return await this.catalogClient.getEntities(
+      { filter: [{ kind: 'System' }, { kind: 'Component' }, { kind: 'API' }] },
+      { token },
+    );
+  }
+
+  protected async getLocations(): Promise<GetEntitiesResponse> {
+    const { token } = await this.tokenManager.getToken();
+    return await this.catalogClient.getEntities(
+      { filter: [{ kind: 'Location' }] },
+      { token },
+    );
+  }
+
+  protected async analyzeRepos(
+    repos: string[],
+  ): Promise<RepoAdoptionAnalysis[]> {
+    const locations = await this.getLocations();
+    const repoToLocations = new Map<string, Entity[]>(
+      repos.map((repo: string) => [
+        repo,
+        locations.items.filter(
+          (location: Entity) =>
+            String(location.spec?.target).indexOf(`${repo}/`) > -1,
+        ),
+      ]),
+    );
+
+    const capableOfRepoEntities = await this.getCapableOfRepoEntities();
+    this.logger.info(
+      `Entities capable of representing a repo: ${capableOfRepoEntities.items.map(
+        entity => stringifyEntityRef(entity),
+      )}`,
+    );
+
+    const usernamesPerPillar = await this.getUsernamesPerPillar();
+    this.logger.info(
+      `Usernames per pillar: ${Array.from(usernamesPerPillar.entries())
+        .map(
+          entry => 'Pillar: ' + entry[0] + ' Usernames: ' + entry[1].join(', '),
+        )
+        .join('\n')}`,
+    );
+
+    const componentsPerUser = await this.getComponentsPerUser();
+    this.logger.info(
+      `Components per user: ${Array.from(componentsPerUser.entries())
+        .map(
+          entry => 'User: ' + entry[0] + ' Components: ' + entry[1].join(', '),
+        )
+        .join('\n')}`,
+    );
+
+    const locationToEntities = new Map<Entity, Entity[]>(
+      locations.items.map((location: Entity) => [
+        location,
+        capableOfRepoEntities.items.filter((entity: Entity) => {
+          return (
+            entity.metadata?.annotations?.[
+              'backstage.io/managed-by-origin-location'
+            ] == `${location.spec?.type}:${location.spec?.target}`
+          );
+        }),
+      ]),
+    );
+
+    return Promise.resolve(
+      Array.from(repoToLocations.entries()).map(([repo, locations]) => {
+        const entitiesForRepo = locations
+          .filter(location => locationToEntities.has(location))
+          .map(location => locationToEntities.get(location))
+          .flat() as Entity[];
+
+        const hasPillar =
+          entitiesForRepo.filter(
+            entity => entity.metadata?.annotations?.['zerofox.com/pillar'],
+          ).length > 0;
+
+        const ownerInPillar =
+          entitiesForRepo
+            // all the entities that have a pillar
+            .map(
+              entity =>
+                [
+                  entity,
+                  entity.metadata?.annotations?.['zerofox.com/pillar'],
+                ] as [Entity, string],
+            )
+            // filter out the ones that don't have users in that pillar
+            .filter(([_, pillar]) => pillar && usernamesPerPillar.has(pillar))
+            // filter out the ones that don't have components owned by users in that pillar
+            .filter(([entity, pillar]) =>
+              // get the users in the pillar
+              usernamesPerPillar
+                .get(pillar)
+                // filter out the ones that don't have components
+                ?.filter(username => componentsPerUser.has(username))
+                // get components for that user
+                .map(username => componentsPerUser.get(username))
+                // flatten the array of arrays
+                .flat()
+                // validate that the entity is in the list of components for that user
+                .filter(entityRef => entityRef == stringifyEntityRef(entity)),
+            ).length > 0;
+
+        return {
+          repo,
+          hasPillar,
+          ownerInPillar,
+          entities: entitiesForRepo,
+          owner: undefined,
+        };
+      }),
+    );
   }
 
   async getTransitionRatioReport(): Promise<PillarAdoptionReport> {
-    const repos = await this.listAllRepos();
-    const adoptingRepos = await this.getAdoptingRepos(repos);
-    const nonAdoptingRepos = await this.getNoAdoptingRepos(repos);
+    const repos = Array.from(await this.listAllRepos());
+    //const repos = ['riskive/go-dm', 'riskive/cacatua', 'riskive/cs-takedown-api', 'riskive/alert-creator'];
+    const repoAnalysis = await this.analyzeRepos(repos);
+    const adoptingRepos = repoAnalysis.filter(({ hasPillar }) => hasPillar);
+    const nonAdoptingRepos = repoAnalysis.filter(
+      ({ repo: repo1 }) =>
+        !adoptingRepos.filter(({ repo }) => repo === repo1).length,
+    );
 
     return {
-      totalRepos: repos.size,
+      totalRepos: repos.length,
       totalPillarRepos: adoptingRepos.length,
       totalPillarReposPercentage: Math.round(
-        (adoptingRepos.length / repos.size) * 100,
+        (adoptingRepos.length / repos.length) * 100,
       ),
-      nonAdoptingRepos,
+      nonAdoptingRepos: nonAdoptingRepos.map(({ repo }) => repo),
     };
   }
 }

@@ -2,93 +2,164 @@
 apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
-  name: t-cti-collections
+  name: t-attack-surface
   tags: ["scrum-team"]
   description: ""
 spec:
   profile:
-    displayName: "CTI: Collection & Alerting"
+    displayName: "Attack surface"
   type: team
   children: []
-  members: [pblanton, evinciguerra, shanna, bconley, rreeves, rjackson]
+  members: [fmendez, rpena, erutz, imergudich, fruiz, rmorton, kmceachern]
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
-  name: t-cti-vigilante
-  tags: ["scrum-team"]
+  name: t-attack-surface-pillar
+  tags: ["pillar-team"]
   description: ""
+  annotations:
+      zerofox.com/pillar: attacksurface
 spec:
   profile:
-    displayName: "CTI: Vigilante Migration"
+    displayName: "Attack surface pillar"
   type: team
-  children: []
-  members: [ccherry, mriveros, rroman, jholyoak, jrodriguez, rjackson]
+  children: [t-attack-surface]
+  members: []
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
-  name: t-d1-validation
+  name: t-disruption
   tags: ["scrum-team"]
   description: ""
 spec:
   profile:
-    displayName: "D1: Takedown Validation"
+    displayName: "Disruption"
   type: team
   children: []
-  members: [afarrel, gwurman, jurbina, ljury, dvalenzuela, kmceachern, rmorton]
+  members: [dgerber, eramirez, rvillablanca, jbahamonde, ahewett, ajuste, mlang]
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
-  name: t-d2-workflow
-  tags: ["scrum-team"]
+  name: t-disruption-pillar
+  tags: ["pillar-team"]
   description: ""
+  annotations:
+      zerofox.com/pillar: disruption
 spec:
   profile:
-    displayName: "D2: Workflow Automation"
+    displayName: "Disruption pillar"
   type: team
-  children: []
-  members: [dgerber, evillalobos, rvillablanca, jbahamonde, acaballero, ahewett, mlang, rmorton]
+  children: [t-disruption]
+  members: []
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
-  name: t-config
+  name: t-cti-breach
   tags: ["scrum-team"]
   description: ""
 spec:
   profile:
-    displayName: "D3: Platform Improvements"
+    displayName: "Breach"
   type: team
   children: []
-  members: [jvidmar, aflano, rpena, fcano, cyuseff, cmunoz, abrewer, cmunoz]
+  members: [ccherry, mmenafra, evinciguerra, bconley, shanna, rjackson]
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
-  name: t-d4-scalable-takedowns
+  name: t-cti-data-services
   tags: ["scrum-team"]
   description: ""
 spec:
   profile:
-    displayName: "D4: Scalable Takedown Support"
+    displayName: "Data Services"
   type: team
   children: []
-  members: [dgerber, eramirez, ajuste, fbravo, hcovington, rmorton, mlang]
+  members: [ccherry, mriveros, ktak, rreeves, shanna, rjackson]
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
-  name: t-domain-analysis
+  name: t-cti-ddw
   tags: ["scrum-team"]
   description: ""
 spec:
   profile:
-    displayName: "Domain Analysis"
+    displayName: "Deep and Dark Web"
   type: team
   children: []
-  members: [bbuttonow, nalvear, smaldonado, aaldunate, kmceachern]
+  members: [afarrel, jrodriguez, rroman, csepulveda, shanna, rjackson]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-intelligence-pillar
+  tags: ["pillar-team"]
+  description: ""
+  annotations:
+      zerofox.com/pillar: intelligence
+spec:
+  profile:
+    displayName: "Intelligence pillar"
+  type: team
+  children: [t-cti-breach, t-cti-data-services, t-cti-ddw]
+  members: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-team-analysis
+  tags: ["scrum-team"]
+  description: ""
+spec:
+  profile:
+    displayName: "Analysis"
+  type: team
+  children: []
+  members: [nalvear, smaldonado, aaldunate, kmceachern]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-team-configuration
+  tags: ["scrum-team"]
+  description: ""
+spec:
+  profile:
+    displayName: "Configuration"
+  type: team
+  children: []
+  members: [bsnowdon, dvalenzuela, afarley, cmunoz, cyuseff, abrewer, ddannunzio]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-team-impersonations
+  tags: ["scrum-team"]
+  description: ""
+spec:
+  profile:
+    displayName: "Impersonations"
+  type: team
+  children: []
+  members: [mcovington, iparada, hcampusano, rnaranjo, tgunther, abrewer, ddannunzio]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-team-physical-security
+  tags: ["scrum-team"]
+  description: ""
+spec:
+  profile:
+    displayName: "Physical Security"
+  type: team
+  children: []
+  members: [mcovington, jurbina, fcano, jsuarez, cbarajas, abrewer, ddannunzio]
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Group
@@ -98,49 +169,10 @@ metadata:
   description: ""
 spec:
   profile:
-    displayName: "Domain & Phishing"
+    displayName: "Domains & Phishing"
   type: team
   children: []
-  members: [bbuttonow, dbarria, selgueda, skhan, nschlotterbeck, cholter]
----
-apiVersion: backstage.io/v1alpha1
-kind: Group
-metadata:
-  name: t-oem
-  tags: ["scrum-team"]
-  description: ""
-spec:
-  profile:
-    displayName: "OEM"
-  type: team
-  children: []
-  members: [nanderson, mmenafra, ktak, ahenriquez, overam ddannunzio]
----
-apiVersion: backstage.io/v1alpha1
-kind: Group
-metadata:
-  name: t-oem
-  tags: ["scrum-team"]
-  description: ""
-spec:
-  profile:
-    displayName: "OEM"
-  type: team
-  children: []
-  members: [nanderson, mmenafra, ktak, ahenriquez, overa, ddannunzio]
----
-apiVersion: backstage.io/v1alpha1
-kind: Group
-metadata:
-  name: t-pds-automation
-  tags: ["scrum-team"]
-  description: ""
-spec:
-  profile:
-    displayName: "PDS Automation"
-  type: team
-  children: []
-  members: [soneill, jalvarez, okhan, hcampusano, iparada, ddannunzio]
+  members: [bsnowdon, dbarria, selgueda, macuna, nschlotterbeck, skhan, overa, ahenriquez, cholter]
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Group
@@ -150,10 +182,146 @@ metadata:
   description: ""
 spec:
   profile:
-    displayName: "Platform Maturity, Quality & Scale"
+    displayName: "Platform Maturity"
   type: team
   children: []
-  members: [jvergara, rcalvo, pfrias, dbano, orencoret, cholter]
+  members: [jvergara, rcalvo, orencoret, dbano, rmorton, cholter]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-protection-pillar
+  tags: ["pillar-team"]
+  description: ""
+  annotations:
+      zerofox.com/pillar: protection
+spec:
+  profile:
+    displayName: "Protection pillar"
+  type: team
+  children: [t-team-analysis, t-team-configuration, t-team-impersonations,  t-team-physical-security, t-domain-monitoring, t-platform-maturity]
+  members: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-idx-zerofox-response-portal
+  tags: ["scrum-team"]
+  description: ""
+spec:
+  profile:
+    displayName: "Breach Portal"
+  type: team
+  children: []
+  members: [dgreenberg, jholewa, ddelaney, bmcclory, falba, lmantilla, eellis, mmcguire]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-team-member-dashboard
+  tags: ["scrum-team"]
+  description: ""
+spec:
+  profile:
+    displayName: "Member Dashboard"
+  type: team
+  children: []
+  members: [jmarquez, jholewa, gvarela, agarcia, dgarcia, eellis, mmcguire]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-team-pii-removal
+  tags: ["scrum-team"]
+  description: ""
+spec:
+  profile:
+    displayName: "PII Removal"
+  type: team
+  children: []
+  members: [jkelly, shuskey, ealejo, msifuentes, hcovington, eellis, mmcguire]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-response-pillar
+  tags: ["pillar-team"]
+  description: ""
+  annotations:
+      zerofox.com/pillar: response
+spec:
+  profile:
+    displayName: "Response pillar"
+  type: team
+  children: [t-idx-zerofox-response-portal, t-team-member-dashboard, t-team-pii-removal]
+  members: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-team-core-db-scaling
+  tags: ["scrum-team"]
+  description: ""
+spec:
+  profile:
+    displayName: "Core DB Scaling"
+  type: team
+  children: []
+  members: [ljury, tceruti, craborg, zwolf]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-devops
+  tags: ["scrum-team"]
+  description: ""
+spec:
+  profile:
+    displayName: "DevOps"
+  type: team
+  children: []
+  members: [zwolf, xzantello, cmoran, vvalderrama, ynakshin]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-devsecops
+  tags: ["scrum-team"]
+  description: ""
+spec:
+  profile:
+    displayName: "DevSecOps"
+  type: team
+  children: []
+  members: [ehall, fbravo, jpietrzak, zwolf]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-sre
+  tags: ["scrum-team"]
+  description: ""
+spec:
+  profile:
+    displayName: "SRE"
+  type: team
+  children: []
+  members: [zwolf, jprotzman, rvasquez, mwatkins, craborg, zwolf]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-sustaining-pillar
+  tags: ["pillar-team"]
+  description: ""
+  annotations:
+      zerofox.com/pillar: sustaining
+spec:
+  profile:
+    displayName: "Sustaining pillar"
+  type: team
+  children: [t-team-core-db-scaling, t-devops, t-devsecops, t-sre]
+  members: []
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Group
@@ -171,77 +339,13 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
-  name: t-devsecops
+  name: t-onboarding
   tags: ["scrum-team"]
   description: ""
 spec:
   profile:
-    displayName: "DevSecOps"
+    displayName: "Bootcamp"
   type: team
   children: []
-  members: [ehall, scornejo, jpietrzak, ljeter, zwolf]
+  members: [tgunther, kmceachern]
 ---
-apiVersion: backstage.io/v1alpha1
-kind: Group
-metadata:
-  name: t-devops
-  tags: ["scrum-team"]
-  description: ""
-spec:
-  profile:
-    displayName: "DevOps"
-  type: team
-  children: []
-  members: [zwolf, xzantello, cmoran, vvalderrama, fvidela]
----
-apiVersion: backstage.io/v1alpha1
-kind: Group
-metadata:
-  name: t-sre
-  tags: ["scrum-team"]
-  description: ""
-spec:
-  profile:
-    displayName: "SRE"
-  type: team
-  children: []
-  members: [zwolf, jprotzman, craborg, rvasquez, mwatkins, emoody]
----
-apiVersion: backstage.io/v1alpha1
-kind: Group
-metadata:
-  name: t-configuration
-  tags: ["scrum-team"]
-  description: ""
-spec:
-  profile:
-    displayName: "Configuration"
-  type: team
-  children: []
-  members: [bsnowdon, dvalenzuela, efarley, cmunoz, cyuseff, abrewer, ddannunzio]
----
-apiVersion: backstage.io/v1alpha1
-kind: Group
-metadata:
-  name: t-impersonations
-  tags: ["scrum-team"]
-  description: ""
-spec:
-  profile:
-    displayName: "Impersonations"
-  type: team
-  children: []
-  members: [mcovington, iparada, hcampuzano, rnaranjo, tmcphillips, abrewer, ddannunzio]
----
-apiVersion: backstage.io/v1alpha1
-kind: Group
-metadata:
-  name: t-physical-security
-  tags: ["scrum-team"]
-  description: ""
-spec:
-  profile:
-    displayName: "Physical Security"
-  type: team
-  children: []
-  members: [mcovington, jurbina, fcano, jsuarez, cbarajas, abrewer, ddannunzio]

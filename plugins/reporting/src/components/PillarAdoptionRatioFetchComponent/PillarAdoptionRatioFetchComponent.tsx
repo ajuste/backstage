@@ -1,16 +1,14 @@
 import React from 'react';
-import { Table, TableColumn, Progress, Link } from '@backstage/core-components';
+import { Table, TableColumn, Progress, GaugeCard } from '@backstage/core-components';
 import Alert from '@material-ui/lab/Alert';
 import useAsync from 'react-use/lib/useAsync';
-import { useApi, useRouteRef } from '@backstage/core-plugin-api';
-import { CatalogApi, CATALOG_FILTER_EXISTS } from '@backstage/catalog-client';
-import { catalogApiRef, entityRouteParams, entityRouteRef, } from '@backstage/plugin-catalog-react';
-import { Entity, stringifyEntityRef, getCompoundEntityRef } from '@backstage/catalog-model';
+import { useApi } from '@backstage/core-plugin-api';
+import { CatalogApi } from '@backstage/catalog-client';
+import { catalogApiRef, } from '@backstage/plugin-catalog-react';
+import { Grid } from '@material-ui/core';
 
 import { pillarAdoptionApiRef } from '../../api/api';
 import { PillarAdoptionServiceAPI, PillarAdoptionReport } from '@internal/plugin-reporting-common';
-
-
 
 type DenseTableProps = {
   report: PillarAdoptionReport | undefined;
@@ -19,41 +17,17 @@ type DenseTableProps = {
 export const DenseTable = ({ report }: DenseTableProps) => {
 
   const columns: TableColumn[] = [
-    { title: 'Repository', field: 'name', width: '50%', type: 'string' },
-    { title: 'Catalog entry', field: 'name', width: '50px', type: 'string' },
+    { title: 'Repository', field: 'repo', width: '50%', type: 'string' },
   ];
 
-  // const data = report.nonAdoptingRepos
-  //   .map(repo => {
-  //     const { entity } = entry
-  //     const catalogEntityRoute = useRouteRef(entityRouteRef);
-  //     const catalogLink = catalogEntityRoute(entityRouteParams(entity));
-
-  //     if (!entry?.results[0]?.facts?.msSinceLastCommit) {
-  //       console.warn(`No msSinceLastCommit fact for entity ${stringifyEntityRef(entity)}`);
-  //       return null;
-  //     }
-  //     const [latestResult] = entry.results;
-  //     const msSinceLastCommit = latestResult.facts?.msSinceLastCommit?.value as number;
-
-  //     return {
-  //       name: (
-  //         <Link to={catalogLink} target="_blank">{entity.metadata.name}</Link>
-  //       ),
-  //       lastCommitInDays: Math.round(msSinceLastCommit / 86400000),
-  //       isStale: latestResult.result,
-  //     };
-  //   })
-  //   .filter(r => r);
-
-  const data = [] as object[];
+  const data = report?.nonAdoptingRepos.map(repo => { return { repo } })
 
   return (
     <Table
       title="Non adopting repositories"
       options={{ search: false, paging: false }}
       columns={columns}
-      data={data}
+      data={data || []}
     />
   );
 };
@@ -80,6 +54,15 @@ export const PillarAdoptionRatioFetchComponent = () => {
   } else if (error) {
     return <Alert severity="error">{error.message}</Alert>;
   }
+  const ratio = (report?.totalPillarReposPercentage || 0) / 100
 
-  return <DenseTable report={report} />;
+  return (
+    <Grid container spacing={3} direction="column">
+      <Grid item>
+        <GaugeCard title='Adoption' progress={ratio} />
+      </Grid>
+      <Grid item>
+        <DenseTable report={report} />
+      </Grid>
+    </Grid>)
 };

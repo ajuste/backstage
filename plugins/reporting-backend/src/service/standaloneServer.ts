@@ -18,6 +18,7 @@ import {
   createServiceBuilder,
   loadBackendConfig,
   SingleHostDiscovery,
+  ServerTokenManager,
 } from '@backstage/backend-common';
 import { Server } from 'http';
 import { Logger } from 'winston';
@@ -35,10 +36,14 @@ export async function startStandaloneServer(
   const logger = options.logger.child({ service: 'reporting-backend-backend' });
   logger.debug('Starting application server...');
   const config = await loadBackendConfig({ logger, argv: process.argv });
+  const tokenManager = ServerTokenManager.fromConfig(config, {
+    logger,
+  });
   const router = await createRouter({
     logger,
     config,
     discovery: SingleHostDiscovery.fromConfig(config),
+    tokenManager,
   });
 
   let service = createServiceBuilder(module)

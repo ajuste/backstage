@@ -26,6 +26,7 @@
     "@backstage/backend-common": "^0.16.0",
     "@backstage/config": "^1.0.4",
     "@octokit/core": "^4.1.0",
+    "@octokit/rest": "^19.0.7",
     "@types/express": "*",
     "express": "^4.17.3",
     "express-promise-router": "^4.1.0",
