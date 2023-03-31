@@ -14,13 +14,22 @@
  * limitations under the License.
  */
 
-import { errorHandler } from '@backstage/backend-common';
 import express from 'express';
 import Router from 'express-promise-router';
 import { Logger } from 'winston';
+import { errorHandler } from '@backstage/backend-common';
+import { PluginEndpointDiscovery } from '@backstage/backend-common';
+import { ConfigApi } from '@backstage/core-plugin-api';
+import { CatalogClient } from '@backstage/catalog-client';
+import { TokenManager } from '@backstage/backend-common';
+import ZFCatalogService from './catalog';
 
 export interface RouterOptions {
   logger: Logger;
+  config: ConfigApi;
+  discovery: PluginEndpointDiscovery;
+  tokenManager: TokenManager;
+  catalogClient: CatalogClient;
 }
 
 export async function createRouter(
@@ -31,10 +40,99 @@ export async function createRouter(
   const router = Router();
   router.use(express.json());
 
+  const buildCatalogServiceRouter = (): ZFCatalogService => {
+    return new ZFCatalogService(
+      options.config,
+      options.logger,
+      options.catalogClient,
+      options.tokenManager,
+    );
+  };
+
   router.get('/health', (_, response) => {
     logger.info('PONG!');
     response.json({ status: 'ok' });
   });
+
+  router.get('/pillar', (_, response) => {
+    logger.info(`Fetching all pillar components`);
+    const service = buildCatalogServiceRouter();
+    service
+      .getPillars()
+      .then(res => {
+        response.send(res);
+        response.end();
+      })
+      .catch(err => {
+        logger.error(err);
+        response.status(500).json({ error: err });
+      });
+  });
+
+  router.get('/global-teams', (_, response) => {
+    logger.info(`Fetching global pillar teams`);
+    const service = buildCatalogServiceRouter();
+    service
+      .getPillarGlobalTeams()
+      .then(res => {
+        response.send(res);
+        response.end();
+      })
+      .catch(err => {
+        logger.error(err);
+        response.status(500).json({ error: err });
+      });
+  });
+
+  router.get('/pillar/:pillar/global-team', (request, response) => {
+    logger.info(`Fetching global team for pillar ${request.params.pillar}`);
+    const pillar = request.params.pillar;
+    const service = buildCatalogServiceRouter();
+    service
+      .getGlobalTeamForPillar(pillar)
+      .then(res => {
+        response.send(res);
+        response.end();
+      })
+      .catch(err => {
+        logger.error(err);
+        response.status(500).json({ error: err });
+      });
+  });
+
+  router.get('/pillar/:pillar/teams', (request, response) => {
+    logger.info(`Fetching teams for pillar ${request.params.pillar}`);
+    const pillar = request.params.pillar;
+    const service = buildCatalogServiceRouter();
+    service
+      .getTeamsForPillar(pillar)
+      .then(res => {
+        logger.info(`Fetching teams for pillar2 ${res}`);
+        response.send(res);
+        response.end();
+      })
+      .catch(err => {
+        logger.error(err);
+        response.status(500).json({ error: err });
+      });
+  });
+
+  router.get('/pillar/:pillar', (request, response) => {
+    logger.info(`Fetching pillar ${request.params.pillar}`);
+    const pillar = request.params.pillar;
+    const service = buildCatalogServiceRouter();
+    service
+      .getPillar(pillar)
+      .then(res => {
+        response.send(res);
+        response.end();
+      })
+      .catch(err => {
+        logger.error(err);
+        response.status(500).json({ error: err });
+      });
+  });
+
   router.use(errorHandler());
   return router;
 }

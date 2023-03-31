@@ -126,14 +126,14 @@ export const Tool = ({ title, image, linksText, links }: Props) => () => {
     return (
         <Card className={classes.card} key={`tool-${title}`}>
             <CardContent className={classes.content} key={`tool-content-${title}`}>
-            <div className={classes.title} key={`tool-title-${title}`}>{title}</div>
-            <hr className={classes.line} key={`tool-line-0-${title}`} />
-            <div className={classes.iconContainer} key={`tool-icon-${title}`}>
-                <img src={image} className={classes.icon} ></img>
-            </div>
-            <hr className={classes.line} key={`tool-line-${title}`} />
-            <div className={classes.bottom} key={`tool-bottom-buttons-${title}`}>{bottomEls}</div>
-        </CardContent>
+                <div className={classes.title} key={`tool-title-${title}`}>{title}</div>
+                <hr className={classes.line} key={`tool-line-0-${title}`} />
+                <div className={classes.iconContainer} key={`tool-icon-${title}`}>
+                    <img src={image} className={classes.icon} ></img>
+                </div>
+                <hr className={classes.line} key={`tool-line-${title}`} />
+                <div className={classes.bottom} key={`tool-bottom-buttons-${title}`}>{bottomEls}</div>
+            </CardContent>
         </Card >
     );
 };

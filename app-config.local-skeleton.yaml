@@ -31,6 +31,11 @@ catalog:
       target: https://github.com/riskive/backstage/blob/master/data/users.yaml
       rules:
         - allow: [User]
+
+    - type: file
+      target: ../../data/pillars.yaml
+      rules:
+        - allow: [User]
         
     - type: url
       target: https://github.com/riskive/backstage/blob/master/data/domains.yaml

@@ -23,6 +23,8 @@ import {
 import { Server } from 'http';
 import { Logger } from 'winston';
 import { createRouter } from './router';
+import { ZFCatalogService } from '@internal/plugin-zf-tech-insights-backend';
+import { CatalogClient } from '@backstage/catalog-client';
 
 export interface ServerOptions {
   port: number;
@@ -39,11 +41,22 @@ export async function startStandaloneServer(
   const tokenManager = ServerTokenManager.fromConfig(config, {
     logger,
   });
+  const discovery = SingleHostDiscovery.fromConfig(config);
+  const catalogClient = new CatalogClient({
+    discoveryApi: discovery,
+  });
+  const zfCatalogService = new ZFCatalogService(
+    config,
+    logger,
+    catalogClient,
+    tokenManager,
+  );
   const router = await createRouter({
     logger,
     config,
-    discovery: SingleHostDiscovery.fromConfig(config),
+    discovery,
     tokenManager,
+    zfCatalogService,
   });
 
   let service = createServiceBuilder(module)

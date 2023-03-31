@@ -18,3 +18,4 @@
 //               ideally we have an API for the context menu that permits that.
 export { grafanaPlugin } from '@k-phoen/backstage-plugin-grafana';
 export { githubResourceFetcherPlugin } from '@internal/plugin-github-resource-fetcher';
+export { zfTechInsightsPlugin } from 'backstage-plugin-zf-tech-insights';

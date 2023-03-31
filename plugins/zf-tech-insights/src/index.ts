@@ -1,0 +1,1 @@
+export { zfTechInsightsPlugin } from './plugin';

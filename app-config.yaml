@@ -138,6 +138,11 @@ catalog:
         - allow: [User]
         
     - type: url
+      target: https://github.com/riskive/backstage/blob/master/data/pillars.yaml
+      rules:
+        - allow: [Component]
+        
+    - type: url
       target: https://github.com/riskive/backstage/blob/master/data/domains.yaml
       rules:
         - allow: [Domain]

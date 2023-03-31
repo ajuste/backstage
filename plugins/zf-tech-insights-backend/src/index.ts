@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-// import allFacts from './service/facts';
-
-// export * from './service/router';
-// export const facts = allFacts;
-
 export * from './service/router';
 export * from './service/facts';
+
+import ZFCatalogService from './service/catalog';
+export { ZFCatalogService };

@@ -1,0 +1,77 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: attacksurface-pillar
+  annotations:
+      zerofox.com/pillar: Attack Surface
+      grafana/tag-selector: attack surface
+spec:
+  owner: na
+  lifecycle: production
+  type: pillar
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: disruption-pillar
+  annotations:
+      zerofox.com/pillar: Disruption
+      grafana/tag-selector: disruption
+spec:
+  owner: na
+  lifecycle: production
+  type: pillar
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: intelligence-pillar
+  annotations:
+      zerofox.com/pillar: Intelligence
+      grafana/tag-selector: intelligence
+spec:
+  owner: na
+  lifecycle: production
+  type: pillar
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: protection-pillar
+  annotations:
+      zerofox.com/pillar: Protection
+spec:
+  owner: na
+  lifecycle: production
+  type: pillar
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: response-pillar
+  annotations:
+      zerofox.com/pillar: Response
+      grafana/tag-selector: response
+spec:
+  owner: na
+  lifecycle: production
+  type: pillar
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: sustaining-pillar
+  annotations:
+      zerofox.com/pillar: Sustaining
+      grafana/tag-selector: sustaining
+spec:
+  owner: na
+  lifecycle: production
+  type: pillar
+  children: []
+---

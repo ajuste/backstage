@@ -23,12 +23,14 @@ import { ConfigApi } from '@backstage/core-plugin-api';
 import { CatalogClient } from '@backstage/catalog-client';
 import { TokenManager } from '@backstage/backend-common';
 import PillarAdoptionService from './PillarAdoptionService';
+import { ZFCatalogAPI } from 'backstage-plugin-zf-tech-insights-common';
 
 export interface RouterOptions {
   logger: Logger;
   config: ConfigApi;
   discovery: PluginEndpointDiscovery;
   tokenManager: TokenManager;
+  zfCatalogService: ZFCatalogAPI;
 }
 
 export async function createRouter(
@@ -56,6 +58,7 @@ export async function createRouter(
       options.logger,
       catalogClient,
       options.tokenManager,
+      options.zfCatalogService
     );
 
     gh.getTransitionRatioReport()

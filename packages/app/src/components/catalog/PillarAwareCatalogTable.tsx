@@ -1,39 +1,50 @@
-import React, {useMemo} from 'react';
+import React, { useMemo } from 'react';
+import { TableColumn, Link } from '@backstage/core-components';
+import { useEntityList, } from '@backstage/plugin-catalog-react';
+import { useRouteRef } from '@backstage/core-plugin-api';
+import { CatalogTable, CatalogTableProps, CatalogTableRow } from '@backstage/plugin-catalog';
+import { entityRouteRef, entityRouteParams } from '@backstage/plugin-catalog-react';
+import { Entity } from '@backstage/catalog-model';
 
-import {OverflowTooltip, TableColumn} from '@backstage/core-components';
-
-import {useEntityList,} from '@backstage/plugin-catalog-react';
-
-import {CatalogTable, CatalogTableProps, CatalogTableRow} from '@backstage/plugin-catalog';
+type PillarAwareCatalogTableProps = CatalogTableProps & {
+  pillarEntities: Array<Entity> | undefined;
+}
 
 const pillarAwareColumnFactories = Object.freeze({
-  createPillarColumn(): TableColumn<CatalogTableRow> {
+  createPillarColumn(pillarEntities: Array<Entity>): TableColumn<CatalogTableRow> {
     return {
       title: 'Pillar',
       field: 'entity.metadata.annotations.zerofox.com/pillar',
-      render: ({entity}) => (
-          <>
-            {(entity.metadata.annotations?.["zerofox.com/pillar"]) && (
-                <OverflowTooltip
-                    text={entity.metadata.annotations!["zerofox.com/pillar"]}
-                    placement="bottom-start"
-                />
-            )}
-          </>
-      ),
-      width: 'auto',
+      render: ({ entity }) => {
+        const pillar = entity.metadata.annotations?.["zerofox.com/pillar"]
+        if (!pillar) {
+          return null
+        }
+
+
+        let link = ""
+        const pillarComponent = pillarEntities.find(pillarEntity => pillarEntity.metadata.annotations?.["zerofox.com/pillar"] === pillar)
+        if (pillarComponent) {
+          const catalogEntityRoute = useRouteRef(entityRouteRef);
+          link = catalogEntityRoute(entityRouteParams(pillarComponent))
+        }
+        return <Link to={link} target="_blank">{pillar}</Link>
+      },
+      width: '500px',
     };
   },
 });
 
-export const PillarAwareCatalogTable = (props: CatalogTableProps) => {
-  const {filters} = useEntityList();
+export const PillarAwareCatalogTable = (props: PillarAwareCatalogTableProps) => {
+  const { filters } = useEntityList();
+  const { pillarEntities = [] } = props
+
 
   const columns: TableColumn<CatalogTableRow>[] = useMemo(() => {
     return [
-      CatalogTable.columns.createTitleColumn({hidden: true}),
-      CatalogTable.columns.createNameColumn({defaultKind: filters.kind?.value}),
-      pillarAwareColumnFactories.createPillarColumn(),
+      CatalogTable.columns.createTitleColumn({ hidden: true }),
+      CatalogTable.columns.createNameColumn({ defaultKind: filters.kind?.value }),
+      pillarAwareColumnFactories.createPillarColumn(pillarEntities),
       ...createEntitySpecificColumns(),
       CatalogTable.columns.createMetadataDescriptionColumn(),
       CatalogTable.columns.createTagsColumn(),
@@ -65,9 +76,9 @@ export const PillarAwareCatalogTable = (props: CatalogTableProps) => {
     }
   }, [filters.kind?.value]);
 
-  const newProps = {...props, ...{columns}};
+  const newProps = { ...props, ...{ columns } };
 
   return (
-      <CatalogTable {...newProps}  />
+    <CatalogTable {...newProps} />
   )
 }

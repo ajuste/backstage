@@ -19,7 +19,7 @@ metadata:
   tags: ["pillar-team"]
   description: ""
   annotations:
-      zerofox.com/pillar: attacksurface
+      zerofox.com/pillar: Attack Surface
 spec:
   profile:
     displayName: "Attack surface pillar"
@@ -47,7 +47,7 @@ metadata:
   tags: ["pillar-team"]
   description: ""
   annotations:
-      zerofox.com/pillar: disruption
+      zerofox.com/pillar: Disruption
 spec:
   profile:
     displayName: "Disruption pillar"
@@ -101,7 +101,7 @@ metadata:
   tags: ["pillar-team"]
   description: ""
   annotations:
-      zerofox.com/pillar: intelligence
+      zerofox.com/pillar: Intelligence
 spec:
   profile:
     displayName: "Intelligence pillar"
@@ -194,7 +194,7 @@ metadata:
   tags: ["pillar-team"]
   description: ""
   annotations:
-      zerofox.com/pillar: protection
+      zerofox.com/pillar: Protection
 spec:
   profile:
     displayName: "Protection pillar"
@@ -248,7 +248,7 @@ metadata:
   tags: ["pillar-team"]
   description: ""
   annotations:
-      zerofox.com/pillar: response
+      zerofox.com/pillar: Response
 spec:
   profile:
     displayName: "Response pillar"
@@ -315,7 +315,7 @@ metadata:
   tags: ["pillar-team"]
   description: ""
   annotations:
-      zerofox.com/pillar: sustaining
+      zerofox.com/pillar: Sustaining
 spec:
   profile:
     displayName: "Sustaining pillar"

@@ -32,6 +32,7 @@ import codeCoverage from './plugins/codecoverage';
 import techInsights from './plugins/techInsights';
 import githubResourceFetcher from './plugins/githubResourceFetcher';
 import reporting from './plugins/reporting';
+import zfInsights from './plugins/zfTechInsights';
 import { PluginEnvironment } from './types';
 import { ServerPermissionClient } from '@backstage/plugin-permission-node';
 import { DefaultIdentityClient } from '@backstage/plugin-auth-node';
@@ -98,6 +99,7 @@ async function main() {
     createEnv('github-resource-fetcher'),
   );
   const reportingEnv = useHotMemoize(module, () => createEnv('reporting'));
+  const zfInsightsEnv = useHotMemoize(module, () => createEnv('zfInsights'));
 
   const apiRouter = Router();
   apiRouter.use('/tech-insights', await techInsights(techInsightsEnv));
@@ -109,6 +111,7 @@ async function main() {
   apiRouter.use('/search', await search(searchEnv));
   apiRouter.use('/code-coverage', await codeCoverage(codeCoverageEnv));
   apiRouter.use('/reporting', await reporting(reportingEnv));
+  apiRouter.use('/zf-insights', await zfInsights(zfInsightsEnv));
   apiRouter.use(
     '/github-resource-fetcher',
     await githubResourceFetcher(githubResourceFetcherEnv),

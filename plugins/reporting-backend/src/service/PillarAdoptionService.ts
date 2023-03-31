@@ -8,17 +8,15 @@ import {
   PillarAdoptionServiceAPI,
 } from '@internal/plugin-reporting-common';
 import { TokenManager } from '@backstage/backend-common';
-import {
-  CatalogClient,
-  GetEntitiesResponse,
-  GetEntityAncestorsResponse,
-} from '@backstage/catalog-client';
+import { CatalogClient, GetEntitiesResponse } from '@backstage/catalog-client';
 import {
   Entity,
   GroupEntity,
   UserEntity,
   stringifyEntityRef,
 } from '@backstage/catalog-model';
+
+import { ZFCatalogAPI } from 'backstage-plugin-zf-tech-insights-common';
 
 type RepoAdoptionAnalysis = {
   repo: string;
@@ -41,17 +39,20 @@ export default class PillarAdoptionService implements PillarAdoptionServiceAPI {
   private logger: Logger;
   private catalogClient: CatalogClient;
   private tokenManager: TokenManager;
+  private zfCatalogService: ZFCatalogAPI;
 
   constructor(
     config: ConfigApi,
     logger: Logger,
     catalogClient: CatalogClient,
     tokenManager: TokenManager,
+    zfCatalogService: ZFCatalogAPI,
   ) {
     this.config = config;
     this.logger = logger;
     this.catalogClient = catalogClient;
     this.tokenManager = tokenManager;
+    this.zfCatalogService = zfCatalogService;
   }
 
   protected async getGithubCredentials(): Promise<GithubCredentials> {
@@ -204,60 +205,15 @@ export default class PillarAdoptionService implements PillarAdoptionServiceAPI {
 
   protected async getUsernamesPerPillar(): Promise<Map<string, string[]>> {
     const { token } = await this.tokenManager.getToken();
-    const pillarTeams = await this.catalogClient.getEntities(
-      {
-        filter: [
-          { kind: 'Group', 'metadata.tags': 'pillar-team', type: 'team' },
-        ],
-      },
-      { token },
-    );
-
-    const pillarTeamToPillar = new Map<string, string>(
-      pillarTeams.items.map(team => [
-        stringifyEntityRef(team),
-        team.metadata?.annotations?.['zerofox.com/pillar'] as string,
-      ]),
-    );
-
-    const getAncestorsRequests = pillarTeams.items
-      .filter(team => pillarTeamToPillar.has(stringifyEntityRef(team)))
-      .map((team: Entity) =>
-        this.catalogClient.getEntityAncestors(
-          { entityRef: stringifyEntityRef(team) },
-          { token },
-        ),
-      );
-
-    // const pillarToTeams = new Map<string, string[]>(
-    //   (await Promise.all(getAncestorsRequests)).map(
-    //     (res: GetEntityAncestorsResponse) => [
-    //       teamToPillar.get(res.rootEntityRef) as string,
-    //       res.items
-    //         .filter(e => e.entity?.kind == 'Group')
-    //         .map(e => e.entity?.relations)
-    //         .flat()
-    //         .filter(r => r?.type == 'parentOf')
-    //         .map(e => e?.targetRef) as string[],
-    //     ],
-    //   ),
-    // );
-
-    const teamToPillar = new Map<string, string>(
-      (await Promise.all(getAncestorsRequests))
-        .map((res: GetEntityAncestorsResponse) =>
-          res.items
-            .filter(e => e.entity?.kind == 'Group')
-            .map(e => e.entity?.relations)
-            .flat()
-            .filter(r => r?.type == 'parentOf')
-            .map(e => [
-              e?.targetRef,
-              pillarTeamToPillar.get(res.rootEntityRef),
-            ]),
-        )
-        .flat() as [string, string][],
-    );
+    const pillarTeams = await this.zfCatalogService.getPillarGlobalTeams();
+    const teamToPillar = new Map<string, string>();
+    for (let team of pillarTeams) {
+      const pillar = team.metadata?.annotations?.[
+        'zerofox.com/pillar'
+      ] as string;
+      const teams = await this.zfCatalogService.getTeamsForPillar(pillar);
+      teams.forEach(t => teamToPillar.set(stringifyEntityRef(t), pillar));
+    }
 
     const allTeams = await this.catalogClient.getEntities(
       {

@@ -17,8 +17,11 @@
 import { getVoidLogger } from '@backstage/backend-common';
 import express from 'express';
 import request from 'supertest';
-
+import ZFCatalogService from './catalog';
 import { createRouter } from './router';
+
+jest.genMockFromModule('./catalog');
+jest.mock('./catalog');
 
 describe('createRouter', () => {
   let app: express.Express;
@@ -26,6 +29,10 @@ describe('createRouter', () => {
   beforeAll(async () => {
     const router = await createRouter({
       logger: getVoidLogger(),
+      catalogClient: {} as any,
+      discovery: {} as any,
+      config: {} as any,
+      tokenManager: {} as any,
     });
     app = express().use(router);
   });
@@ -40,6 +47,29 @@ describe('createRouter', () => {
 
       expect(response.status).toEqual(200);
       expect(response.body).toEqual({ status: 'ok' });
+    });
+  });
+
+  describe('GET /pillar', () => {
+    it('returns all pillars', async () => {
+      (ZFCatalogService as jest.Mock).mockImplementation(() => {
+        return {
+          getPillars: jest.fn(() => {
+            return Promise.resolve([
+              {
+                id: '1',
+                name: 'Pillar 1',
+                description: 'Pillar 1 description',
+              },
+            ]);
+          }),
+        };
+      });
+
+      const response = await request(app).get('/pillar');
+
+      expect(response.text).toEqual('[{\"id\":\"1\",\"name\":\"Pillar 1\",\"description\":\"Pillar 1 description\"}]');
+      expect(response.status).toEqual(200);
     });
   });
 });

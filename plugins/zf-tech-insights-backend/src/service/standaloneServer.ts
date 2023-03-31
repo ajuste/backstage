@@ -14,10 +14,16 @@
  * limitations under the License.
  */
 
-import { createServiceBuilder } from '@backstage/backend-common';
+import {
+  createServiceBuilder,
+  loadBackendConfig,
+  SingleHostDiscovery,
+  ServerTokenManager,
+} from '@backstage/backend-common';
 import { Server } from 'http';
 import { Logger } from 'winston';
 import { createRouter } from './router';
+import { CatalogClient } from '@backstage/catalog-client';
 
 export interface ServerOptions {
   port: number;
@@ -28,10 +34,24 @@ export interface ServerOptions {
 export async function startStandaloneServer(
   options: ServerOptions,
 ): Promise<Server> {
-  const logger = options.logger.child({ service: 'zf-tech-insights-backend-backend' });
+  const logger = options.logger.child({
+    service: 'zf-tech-insights-backend-backend',
+  });
   logger.debug('Starting application server...');
+  const config = await loadBackendConfig({ logger, argv: process.argv });
+  const tokenManager = ServerTokenManager.fromConfig(config, {
+    logger,
+  });
+  const discovery = SingleHostDiscovery.fromConfig(config);
+  const catalogClient = new CatalogClient({
+    discoveryApi: discovery,
+  });
   const router = await createRouter({
     logger,
+    config,
+    discovery,
+    tokenManager,
+    catalogClient,
   });
 
   let service = createServiceBuilder(module)

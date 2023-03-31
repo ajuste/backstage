@@ -2,6 +2,7 @@ import React from 'react';
 import { Content, Page, InfoCard } from '@backstage/core-components';
 import { Grid, makeStyles } from '@material-ui/core';
 import { getAllTools } from '../toolkit';
+import { PillardInfoCardComponent } from '../pillar/PillarsInfoCardComponent';
 
 const useStyles = makeStyles(theme => ({
     searchBar: {
@@ -30,12 +31,19 @@ export const HomePage = () => {
     return (
         <Page themeId="home">
             <Content>
-                <Grid item xs={12} md={6}>
-                    <InfoCard title="Toolbox" className={classes.toolkit} cardClassName={classes.toolkit} key="tools">
-                        <div className={classes.toolkitContainer}>
-                            {getAllTools().map(t => t())}
-                        </div>
-                    </InfoCard>
+                <Grid item md={12}>
+                    <Grid container spacing={3} alignItems="stretch">
+                        <Grid item md={4}>
+                            <InfoCard title="Toolbox" className={classes.toolkit} cardClassName={classes.toolkit} key="tools">
+                                <div className={classes.toolkitContainer}>
+                                    {getAllTools().map(t => t())}
+                                </div>
+                            </InfoCard>
+                        </Grid>
+                        <Grid item md={4}>
+                            <PillardInfoCardComponent />
+                        </Grid>
+                    </Grid>
                 </Grid>
             </Content>
         </Page>

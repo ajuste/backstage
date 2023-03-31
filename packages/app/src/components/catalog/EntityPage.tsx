@@ -66,6 +66,7 @@ import { EntityTechdocsContent } from '@backstage/plugin-techdocs';
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
 import { DocumentsComponent, EntityHasUisCard, DomainHasApisCard, } from '../domain';
+import { DocumentsComponent as PillarDocumentsComponent, UIsCardComponent as PillarUIsCardComponent, APICardComponent as PillarAPICardComponent, SystemCardComponent as PillarSystemCardComponent, TeamsCardComponent as PillarTeamsCardComponent } from '../pillar';
 
 import { PillarAwareAboutCard } from './PillarAwareAboutCard';
 
@@ -287,6 +288,43 @@ const defaultEntityPage = (
   </EntityLayout>
 );
 
+const pillarPage = (
+  <EntityLayout>
+    <EntityLayout.Route path="/" title="Overview">
+      <Grid container spacing={3} alignItems="stretch">
+        {entityWarningContent}
+        <Grid item md={6}>
+          <Grid container spacing={3} alignItems="stretch">
+            <Grid item md={12}>
+              <PillarSystemCardComponent></PillarSystemCardComponent>
+            </Grid>
+            <Grid item md={12}>
+              <PillarAPICardComponent></PillarAPICardComponent>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item md={6}>
+          <Grid container spacing={3} alignItems="stretch">
+            {entityWarningContent}
+            <Grid item md={12}>
+              <PillarUIsCardComponent></PillarUIsCardComponent>
+            </Grid>
+            <Grid item md={12}>
+              <PillarTeamsCardComponent></PillarTeamsCardComponent>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+    </EntityLayout.Route>
+    <EntityLayout.Route path="/health" title="Health" if={isDashboardSelectorAvailable}>
+      <HealthContent />
+    </EntityLayout.Route>
+    <EntityLayout.Route path="/docs" title="Documentation">
+      <PillarDocumentsComponent />
+    </EntityLayout.Route>
+  </EntityLayout>
+);
+
 const componentPage = (
   <EntitySwitch>
     <EntitySwitch.Case if={isComponentType('service')}>
@@ -295,6 +333,10 @@ const componentPage = (
 
     <EntitySwitch.Case if={isComponentType('website')}>
       {websiteEntityPage}
+    </EntitySwitch.Case>
+
+    <EntitySwitch.Case if={isComponentType('pillar')}>
+      {pillarPage}
     </EntitySwitch.Case>
 
     <EntitySwitch.Case>{defaultEntityPage}</EntitySwitch.Case>
