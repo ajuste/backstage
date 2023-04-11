@@ -25,7 +25,7 @@ spec:
   memberOf: []
   profile:
     displayName: Rodrigo Peña
-    email: rpena@zerofox.com
+    email: rodrigo.pena@zerofox.com
 ---
 apiVersion: backstage.io/v1alpha1
 kind: User
