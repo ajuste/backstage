@@ -4,7 +4,7 @@
 ```sh
 export GITHUB_TOKEN=[your token here]
 ```
-* Make sure to add a new entry of your user under ./local/users.yaml
+* Make sure to add a new entry of your user under ./local/users.**yaml**
   that matches your github username.
 
 ## in-memory database

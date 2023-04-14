@@ -1,10 +1,23 @@
-FROM 012321959326.dkr.ecr.us-west-2.amazonaws.com/zf/backstage-deps:latest
+FROM node:18-bullseye-slim
+
+# (libsqlite3-dev, curl, ca-certificates, gnupg, lsb-release, update && apt-get install -y python3 python3-pip) can be removed when dropping docker (used for POC only)
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends libsqlite3-dev python3 build-essential procps make python3-pip git && \
+    pip3 install mkdocs-techdocs-core==1.0.1 && \
+    rm -rf /var/lib/apt/lists/* && \
+    yarn config set python /usr/bin/python3
+
 WORKDIR /builder
 COPY . .
 #RUN yarn install
 
 # Register every plugin like this
+
+WORKDIR /builder/plugins/reporting-common
+RUN yarn link
+
 WORKDIR /builder/plugins/reporting
+RUN yarn link "@internal/plugin-reporting-common"
 RUN yarn link
 
 WORKDIR /builder/plugins/github-resource-fetcher-backend
@@ -17,15 +30,17 @@ WORKDIR /builder/plugins/zf-tech-insights-common
 RUN yarn link
 
 WORKDIR /builder/plugins/zf-tech-insights-backend
+RUN yarn link "backstage-plugin-zf-tech-insights-common"
 RUN yarn link
 
 WORKDIR /builder/plugins/zf-tech-insights
+RUN yarn link "backstage-plugin-zf-tech-insights-common"
 RUN yarn link
 
 WORKDIR /builder/plugins/reporting-backend
-RUN yarn link
-
-WORKDIR /builder/plugins/reporting-common
+RUN yarn link "@internal/plugin-reporting-common"
+RUN yarn link "backstage-plugin-zf-tech-insights-common"
+RUN yarn link "@internal/plugin-zf-tech-insights-backend"
 RUN yarn link
 
 
@@ -45,9 +60,9 @@ RUN yarn link "backstage-plugin-zf-tech-insights-common"
 RUN yarn link "@internal/plugin-zf-tech-insights-backend"
 RUN yarn link "backstage-plugin-zf-tech-insights"
 
-
+RUN export NODE_OPTIONS=--max_old_space_size=16192
 WORKDIR /builder
-RUN yarn install && yarn tsc && yarn build:backend
+RUN yarn --verbose install && yarn tsc && yarn --verbose build:backend
 
 WORKDIR /app
 RUN cp /builder/yarn.lock /builder/package.json /builder/packages/backend/dist/skeleton.tar.gz ./

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route } from 'react-router';
+import { Route } from 'react-router-dom';
 import { apiDocsPlugin, ApiExplorerPage } from '@backstage/plugin-api-docs';
 
 import {
@@ -31,7 +31,7 @@ import { Root } from './components/Root';
 
 import { AlertDisplay, OAuthRequestDialog, SignInPage } from '@backstage/core-components';
 import { createApp } from '@backstage/app-defaults';
-import { FlatRoutes } from '@backstage/core-app-api';
+import { AppRouter, FlatRoutes } from '@backstage/core-app-api';
 import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
@@ -90,9 +90,6 @@ const app = createApp({
     });
   },
 });
-
-const AppProvider = app.getProvider();
-const AppRouter = app.getRouter();
 
 const routes = (
   <FlatRoutes>
@@ -193,14 +190,12 @@ const routes = (
   </FlatRoutes>
 );
 
-const App = () => (
-  <AppProvider>
+export default app.createRoot(
+  <>
     <AlertDisplay />
     <OAuthRequestDialog />
     <AppRouter>
       <Root>{routes}</Root>
     </AppRouter>
-  </AppProvider>
+  </>
 );
-
-export default App;
