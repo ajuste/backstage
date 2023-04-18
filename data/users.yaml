@@ -215,7 +215,7 @@ spec:
   memberOf: []
   profile:
     displayName: Harold Campuzano
-    email: hcampusano@zerofox.com
+    email: hcampuzano@zerofox.com
 ---
 apiVersion: backstage.io/v1alpha1
 kind: User
