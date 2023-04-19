@@ -1016,3 +1016,53 @@ spec:
   profile:
     displayName: Eric Rutz
     email: erutz@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: lmarenco
+spec:
+  memberOf: []
+  profile:
+    displayName: Leticia Marenco
+    email: lmarenco@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: iyanes
+spec:
+  memberOf: []
+  profile:
+    displayName: Iann Yanez
+    email: iyanes@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: rmendoza
+spec:
+  memberOf: []
+  profile:
+    displayName: Rodolfo Mendoza
+    email: rmendoza@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: spinero
+spec:
+  memberOf: []
+  profile:
+    displayName: Saher Piñero
+    email: spinero@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: rpuga
+spec:
+  memberOf: []
+  profile:
+    displayName: Roberto Puga
+    email: rpuga@zerofox.com
