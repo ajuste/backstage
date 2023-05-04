@@ -1,5 +1,4 @@
 AWS_REGION:=$(if $(AWS_REGION),$(AWS_REGION),us-west-2)
-CONSUL_TOKEN:=
 ENVIRONMENT:=qa
 GIT_SHA:=$(shell git rev-parse --short=7 HEAD)
 S3_BUCKET_PREFIX:=$(if $(S3_BUCKET_PREFIX),$(S3_BUCKET_PREFIX),zf-terraform)
@@ -11,16 +10,16 @@ apply: terra.plan
 	$(TERRAFORM) apply terra.plan
 
 check-fmt:
-	$(TERRAFORM) fmt -check=true
+	$(TERRAFORM) fmt -recursive -check=true
+
+format: ${tf_files}
+	$(TERRAFORM) fmt -recursive
 
 clean:
 	rm -f *.backup *.plan .terraform/terraform.tfstate
 
 clobber: clean
 	rm -rf .terraform
-
-format: ${tf_files}
-	$(TERRAFORM) fmt
 
 init: clobber
 	$(TERRAFORM) init \
@@ -30,8 +29,7 @@ init: clobber
 terra.plan: ${tf_files}
 	$(TERRAFORM) plan \
 		-var "env=$(ENVIRONMENT)" \
-		-var "consul_token=\"$(CONSUL_TOKEN)\"" \
-		-var "git_sha=\"$(GIT_SHA)\"" \
+		-var "git_sha=$(GIT_SHA)" \
 		-out terra.plan
 
 plan: terra.plan

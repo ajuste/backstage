@@ -6,8 +6,6 @@ variable "app" {}
 
 variable "aws_region" {}
 
-variable "consul_token" {}
-
 variable "ecr_url" {}
 
 variable "env" {}
@@ -76,7 +74,7 @@ data "terraform_remote_state" "global" {
   config = {
     bucket = "zf-terraform-global"
     key    = "global/terraform.tfstate"
-    region = "${var.aws_region}"
+    region = var.aws_region
   }
 }
 
@@ -93,8 +91,8 @@ resource "aws_s3_bucket" "backstage" {
   }
 
   tags = {
-    Application = "${var.app}"
-    Environment = "${var.env}"
+    Application = var.app
+    Environment = var.env
   }
 }
 
@@ -111,17 +109,9 @@ resource "aws_s3_bucket" "techdocs" {
   }
 
   tags = {
-    Application = "${var.app}"
-    Environment = "${var.env}"
+    Application = var.app
+    Environment = var.env
   }
-}
-
-//<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>>
-// Consul keys
-//<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>>
-resource "consul_keys" "main" {
-  datacenter = "aws-${var.aws_region}"
-  token      = "${var.consul_token}"
 }
 
 //<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>>
@@ -129,21 +119,21 @@ resource "consul_keys" "main" {
 //<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>>
 
 data "template_file" "nomad_group" {
-  template = "${file("./backend/backend.hcl")}"
+  template = file("./backend/backend.hcl")
 
-  vars {
-    app           = "${var.app}"
-    aws_region    = "${var.aws_region}"
-    count         = "${lookup(local.container_count, var.env)}"
-    database_host = "${lookup(local.database_host, var.env)}"
-    ecr_url       = "${var.ecr_url}"
-    env           = "${var.env}"
-    git_sha       = "${var.git_sha}"
-    config_file   = "${lookup(local.config_file, var.env)}"
-    bucket_name   = "${aws_s3_bucket.techdocs.id}"
-    bucket_region = "${aws_s3_bucket.techdocs.region}"
-    subdomain     = "${lookup(local.subdomain, var.env)}"
-    db_address    = "${var.db_address}"
+  vars = {
+    app           = var.app
+    aws_region    = var.aws_region
+    count         = local.container_count[var.env]
+    database_host = local.database_host[var.env]
+    ecr_url       = var.ecr_url
+    env           = var.env
+    git_sha       = var.git_sha
+    config_file   = local.config_file[var.env]
+    bucket_name   = aws_s3_bucket.techdocs.id
+    bucket_region = aws_s3_bucket.techdocs.region
+    subdomain     = local.subdomain[var.env]
+    db_address    = var.db_address
   }
 }
 
@@ -152,5 +142,5 @@ data "template_file" "nomad_group" {
 //<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>>
 
 output "nomad_group" {
-  value = "${data.template_file.nomad_group.rendered}"
+  value = data.template_file.nomad_group.rendered
 }
