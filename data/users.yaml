@@ -1076,3 +1076,63 @@ spec:
   profile:
     displayName: Jon Edmunds
     email: jedmunds@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: mcartagena
+spec:
+  memberOf: []
+  profile:
+    displayName: Manuel Cartagena
+    email: mcartagena@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: imaturana
+spec:
+  memberOf: []
+  profile:
+    displayName: Ivan Maturrana
+    email: imaturana@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: hpinero
+spec:
+  memberOf: []
+  profile:
+    displayName: Hector Pinero
+    email: hpinero@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: fgarrido
+spec:
+  memberOf: []
+  profile:
+    displayName: Felipe Garrido
+    email: fgarrido@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: dramirez
+spec:
+  memberOf: []
+  profile:
+    displayName: Diego Ramirez
+    email: dramirez@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: asuil
+spec:
+  memberOf: []
+  profile:
+    displayName: Ariel Sauil
+    email: asuil@zerofox.com
