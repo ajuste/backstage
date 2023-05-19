@@ -83,6 +83,7 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
             <SidebarSubmenu title="Tech Radars">
               <SidebarSubmenuItem icon={MapIcon} to="tech-radars/ui-e" title="UI East" />
               <SidebarSubmenuItem icon={MapIcon} to="tech-radars/qa" title="Testing / Quality" />
+              <SidebarSubmenuItem icon={MapIcon} to="tech-radars/sre" title="SRE" />
             </SidebarSubmenu>
           </SidebarItem>
         </SidebarScrollWrapper>

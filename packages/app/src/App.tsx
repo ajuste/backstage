@@ -147,6 +147,19 @@ const routes = (
       }
     />
     <Route
+      path="/tech-radars/sre"
+      element={
+        <TechRadarPage
+          id="sre"
+          width={1500}
+          height={800}
+          title="Site Reliability & Efficiency"
+          subtitle="Use this radar to determine recommended technologies for new and existing infrastructure projects."
+          pageTitle="SRE"
+        />
+      }
+    />
+    <Route
       path="/catalog-import"
       element={
         <RequirePermission permission={catalogEntityCreatePermission}>
