@@ -62,7 +62,7 @@ export class TechRadarClient implements TechRadarApi {
           path: '.backstage/radars/sre.json',
           owner: 'riskive',
           repo: 'ui-architecture',
-          branch: 'sre-radar',
+          branch: 'master',
         };
       default:
         throw new Error('No repo details found');
