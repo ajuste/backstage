@@ -50,6 +50,13 @@ export class TechRadarClient implements TechRadarApi {
           repo: 'ui-architecture',
           branch: 'master',
         };
+      case 'ui-w':
+        return {
+          path: '.backstage/radars/ui-w.json',
+          owner: 'riskive',
+          repo: 'ui-architecture',
+          branch: 'master',
+        };
       case 'qa':
         return {
           path: '.backstage/radars/test-quality.json',

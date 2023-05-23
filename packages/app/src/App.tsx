@@ -134,6 +134,19 @@ const routes = (
       }
     />
     <Route
+      path="/tech-radars/ui-w"
+      element={
+        <TechRadarPage
+          id="ui-w"
+          width={1500}
+          height={800}
+          title="UI - West"
+          subtitle="Use this radar to determine recommended technologies for new and existing frontend projects."
+          pageTitle="UI-West"
+        />
+      }
+    />
+    <Route
       path="/tech-radars/qa"
       element={
         <TechRadarPage
