@@ -10,12 +10,6 @@ Run `yarn test` and you will see the tests running.
 
 It will listen to changes in the source code and re run the tests.
 
-## Writing tests for packages/app or frontend plugins examples
+## Writing tests for plugins
 
-* [Mocking APIs](https://github.com/riskive/backstage/tree/master/plugins/reporting/src/components/CodeCoverageReportFetchComponent)
-* [Testing components rendered](https://github.com/riskive/backstage/tree/master/plugins/reporting/src/components/CodeCoverageReportFetchComponent)
-* [Setting up routes](https://github.com/riskive/backstage/tree/master/plugins/reporting/src/components/CodeCoverageReportFetchComponent)
-
-## Writing tests for packages/backend or backend plugins
-
-//TODO
+Refer to [creating plugins docs](./playbook-creating_plugins.md)

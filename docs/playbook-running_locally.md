@@ -1,5 +1,7 @@
 # Local development
 
+* Install `yarn v1.22.19` and `node v18.12.1`
+* Run `yarn install`
 * Create a Personal access token following [these instructions](https://backstage.io/docs/getting-started/configuration#setting-up-a-github-integration). And add your token to your `.bash_profile`
 ```sh
 export GITHUB_TOKEN=[your token here]

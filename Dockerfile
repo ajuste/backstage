@@ -43,6 +43,9 @@ RUN yarn link "backstage-plugin-zf-tech-insights-common"
 RUN yarn link "@internal/plugin-zf-tech-insights-backend"
 RUN yarn link
 
+WORKDIR /builder/plugins/analytics-matomo
+RUN yarn link
+
 
 # Link every backend plugin from zerofox here
 WORKDIR /builder/packages/backend
@@ -59,6 +62,7 @@ RUN yarn link "@internal/plugin-github-resource-fetcher"
 RUN yarn link "backstage-plugin-zf-tech-insights-common"
 RUN yarn link "@internal/plugin-zf-tech-insights-backend"
 RUN yarn link "backstage-plugin-zf-tech-insights"
+RUN yarn link "plugin-analytics-matomo"
 
 RUN export NODE_OPTIONS=--max_old_space_size=16192
 WORKDIR /builder

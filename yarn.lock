@@ -2780,21 +2780,6 @@
     lodash "^4.17.21"
     luxon "^3.0.0"
 
-"@backstage/plugin-analytics-module-ga@^0.1.27":
-  version "0.1.27"
-  resolved "https://registry.yarnpkg.com/@backstage/plugin-analytics-module-ga/-/plugin-analytics-module-ga-0.1.27.tgz#b87269bc148edcf6c60ba92ec70591d0d9b3041d"
-  integrity sha512-Ttvyqt5ck7NfgtmIhVU6wf1xZv/74JuXFtiD8UoRi7TD8plaAy/U4heBFAjoW0jrU/4pD4XesGcRQUn8ocB+tw==
-  dependencies:
-    "@backstage/config" "^1.0.7"
-    "@backstage/core-components" "^0.12.5"
-    "@backstage/core-plugin-api" "^1.5.0"
-    "@backstage/theme" "^0.2.18"
-    "@material-ui/core" "^4.12.2"
-    "@material-ui/icons" "^4.9.1"
-    "@material-ui/lab" "4.0.0-alpha.57"
-    react-ga "^3.3.0"
-    react-use "^17.2.4"
-
 "@backstage/plugin-api-docs@^0.9.1":
   version "0.9.1"
   resolved "https://registry.yarnpkg.com/@backstage/plugin-api-docs/-/plugin-api-docs-0.9.1.tgz#455298d045d9cf8fa24a99b35902b5299a058ce6"
@@ -3962,6 +3947,11 @@
     colorspace "1.1.x"
     enabled "2.0.x"
     kuler "^2.0.0"
+
+"@datapunt/matomo-tracker-js@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@datapunt/matomo-tracker-js/-/matomo-tracker-js-0.5.1.tgz#92a746ffa421f91b3a59fefce707d45ca22be96b"
+  integrity sha512-9/MW9vt/BA5Db7tO6LqCeQKtuvBNjyq51faF3AzUmPMlYsJCnASIxcut3VqJKiribhUoey7aYbPIYuj9x4DLPA==
 
 "@date-io/core@1.x", "@date-io/core@^1.3.13":
   version "1.3.13"
@@ -7263,9 +7253,9 @@
   integrity sha512-EEhsLsD6UsDM1yFhAvy0Cjr6VwmpMWqFBCb9w07wVugF7w9nfajxLuVmngTIpgS6svCnm6Vaw+MZhoDCKnOfsw==
 
 "@types/react-dom@*", "@types/react-dom@<18.0.0", "@types/react-dom@^17":
-  version "17.0.19"
-  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-17.0.19.tgz#36feef3aa35d045cacd5ed60fe0eef5272f19492"
-  integrity sha512-PiYG40pnQRdPHnlf7tZnp0aQ6q9tspYr72vD61saO6zFCybLfMqwUCN0va1/P+86DXn18ZWeW30Bk7xlC5eEAQ==
+  version "17.0.20"
+  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-17.0.20.tgz#e0c8901469d732b36d8473b40b679ad899da1b53"
+  integrity sha512-4pzIjSxDueZZ90F52mU3aPoogkHIoSIDG+oQ+wQK7Cy2B9S+MvOqY0uEA/qawKz381qrEDkvpwyt8Bm31I8sbA==
   dependencies:
     "@types/react" "^17"
 
@@ -8027,7 +8017,6 @@ anymatch@^3.0.3, anymatch@~3.1.2:
     "@backstage/core-components" "^0.12.5"
     "@backstage/core-plugin-api" "^1.5.0"
     "@backstage/integration-react" "^1.1.11"
-    "@backstage/plugin-analytics-module-ga" "^0.1.27"
     "@backstage/plugin-api-docs" "^0.9.1"
     "@backstage/plugin-catalog" "^1.9.0"
     "@backstage/plugin-catalog-common" "^1.0.12"
@@ -8060,6 +8049,7 @@ anymatch@^3.0.3, anymatch@~3.1.2:
     backstage-plugin-zf-tech-insights "^0.1.0"
     better-sqlite3 "^7.5.3"
     history "^5.0.0"
+    plugin-analytics-matomo "^0.1.0"
     plugin-reporting "^0.1.0"
     react "^17.0.2"
     react-dom "^17.0.2"
@@ -18465,11 +18455,6 @@ react-fast-compare@^3.1.1:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-3.2.0.tgz#641a9da81b6a6320f270e89724fb45a0b39e43bb"
   integrity sha512-rtGImPZ0YyLrscKI9xTpV8psd6I8VAtjKCzQDlzyDvqJA8XOW78TXYQwNRNd8g8JZnDu8q9Fu/1v4HPAVwVdHA==
-
-react-ga@^3.3.0:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/react-ga/-/react-ga-3.3.1.tgz#d8e1f4e05ec55ed6ff944dcb14b99011dfaf9504"
-  integrity sha512-4Vc0W5EvXAXUN/wWyxvsAKDLLgtJ3oLmhYYssx+YzphJpejtOst6cbIHCIyF50Fdxuf5DDKqRYny24yJ2y7GFQ==
 
 react-helmet@6.1.0:
   version "6.1.0"

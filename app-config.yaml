@@ -1,6 +1,11 @@
 app:
   title: Zerofox Dev Portal
   baseUrl: http://localhost:3003
+  analytics:
+    matomo:
+      siteId: 1
+      urlBase: https://stats-qa.zerofox.com
+      srcUrl: https://cdn-qa.zerofox.com/stats/stats.js
 
 auth:
   environment: development
@@ -51,11 +56,12 @@ backend:
     # Uncomment the following host directive to bind to specific interfaces
     # host: 127.0.0.1
   csp:
-    connect-src: ["'self'", 'http:', 'https:']
+    connect-src: ["'self'", '*.zerofox.com']
     # Content-Security-Policy directives follow the Helmet format: https://helmetjs.github.io/#reference
     # Default Helmet Content-Security-Policy values can be removed by setting the key to false
-    script-src: ["'self'", "'unsafe-eval'", 'https://www.google-analytics.com']
-    img-src: ["'self'", 'data:', 'https://www.google-analytics.com']
+    script-src: ["'self'", "'unsafe-eval'", '*.zerofox.com']
+    img-src: ["'self'", 'data:', '*.zerofox.com', '*.github.com']
+    default-src: ["'self'", '*.zerofox.com']
 
   cors:
     origin: http://localhost:3003
