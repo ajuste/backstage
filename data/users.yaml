@@ -1136,3 +1136,44 @@ spec:
   profile:
     displayName: Ariel Sauil
     email: asuil@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: rguerra
+spec:
+  memberOf: []
+  profile:
+    displayName: Rodrigo Guerra
+    email: rguerra@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: jlago
+spec:
+  memberOf: []
+  profile:
+    displayName: Julio Lago
+    email: jlago@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: jmontoya
+spec:
+  memberOf: []
+  profile:
+    displayName: Javier Montoya
+    email: jmontoya@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: jsalgado
+spec:
+  memberOf: []
+  profile:
+    displayName: Jhon Salgado
+    email: jsalgado@zerofox.com
+
