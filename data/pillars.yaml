@@ -1,4 +1,19 @@
 apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+    name: attacksurface-pillar-owners
+    description: Owners of attacksurface-pillar
+    annotations:
+        zerofox.com/pillar: Attack Surface
+spec:
+    lifecycle: production
+    type: team
+    profile:
+        displayName: attacksurface-pillar-owners
+    children: []
+    members: [default/kmceachern]
+---
+apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: attacksurface-pillar
@@ -6,10 +21,25 @@ metadata:
       zerofox.com/pillar: Attack Surface
       grafana/tag-selector: attack surface
 spec:
-  owner: na
+  owner: attacksurface-pillar-owners
   lifecycle: production
   type: pillar
   children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+    name: disruption-pillar-owners
+    description: Owners of disruption-pillar
+    annotations:
+        zerofox.com/pillar: Disruption
+spec:
+    lifecycle: production
+    type: team
+    profile:
+        displayName: disruption-pillar-owners
+    children: []
+    members: [default/mlang]
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Component
@@ -19,10 +49,25 @@ metadata:
       zerofox.com/pillar: Disruption
       grafana/tag-selector: disruption
 spec:
-  owner: na
+  owner: disruption-pillar-owners
   lifecycle: production
   type: pillar
   children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+    name: intelligence-pillar-owners
+    description: Owners of intelligence-pillar
+    annotations:
+        zerofox.com/pillar: Intelligence
+spec:
+    lifecycle: production
+    type: team
+    profile:
+        displayName: intelligence-pillar-owners
+    children: []
+    members: [default/rjackson]
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Component
@@ -32,10 +77,25 @@ metadata:
       zerofox.com/pillar: Intelligence
       grafana/tag-selector: intelligence
 spec:
-  owner: na
+  owner: intelligence-pillar-owners
   lifecycle: production
   type: pillar
   children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+    name: protection-pillar-owners
+    description: Owners of protection-pillar
+    annotations:
+        zerofox.com/pillar: Protection
+spec:
+    lifecycle: production
+    type: team
+    profile:
+        displayName: protection-pillar-owners
+    children: []
+    members: [default/ddannunzio, default/cholter]
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Component
@@ -44,10 +104,25 @@ metadata:
   annotations:
       zerofox.com/pillar: Protection
 spec:
-  owner: na
+  owner: protection-pillar-owners
   lifecycle: production
   type: pillar
   children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+    name: response-pillar-owners
+    description: Owners of response-pillar
+    annotations:
+        zerofox.com/pillar: Response
+spec:
+    lifecycle: production
+    type: team
+    profile:
+        displayName: response-pillar-owners
+    children: []
+    members: [default/mmcguire]
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Component
@@ -57,10 +132,25 @@ metadata:
       zerofox.com/pillar: Response
       grafana/tag-selector: response
 spec:
-  owner: na
+  owner: response-pillar-owners
   lifecycle: production
   type: pillar
   children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+    name: sustaining-pillar-owners
+    description: Owners of sustaining-pillar
+    annotations:
+        zerofox.com/pillar: Sustaining
+spec:
+    lifecycle: production
+    type: team
+    profile:
+        displayName: sustaining-pillar-owners
+    children: []
+    members: [default/zwolf]
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Component
@@ -70,7 +160,7 @@ metadata:
       zerofox.com/pillar: Sustaining
       grafana/tag-selector: sustaining
 spec:
-  owner: na
+  owner: sustaining-pillar-owners
   lifecycle: production
   type: pillar
   children: []
