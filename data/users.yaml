@@ -1176,4 +1176,23 @@ spec:
   profile:
     displayName: Jhon Salgado
     email: jsalgado@zerofox.com
-
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: bmartinez
+spec:
+  memberOf: []
+  profile:
+    displayName: Benjamin Martinez
+    email: bmartinez@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: cserpell
+spec:
+  memberOf: []
+  profile:
+    displayName: Cristian Serpell
+    email: cserpell@zerofox.com
