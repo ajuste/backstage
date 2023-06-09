@@ -1206,3 +1206,253 @@ spec:
   profile:
     displayName: Maria José Berger
     email: mberger@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: pkarsa
+spec:
+   memberOf: []
+   profile:
+     displayName: Peter Karsa
+     email: pkarsa@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: ahayden
+spec:
+   memberOf: []
+   profile:
+     displayName: Arlin Hayden
+     email: ahayden@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: dpiatti
+spec:
+   memberOf: []
+   profile:
+     displayName: Dominique Alexander Piatti
+     email: dpiatti@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: emerlo
+spec:
+   memberOf: []
+   profile:
+     displayName: Emiliano Merlo
+     email: emerlo@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: ereilly
+spec:
+   memberOf: []
+   profile:
+     displayName: Edward Reilly
+     email: ereilly@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: esabowski
+spec:
+   memberOf: []
+   profile:
+     displayName: Erik M. Sabowski
+     email: esabowski@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: jpostula
+spec:
+   memberOf: []
+   profile:
+     displayName: Joseph Postula
+     email: jpostula@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: jrobles
+spec:
+   memberOf: []
+   profile:
+     displayName: Javier Robles
+     email: jrobles@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: kallen
+spec:
+   memberOf: []
+   profile:
+     displayName: Ken Allen
+     email: kallen@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: klee
+spec:
+   memberOf: []
+   profile:
+     displayName: Kayla Lee
+     email: klee@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: msherman
+spec:
+   memberOf: []
+   profile:
+     displayName: Michael Sherman
+     email: msherman@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: mwillock
+spec:
+   memberOf: []
+   profile:
+     displayName: Marcus Willock
+     email: mwillock@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: pbeverly
+spec:
+   memberOf: []
+   profile:
+     displayName: Phillip Beverly
+     email: pbeverly@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: pzaino
+spec:
+   memberOf: []
+   profile:
+     displayName: Paolo Zaino
+     email: pzaino@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: tzarzavidjian
+spec:
+   memberOf: []
+   profile:
+     displayName: Tiago Zarzavidjian
+     email: tzarzavidjian@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: vschaaf
+spec:
+   memberOf: []
+   profile:
+     displayName: Victor Schaaf
+     email: vschaaf@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: vserban
+spec:
+   memberOf: []
+   profile:
+     displayName: Vlad Serban
+     email: vserban@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: ppopiela
+spec:
+   memberOf: []
+   profile:
+     displayName: Peter Popiela
+     email: ppopiela@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: mkarlovich
+spec:
+   memberOf: []
+   profile:
+     displayName: Michael Karlovich
+     email: mkarlovich@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: dmcneil
+spec:
+   memberOf: []
+   profile:
+     displayName: Daniel Mcneil
+     email: dmcneil@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: eromero
+spec:
+   memberOf: []
+   profile:
+     displayName: Emiliana Romero
+     email: eromero@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: jblecha
+spec:
+   memberOf: []
+   profile:
+     displayName: Jan Blecha
+     email: jblecha@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: lverner
+spec:
+   memberOf: []
+   profile:
+     displayName: Lumir Verner
+     email: lverner@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: pstark
+spec:
+   memberOf: []
+   profile:
+     displayName: Paul Stark
+     email: pstark@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: rcargnelutti
+spec:
+   memberOf: []
+   profile:
+     displayName: Renato Cargnelutti
+     email: rcargnelutti@zerofox.com
