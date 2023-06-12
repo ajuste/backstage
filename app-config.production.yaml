@@ -4,8 +4,8 @@ app:
   analytics:
     matomo:
       siteId: 1
-      urlBase: https://stats-qa.zerofox.com
-      srcUrl: https://cdn-qa.zerofox.com/stats/stats.js
+      urlBase: https://stats.zerofox.com
+      srcUrl: https://cdn.zerofox.com/stats/stats.js
 
 auth:
   environment: prod
