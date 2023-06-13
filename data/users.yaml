@@ -1196,3 +1196,13 @@ spec:
   profile:
     displayName: Cristian Serpell
     email: cserpell@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: mbergert
+spec:
+  memberOf: []
+  profile:
+    displayName: Maria José Berger
+    email: mberger@zerofox.com
