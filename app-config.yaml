@@ -6,6 +6,9 @@ app:
       siteId: 1
       urlBase: https://stats-qa.zerofox.com
       srcUrl: https://cdn-qa.zerofox.com/stats/stats.js
+  reporting:
+    pillarAdoption:
+      excludedRepositories: ${REPORTING_PILLAR_ADOPTION_EXCLUDED_REPOSITORIES}
 
 auth:
   environment: development

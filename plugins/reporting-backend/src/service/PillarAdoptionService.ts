@@ -73,7 +73,9 @@ export default class PillarAdoptionService implements PillarAdoptionServiceAPI {
     });
   }
 
-  protected async listAllGithubRepos(): Promise<string[]> {
+  protected async listAllGithubRepos(
+    excludedRepos: string[],
+  ): Promise<string[]> {
     const { headers } = await this.getGithubCredentials();
 
     const octokit = new Octokit({
@@ -94,6 +96,7 @@ export default class PillarAdoptionService implements PillarAdoptionServiceAPI {
       const commitsPerRepo = await Promise.all(
         data
           .filter(repo => !repo.archived)
+          .filter(repo => !excludedRepos.includes(repo.full_name))
           .map(
             repo =>
               new Promise((res, _) => {
@@ -137,7 +140,12 @@ export default class PillarAdoptionService implements PillarAdoptionServiceAPI {
   }
 
   protected async listAllRepos(): Promise<Set<string>> {
-    const githubRepos = await this.listAllGithubRepos();
+    const excludedRepos = (
+      this.config.getOptionalString(
+        'app.reporting.pillarAdoption.excludedRepositories',
+      ) || ''
+    ).split(',');
+    const githubRepos = await this.listAllGithubRepos(excludedRepos);
     const azureRepos = await this.listAllAzureRepos();
 
     return new Set([...githubRepos, ...azureRepos]);
@@ -354,7 +362,6 @@ export default class PillarAdoptionService implements PillarAdoptionServiceAPI {
 
   async getTransitionRatioReport(): Promise<PillarAdoptionReport> {
     const repos = Array.from(await this.listAllRepos());
-    //const repos = ['riskive/go-dm', 'riskive/cacatua', 'riskive/cs-takedown-api', 'riskive/alert-creator'];
     const repoAnalysis = await this.analyzeRepos(repos);
     const adoptingRepos = repoAnalysis.filter(({ hasPillar }) => hasPillar);
     const nonAdoptingRepos = repoAnalysis.filter(
