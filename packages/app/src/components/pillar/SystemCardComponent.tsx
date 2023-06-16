@@ -78,6 +78,7 @@ export function SystemCardComponent(
                 columns={
                     [
                         EntityTable.columns.createEntityRefColumn({ defaultKind: 'system' }),
+                        EntityTable.columns.createOwnerColumn(),
                         EntityTable.columns.createMetadataDescriptionColumn(),
                     ]
                 }
