@@ -107,7 +107,7 @@ const routes = (
     >
       {entityPage}
     </Route>
-    <Route path="/docs" element={<TechDocsIndexPage />} />
+    <Route path="/docs" element={<TechDocsIndexPage initialFilter='all' />} />
     <Route
       path="/docs/:namespace/:kind/:name/*"
       element={<TechDocsReaderPage />}

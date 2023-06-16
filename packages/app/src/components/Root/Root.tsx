@@ -3,7 +3,6 @@ import { makeStyles } from '@material-ui/core';
 import HomeIcon from '@material-ui/icons/Home';
 import ExtensionIcon from '@material-ui/icons/Extension';
 import MapIcon from '@material-ui/icons/MyLocation';
-import ExploreIcon from '@material-ui/icons/Map';
 import LibraryBooks from '@material-ui/icons/LibraryBooks';
 import ReportingIcon from '@material-ui/icons/Assessment';
 import CategoryIcon from '@material-ui/icons/Category';
