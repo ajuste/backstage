@@ -1456,3 +1456,23 @@ spec:
    profile:
      displayName: Renato Cargnelutti
      email: rcargnelutti@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: lbermeo
+spec:
+   memberOf: []
+   profile:
+     displayName: Laura Bermeo
+     email: lbermeo@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: javierhuertay
+spec:
+   memberOf: []
+   profile:
+     displayName: Javier Huerta
+     email: jhuerta@zerofox.com
