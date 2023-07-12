@@ -1476,3 +1476,13 @@ spec:
    profile:
      displayName: Javier Huerta
      email: jhuerta@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: zkto
+spec:
+   memberOf: []
+   profile:
+     displayName: Ian Zamorano
+     email: izamorano@zerofox.com
