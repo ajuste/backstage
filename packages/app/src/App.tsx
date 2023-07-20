@@ -171,6 +171,32 @@ const routes = (
       }
     />
     <Route
+      path="/tech-radars/python"
+      element={
+        <TechRadarPage
+          id="python"
+          width={1500}
+          height={800}
+          title="Python"
+          subtitle="Use this radar to determine recommended technologies for new and existing Python projects."
+          pageTitle="Python"
+        />
+      }
+    />
+     <Route
+      path="/tech-radars/ai"
+      element={
+        <TechRadarPage
+          id="ai"
+          width={1500}
+          height={800}
+          title="AI & Analysis"
+          subtitle="Use this radar to determine recommended technologies for new and existing AI projects."
+          pageTitle="AI & Analysis"
+        />
+      }
+    />
+    <Route
       path="/catalog-import"
       element={
         <RequirePermission permission={catalogEntityCreatePermission}>

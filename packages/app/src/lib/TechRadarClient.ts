@@ -71,6 +71,20 @@ export class TechRadarClient implements TechRadarApi {
           repo: 'ui-architecture',
           branch: 'master',
         };
+      case 'python':
+        return {
+          path: '.backstage/radars/python.json',
+          owner: 'riskive',
+          repo: 'ui-architecture',
+          branch: 'master',
+        };
+      case 'ai':
+        return {
+          path: '.backstage/radars/ai.json',
+          owner: 'riskive',
+          repo: 'ui-architecture',
+          branch: 'master',
+        };
       default:
         throw new Error('No repo details found');
     }
