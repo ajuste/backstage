@@ -1486,3 +1486,13 @@ spec:
    profile:
      displayName: Ian Zamorano
      email: izamorano@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: sleiva
+spec:
+   memberOf: []
+   profile:
+     displayName: Sergio Leiva
+     email: sleiva@zerofox.com
