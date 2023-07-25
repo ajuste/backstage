@@ -185,3 +185,27 @@ spec:
   type: service
   children: []
 ---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: cymru
+  namespace: services
+  description:  Team Cymru is a non-profit organization that provides threat intelligence and security services to organizations around the world. They are known for their work in developing the world's largest IP reputation database, which is used by organizations to identify and block malicious traffic.
+spec:
+  owner: na
+  lifecycle: production
+  type: service
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: whois
+  namespace: services
+  description: public WHOIS services
+spec:
+  owner: na
+  lifecycle: production
+  type: service
+  children: []
+---
