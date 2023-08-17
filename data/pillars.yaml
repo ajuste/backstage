@@ -165,3 +165,31 @@ spec:
   type: pillar
   children: []
 ---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+    name: datascience-pillar-owners
+    description: Owners of datascience-pillar
+    annotations:
+        zerofox.com/pillar: Data Science
+spec:
+    lifecycle: production
+    type: team
+    profile:
+        displayName: datascience-pillar-owners
+    children: []
+    members: [default/kmceachern]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: datascience-pillar
+  annotations:
+      zerofox.com/pillar: Data Science
+      grafana/tag-selector: data science
+spec:
+  owner: datascience-pillar-owners
+  lifecycle: production
+  type: pillar
+  children: []
+---

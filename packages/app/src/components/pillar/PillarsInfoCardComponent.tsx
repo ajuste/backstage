@@ -12,6 +12,7 @@ import SustainingIcon from '@material-ui/icons/Build';
 import DisruptionIcon from '@material-ui/icons/FlashOn';
 import ResponseIcon from '@material-ui/icons/RecentActors';
 import IntelligenceIcon from '@material-ui/icons/GroupWork';
+import DataScienceIcon from '@material-ui/icons/Functions';
 import UnknownIcon from '@material-ui/icons/BrokenImage';
 import { Entity } from '@backstage/catalog-model';
 
@@ -50,6 +51,8 @@ const pillarToIcon = (pillar: Entity): JSX.Element => {
             return <ProtectionIcon htmlColor='#49a078' style={{ 'fontSize': '60px' }}></ProtectionIcon>
         case 'Intelligence':
             return <IntelligenceIcon htmlColor='#F42272' style={{ 'fontSize': '60px' }}></IntelligenceIcon>
+        case 'Data Science':
+            return <DataScienceIcon htmlColor='#DAC4F7' style={{ 'fontSize': '60px' }}></DataScienceIcon>
         default:
             return <UnknownIcon style={{ 'fontSize': '60px' }}></UnknownIcon>
     }

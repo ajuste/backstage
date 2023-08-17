@@ -71,6 +71,7 @@ export const EntityPillarPicker = () => {
                 'Protection',
                 'Response',
                 'Sustaining',
+                'Data Science',
             ];
 
             return [...new Set([...backendPillars, ...defaultPillars])].sort();
