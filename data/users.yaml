@@ -594,7 +594,7 @@ metadata:
 spec:
   memberOf: []
   profile:
-    displayName: Alex Farrel
+    displayName: Alex Farrell
     email: afarrel@zerofox.com
 ---
 apiVersion: backstage.io/v1alpha1
@@ -1496,3 +1496,193 @@ spec:
    profile:
      displayName: Sergio Leiva
      email: sleiva@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: mstjohn
+spec:
+   memberOf: []
+   profile:
+     displayName: Mark St. John
+     email: mstjohn@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: mprice
+spec:
+   memberOf: []
+   profile:
+     displayName: Mike Price
+     email: mprice@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: cpierce
+spec:
+   memberOf: []
+   profile:
+     displayName: Cody Pierce
+     email: cpierce@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: cpierce
+spec:
+   memberOf: []
+   profile:
+     displayName: Cody Pierce
+     email: cpierce@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: jsepulveda
+spec:
+   memberOf: []
+   profile:
+     displayName: Joaquin Sepulveda
+     email: jsepulveda@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: alavarello
+spec:
+   memberOf: []
+   profile:
+     displayName: Alfredo Lavarello
+     email: alavarello@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: alavarello
+spec:
+   memberOf: []
+   profile:
+     displayName: Jason Crawley
+     email: jcrawley@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: hghoghari
+spec:
+   memberOf: []
+   profile:
+     displayName: Haresh Ghoghari
+     email: hghoghari@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: bjangid
+spec:
+   memberOf: []
+   profile:
+     displayName: Bunty Jangid
+     email: bjangid@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: npaliwal
+spec:
+   memberOf: []
+   profile:
+     displayName: Neeraj Paliwal
+     email: npaliwal@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: spatel
+spec:
+   memberOf: []
+   profile:
+     displayName: Seth Patel
+     email: spatel@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: nmehta
+spec:
+   memberOf: []
+   profile:
+     displayName: Nishit Mehta
+     email: nmehta@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: hghoghari
+spec:
+   memberOf: []
+   profile:
+     displayName: Haresh Ghoghari
+     email: hghoghari@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: calonso
+spec:
+   memberOf: []
+   profile:
+     displayName: Carlos Alonso
+     email: calonso@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: csemke
+spec:
+   memberOf: []
+   profile:
+     displayName: Chris Semke
+     email: csemke@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: cvasquez
+spec:
+   memberOf: []
+   profile:
+     displayName: Cris Vasquez
+     email: cvasquez@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: pbeverly
+spec:
+   memberOf: []
+   profile:
+     displayName: Phillip Beverly
+     email: pbeverly@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: emoody
+spec:
+   memberOf: []
+   profile:
+     displayName: Eric Moody
+     email: emoody@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: rvasquez
+spec:
+   memberOf: []
+   profile:
+     displayName: Ricardo Vasquez
+     email: rvasquez@zerofox.com

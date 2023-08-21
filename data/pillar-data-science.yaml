@@ -1,0 +1,121 @@
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-ai-alerting-disruption
+  tags: ["scrum-team", "Y23H2"]
+  description: ""
+  links:
+      - url: https://zf.atlassian.net/jira/software/c/projects/ZFE/boards/297
+        title: JIRA board
+      - url: https://zerofox.slack.com/archives/C010WT6SZ1D
+        title: Slack Channel
+      - url: https://drive.google.com/drive/folders/1bf-JLq7D4zdpikNraJIsCiDOwhPgr3SZ?usp=share_link
+        title: Team Folder
+  annotations:
+    zerofox.com/pillar: Data Science
+    zerofox.com/em: kmceachern
+    zerofox.com/architect: kmceachern
+    zerofox.com/techlead: cserpell
+    zerofox.com/scrummaster: dvalenzuela
+    zerofox.com/productowner: nalvear
+spec:
+  profile:
+    displayName: "AI: Alerting & Disruption Workflows"
+  type: team
+  children: []
+  members: [kmceachern, cserpell, dvalenzuela, nalvear]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-ai-core-use-detection
+  tags: ["scrum-team", "Y23H2"]
+  description: ""
+  links:
+      - url: https://zf.atlassian.net/jira/software/c/projects/ZFE/boards/298
+        title: JIRA board
+      - url: https://zerofox.slack.com/archives/C010WT6SZ1D
+        title: Slack Channel
+      - url: https://drive.google.com/drive/folders/1bf-JLq7D4zdpikNraJIsCiDOwhPgr3SZ?usp=share_link
+        title: Team Folder
+  annotations:
+    zerofox.com/pillar: Data Science
+    zerofox.com/em: kmceachern
+    zerofox.com/architect: skhan
+    zerofox.com/techlead: smaldonado
+    zerofox.com/scrummaster: smaldonado
+    zerofox.com/productowner: nalvear
+spec:
+  profile:
+    displayName: "AI: Core Use Case Detection"
+  type: team
+  children: []
+  members: [kmceachern, skhan, smaldonado, nalvear]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-business-intelligence
+  tags: ["scrum-team", "Y23H2"]
+  description: ""
+  links:
+      - url: https://zf.atlassian.net/jira/software/projects/DT/boards/167
+        title: JIRA board
+      - url: https://zerofox.slack.com/archives/C023D5J2RHR
+        title: Slack Channel
+      - url: https://drive.google.com/drive/folders/1Rv5rGF5tJZsmgNdK9iGISq9_ni1-EP5v
+        title: Team Folder
+  annotations:
+    zerofox.com/pillar: Data Science
+    zerofox.com/em: kmceachern
+    zerofox.com/architect: kmceachern
+    zerofox.com/productowner: jvergara
+spec:
+  profile:
+    displayName: "Business Intelligence"
+  type: team
+  children: []
+  members: [kmceachern, jvergara, gnegrete]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+    name: datascience-pillar-owners
+    description: Owners of Data science
+    annotations:
+        zerofox.com/pillar: Data Science
+spec:
+    lifecycle: production
+    type: team
+    profile:
+        displayName: Owners of Data science
+    children: []
+    members: [mlang, kmceachern]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: datascience-pillar
+  annotations:
+      zerofox.com/pillar: Data Science
+      grafana/tag-selector: data science
+spec:
+  owner: datascience-pillar-owners
+  lifecycle: production
+  type: pillar
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+    name: t-datascience-pillar
+    description: Owners of datascience-pillar
+    annotations:
+        zerofox.com/pillar: Data Science
+spec:
+    profile:
+      displayName: "Data Science parent team"
+    lifecycle: production
+    type: team
+    children: []
+    members: [t-ai-alerting-disruption, t-ai-core-use-detection, t-business-intelligence]

@@ -1,0 +1,96 @@
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-disruption
+  tags: ["scrum-team", "Y23H2"]
+  description: ""
+  links:
+      - url: https://zf.atlassian.net/jira/software/c/projects/ZFE/boards/251
+        title: JIRA board
+      - url: https://zerofox.slack.com/archives/C03DJ811J4R
+        title: Slack Channel
+      - url: https://drive.google.com/drive/folders/13wRHfHVvMO6Kjg7rnCjYd87e0RukwEvb
+        title: Team Folder
+  annotations:
+    zerofox.com/pillar: Disruption
+    zerofox.com/em: mlang
+    zerofox.com/architect: ajuste
+    zerofox.com/techlead: eramirez
+    zerofox.com/scrummaster: gwurman
+    zerofox.com/productowner: iyanes
+spec:
+  profile:
+    displayName: "Disruption"
+  type: team
+  children: []
+  members: [mlang, ajuste, eramirez, gwurman, iyanes]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-triage
+  tags: ["scrum-team", "Y23H2"]
+  description: ""
+  links:
+      - url: https://zf.atlassian.net/jira/software/c/projects/ZFE/boards/251
+        title: JIRA board
+      - url: https://zerofox.slack.com/archives/C03DJ811J4R
+        title: Slack Channel
+      - url: https://drive.google.com/drive/folders/13wRHfHVvMO6Kjg7rnCjYd87e0RukwEvb
+        title: Team Folder
+  annotations:
+    zerofox.com/pillar: Disruption
+    zerofox.com/em: mlang
+    zerofox.com/architect: ajuste
+    zerofox.com/techlead: rvillablanca
+    zerofox.com/scrummaster: jmontoya
+    zerofox.com/productowner: jvidmar
+spec:
+  profile:
+    displayName: "Triage"
+  type: team
+  children: []
+  members: [mlang, ajuste, rvillablanca, jmontoya, jvidmar]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+    name: disruption-pillar-owners
+    description: Owners of disruption-pillar
+    annotations:
+        zerofox.com/pillar: Disruption
+spec:
+    lifecycle: production
+    type: team
+    profile:
+        displayName: disruption-pillar-owners
+    children: []
+    members: [mlang, ajuste, jvidmar]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: disruption-pillar
+  annotations:
+      zerofox.com/pillar: Disruption
+      grafana/tag-selector: disruption
+spec:
+  owner: disruption-pillar-owners
+  lifecycle: production
+  type: pillar
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-disruption-pillar
+  tags: ["pillar-team"]
+  description: ""
+  annotations:
+      zerofox.com/pillar: Disruption
+spec:
+  profile:
+    displayName: "Disruption parent team"
+  type: team
+  children: [t-disruption, t-triage]
+  members: []

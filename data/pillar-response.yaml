@@ -1,0 +1,124 @@
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-breach-portal
+  tags: ["scrum-team", "Y23H2"]
+  description: ""
+  links:
+      - url: https://idexperts.visualstudio.com/MyIDCare/_sprints/backlog/Response%20Portal/MyIDCare/
+        title: JIRA board
+      - url: t-idx-zerofox-response-portal
+        title: Slack Channel
+      - url: https://drive.google.com/drive/folders/1vQYq9Z9I81VMmeRjWdG8SwBTCU92QoX-?usp=sharing
+        title: Team Folder
+  annotations:
+    zerofox.com/pillar: Response
+    zerofox.com/em: mmcguire
+    zerofox.com/architect: eellis
+    zerofox.com/techlead: bmcclory
+    zerofox.com/scrummaster: lmantilla
+    zerofox.com/productowner: dgreenberg
+    zerofox.com/quality: jholewa
+spec:
+  profile:
+    displayName: "Breach Portal"
+  type: team
+  children: []
+  members: [mmcguire, eellis, bmcclory, lmantilla, dgreenberg, dgarcia, izamorano, jholewa]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-member-dashboard
+  tags: ["scrum-team", "Y23H2"]
+  description: ""
+  links:
+      - url: https://idexperts.visualstudio.com/MyIDCare/_sprints/backlog/Response%20Portal/MyIDCare/
+        title: JIRA board
+      - url: t-team-member-dashboard
+        title: Slack Channel
+      - url: https://drive.google.com/drive/folders/1Nqi2ct3ufrPJeotH9NY6a_W_sW63sXu6?usp=sharing
+        title: Team Folder
+  annotations:
+    zerofox.com/pillar: Response
+    zerofox.com/em: mmcguire
+    zerofox.com/architect: eellis
+    zerofox.com/techlead: agarcia
+    zerofox.com/scrummaster: calonso
+    zerofox.com/productowner: jmarquez
+    zerofox.com/quality: jholewa
+spec:
+  profile:
+    displayName: "Member Dashboard"
+  type: team
+  children: []
+  members: [mmcguire, eellis, agarcia, calonso, jmarquez, jholewa, erutz]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-pii-removal
+  tags: ["scrum-team", "Y23H2"]
+  description: ""
+  links:
+      - url: t-team-pii-removal
+        title: Slack Channel
+      - url: https://drive.google.com/drive/folders/1XJCnQNQ1mwNj-Hs8K5hvUelNY1WM_2Kq?usp=share_link
+        title: Team Folder
+  annotations:
+    zerofox.com/pillar: Response
+    zerofox.com/em: mmcguire
+    zerofox.com/architect: eellis
+    zerofox.com/techlead: efarley
+    zerofox.com/scrummaster: hcovington
+    zerofox.com/productowner: jkelly
+    zerofox.com/quality: jholewa
+spec:
+  profile:
+    displayName: "PII Removal"
+  type: team
+  children: []
+  members: [mmcguire, eellis, efarley, hcovington, jkelly, jholewa, msifuentes, ealejo]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+    name: response-pillar-owners
+    description: Owners of response-pillar
+    annotations:
+        zerofox.com/pillar: Response
+spec:
+    lifecycle: production
+    type: team
+    profile:
+        displayName: response-pillar-owners
+    children: []
+    members: [mmcguire, csemke, eellis]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: response-pillar
+  annotations:
+      zerofox.com/pillar: Response
+      grafana/tag-selector: response
+spec:
+  owner: response-pillar-owners
+  lifecycle: production
+  type: pillar
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: t-response-pillar
+  tags: ["pillar-team"]
+  description: ""
+  annotations:
+      zerofox.com/pillar: Response
+spec:
+  profile:
+    displayName: "Response parent team"
+  type: team
+  children: [t-breach-portal, t-member-dashboard, t-pii-removal]
+  members: []
