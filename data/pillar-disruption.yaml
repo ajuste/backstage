@@ -2,7 +2,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-disruption
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: ""
   links:
       - url: https://zf.atlassian.net/jira/software/c/projects/ZFE/boards/251
@@ -23,13 +23,13 @@ spec:
     displayName: "Disruption"
   type: team
   children: []
-  members: [mlang, ajuste, eramirez, gwurman, iyanes]
+  members: [mlang, ajuste, eramirez, gwurman, iyanes, asuil]
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-triage
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: ""
   links:
       - url: https://zf.atlassian.net/jira/software/c/projects/ZFE/boards/251
@@ -50,20 +50,18 @@ spec:
     displayName: "Triage"
   type: team
   children: []
-  members: [mlang, ajuste, rvillablanca, jmontoya, jvidmar]
+  members: [mlang, ajuste, rvillablanca, jmontoya, jvidmar, jbahamonde]
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
     name: disruption-pillar-owners
-    description: Owners of disruption-pillar
+    description: Owners of Disruption
     annotations:
         zerofox.com/pillar: Disruption
 spec:
     lifecycle: production
     type: team
-    profile:
-        displayName: disruption-pillar-owners
     children: []
     members: [mlang, ajuste, jvidmar]
 ---
@@ -71,6 +69,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: disruption-pillar
+  description: Disruption pillar
   annotations:
       zerofox.com/pillar: Disruption
       grafana/tag-selector: disruption
@@ -84,13 +83,11 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-disruption-pillar
-  tags: ["pillar-team"]
-  description: ""
+  tags: [pillar-team]
+  description: Disruption parent team
   annotations:
       zerofox.com/pillar: Disruption
 spec:
-  profile:
-    displayName: "Disruption parent team"
   type: team
   children: [t-disruption, t-triage]
   members: []

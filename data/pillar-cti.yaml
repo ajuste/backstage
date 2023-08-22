@@ -2,7 +2,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-cti-ddw-maturity
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: ""
   links:
       - url: https://zf.atlassian.net/jira/software/c/projects/ZFE/boards/252
@@ -23,17 +23,15 @@ spec:
     displayName: "CTI: DDW + Maturity"
   type: team
   children: []
-  members: [dpiatti, shanna, rroman, jrodriguez, jsepulveda, pkarsa, csepulveda]
+  members: [dpiatti, shanna, rroman, jrodriguez, jsepulveda, pkarsa, csepulveda, sleiva]
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-cti-graph
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: ""
   links:
-      - url: t-team-data-platform-cdm
-        title: Slack Channel
       - url: https://zf.atlassian.net/jira/software/c/projects/ZFE/boards/301
         title: JIRA board
       - url: https://drive.google.com/drive/u/0/folders/1OtO0ZD4qN3v-Q_wrMc5JG3_NHhrNhYMI
@@ -56,11 +54,9 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-cti-lg-legacy
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: ""
   links:
-      - url: t-team-prime
-        title: Slack Channel
       - url: https://zf.atlassian.net/jira/software/c/projects/ZFE/boards/292
         title: JIRA board
       - url: https://drive.google.com/drive/folders/1iLptNE2xVbNnbV1-OiVxt2-3XrvBeobj
@@ -83,7 +79,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-cti-odi-rfi
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: ""
   links:
       - url: https://zerofox.slack.com/archives/C022J1YKE79
@@ -110,11 +106,9 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-cti-search-data
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: ""
   links:
-      - url: t-team-data-platform-ingest
-        title: Slack Channel
       - url: https://zf.atlassian.net/jira/software/c/projects/ZFE/boards/299
         title: JIRA board
       - url: https://drive.google.com/drive/folders/1I5xqIKhVt0m9pOrdlfSyt718NIRM5uyu
@@ -126,18 +120,19 @@ metadata:
     zerofox.com/techlead: jrobles
     zerofox.com/scrummaster: ktak
     zerofox.com/productowner: afarrel
+    zerofox.com/qa: mkarlovich
 spec:
   profile:
     displayName: "CTI: Search - Data"
   type: team
   children: []
-  members: [rjackson, msherman, jrobles, ktak, afarrel]
+  members: [rjackson, msherman, jrobles, ktak, afarrel, dmcneil, pstark, mkarlovich]
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-cti-search-ux
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: ""
   links:
       - url: https://zerofox.slack.com/archives/C022FFZ9HRD
@@ -164,14 +159,12 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
     name: intelligence-pillar-owners
-    description: Owners of cti-pillar
+    description: Owners of CTI
     annotations:
         zerofox.com/pillar: Intelligence
 spec:
     lifecycle: production
     type: team
-    profile:
-        displayName: Owners of CTI Pillar
     children: []
     members: [afarrel, rjackson, shanna]
 ---
@@ -179,12 +172,11 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: intelligence-pillar
+  description: CTI pillar
   annotations:
       zerofox.com/pillar: Intelligence
       grafana/tag-selector: intelligence
 spec:
-  profile:
-      displayName: CTI Pillar
   owner: intelligence-pillar-owners
   lifecycle: production
   type: pillar
@@ -195,12 +187,10 @@ kind: Group
 metadata:
   name: t-intelligence-pillar
   tags: ["pillar-team"]
-  description: ""
+  description: CTI parent team
   annotations:
       zerofox.com/pillar: Intelligence
 spec:
-  profile:
-    displayName: "CTI parent team"
   type: team
   children: [t-cti-ddw-maturity, t-cti-graph, t-cti-lg-legacy, t-cti-odi-rfi, t-cti-search-data, t-cti-search-ux]
   members: []

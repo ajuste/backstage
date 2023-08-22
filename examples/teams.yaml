@@ -3,7 +3,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-contig-automation
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: "Everything related to automating customer experience"
 spec:
   profile:
@@ -16,7 +16,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-cti-collection
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: "Everything CTI data collection"
 spec:
   profile:
@@ -29,7 +29,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-cti-engagement
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: "Everything related to increasing customer engagement with CTI"
 spec:
   profile:
@@ -42,7 +42,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-cti-search
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: "Everything related to searching among CTI collections"
 spec:
   profile:
@@ -55,7 +55,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-customer-commits
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: "Everything related to improving customer experience"
 spec:
   profile:
@@ -68,7 +68,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-disruption
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: "Everything related to "
 spec:
   profile:
@@ -81,7 +81,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-domains
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: "Everything related to domain scanning and phishing"
 spec:
   profile:
@@ -94,7 +94,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-domains-search
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: "Everything related to implementing domain search"
 spec:
   profile:
@@ -107,7 +107,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-drp-analysis
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: "Everything related to DRP"
 spec:
   profile:
@@ -120,7 +120,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-platform-maturity
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: "Everything related to platform maturity"
 spec:
   profile:
@@ -136,7 +136,7 @@ metadata:
 spec:
   profile:
     displayName: SRE
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: "Everything related to Site Reliability Eng"
   type: team
   children: []
@@ -149,7 +149,7 @@ metadata:
 spec:
   profile:
     displayName: Triage & PDS
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: "Everything related to triaing alerts"
   type: team
   children: []
@@ -162,7 +162,7 @@ metadata:
 spec:
   profile:
     displayName: DevSecOps
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: "Everything related to dev sec ops"
   type: team
   children: []
@@ -175,7 +175,7 @@ metadata:
 spec:
   profile:
     displayName: DevOps
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: "Everything related to devops"
   type: team
   children: []

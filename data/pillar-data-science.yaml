@@ -2,7 +2,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-ai-alerting-disruption
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: ""
   links:
       - url: https://zf.atlassian.net/jira/software/c/projects/ZFE/boards/297
@@ -23,13 +23,13 @@ spec:
     displayName: "AI: Alerting & Disruption Workflows"
   type: team
   children: []
-  members: [kmceachern, cserpell, dvalenzuela, nalvear]
+  members: [kmceachern, cserpell, dvalenzuela, nalvear, jhuerta, rreeves]
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-ai-core-use-detection
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: ""
   links:
       - url: https://zf.atlassian.net/jira/software/c/projects/ZFE/boards/298
@@ -50,13 +50,13 @@ spec:
     displayName: "AI: Core Use Case Detection"
   type: team
   children: []
-  members: [kmceachern, skhan, smaldonado, nalvear]
+  members: [kmceachern, skhan, smaldonado, nalvea, lbermeo, mcartagena]
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-business-intelligence
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: ""
   links:
       - url: https://zf.atlassian.net/jira/software/projects/DT/boards/167
@@ -87,8 +87,6 @@ metadata:
 spec:
     lifecycle: production
     type: team
-    profile:
-        displayName: Owners of Data science
     children: []
     members: [mlang, kmceachern]
 ---
@@ -96,6 +94,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: datascience-pillar
+  description: Data Science pillar
   annotations:
       zerofox.com/pillar: Data Science
       grafana/tag-selector: data science
@@ -109,13 +108,12 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
     name: t-datascience-pillar
-    description: Owners of datascience-pillar
+    tags: ["pillar-team"]
+    description: Data Science parent team
     annotations:
         zerofox.com/pillar: Data Science
 spec:
-    profile:
-      displayName: "Data Science parent team"
     lifecycle: production
     type: team
-    children: []
-    members: [t-ai-alerting-disruption, t-ai-core-use-detection, t-business-intelligence]
+    children: [t-ai-alerting-disruption, t-ai-core-use-detection, t-business-intelligence]
+    members: []

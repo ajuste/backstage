@@ -2,7 +2,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-team-configuration
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: ""
   links:
       - url: https://zf.atlassian.net/jira/software/c/projects/ZFE/boards/248
@@ -29,7 +29,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-domains
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: ""
   links:
       - url: https://zf.atlassian.net/jira/software/c/projects/ZFE/boards/166
@@ -56,7 +56,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-impersonation
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: ""
   links:
       - url: https://zf.atlassian.net/jira/software/c/projects/ZFE/boards/246
@@ -69,7 +69,7 @@ metadata:
     zerofox.com/pillar: Protection
     zerofox.com/em: ddannunzio
     zerofox.com/architect: abrewer
-    zerofox.com/techlead: hcampusano
+    zerofox.com/techlead: hcampuzano
     zerofox.com/scrummaster: iparada
     zerofox.com/productowner: alavarello
 spec:
@@ -77,13 +77,13 @@ spec:
     displayName: "Impersonation"
   type: team
   children: []
-  members: [ddannunzio, abrewer, hcampusano, iparada, alavarello, rnaranjo, hpinero]
+  members: [ddannunzio, abrewer, hcampuzano, iparada, alavarello, rnaranjo, hpinero]
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-physical-security
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: ""
   links:
       - url: https://zf.atlassian.net/jira/software/c/projects/ZFE/boards/250
@@ -110,7 +110,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-platform-maturity
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: ""
   links:
       - url: https://zf.atlassian.net/jira/software/c/projects/ZFE/boards/188
@@ -137,7 +137,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-reporting
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: ""
   links:
       - url: https://zf.atlassian.net/jira/software/c/projects/ZFE/boards/295
@@ -164,14 +164,12 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
     name: protection-pillar-owners
-    description: Owners of protection-pillar
+    description: Owners of Protection
     annotations:
         zerofox.com/pillar: Protection
 spec:
     lifecycle: production
     type: team
-    profile:
-        displayName: protection-pillar-owners
     children: []
     members: [ddannunzio, cholter, bsnowdon, abrewer, rmorton]
 ---
@@ -179,6 +177,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: protection-pillar
+  description: Protection pillar
   annotations:
       zerofox.com/pillar: Protection
       grafana/tag-selector: protection
@@ -193,12 +192,10 @@ kind: Group
 metadata:
   name: t-protection-pillar
   tags: ["pillar-team"]
-  description: ""
+  description: Protection parent team
   annotations:
       zerofox.com/pillar: Protection
 spec:
-  profile:
-    displayName: "Protection parent team"
   type: team
   children: [t-team-configuration, t-domains, t-impersonation, t-physical-security, t-platform-maturity, t-reporting]
   members: []

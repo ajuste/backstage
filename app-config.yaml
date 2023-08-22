@@ -147,32 +147,37 @@ catalog:
         - allow: [User]
         
     - type: url
-      target: https://github.com/riskive/backstage/blob/master/data/pillars-attack-surface.yaml
+      target: https://github.com/riskive/backstage/blob/master/data/pillar-attack-surface.yaml
       rules:
         - allow: [Component, Group]
         
     - type: url
-      target: https://github.com/riskive/backstage/blob/master/data/pillars-cti.yaml
+      target: https://github.com/riskive/backstage/blob/master/data/pillar-cti.yaml
       rules:
         - allow: [Component, Group]
         
     - type: url
-      target: https://github.com/riskive/backstage/blob/master/data/pillars-data-science.yaml
+      target: https://github.com/riskive/backstage/blob/master/data/pillar-data-science.yaml
       rules:
         - allow: [Component, Group]
         
     - type: url
-      target: https://github.com/riskive/backstage/blob/master/data/pillars-protection.yaml
+      target: https://github.com/riskive/backstage/blob/master/data/pillar-protection.yaml
       rules:
         - allow: [Component, Group]
         
     - type: url
-      target: https://github.com/riskive/backstage/blob/master/data/pillars-response.yaml
+      target: https://github.com/riskive/backstage/blob/master/data/pillar-response.yaml
       rules:
         - allow: [Component, Group]
         
     - type: url
-      target: https://github.com/riskive/backstage/blob/master/data/pillars-sustaining.yaml
+      target: https://github.com/riskive/backstage/blob/master/data/pillar-sustaining.yaml
+      rules:
+        - allow: [Component, Group]
+        
+    - type: url
+      target: https://github.com/riskive/backstage/blob/master/data/pillar-disruption.yaml
       rules:
         - allow: [Component, Group]
         

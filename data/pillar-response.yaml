@@ -2,13 +2,11 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-breach-portal
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: ""
   links:
       - url: https://idexperts.visualstudio.com/MyIDCare/_sprints/backlog/Response%20Portal/MyIDCare/
         title: JIRA board
-      - url: t-idx-zerofox-response-portal
-        title: Slack Channel
       - url: https://drive.google.com/drive/folders/1vQYq9Z9I81VMmeRjWdG8SwBTCU92QoX-?usp=sharing
         title: Team Folder
   annotations:
@@ -30,13 +28,11 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-member-dashboard
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: ""
   links:
       - url: https://idexperts.visualstudio.com/MyIDCare/_sprints/backlog/Response%20Portal/MyIDCare/
         title: JIRA board
-      - url: t-team-member-dashboard
-        title: Slack Channel
       - url: https://drive.google.com/drive/folders/1Nqi2ct3ufrPJeotH9NY6a_W_sW63sXu6?usp=sharing
         title: Team Folder
   annotations:
@@ -58,11 +54,9 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-pii-removal
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: ""
   links:
-      - url: t-team-pii-removal
-        title: Slack Channel
       - url: https://drive.google.com/drive/folders/1XJCnQNQ1mwNj-Hs8K5hvUelNY1WM_2Kq?usp=share_link
         title: Team Folder
   annotations:
@@ -84,7 +78,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
     name: response-pillar-owners
-    description: Owners of response-pillar
+    description: Owners of Response
     annotations:
         zerofox.com/pillar: Response
 spec:
@@ -99,6 +93,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: response-pillar
+  description: Response pillar
   annotations:
       zerofox.com/pillar: Response
       grafana/tag-selector: response
@@ -113,12 +108,10 @@ kind: Group
 metadata:
   name: t-response-pillar
   tags: ["pillar-team"]
-  description: ""
+  description: Response parent team
   annotations:
       zerofox.com/pillar: Response
 spec:
-  profile:
-    displayName: "Response parent team"
   type: team
   children: [t-breach-portal, t-member-dashboard, t-pii-removal]
   members: []

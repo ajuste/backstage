@@ -2,7 +2,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-team-core-db-scaling
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: ""
   links:
       - url: https://zf.atlassian.net/jira/software/c/projects/ZFE/boards/253/
@@ -29,7 +29,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-devops
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: ""
   links:
       - url: https://zf.atlassian.net/jira/software/c/projects/ZFE/boards/134
@@ -56,7 +56,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-devsecops
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: ""
   links:
       - url: https://zf.atlassian.net/jira/software/c/projects/ZFE/boards/213
@@ -83,7 +83,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-sre
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: ""
   links:
       - url: https://zf.atlassian.net/jira/software/c/projects/ZFE/boards/189
@@ -110,7 +110,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: t-datacenter
-  tags: ["scrum-team", "Y23H2"]
+  tags: ["scrum-team", "y23h2"]
   description: ""
   links:
       - url: https://zf.atlassian.net/jira/software/c/projects/ZFE/boards/293
@@ -137,7 +137,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
     name: sustaining-pillar-owners
-    description: Owners of Sustaining pillar
+    description: Owners of Sustaining
     annotations:
         zerofox.com/pillar: Sustaining
 spec:
@@ -152,6 +152,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: sustaining-pillar
+  description: Sustaining pillar
   annotations:
       zerofox.com/pillar: Sustaining
       grafana/tag-selector: sustaining
@@ -166,7 +167,7 @@ kind: Group
 metadata:
   name: t-sustaining-pillar
   tags: ["pillar-team"]
-  description: ""
+  description: Sustaining parent team
   annotations:
       zerofox.com/pillar: Sustaining
 spec:
