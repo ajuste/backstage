@@ -8,7 +8,7 @@ app:
       srcUrl: https://cdn-qa.zerofox.com/stats/stats.js
 
 auth:
-  environment: test
+  environment: qa
 
 backend:
   baseUrl: https://devportal-qa.zerofox.com
