@@ -13,6 +13,10 @@ import {
   JsonRulesEngineFactCheckerFactory,
   JSON_RULE_ENGINE_CHECK_TYPE,
 } from '@backstage/plugin-tech-insights-backend-module-jsonfc';
+import {
+  Operator,
+} from 'json-rules-engine';
+import semver from 'semver';
 
 const ttlTwoWeeks = { timeToLive: { weeks: 2 } };
 
@@ -30,28 +34,45 @@ export default async function createPlugin(
       process.env.NOMAD_ALLOC_INDEX !== '0'
         ? []
         : [
-            createFactRetrieverRegistration({
-              cadence: '0 1 * * *',
-              factRetriever: entityOwnershipFactRetriever,
-              lifecycle: ttlTwoWeeks,
-            }),
-            createFactRetrieverRegistration({
-              cadence: '0 2 * * *',
-              factRetriever: entityMetadataFactRetriever,
-              lifecycle: ttlTwoWeeks,
-            }),
-            createFactRetrieverRegistration({
-              cadence: '0 3 * * *',
-              factRetriever: techdocsFactRetriever,
-              lifecycle: ttlTwoWeeks,
-            }),
-            createFactRetrieverRegistration({
-              cadence: '0 4 * * *',
-              factRetriever: getGithubFactRetriever(),
-              lifecycle: ttlTwoWeeks,
-            }),
-          ],
+          createFactRetrieverRegistration({
+            cadence: '0 1 * * *',
+            factRetriever: entityOwnershipFactRetriever,
+            lifecycle: ttlTwoWeeks,
+          }),
+          createFactRetrieverRegistration({
+            cadence: '0 2 * * *',
+            factRetriever: entityMetadataFactRetriever,
+            lifecycle: ttlTwoWeeks,
+          }),
+          createFactRetrieverRegistration({
+            cadence: '0 3 * * *',
+            factRetriever: techdocsFactRetriever,
+            lifecycle: ttlTwoWeeks,
+          }),
+          createFactRetrieverRegistration({
+            cadence: '0 4 * * *',
+            factRetriever: getGithubFactRetriever(),
+            lifecycle: ttlTwoWeeks,
+          }),
+        ],
     factCheckerFactory: new JsonRulesEngineFactCheckerFactory({
+      operators: [
+        new Operator('semverGraterThan', (factValue: any, jsonValue: any) => {
+          return semver.gt(factValue, jsonValue);
+        }),
+        new Operator('semverGraterThanEquals', (factValue: any, jsonValue: any) => {
+          return semver.gte(factValue, jsonValue);
+        }),
+        new Operator('semverLesserThan', (factValue: any, jsonValue: any) => {
+          return semver.lt(factValue, jsonValue);
+        }),
+        new Operator('semverLesserThanEquals', (factValue: any, jsonValue: any) => {
+          return semver.lte(factValue, jsonValue);
+        }),
+        new Operator('semverEquals', (factValue: any, jsonValue: any) => {
+          return semver.eq(factValue, jsonValue);
+        }),
+      ],
       logger: env.logger,
       checks: [
         {
@@ -124,6 +145,24 @@ export default async function createPlugin(
                   fact: 'msSinceLastCommit',
                   operator: 'greaterThan',
                   value: 6 * 30 * 24 * 60 * 60 * 1000,
+                },
+              ],
+            },
+          },
+        },
+        {
+          id: 'outdatedInfraToolsCheck',
+          type: JSON_RULE_ENGINE_CHECK_TYPE,
+          name: 'Outdated infrastructure tools',
+          description: 'Verifies if an entity is using outdated infrastructure tools',
+          factIds: ['githubFactRetriever'],
+          rule: {
+            conditions: {
+              all: [
+                {
+                  fact: 'terraformVersion',
+                  operator: 'semverLesserThan',
+                  value: "0.11.15",
                 },
               ],
             },
