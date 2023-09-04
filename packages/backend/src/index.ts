@@ -125,8 +125,7 @@ async function main() {
     .addRouter('/api', apiRouter)
     .addRouter('', await app(appEnv));
 
-  await service.start().catch(err => {
-    console.log(err);
+  await service.start().catch(() => {
     process.exit(1);
   });
 }

@@ -460,6 +460,12 @@ const systemPage = (
     <EntityLayout.Route path="/grafana" title="Grafana" if={isDashboardSelectorAvailable}>
       <HealthContent />
     </EntityLayout.Route>
+    <EntityLayout.Route path="/tech-insights" title="Scorecards">
+      <EntityTechInsightsScorecardContent
+        title="Customized title for the scorecard"
+        description="Small description about scorecards"
+      />
+    </EntityLayout.Route>
   </EntityLayout>
 );
 

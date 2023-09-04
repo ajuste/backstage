@@ -66,7 +66,6 @@ class GithubFactRetriever {
         // Create the folder
         fs.mkdirSync(tempFolderPath);
 
-        console.log(`Temporary folder created at: ${tempFolderPath}`);
         return tempFolderPath;
     }
 

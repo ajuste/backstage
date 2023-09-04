@@ -143,7 +143,7 @@ export default async function createPlugin(
               all: [
                 {
                   fact: 'msSinceLastCommit',
-                  operator: 'greaterThan',
+                  operator: 'lessThan',
                   value: 6 * 30 * 24 * 60 * 60 * 1000,
                 },
               ],
@@ -161,7 +161,7 @@ export default async function createPlugin(
               all: [
                 {
                   fact: 'terraformVersion',
-                  operator: 'semverLesserThan',
+                  operator: 'semverGraterThanEquals',
                   value: "0.11.15",
                 },
               ],

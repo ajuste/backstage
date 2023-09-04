@@ -52,6 +52,9 @@ export class Project {
         const result: { [key: string]: string } = {};
 
         const items = fs.readdirSync(path);
+        if (!items) {
+            return result;
+        }
 
         for (const item of items) {
             const currentPath = Path.join(path, item);
