@@ -52,6 +52,7 @@ export class Project {
      */
     readDirectoryContent(path: string, baseDir: string): { [key: string]: string } {
         const result: { [key: string]: string } = {};
+
         const items = fs.readdirSync(path);
         
         if (!items) {

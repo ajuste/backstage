@@ -1,8 +1,6 @@
 import { DjangoVersionAnalyzer, DjangoVersionAnalyzeResult } from './analyzerDjangoVersion';
 import { NoMatchResult } from './analyzer';
 
-jest.mock('fs');
-
 describe('DjangoVersionAnalyzer', () => {
 
     describe("analyze", () => {

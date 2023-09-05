@@ -16,6 +16,7 @@
 
 export * from './service/router';
 export * from './service/facts';
+export * from './service/project-analyzer';
 
 import ZFCatalogService from './service/catalog';
 export { ZFCatalogService };

@@ -17,6 +17,7 @@ import {
   Operator,
 } from 'json-rules-engine';
 import semver from 'semver';
+import { Duration } from 'luxon';
 
 const ttlTwoWeeks = { timeToLive: { weeks: 2 } };
 
@@ -50,9 +51,10 @@ export default async function createPlugin(
             lifecycle: ttlTwoWeeks,
           }),
           createFactRetrieverRegistration({
-            cadence: '0 4/16 * * *',
+            cadence: '0 6 * * *',
             factRetriever: getGithubFactRetriever(),
             lifecycle: ttlTwoWeeks,
+            timeout: Duration.fromObject({ hours: 2 }),
           }),
         ],
     factCheckerFactory: new JsonRulesEngineFactCheckerFactory({
@@ -145,24 +147,6 @@ export default async function createPlugin(
                   fact: 'msSinceLastCommit',
                   operator: 'lessThan',
                   value: 6 * 30 * 24 * 60 * 60 * 1000,
-                },
-              ],
-            },
-          },
-        },
-        {
-          id: 'outdatedInfraToolsCheck',
-          type: JSON_RULE_ENGINE_CHECK_TYPE,
-          name: 'Outdated infrastructure tools',
-          description: 'Verifies if an entity is using outdated infrastructure tools',
-          factIds: ['githubFactRetriever'],
-          rule: {
-            conditions: {
-              all: [
-                {
-                  fact: 'terraformVersion',
-                  operator: 'semverGraterThanEquals',
-                  value: "0.11.15",
                 },
               ],
             },

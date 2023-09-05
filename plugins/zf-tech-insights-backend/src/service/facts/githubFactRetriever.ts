@@ -19,7 +19,7 @@ import { graphql } from '@octokit/graphql';
 import simpleGit from 'simple-git';
 
 
-import { Project } from '../../project-analyzer';
+import { Project } from '../project-analyzer';
 
 type GithubAPIFacts = {
     lastCommit: DateTime | null;
@@ -28,6 +28,7 @@ type GithubAPIFacts = {
 
 type ProjectAnalysisFacts = {
     terraformVersion: string | null;
+    djangoVersion: string | null;
 }
 
 
@@ -38,6 +39,10 @@ class GithubFactRetriever {
     context: FactRetrieverContext;
     constructor(context: FactRetrieverContext) {
         this.context = context;
+    }
+
+    async delay(): Promise<void> {
+        return new Promise<void>(resolve => setTimeout(resolve, 2000));
     }
 
     /**
@@ -73,8 +78,13 @@ class GithubFactRetriever {
      * Fetches facts from the GitHub by cloning the repo.
      */
     async fetchProjectAnalysis(slug: string): Promise<ProjectAnalysisFacts> {
+
+        this.context.logger.info(`Fetching project analysis for ${slug}`);
+
         const tempFolder = await this.createTempFolder();
         const res = {} as ProjectAnalysisFacts;
+
+        this.context.logger.info(`Created temporary folder ${tempFolder} for analysis of ${slug} fact`);
 
         const analyzerResultNameToFactName = new Map<string, string>(
             [
@@ -87,6 +97,8 @@ class GithubFactRetriever {
             await this.cloneRepo(slug, tempFolder);
             const project = new Project(tempFolder);
             const analysis = await project.analyze();
+
+            this.context.logger.info(`Analysis of ${slug} finished with ${analysis.matches.length} matches`)
 
             for (const match of analysis.matches) {
                 const resultTypeName = match.result.constructor.name;
@@ -143,6 +155,11 @@ class GithubFactRetriever {
         const { headers } = await this.getCredentials(slug);
         const [owner, repo] = slug ? slug.split('/') : [];
 
+        if (!owner || !repo) {
+            this.context.logger.warn(`Invalid slug ${slug}`);
+            return Promise.resolve({} as GithubAPIFacts)
+        }
+
         const response: any = await graphql(`
         {
         repository(owner: "${owner}", name: "${repo}") {
@@ -197,32 +214,39 @@ class GithubFactRetriever {
         const result = Array<TechInsightFact>();
 
         for (const entity of entities.items) {
-            this.context.logger.info(`Fetching github facts for ${entity.metadata.name}`);
+            try {
+                this.context.logger.info(`Fetching github facts for ${entity.metadata.name}`);
 
-            const slug = entity.metadata.annotations?.['github.com/project-slug'];
-            if (!slug) {
-                throw new Error(
-                    `No github.com/project-slug annotation found for entity ${entity.metadata.name}`
-                );
+                const slug = entity.metadata.annotations?.['github.com/project-slug'];
+                if (!slug) {
+                    throw new Error(
+                        `No github.com/project-slug annotation found for entity ${entity.metadata.name}`
+                    );
+                }
+
+                const response = {
+                    entity: {
+                        namespace: entity.metadata.namespace!,
+                        kind: entity.kind,
+                        name: entity.metadata.name,
+                    },
+                    facts: {}
+                };
+
+                const githubAPIFacts = await this.fetchGithubAPIFacts(slug);
+                const projectAnalysisFacts = await this.fetchProjectAnalysis(slug);
+
+                this.context.logger.info(`Fetched github facts for ${entity.metadata.name}: ${JSON.stringify(githubAPIFacts)} ${JSON.stringify(projectAnalysisFacts)}`);
+
+                response.facts = Object.assign({}, githubAPIFacts, projectAnalysisFacts);
+
+                result.push(response);
+
+                await this.delay();
+
+            } catch (error) {
+                this.context.logger.error(`Error while fetching github facts for ${entity.metadata.name}: ${error}`)
             }
-
-            const response = {
-                entity: {
-                    namespace: entity.metadata.namespace!,
-                    kind: entity.kind,
-                    name: entity.metadata.name,
-                },
-                facts: {}
-            };
-
-            const githubAPIFacts = await this.fetchGithubAPIFacts(slug);
-            const projectAnalysisFacts = await this.fetchProjectAnalysis(slug);
-
-            this.context.logger.info(`Fetched github facts for ${entity.metadata.name}: ${JSON.stringify(githubAPIFacts)} ${JSON.stringify(projectAnalysisFacts)}`);
-
-            response.facts = Object.assign({}, githubAPIFacts, projectAnalysisFacts);
-
-            result.push(response);
         }
         return result;
     }
@@ -235,7 +259,7 @@ class GithubFactRetriever {
  */
 const githubFactRetriever: FactRetriever = {
     id: 'githubFactRetriever',
-    version: '0.0.1',
+    version: '0.0.2',
     title: 'Entity Ownership',
     description:
         'Generates facts for entities that are pulled from github such as last commit date, etc.',

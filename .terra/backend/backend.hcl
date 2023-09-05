@@ -30,8 +30,8 @@ group "backend" {
     }
 
     resources {
-      cpu    = "2000"
-      memory = "2048"
+      cpu    = "6000"
+      memory = "4096"
 
       network {
         mbits = 1

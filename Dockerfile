@@ -1,11 +1,20 @@
 FROM node:18-bullseye-slim
 
+ARG SSH_PRIVATE_KEY
+
 # (libsqlite3-dev, curl, ca-certificates, gnupg, lsb-release, update && apt-get install -y python3 python3-pip) can be removed when dropping docker (used for POC only)
 RUN apt-get update && \
     apt-get install -y --no-install-recommends libsqlite3-dev python3 build-essential procps make python3-pip git && \
     pip3 install mkdocs-techdocs-core==1.0.1 && \
     rm -rf /var/lib/apt/lists/* && \
-    yarn config set python /usr/bin/python3
+    yarn config set python /usr/bin/python3 && \
+    apt-get update && \
+    apt-get install -y openssh-client && \
+    mkdir /root/.ssh/ && \
+    echo "${SSH_PRIVATE_KEY}" > /root/.ssh/id_rsa && \
+    chmod 0600 /root/.ssh/id_rsa && \
+    ssh-keyscan -H github.com >> ~/.ssh/known_hosts && \
+    git config --global url."git@github.com:".insteadOf "https://github.com/"
 
 WORKDIR /builder
 COPY . .
@@ -72,7 +81,7 @@ WORKDIR /app
 RUN cp /builder/yarn.lock /builder/package.json /builder/packages/backend/dist/skeleton.tar.gz ./
 RUN tar xzf skeleton.tar.gz && rm skeleton.tar.gz
 
-RUN yarn install --frozen-lockfile --production --network-timeout 300000 && rm -rf "$(yarn cache dir)"
+RUN yarn install --frozen-lockfile --production --network-timeout 300000 --network-concurrency 5 && rm -rf "$(yarn cache dir)"
 RUN cp /builder/packages/backend/dist/bundle.tar.gz /builder/app-config*.yaml ./
 COPY ./data ./data
 RUN tar xzf bundle.tar.gz && rm bundle.tar.gz
