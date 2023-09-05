@@ -19,7 +19,7 @@ import { graphql } from '@octokit/graphql';
 import simpleGit from 'simple-git';
 
 
-import { Project, TerraformVersionAnalyzeResult } from '../../project-analyzer';
+import { Project } from '../../project-analyzer';
 
 type GithubAPIFacts = {
     lastCommit: DateTime | null;
@@ -76,18 +76,28 @@ class GithubFactRetriever {
         const tempFolder = await this.createTempFolder();
         const res = {} as ProjectAnalysisFacts;
 
+        const analyzerResultNameToFactName = new Map<string, string>(
+            [
+                ["TerraformVersionAnalyzeResult", "terraformVersion"],
+                ["DjangoVersionAnalyzeResult", "djangoVersion"],
+            ]);
+
         try {
             this.context.logger.info(`Cloning repo ${slug} to ${tempFolder}`);
             await this.cloneRepo(slug, tempFolder);
             const project = new Project(tempFolder);
             const analysis = await project.analyze();
 
-            const terraformVersion = analysis.matches.find((match) => match.result instanceof TerraformVersionAnalyzeResult);
-            if (terraformVersion) {
-                this.context.logger.info(`Found terraform version ${(terraformVersion.result as TerraformVersionAnalyzeResult).terraformVersion} for ${slug}`);
-                res.terraformVersion = (terraformVersion.result as TerraformVersionAnalyzeResult).terraformVersion
-            } else {
-                this.context.logger.info(`No terraform version found for ${slug}`);
+            for (const match of analysis.matches) {
+                const resultTypeName = match.result.constructor.name;
+                const factName = analyzerResultNameToFactName.get(resultTypeName);
+                if (!factName) {
+                    this.context.logger.info(`No fact name found for ${resultTypeName}`);
+                    continue;
+                }
+                const fact = (match as any).result[factName];
+                this.context.logger.info(`Found ${factName} for ${slug} with value ${fact} and analyzer result ${resultTypeName}`);
+                (res as any)[factName] = fact;
             }
         }
         finally {
@@ -246,6 +256,10 @@ const githubFactRetriever: FactRetriever = {
         terraformVersion: {
             type: 'string',
             description: 'Terraform version',
+        },
+        djangoVersion: {
+            type: 'string',
+            description: 'Django version',
         },
     },
     handler: async ({

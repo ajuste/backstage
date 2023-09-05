@@ -1,8 +1,9 @@
-import * as fs from 'fs';
-import * as Path from 'path';
+import fs from 'fs';
+import Path from 'path';
 
 import { Analyzer, AnalysisMatch } from "./analyzer";
 import { TerraformVersionAnalyzer } from "./analyzerTerraformVersion";
+import { DjangoVersionAnalyzer } from "./analyzerDjangoVersion";
 
 /**
  * Maximum file size to analyze.
@@ -13,7 +14,8 @@ const MAX_FILE_SIZE = 40 * 1024;  // 40KB
  * Default analyzers to use.
  */
 const DEFAULT_ANALYZERS: Analyzer[] = [
-    new TerraformVersionAnalyzer()
+    new TerraformVersionAnalyzer(),
+    new DjangoVersionAnalyzer(),
 ];
 
 /**
@@ -50,8 +52,8 @@ export class Project {
      */
     readDirectoryContent(path: string, baseDir: string): { [key: string]: string } {
         const result: { [key: string]: string } = {};
-
         const items = fs.readdirSync(path);
+        
         if (!items) {
             return result;
         }

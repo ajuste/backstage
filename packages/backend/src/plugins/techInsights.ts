@@ -50,7 +50,7 @@ export default async function createPlugin(
             lifecycle: ttlTwoWeeks,
           }),
           createFactRetrieverRegistration({
-            cadence: '0 4 * * *',
+            cadence: '0 4/16 * * *',
             factRetriever: getGithubFactRetriever(),
             lifecycle: ttlTwoWeeks,
           }),

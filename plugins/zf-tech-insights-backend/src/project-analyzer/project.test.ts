@@ -4,14 +4,6 @@ jest.mock('fs');
 
 describe('project', () => {
 
-    beforeAll(async () => {
-
-    });
-
-    beforeEach(() => {
-        jest.resetAllMocks();
-    });
-
     describe("readDirectoryContent", () => {
         it('returns structure from folder', async () => {
             const project = new Project(".terra");
