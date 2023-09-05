@@ -1686,3 +1686,33 @@ spec:
    profile:
      displayName: Ricardo Vasquez
      email: rvasquez@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: cvalenzuela
+spec:
+   memberOf: []
+   profile:
+     displayName: Cristobal Valenzuela
+     email: cvalenzuela@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: mvasquez
+spec:
+   memberOf: []
+   profile:
+     displayName: Matias Vasquez
+     email: mvasquez@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: cquintana
+spec:
+   memberOf: []
+   profile:
+     displayName: Carlos Quintana
+     email: cquintana@zerofox.com
