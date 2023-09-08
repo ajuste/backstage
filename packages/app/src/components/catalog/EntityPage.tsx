@@ -60,8 +60,8 @@ import { EntityTechInsightsScorecardContent } from '@backstage/plugin-tech-insig
 import {
   EntityGrafanaDashboardsCard,
   EntityGrafanaAlertsCard,
-  isDashboardSelectorAvailable
-} from '@k-phoen/backstage-plugin-grafana';
+  isDashboardSelectorAvailable as isGrafanaAvailable,
+} from 'plugin-grafana';
 import { EntityTechdocsContent } from '@backstage/plugin-techdocs';
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
@@ -77,18 +77,6 @@ const techdocsContent = (
     </TechDocsAddons>
   </EntityTechdocsContent>
 );
-
-// const githubcContent = (
-//   <EntitySwitch.Case if={isGithubInsightsAvailable}>
-//     <Grid item md={6}>
-//       <EntityGithubInsightsLanguagesCard />
-//       <EntityGithubInsightsReleasesCard />
-//     </Grid>
-//     <Grid item md={6}>
-//       <EntityGithubInsightsReadmeCard maxHeight={350} />
-//     </Grid>
-//   </EntitySwitch.Case>
-// );
 
 const HealthContent = () => (
   <Grid container spacing={3} alignItems="stretch">
@@ -195,6 +183,10 @@ const serviceEntityPage = (
     <EntityLayout.Route path="/" title="Overview">
       {overviewContent}
     </EntityLayout.Route>
+    
+    <EntityLayout.Route path="/health" title="Health" if={isGrafanaAvailable}>
+      <HealthContent />
+    </EntityLayout.Route>
 
     <EntityLayout.Route path="/ci-cd" title="CI/CD">
       {cicdContent}
@@ -243,6 +235,10 @@ const websiteEntityPage = (
     <EntityLayout.Route path="/" title="Overview">
       {overviewContent}
     </EntityLayout.Route>
+    
+    <EntityLayout.Route path="/health" title="Health" if={isGrafanaAvailable}>
+      <HealthContent />
+    </EntityLayout.Route>
 
     <EntityLayout.Route path="/ci-cd" title="CI/CD">
       {cicdContent}
@@ -285,6 +281,10 @@ const defaultEntityPage = (
     <EntityLayout.Route path="/docs" title="Docs">
       {techdocsContent}
     </EntityLayout.Route>
+    
+    <EntityLayout.Route path="/health" title="Health" if={isGrafanaAvailable}>
+      <HealthContent />
+    </EntityLayout.Route>
   </EntityLayout>
 );
 
@@ -316,7 +316,7 @@ const pillarPage = (
         </Grid>
       </Grid>
     </EntityLayout.Route>
-    <EntityLayout.Route path="/health" title="Health" if={isDashboardSelectorAvailable}>
+    <EntityLayout.Route path="/health" title="Health" if={isGrafanaAvailable}>
       <HealthContent />
     </EntityLayout.Route>
     <EntityLayout.Route path="/docs" title="Documentation">
@@ -432,6 +432,11 @@ const systemPage = (
         </Grid>
       </Grid>
     </EntityLayout.Route>
+    
+    <EntityLayout.Route path="/health" title="Health" if={isGrafanaAvailable}>
+      <HealthContent />
+    </EntityLayout.Route>
+    
     <EntityLayout.Route path="/diagram" title="Diagram">
       <EntityCatalogGraphCard
         variant="gridItem"
@@ -455,10 +460,6 @@ const systemPage = (
 
     <EntityLayout.Route path="/code-coverage" title="Code Coverage">
       <EntityCodeCoverageContent />
-    </EntityLayout.Route>
-
-    <EntityLayout.Route path="/grafana" title="Grafana" if={isDashboardSelectorAvailable}>
-      <HealthContent />
     </EntityLayout.Route>
   </EntityLayout>
 );
@@ -485,7 +486,7 @@ const domainPage = (
         </Grid>
       </Grid>
     </EntityLayout.Route>
-    <EntityLayout.Route path="/health" title="Health" if={isDashboardSelectorAvailable}>
+    <EntityLayout.Route path="/health" title="Health" if={isGrafanaAvailable}>
       <HealthContent />
     </EntityLayout.Route>
     <EntityLayout.Route path="/docs" title="Documentation">
