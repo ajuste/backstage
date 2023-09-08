@@ -23,6 +23,7 @@
     "@backstage/plugin-code-coverage": "^0.2.9",
     "@backstage/plugin-explore": "^0.4.1",
     "@backstage/plugin-github-actions": "^0.5.16",
+    "@backstage/plugin-home": "^0.5.7",
     "@backstage/plugin-org": "^0.6.6",
     "@backstage/plugin-permission-react": "^0.4.11",
     "@backstage/plugin-scaffolder": "^1.12.0",
