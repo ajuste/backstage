@@ -23,6 +23,8 @@ import {
   isKind,
   hasCatalogProcessingErrors,
   isOrphan,
+  hasRelationWarnings,
+  EntityRelationWarning,
   EntityHasSystemsCard,
 } from '@backstage/plugin-catalog';
 import {
@@ -114,6 +116,7 @@ const cicdContent = (
         }
       />
     </EntitySwitch.Case>
+
   </EntitySwitch>
 );
 
@@ -123,6 +126,14 @@ const entityWarningContent = (
       <EntitySwitch.Case if={isOrphan}>
         <Grid item xs={12}>
           <EntityOrphanWarning />
+        </Grid>
+      </EntitySwitch.Case>
+    </EntitySwitch>
+
+    <EntitySwitch>
+      <EntitySwitch.Case if={hasRelationWarnings}>
+        <Grid item xs={12}>
+          <EntityRelationWarning />
         </Grid>
       </EntitySwitch.Case>
     </EntitySwitch>
@@ -183,7 +194,7 @@ const serviceEntityPage = (
     <EntityLayout.Route path="/" title="Overview">
       {overviewContent}
     </EntityLayout.Route>
-    
+
     <EntityLayout.Route path="/health" title="Health" if={isGrafanaAvailable}>
       <HealthContent />
     </EntityLayout.Route>
@@ -235,7 +246,7 @@ const websiteEntityPage = (
     <EntityLayout.Route path="/" title="Overview">
       {overviewContent}
     </EntityLayout.Route>
-    
+
     <EntityLayout.Route path="/health" title="Health" if={isGrafanaAvailable}>
       <HealthContent />
     </EntityLayout.Route>
@@ -281,7 +292,7 @@ const defaultEntityPage = (
     <EntityLayout.Route path="/docs" title="Docs">
       {techdocsContent}
     </EntityLayout.Route>
-    
+
     <EntityLayout.Route path="/health" title="Health" if={isGrafanaAvailable}>
       <HealthContent />
     </EntityLayout.Route>
@@ -432,11 +443,11 @@ const systemPage = (
         </Grid>
       </Grid>
     </EntityLayout.Route>
-    
+
     <EntityLayout.Route path="/health" title="Health" if={isGrafanaAvailable}>
       <HealthContent />
     </EntityLayout.Route>
-    
+
     <EntityLayout.Route path="/diagram" title="Diagram">
       <EntityCatalogGraphCard
         variant="gridItem"

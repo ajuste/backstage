@@ -75,8 +75,6 @@ backend:
   database:
     client: better-sqlite3
     connection: ':memory:'
-  cache:
-    store: memory
   # workingDirectory: /tmp # Use this to configure a working directory for the scaffolder, defaults to the OS temp-dir
 
 integrations:
@@ -94,22 +92,20 @@ integrations:
       token: ${AZURE_TOKEN}
 
 proxy:
-  '/test':
-    target: 'https://example.com'
-    changeOrigin: true
-  '/jira/api':
-    target: https://zf.atlassian.net
-    headers:
-      Authorization:
-        $env: JIRA_TOKEN
-      Accept: 'application/json'
-      Content-Type: 'application/json'
-      X-Atlassian-Token: 'no-check'
-      User-Agent: "AnyRandomString"
-  '/grafana/api':
-    target: https://grafana-qa.zerofox.com
-    headers:
-      Authorization: Bearer ${GRAFANA_TOKEN}
+  endpoints:
+    '/jira/api':
+      target: https://zf.atlassian.net
+      headers:
+        Authorization:
+          $env: JIRA_TOKEN
+        Accept: 'application/json'
+        Content-Type: 'application/json'
+        X-Atlassian-Token: 'no-check'
+        User-Agent: "AnyRandomString"
+    '/grafana/api':
+      target: https://grafana-qa.zerofox.com
+      headers:
+        Authorization: Bearer ${GRAFANA_TOKEN}
 
 # Reference documentation http://backstage.io/docs/features/techdocs/configuration
 # Note: After experimenting with basic setup, use CI/CD to generate docs

@@ -24,31 +24,57 @@ export type AlertsCardOpts = {
 
 const AlertStatusBadge = ({ alert }: { alert: GrafanaAlert }) => {
     let statusElmt: React.ReactElement;
+    let title: string
 
     switch (alert.state) {
         case "ok":
             statusElmt = <StatusOK />;
+            title = "Ok";
             break;
         case "paused":
             statusElmt = <StatusPending />;
+            title = "Paused";
             break;
         case "no_data":
+            statusElmt = <StatusWarning />;
+            title = "No data";
+            break;
         case "pending":
             statusElmt = <StatusWarning />;
+            title = "Pending";
             break;
         case "alerting":
             statusElmt = <StatusError />;
+            title = "Alerting";
             break;
         default:
             statusElmt = <StatusAborted />;
+            title = "Unknown";
     }
 
     return (
-        <div>{statusElmt}</div>
+        <div title={title}>{statusElmt}</div>
     );
 };
 
 export const AlertsTable = ({ alerts, opts }: { alerts: GrafanaAlert[], opts: AlertsCardOpts }) => {
+
+    const getSortValue = (alert: GrafanaAlert): number => {
+        switch (alert.state) {
+            case "ok":
+                return 1;
+            case "paused":
+                return 2;
+            case "no_data":
+                return 3;
+            case "pending":
+                return 4;
+            case "alerting":
+                return 6;
+            default:
+                return 5;
+        }
+    }
     const columns: TableColumn<GrafanaAlert>[] = [
         {
             title: 'Name',
@@ -61,6 +87,11 @@ export const AlertsTable = ({ alerts, opts }: { alerts: GrafanaAlert[], opts: Al
     if (opts.showState) {
         columns.push({
             title: 'State',
+            customSort: (
+                data1: GrafanaAlert,
+                data2: GrafanaAlert,
+            ) => getSortValue(data1) < getSortValue(data2) ? -1 : 1,
+            defaultSort: 'desc',
             render: (row: GrafanaAlert): React.ReactNode => <AlertStatusBadge alert={row} />,
         });
     }

@@ -22,8 +22,6 @@ backend:
       port: 5432
       user: ${DB_USER}
       password: ${DB_PASSWORD}
-  cache:
-    store: memory
 
 techdocs:
   builder: 'local'
@@ -38,10 +36,11 @@ grafana:
   domain: https://grafana-prod.zerofox.com
 
 proxy:
-  '/grafana/api':
-    target: https://grafana-prod.zerofox.com
-    headers:
-      Authorization: Bearer ${GRAFANA_TOKEN}
+  endpoints:
+    '/grafana/api':
+      target: https://grafana-prod.zerofox.com
+      headers:
+        Authorization: Bearer ${GRAFANA_TOKEN}
 
 catalog:
   rules:

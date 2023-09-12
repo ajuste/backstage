@@ -9,16 +9,11 @@ import { Grid, makeStyles } from '@material-ui/core';
 import { getAllTools } from '../toolkit';
 import { PillardInfoCardComponent } from '../pillar/PillarsInfoCardComponent';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
     searchBar: {
         display: 'flex',
         maxWidth: '40vw',
-        backgroundColor: theme.palette.background.paper,
-        boxShadow: theme.shadows[1],
-        padding: '1rem 1rem',
-        borderRadius: '4rem',
         margin: 'auto',
-        height: '4rem',
     },
     toolkit: {
         overflowY: 'auto',
@@ -40,7 +35,7 @@ export const HomePage = () => {
     return (
         <Page themeId="home">
             <Content>
-                <HomePageSearchBar className={classes.searchBar} />
+                <HomePageSearchBar className={classes.searchBar} style={{backgroundColor: 'white'}} />
 
                 <Grid item md={12} className={classes.contentContainer}>
                     <Grid container spacing={3} alignItems="stretch">
