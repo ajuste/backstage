@@ -34,6 +34,7 @@ techdocs:
 
 grafana:
   domain: https://grafana-prod.zerofox.com
+  unifiedAlerting: true
 
 proxy:
   endpoints:

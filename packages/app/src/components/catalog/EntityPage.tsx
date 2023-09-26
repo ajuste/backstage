@@ -86,7 +86,7 @@ const HealthContent = () => (
       <EntityGrafanaDashboardsCard title='Grafana dashboards' />
     </Grid>
     <Grid item md={6}>
-      <EntityGrafanaAlertsCard showState={true} sortable={true} pageSize={100} searchable={true} />
+      <EntityGrafanaAlertsCard sortable={true} pageSize={100} searchable={true} />
     </Grid>
   </Grid>
 )

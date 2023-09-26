@@ -3,7 +3,7 @@ import { Entity } from '@backstage/catalog-model';
 export const ZEROFOX_PILLAR = 'zerofox.com/pillar';
 
 export const isDashboardSelectorAvailable = (entity: Entity): boolean => !!entity?.metadata.annotations?.[ZEROFOX_PILLAR]
-export const isAlertSelectorAvailable = () => false
+export const isAlertSelectorAvailable = (entity: Entity): boolean => !!entity?.metadata.annotations?.[ZEROFOX_PILLAR]
 
 export const dashboardSelectorFromEntity = (entity: Entity) => {
     switch (entity.kind) {
@@ -18,7 +18,20 @@ export const dashboardSelectorFromEntity = (entity: Entity) => {
             return '';
     }
 }
-export const alertSelectorFromEntity = dashboardSelectorFromEntity
+export const alertSelectorFromEntity = (entity: Entity) => {
+    switch (entity.kind) {
+        case 'Component':
+            if (entity?.metadata.annotations?.[ZEROFOX_PILLAR]) {
+                return entity?.spec?.type === 'pillar' ? `pillar=${entity?.metadata.annotations?.[ZEROFOX_PILLAR].toLowerCase()}` : `service_name=${entity?.metadata.annotations?.[ZEROFOX_PILLAR].toLowerCase()}`;
+            }
+            return '';
+        case 'System':
+            return entity?.metadata?.name ? `service_name=${entity?.metadata?.name.toLowerCase()}` : '';
+        default:
+            return '';
+    }
+}
+
 
 // @deprecated Use dashboardSelectorFromEntity instead
 export const tagSelectorFromEntity = dashboardSelectorFromEntity;

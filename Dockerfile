@@ -6,6 +6,7 @@ ARG SSH_PRIVATE_KEY
 RUN apt-get update && \
     apt-get install -y --no-install-recommends libsqlite3-dev python3 build-essential procps make python3-pip git && \
     pip3 install mkdocs-techdocs-core==1.0.1 && \
+    npm install -g node-gyp && \
     rm -rf /var/lib/apt/lists/* && \
     yarn config set python /usr/bin/python3 && \
     apt-get update && \

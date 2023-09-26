@@ -1,17 +1,13 @@
 import React from 'react';
-
-import { grafanaPlugin, } from '@k-phoen/backstage-plugin-grafana';
-
 import { Progress, TableColumn, Table, StatusOK, StatusPending, StatusWarning, StatusError, StatusAborted, MissingAnnotationEmptyState, Link } from '@backstage/core-components';
 import { Entity } from '@backstage/catalog-model';
 import { useEntity } from '@backstage/plugin-catalog-react';
-import { configApiRef, useApi } from '@backstage/core-plugin-api';
+import { useApi } from '@backstage/core-plugin-api';
 import { useAsync } from 'react-use';
 import { Alert } from '@material-ui/lab';
 import { Alert as GrafanaAlert, GrafanaApi } from '../../types';
-import { ZEROFOX_PILLAR, tagSelectorFromEntity, alertSelectorFromEntity, isAlertSelectorAvailable, isDashboardSelectorAvailable } from '../grafanaData';
-
-const grafanaApiRef = Array.from(grafanaPlugin.getApis())[0].api;
+import { grafanaApiRef } from '../../api';
+import { ZEROFOX_PILLAR, tagSelectorFromEntity, alertSelectorFromEntity, isAlertSelectorAvailable } from '../grafanaData';
 
 export type AlertsCardOpts = {
     paged?: boolean;
@@ -19,7 +15,6 @@ export type AlertsCardOpts = {
     pageSize?: number;
     sortable?: boolean;
     title?: string;
-    showState?: boolean;
 };
 
 const AlertStatusBadge = ({ alert }: { alert: GrafanaAlert }) => {
@@ -29,23 +24,19 @@ const AlertStatusBadge = ({ alert }: { alert: GrafanaAlert }) => {
     switch (alert.state) {
         case "ok":
             statusElmt = <StatusOK />;
-            title = "Ok";
+            title = "Normal";
             break;
-        case "paused":
+        case "suppressed":
             statusElmt = <StatusPending />;
-            title = "Paused";
+            title = "Suppressed";
             break;
-        case "no_data":
+        case "unprocessed":
             statusElmt = <StatusWarning />;
-            title = "No data";
+            title = "Unprocessed";
             break;
-        case "pending":
-            statusElmt = <StatusWarning />;
-            title = "Pending";
-            break;
-        case "alerting":
+        case "active":
             statusElmt = <StatusError />;
-            title = "Alerting";
+            title = "Active";
             break;
         default:
             statusElmt = <StatusAborted />;
@@ -63,14 +54,12 @@ export const AlertsTable = ({ alerts, opts }: { alerts: GrafanaAlert[], opts: Al
         switch (alert.state) {
             case "ok":
                 return 1;
-            case "paused":
+            case "suppressed":
                 return 2;
-            case "no_data":
+            case "unprocessed":
                 return 3;
-            case "pending":
+            case "active":
                 return 4;
-            case "alerting":
-                return 6;
             default:
                 return 5;
         }
@@ -84,17 +73,15 @@ export const AlertsTable = ({ alerts, opts }: { alerts: GrafanaAlert[], opts: Al
         },
     ];
 
-    if (opts.showState) {
-        columns.push({
-            title: 'State',
-            customSort: (
-                data1: GrafanaAlert,
-                data2: GrafanaAlert,
-            ) => getSortValue(data1) < getSortValue(data2) ? -1 : 1,
-            defaultSort: 'desc',
-            render: (row: GrafanaAlert): React.ReactNode => <AlertStatusBadge alert={row} />,
-        });
-    }
+    columns.push({
+        title: 'State',
+        customSort: (
+            data1: GrafanaAlert,
+            data2: GrafanaAlert,
+        ) => getSortValue(data1) < getSortValue(data2) ? -1 : 1,
+        defaultSort: 'desc',
+        render: (row: GrafanaAlert): React.ReactNode => <AlertStatusBadge alert={row} />,
+    });
 
     return (
         <Table
@@ -117,11 +104,12 @@ export const AlertsTable = ({ alerts, opts }: { alerts: GrafanaAlert[], opts: Al
 
 const Alerts = ({ entity, opts }: { entity: Entity, opts: AlertsCardOpts }) => {
     const grafanaApi = useApi(grafanaApiRef) as GrafanaApi;
-    const configApi = useApi(configApiRef);
-    const unifiedAlertingEnabled = configApi.getOptionalBoolean('grafana.unifiedAlerting') || false;
-    const alertSelector = unifiedAlertingEnabled ? alertSelectorFromEntity(entity) : tagSelectorFromEntity(entity);
-
-    const { value, loading, error } = useAsync(async () => await grafanaApi.alertsForSelector(alertSelector));
+    const alertSelector = alertSelectorFromEntity(entity);
+    const tagSelector = tagSelectorFromEntity(entity);
+    const { value, loading, error } = useAsync(async () => {
+        const dashboardUUIDs = await grafanaApi.listDashboards(tagSelector);
+        return await grafanaApi.listAlertsForDashboards(dashboardUUIDs.map(d => d.uid), alertSelector)
+    });
 
     if (loading) {
         return <Progress />;
@@ -135,18 +123,12 @@ const Alerts = ({ entity, opts }: { entity: Entity, opts: AlertsCardOpts }) => {
 
 export const AlertsCard = (opts?: AlertsCardOpts) => {
     const { entity } = useEntity();
-    const configApi = useApi(configApiRef);
-    const unifiedAlertingEnabled = configApi.getOptionalBoolean('grafana.unifiedAlerting') || false;
 
-    if (!unifiedAlertingEnabled && !isDashboardSelectorAvailable(entity)) {
+    if (!isAlertSelectorAvailable(entity)) {
         return <MissingAnnotationEmptyState annotation={ZEROFOX_PILLAR} />;
     }
 
-    if (unifiedAlertingEnabled && !isAlertSelectorAvailable()) {
-        return <MissingAnnotationEmptyState annotation={ZEROFOX_PILLAR} />;
-    }
-
-    const finalOpts = { ...opts, ...{ showState: opts?.showState && !unifiedAlertingEnabled } };
+    const finalOpts = { ...opts };
 
     return <Alerts entity={entity} opts={finalOpts} />;
 };

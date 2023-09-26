@@ -4,6 +4,7 @@ export interface Dashboard {
     folderTitle: string;
     folderUrl: string;
     tags: string[];
+    uid: string;
 }
 
 export interface Alert {
@@ -13,7 +14,7 @@ export interface Alert {
 }
 
 export interface GrafanaApi {
-    domain: string;
-    dashboardsByTag(query: string, domain: string): Promise<Dashboard[]>;
-    alertsForSelector(selector: string): Promise<Alert[]>;
+    dashboardsByTag(query: string): Promise<Dashboard[]>;
+    listAlertsForDashboards(dashboardUUIDs: string[], selector: string): Promise<Alert[]>;
+    listDashboards(query: string): Promise<Dashboard[]>;
 }

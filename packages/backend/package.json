@@ -44,7 +44,6 @@
     "@vscode/sqlite3": "^5.0.8",
     "app": "link:../app",
     "better-sqlite3": "^7.5.0",
-    "dockerode": "^3.3.1",
     "express": "^4.17.1",
     "express-promise-router": "^4.1.0",
     "pg": "^8.7.3",

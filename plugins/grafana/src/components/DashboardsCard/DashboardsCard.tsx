@@ -1,5 +1,4 @@
 import React from 'react';
-import { grafanaPlugin } from '@k-phoen/backstage-plugin-grafana';
 import { Progress, TableColumn, Table, MissingAnnotationEmptyState, Link } from '@backstage/core-components';
 import { Entity } from '@backstage/catalog-model';
 import { useEntity } from '@backstage/plugin-catalog-react';
@@ -8,9 +7,8 @@ import { useAsync } from 'react-use';
 import { Alert } from '@material-ui/lab';
 import { Tooltip } from '@material-ui/core';
 import { Dashboard, GrafanaApi } from '../../types';
+import { grafanaApiRef } from '../../api';
 import { dashboardSelectorFromEntity, ZEROFOX_PILLAR, isDashboardSelectorAvailable } from '../grafanaData';
-
-const grafanaApiRef = Array.from(grafanaPlugin.getApis())[0].api;
 
 export const DashboardsTable = ({ entity, dashboards, opts }: { entity: Entity, dashboards: Dashboard[], opts: DashboardCardOpts }) => {
     const columns: TableColumn<Dashboard>[] = [
@@ -52,7 +50,7 @@ export const DashboardsTable = ({ entity, dashboards, opts }: { entity: Entity, 
 
 const Dashboards = ({ entity, opts }: { entity: Entity, opts: DashboardCardOpts }) => {
     const grafanaApi = useApi(grafanaApiRef) as GrafanaApi;
-    const { value, loading, error } = useAsync(async () => await grafanaApi.dashboardsByTag(dashboardSelectorFromEntity(entity), grafanaApi.domain));
+    const { value, loading, error } = useAsync(async () => await grafanaApi.dashboardsByTag(dashboardSelectorFromEntity(entity)));
 
     if (loading) {
         return <Progress />;
