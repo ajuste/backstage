@@ -1716,3 +1716,13 @@ spec:
    profile:
      displayName: Carlos Quintana
      email: cquintana@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: maacuna
+spec:
+   memberOf: []
+   profile:
+     displayName: Marisol Acuña
+     email: maacuna@zerofox.com
