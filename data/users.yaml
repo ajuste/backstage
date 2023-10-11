@@ -1726,3 +1726,23 @@ spec:
    profile:
      displayName: Marisol Acuña
      email: maacuna@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: jzuniga
+spec:
+   memberOf: []
+   profile:
+     displayName: Jose Zuñiga
+     email: jzuniga@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: dhans
+spec:
+   memberOf: []
+   profile:
+     displayName: David Hans
+     email: dhans@zerofox.com
