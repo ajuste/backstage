@@ -165,7 +165,7 @@ export class UnifiedAlertingGrafanaApiClient implements GrafanaApi {
       return {
         name: rule.grafana_alert.title,
         url: `${this.domain}/alerting/grafana/${rule.grafana_alert.uid}/view`,
-        state: ruleToAlert[rule.labels['rule_uid']]?.status?.state ?? "ok"
+        state: ruleToAlert[rule.grafana_alert.uid ?? rule.labels['rule_uid']]?.status?.state ?? "ok"
       };
     })
   }

@@ -259,7 +259,7 @@ class GithubFactRetriever {
  */
 const githubFactRetriever: FactRetriever = {
     id: 'githubFactRetriever',
-    version: '0.0.2',
+    version: '0.0.3',
     title: 'Entity Ownership',
     description:
         'Generates facts for entities that are pulled from github such as last commit date, etc.',

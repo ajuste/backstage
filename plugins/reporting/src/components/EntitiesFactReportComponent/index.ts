@@ -1,0 +1,1 @@
+export { EntitiesFactReportComponent } from './EntitiesFactReportComponent';

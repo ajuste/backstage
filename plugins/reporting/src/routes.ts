@@ -15,3 +15,7 @@ export const serviceStalenessRouteRef = createRouteRef({
 export const pillarAdoptionRatioRouteRef = createRouteRef({
   id: 'pillar-adoption-ratio',
 });
+
+export const entitiesFactRouteRef = createRouteRef({
+  id: 'entities-facts',
+});

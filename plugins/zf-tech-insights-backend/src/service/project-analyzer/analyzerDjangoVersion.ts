@@ -17,7 +17,7 @@ export class DjangoVersionAnalyzeResult extends AnalyzeResult {
  */
 export class DjangoVersionAnalyzer implements Analyzer {
     analyze(path: string, content: string): Promise<AnalyzeResult> {
-        if (path.endsWith("requirements.txt") && content.includes("django==")) {
+        if (path.endsWith("requirements.txt") && (content.includes("django==") || content.includes("Django=="))) {
             const djangoVersion = this.extractDjangoVersion(content);
             if (djangoVersion) {
                 return Promise.resolve(new DjangoVersionAnalyzeResult(true, djangoVersion));

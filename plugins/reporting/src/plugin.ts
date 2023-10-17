@@ -10,8 +10,11 @@ import {
   discoveryApiRef,
   identityApiRef,
 } from '@backstage/core-plugin-api';
-import { pillarAdoptionApiRef } from './api/api';
+import { catalogApiRef } from '@backstage/plugin-catalog-react';
+import { techInsightsApiRef } from '@backstage/plugin-tech-insights';
+import { pillarAdoptionApiRef, factAiRef } from './api/api';
 import PillarAdoptionClient from './api/PillarAdoptionClient';
+import FactServiceClient from './api/FactServiceClient';
 
 export const reportingPlugin = createPlugin({
   id: 'reporting',
@@ -21,6 +24,13 @@ export const reportingPlugin = createPlugin({
       deps: { discoveryApi: discoveryApiRef, identityApi: identityApiRef },
       factory: ({ discoveryApi, identityApi }) =>
         new PillarAdoptionClient({ discoveryApi, identityApi }),
+    }),
+
+    createApiFactory({
+      api: factAiRef,
+      deps: { catalogApi: catalogApiRef, techInsightsApi: techInsightsApiRef },
+      factory: ({ catalogApi, techInsightsApi }) =>
+        new FactServiceClient(catalogApi, techInsightsApi),
     }),
   ],
   routes: {
@@ -67,6 +77,16 @@ export const PillarAdoptionRatioPage = reportingPlugin.provide(
     component: () =>
       import('./components/PillarAdoptionRatioComponent').then(
         m => m.PillarAdoptionRatioComponent,
+      ),
+    mountPoint: rootRouteRef,
+  }),
+);
+export const EntitiesFactsPage = reportingPlugin.provide(
+  createRoutableExtension({
+    name: 'EntitiesFactsPage',
+    component: () =>
+      import('./components/EntitiesFactReportComponent').then(
+        m => m.EntitiesFactReportComponent,
       ),
     mountPoint: rootRouteRef,
   }),
