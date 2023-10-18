@@ -107,7 +107,7 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
-    name: t-datascience-pillar
+    name: t-datascience-pillar-parent
     tags: ["pillar-team"]
     description: Data Science parent team
     annotations:

@@ -94,7 +94,7 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
-  name: t-attack-surface-pillar
+  name: t-attack-surface-pillar-parent
   tags: ["pillar-team"]
   description: Attack Surface parent team
   annotations:

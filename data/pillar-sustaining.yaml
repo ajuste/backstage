@@ -165,7 +165,7 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
-  name: t-sustaining-pillar
+  name: t-sustaining-pillar-parent
   tags: ["pillar-team"]
   description: Sustaining parent team
   annotations:

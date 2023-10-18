@@ -185,7 +185,7 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
-  name: t-intelligence-pillar
+  name: t-intelligence-pillar-parent
   tags: ["pillar-team"]
   description: CTI parent team
   annotations:

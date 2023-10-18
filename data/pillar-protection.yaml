@@ -190,7 +190,7 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
-  name: t-protection-pillar
+  name: t-protection-pillar-parent
   tags: ["pillar-team"]
   description: Protection parent team
   annotations:
