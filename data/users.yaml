@@ -1746,3 +1746,13 @@ spec:
    profile:
      displayName: David Hans
      email: dhans@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: jbao
+spec:
+   memberOf: []
+   profile:
+     displayName: Javi Bao
+     email: jbao@zerofox.com
