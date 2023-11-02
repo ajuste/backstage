@@ -1756,3 +1756,23 @@ spec:
   profile:
     displayName: Javi Bao
     email: jbao@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: jvillaseca
+spec:
+  memberOf: []
+  profile:
+    displayName: Juan Pablo Villaseca
+    email: jvillaseca@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: mfuentes
+spec:
+  memberOf: []
+  profile:
+    displayName: Mario Fuentes
+    email: mfuentes@zerofox.com
