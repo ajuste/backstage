@@ -1786,3 +1786,13 @@ spec:
   profile:
     displayName: Eduardo Molina
     email: emolina@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: garocha
+spec:
+  memberOf: []
+  profile:
+    displayName: Gabriel Arocha
+    email: garocha@zerofox.com
