@@ -9,7 +9,15 @@ auth:
 integrations:
   github:
     - host: github.com
-      token: ${GITHUB_ACCESS_TOKEN}
+      token: ${GITHUB_TOKEN}
+  
+  # for accessing git repositories in Azure DevOps. credential type uses a PAT
+  # do NOT use the credential keyword described in the docs: https://backstage.io/docs/integrations/azure/locations/
+  azure:
+    - host: dev.azure.com
+      organizations:
+        - idexperts
+      token: ${AZURE_TOKEN}
 
 catalog:
   rules:

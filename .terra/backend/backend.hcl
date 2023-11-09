@@ -77,32 +77,46 @@ group "backend" {
 {{ end }}
 ENV=${env}
 TECHDOCS_AWSS3_BUCKET_NAME=${bucket_name}
+
+# for reading git repositories from GitHub, using GitHub for auth
 {{ with secret "secret/${app}/github" }}
 AUTH_GITHUB_CLIENT_ID="{{ .Data.client_id }}"
 AUTH_GITHUB_CLIENT_SECRET="{{ .Data.client_secret }}"
 GITHUB_ACCESS_TOKEN="{{ .Data.access_token }}"
 GITHUB_TOKEN="{{ .Data.access_token }}"
 {{ end }}
+
+# for reading git repositories in Azure DevOps (IDX)
 {{ with secret "secret/${app}/azure" }}
-AZURE_TOKEN="{{ .Data.azure_access_token }}"
+AZURE_TOKEN="{{ .Data.access_token }}"
 {{ end }}
+
+# for reading tickets from JIRA
 {{ with secret "secret/${app}/jira" }}
 JIRA_TOKEN="{{ .Data.token }}"
 {{ end }}
+
+# for reading dashboards, alerts from Grafana
 {{ with secret "secret/${app}/grafana" }}
 GRAFANA_TOKEN="{{ .Data.token }}"
 {{ end }}
+
+# for accessing AWS resources (S3)
 {{ with secret "aws/sts/backstage" "ttl=24h" }}
 AWS_REGION="us-west-2"
 AWS_ACCESS_KEY_ID="{{ .Data.access_key }}"
 AWS_SECRET_ACCESS_KEY="{{ .Data.secret_key }}"
 AWS_SESSION_TOKEN="{{ .Data.security_token }}"
 {{ end }}
+
+# for accessing RDS database
 {{ with secret "database/backstage/creds/admin" }}
 DB_HOST=${db_address}
 DB_USER="{{ .Data.username }}"
 DB_PASSWORD="{{ .Data.password }}"
 {{ end }}
+
+# for using Okta for SSO
 {{ with secret "secret/${app}/okta" }}
 AUTH_OKTA_CLIENT_ID="{{ .Data.client_id }}"
 AUTH_OKTA_CLIENT_SECRET="{{ .Data.client_secret }}"

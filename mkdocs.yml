@@ -5,10 +5,11 @@ nav:
   - Home: README.md
   - Contributing: CONTRIBUTING.md
   - Playbooks:
-    - Developement:
+    - Development:
       - Running locally: playbook-running_locally.md
       - Writing tests: playbook-writing_tests.md
       - Creating plugins: playbook-creating_plugins.md
+      - Generating an Azure DevOps PAT: playbook-generating-azure-pat.md
     
 plugins:
   - techdocs-core
