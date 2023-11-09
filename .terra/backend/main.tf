@@ -1,20 +1,4 @@
 //<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>>
-// Variables
-//<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>>
-
-variable "app" {}
-
-variable "aws_region" {}
-
-variable "ecr_url" {}
-
-variable "env" {}
-
-variable "git_sha" {}
-
-variable "db_address" {}
-
-//<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>>
 // Locals
 //<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>>
 
@@ -66,16 +50,6 @@ resource "aws_iam_role" "iam_role" {
   ]
 }
 EOF
-}
-
-data "terraform_remote_state" "global" {
-  backend = "s3"
-
-  config = {
-    bucket = "zf-terraform-global"
-    key    = "global/terraform.tfstate"
-    region = var.aws_region
-  }
 }
 
 resource "aws_s3_bucket" "backstage" {
