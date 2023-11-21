@@ -54,3 +54,5 @@ site
 .terraform
 *.backup
 *.plan
+
+.idea

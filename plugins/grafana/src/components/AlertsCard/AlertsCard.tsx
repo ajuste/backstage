@@ -83,6 +83,17 @@ export const AlertsTable = ({ alerts, opts }: { alerts: GrafanaAlert[], opts: Al
         render: (row: GrafanaAlert): React.ReactNode => <AlertStatusBadge alert={row} />,
     });
 
+    columns.push({
+        title: 'Owner',
+        render: row => {
+            if (row.owner_backstage) {
+                return <Link to={row.owner_backstage}>{row.owner_name ?? row.owner_backstage}</Link>;
+            }
+
+            return '';
+        },
+    });
+
     return (
         <Table
             title={opts.title || 'Alerts'}

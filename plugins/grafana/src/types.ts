@@ -11,6 +11,8 @@ export interface Alert {
     name: string;
     state: string;
     url: string;
+    owner_backstage?: string,
+    owner_name?: string,
 }
 
 export interface GrafanaApi {

@@ -15,6 +15,8 @@ interface UnifiedGrafanaAlert {
 
 type Annotation = {
   __dashboardUid__: string;
+  owner_backstage?: string;
+  owner_name?: string;
 }
 
 interface AlertRule {
@@ -165,7 +167,9 @@ export class UnifiedAlertingGrafanaApiClient implements GrafanaApi {
       return {
         name: rule.grafana_alert.title,
         url: `${this.domain}/alerting/grafana/${rule.grafana_alert.uid}/view`,
-        state: ruleToAlert[rule.grafana_alert.uid ?? rule.labels['rule_uid']]?.status?.state ?? "ok"
+        state: ruleToAlert[rule.grafana_alert.uid ?? rule.labels['rule_uid']]?.status?.state ?? "ok",
+        owner_backstage: rule.annotations?.owner_backstage ? `/catalog/default/user/${rule.annotations?.owner_backstage}` : '',
+        owner_name: rule.annotations?.owner_name,
       };
     })
   }
