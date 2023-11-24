@@ -1130,11 +1130,11 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: User
 metadata:
-  name: asuil
+  name: aaravena
 spec:
   memberOf: []
   profile:
-    displayName: Ariel Sauil
+    displayName: Ariel Aravena
     email: asuil@zerofox.com
 ---
 apiVersion: backstage.io/v1alpha1
