@@ -1796,3 +1796,13 @@ spec:
   profile:
     displayName: Gabriel Arocha
     email: garocha@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: rsanmartin
+spec:
+  memberOf: []
+  profile:
+    displayName: Renato San Martin
+    email: rsanmartin@zerofox.com
