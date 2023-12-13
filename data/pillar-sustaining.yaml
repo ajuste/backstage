@@ -104,7 +104,7 @@ spec:
     displayName: "SRE"
   type: team
   children: []
-  members: [zwolf, craborg, jprotzman, emoody, cvasquez, rvasquez, mwatkins]
+  members: [zwolf, craborg, jprotzman, emoody, cvasquez, rvasquez, mfuentes]
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Group
