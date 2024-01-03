@@ -1655,7 +1655,7 @@ spec:
   memberOf: []
   profile:
     displayName: Cris Vasquez
-    email: cvasquez@zerofox.com
+    email: crvasquez@zerofox.com
 ---
 apiVersion: backstage.io/v1alpha1
 kind: User
