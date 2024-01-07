@@ -3,12 +3,17 @@ import { ScaffolderEntitiesProcessor } from '@backstage/plugin-scaffolder-backen
 import { Router } from 'express';
 import { PluginEnvironment } from '../types';
 import { GithubOrgEntityProvider, defaultOrganizationTeamTransformer } from '@backstage/plugin-catalog-backend-module-github';
+import { GithubProcessor } from '../processors/githubProcessor';
+import { GithubOrgEntityProvider, defaultOrganizationTeamTransformer } from '@backstage/plugin-catalog-backend-module-github';
+import { GithubEntityProvider } from '@backstage/plugin-catalog-backend-module-github';
+import { Octokit } from "octokit";
 
 
 export default async function createPlugin(
   env: PluginEnvironment,
 ): Promise<Router> {
   const builder = await CatalogBuilder.create(env);
+  builder.addProcessor(new GithubProcessor());
 
   // Fetches all users and teams from the riskive org
   builder.addEntityProvider(
@@ -41,6 +46,16 @@ export default async function createPlugin(
       },
     }),
   );
+
+  // TODO add later
+  // Fetches all repos and uploads to Backstage automatically
+  // builder.addEntityProvider(
+  //   GithubEntityProvider.fromConfig(env.config, {
+  //     logger: env.logger,
+  //     scheduler: env.scheduler,
+  //     // TODO maybe add transformer here for defining owners by fetching maintaining teams
+  //   }),
+  // );
 
   builder.addProcessor(new ScaffolderEntitiesProcessor());
   builder.setProcessingIntervalSeconds(7200); // every 2 hours
