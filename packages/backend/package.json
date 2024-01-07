@@ -25,6 +25,7 @@
     "@backstage/plugin-auth-backend": "^0.18.8",
     "@backstage/plugin-auth-node": "^0.2.19",
     "@backstage/plugin-catalog-backend": "^1.12.4",
+    "@backstage/plugin-catalog-backend-module-github": "^0.4.6",
     "@backstage/plugin-code-coverage-backend": "^0.2.16",
     "@backstage/plugin-home": "^0.5.7",
     "@backstage/plugin-permission-common": "^0.7.7",
