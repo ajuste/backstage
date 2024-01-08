@@ -126,6 +126,22 @@ catalog:
   rules:
     - allow: [Component, System, API, Resource, Location, User, Group, Template, Domain]
 
+  providers:
+    github:
+      # the provider ID can be any camelCase string
+      providerId:
+        organization: 'riskive' # string
+        catalogPath: '/catalog-info.yaml' # string
+        filters:
+          branch: 'master' # string
+          repository: '.*' # Regex
+          visibility: ['private', 'internal']
+        schedule: # same options as in TaskScheduleDefinition
+          # supports cron, ISO duration, "human duration" as used in code
+          frequency: { minutes: 1 }
+          # supports ISO duration, "human duration" as used in code
+          timeout: { minutes: 3 }
+
   locations:
     
     - type: url

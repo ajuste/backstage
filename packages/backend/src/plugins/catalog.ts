@@ -2,18 +2,17 @@ import { CatalogBuilder } from '@backstage/plugin-catalog-backend';
 import { ScaffolderEntitiesProcessor } from '@backstage/plugin-scaffolder-backend';
 import { Router } from 'express';
 import { PluginEnvironment } from '../types';
-import { GithubOrgEntityProvider, defaultOrganizationTeamTransformer } from '@backstage/plugin-catalog-backend-module-github';
 import { GithubProcessor } from '../processors/githubProcessor';
 import { GithubOrgEntityProvider, defaultOrganizationTeamTransformer } from '@backstage/plugin-catalog-backend-module-github';
 import { GithubEntityProvider } from '@backstage/plugin-catalog-backend-module-github';
-import { Octokit } from "octokit";
 
 
 export default async function createPlugin(
   env: PluginEnvironment,
 ): Promise<Router> {
   const builder = await CatalogBuilder.create(env);
-  builder.addProcessor(new GithubProcessor());
+  builder.addProcessor(new GithubProcessor(env.config.config.data.integrations.github[0].token));
+
 
   // Fetches all users and teams from the riskive org
   builder.addEntityProvider(
@@ -22,15 +21,15 @@ export default async function createPlugin(
       orgUrl: 'https://github.com/riskive',
       logger: env.logger,
       schedule: env.scheduler.createScheduledTaskRunner({
-        frequency: { minutes: 60 },
+        frequency: { minutes: 1 },
         timeout: { minutes: 15 },
       }),
       teamTransformer: async (team, ctx) => {
         const entity = await defaultOrganizationTeamTransformer(team, ctx);
-        console.log(entity);
         if (entity?.metadata?.name?.includes('team-')) {
           if (entity.spec !== null && entity.spec !== undefined) {
             Object.assign(entity.spec, { 'type': 'team' });
+            Object.assign(entity.metadata.annotations, { 'zerofox.com/pillar': 'Protection' });
           }
         }
         if (entity?.metadata?.name?.includes('pillar-')) {
@@ -49,13 +48,13 @@ export default async function createPlugin(
 
   // TODO add later
   // Fetches all repos and uploads to Backstage automatically
-  // builder.addEntityProvider(
-  //   GithubEntityProvider.fromConfig(env.config, {
-  //     logger: env.logger,
-  //     scheduler: env.scheduler,
-  //     // TODO maybe add transformer here for defining owners by fetching maintaining teams
-  //   }),
-  // );
+  builder.addEntityProvider(
+    GithubEntityProvider.fromConfig(env.config, {
+      logger: env.logger,
+      scheduler: env.scheduler,
+      // TODO maybe add transformer here for defining owners by fetching maintaining teams
+    }),
+  );
 
   builder.addProcessor(new ScaffolderEntitiesProcessor());
   builder.setProcessingIntervalSeconds(7200); // every 2 hours
