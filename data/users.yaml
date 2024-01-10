@@ -1806,3 +1806,33 @@ spec:
   profile:
     displayName: Renato San Martin
     email: rsanmartin@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: gacuna
+spec:
+  memberOf: []
+  profile:
+    displayName: Gabriela Acuña
+    email: gacuna@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: ssaavedra
+spec:
+  memberOf: []
+  profile:
+    displayName: Sebastian Saavedra
+    email: ssaavedra@zerofox.com
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: smatamala
+spec:
+  memberOf: []
+  profile:
+    displayName: Sergio Matamala
+    email: smatamala@zerofox.com
