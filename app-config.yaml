@@ -82,7 +82,12 @@ integrations:
   # about setting up the GitHub integration here: https://backstage.io/docs/getting-started/configuration#setting-up-a-github-integration
   github:
     - host: github.com
-      token: ${GITHUB_TOKEN}
+      apps:
+        - appId: ${GITHUB_APP_ID}
+          clientId: ${GITHUB_CLIENT_ID}
+          clientSecret: ${GITHUB_APP_SECRET}
+          webhookSecret: dummy
+          privateKey: ${GITHUB_APP_PRIVATE_KEY}
 
   # for accessing git repositories in Azure DevOps. credential type uses a PAT
   # do NOT use the credential keyword described in the docs: https://backstage.io/docs/integrations/azure/locations/

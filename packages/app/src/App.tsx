@@ -30,7 +30,7 @@ import { PillarAwareCatalogPage } from './components/catalog/PillarAwareCatalogP
 import { Root } from './components/Root';
 
 
-import { AlertDisplay, OAuthRequestDialog, SignInPage } from '@backstage/core-components';
+import { AlertDisplay, OAuthRequestDialog, SignInPage, IdentityProviders } from '@backstage/core-components';
 import { createApp } from '@backstage/app-defaults';
 import { AppRouter, FlatRoutes } from '@backstage/core-app-api';
 import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
@@ -39,7 +39,8 @@ import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/
 import { HomePage } from './components/home/HomePage';
 import { ReportingPage, CodeCoveragePage, StalenessPage, PillarAdoptionRatioPage, EntitiesFactsPage } from 'plugin-reporting';
 import { ExplorePage } from './components/explore/ExplorePage';
-import { oktaAuthApiRef, configApiRef, useApi } from '@backstage/core-plugin-api';
+import { oktaAuthApiRef, configApiRef, useApi, githubAuthApiRef } from '@backstage/core-plugin-api';
+
 
 import * as plugins from './plugins';
 
@@ -51,28 +52,22 @@ const app = createApp({
   components: {
     SignInPage: props => {
       const configApi = useApi(configApiRef);
-      if (!GuestDisabledEnvs.includes(configApi.getOptionalString('auth.environment') || "")) {
-        return (
-          <SignInPage
-            {...props}
-            providers={['guest', {
-              id: 'okta-auth-provider',
-              title: 'Okta',
-              message: 'Sign in using Okta',
-              apiRef: oktaAuthApiRef,
-            }]
-            }
-          />);
-      }
-      return <SignInPage
-        {...props}
-        provider={{
-          id: 'okta-auth-provider',
-          title: 'Okta',
-          message: 'Sign in using Okta',
-          apiRef: oktaAuthApiRef,
-        }}
-      />;
+      let providers: IdentityProviders = !GuestDisabledEnvs.includes(configApi.getOptionalString('auth.environment') || "") ? ['guest'] : []
+      providers = [...providers,
+      {
+        id: 'okta-auth-provider',
+        title: 'Okta',
+        message: 'Sign in using Okta',
+        apiRef: oktaAuthApiRef,
+      }, {
+        id: 'github-auth-provider',
+        title: 'GitHub',
+        message: 'Sign in using GitHub',
+        apiRef: githubAuthApiRef,
+      }];
+      return (
+        <SignInPage {...props} providers={providers} />);
+
     },
   },
   bindRoutes({ bind }) {

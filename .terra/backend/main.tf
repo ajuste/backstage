@@ -6,7 +6,7 @@ locals {
   container_count = {
     qa   = 1
     stag = 1
-    prod = 2
+    prod = 3 # HA
   }
 
   subdomain = {
