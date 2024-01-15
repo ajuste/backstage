@@ -43,7 +43,6 @@ export async function createRouter(
   const buildCatalogServiceRouter = (): ZFCatalogService => {
     return new ZFCatalogService(
       options.config,
-      options.logger,
       options.catalogClient,
       options.tokenManager,
     );
@@ -60,54 +59,6 @@ export async function createRouter(
     service
       .getPillars()
       .then(res => {
-        response.send(res);
-        response.end();
-      })
-      .catch(err => {
-        logger.error(err);
-        response.status(500).json({ error: err });
-      });
-  });
-
-  router.get('/global-teams', (_, response) => {
-    logger.info(`Fetching global pillar teams`);
-    const service = buildCatalogServiceRouter();
-    service
-      .getPillarGlobalTeams()
-      .then(res => {
-        response.send(res);
-        response.end();
-      })
-      .catch(err => {
-        logger.error(err);
-        response.status(500).json({ error: err });
-      });
-  });
-
-  router.get('/pillar/:pillar/global-team', (request, response) => {
-    logger.info(`Fetching global team for pillar ${request.params.pillar}`);
-    const pillar = request.params.pillar;
-    const service = buildCatalogServiceRouter();
-    service
-      .getGlobalTeamForPillar(pillar)
-      .then(res => {
-        response.send(res);
-        response.end();
-      })
-      .catch(err => {
-        logger.error(err);
-        response.status(500).json({ error: err });
-      });
-  });
-
-  router.get('/pillar/:pillar/teams', (request, response) => {
-    logger.info(`Fetching teams for pillar ${request.params.pillar}`);
-    const pillar = request.params.pillar;
-    const service = buildCatalogServiceRouter();
-    service
-      .getTeamsForPillar(pillar)
-      .then(res => {
-        logger.info(`Fetching teams for pillar2 ${res}`);
         response.send(res);
         response.end();
       })

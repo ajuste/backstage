@@ -10,7 +10,6 @@ export default async function createPlugin(env: PluginEnvironment) {
 
   const zfCatalogService = new ZFCatalogService(
     env.config,
-    env.logger,
     catalogClient,
     env.tokenManager,
   );

@@ -7,24 +7,15 @@ import {
   createApiFactory,
   createPlugin,
   createRoutableExtension,
-  discoveryApiRef,
-  identityApiRef,
 } from '@backstage/core-plugin-api';
 import { catalogApiRef } from '@backstage/plugin-catalog-react';
 import { techInsightsApiRef } from '@backstage/plugin-tech-insights';
-import { pillarAdoptionApiRef, factAiRef } from './api/api';
-import PillarAdoptionClient from './api/PillarAdoptionClient';
+import { factAiRef } from './api/api';
 import FactServiceClient from './api/FactServiceClient';
 
 export const reportingPlugin = createPlugin({
   id: 'reporting',
   apis: [
-    createApiFactory({
-      api: pillarAdoptionApiRef,
-      deps: { discoveryApi: discoveryApiRef, identityApi: identityApiRef },
-      factory: ({ discoveryApi, identityApi }) =>
-        new PillarAdoptionClient({ discoveryApi, identityApi }),
-    }),
 
     createApiFactory({
       api: factAiRef,
@@ -71,16 +62,6 @@ export const StalenessPage = reportingPlugin.provide(
   }),
 );
 
-export const PillarAdoptionRatioPage = reportingPlugin.provide(
-  createRoutableExtension({
-    name: 'PillarAdoptionRatioPage',
-    component: () =>
-      import('./components/PillarAdoptionRatioComponent').then(
-        m => m.PillarAdoptionRatioComponent,
-      ),
-    mountPoint: rootRouteRef,
-  }),
-);
 export const EntitiesFactsPage = reportingPlugin.provide(
   createRoutableExtension({
     name: 'EntitiesFactsPage',

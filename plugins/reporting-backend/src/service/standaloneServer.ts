@@ -47,7 +47,6 @@ export async function startStandaloneServer(
   });
   const zfCatalogService = new ZFCatalogService(
     config,
-    logger,
     catalogClient,
     tokenManager,
   );

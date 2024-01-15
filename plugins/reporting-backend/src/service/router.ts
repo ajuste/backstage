@@ -20,9 +20,7 @@ import express from 'express';
 import Router from 'express-promise-router';
 import { Logger } from 'winston';
 import { ConfigApi } from '@backstage/core-plugin-api';
-import { CatalogClient } from '@backstage/catalog-client';
 import { TokenManager } from '@backstage/backend-common';
-import PillarAdoptionService from './PillarAdoptionService';
 import { ZFCatalogAPI } from 'backstage-plugin-zf-tech-insights-common';
 
 export interface RouterOptions {
@@ -44,32 +42,6 @@ export async function createRouter(
   router.get('/health', (_, response) => {
     logger.info('PONG!');
     response.json({ status: 'ok' });
-  });
-
-  router.get('/pillar-adoption/ratio', (_, response) => {
-    logger.info(`Fetching resource pillar adoption ratio`);
-
-    const catalogClient = new CatalogClient({
-      discoveryApi: options.discovery,
-    });
-
-    const gh = new PillarAdoptionService(
-      options.config,
-      options.logger,
-      catalogClient,
-      options.tokenManager,
-      options.zfCatalogService
-    );
-
-    gh.getTransitionRatioReport()
-      .then(res => {
-        response.send(res);
-        response.end();
-      })
-      .catch(err => {
-        logger.error(err);
-        response.status(500).json({ error: err });
-      });
   });
 
   router.use(errorHandler());

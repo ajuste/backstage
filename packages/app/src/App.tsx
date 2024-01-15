@@ -37,7 +37,7 @@ import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
 import { HomePage } from './components/home/HomePage';
-import { ReportingPage, CodeCoveragePage, StalenessPage, PillarAdoptionRatioPage, EntitiesFactsPage } from 'plugin-reporting';
+import { ReportingPage, CodeCoveragePage, StalenessPage, EntitiesFactsPage } from 'plugin-reporting';
 import { ExplorePage } from './components/explore/ExplorePage';
 import { oktaAuthApiRef, configApiRef, useApi, githubAuthApiRef } from '@backstage/core-plugin-api';
 
@@ -209,7 +209,6 @@ const routes = (
     <Route path="/reporting" element={<ReportingPage />} />
     <Route path="/reporting/code-coverage" element={<CodeCoveragePage />} />
     <Route path="/reporting/service-staleness" element={<StalenessPage />} />
-    <Route path="/reporting/pillar-adoption-ratio" element={<PillarAdoptionRatioPage />} />
     <Route path="/reporting/entities-fact" element={<EntitiesFactsPage />} />
     <Route path="/explore" element={<ExplorePage />} />
   </FlatRoutes>
