@@ -51,7 +51,7 @@ export default async function createPlugin(
             lifecycle: ttlTwoWeeks,
           }),
           createFactRetrieverRegistration({
-            cadence: '* * * * *',
+            cadence: '0 6 * * *',
             factRetriever: getGithubFactRetriever(),
             lifecycle: ttlTwoWeeks,
             timeout: Duration.fromObject({ hours: 2 }),
