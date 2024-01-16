@@ -84,6 +84,23 @@ export async function createRouter(
       });
   });
 
+  router.get('/pillar/:pillar/teams', (request, response) => {
+    logger.info(`Fetching teams for pillar ${request.params.pillar}`);
+    const pillar = request.params.pillar;
+    const service = buildCatalogServiceRouter();
+    service
+      .getTeamsForPillar(pillar)
+      .then(res => {
+        logger.info(`Fetching teams for pillar2 ${res}`);
+        response.send(res);
+        response.end();
+      })
+      .catch(err => {
+        logger.error(err);
+        response.status(500).json({ error: err });
+      });
+  });
+
   router.use(errorHandler());
   return router;
 }
