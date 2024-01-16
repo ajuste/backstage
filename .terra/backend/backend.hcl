@@ -82,7 +82,7 @@ TECHDOCS_AWSS3_BUCKET_NAME=${bucket_name}
 {{ with secret "secret/${app}/github" }}
 AUTH_GITHUB_CLIENT_ID="{{ .Data.client_id }}"
 AUTH_GITHUB_CLIENT_SECRET="{{ .Data.client_secret }}"
-GITHUB_APP_ID"{{ .Data.app_id }}"
+GITHUB_APP_ID="{{ .Data.app_id }}"
 GITHUB_CLIENT_ID="{{ .Data.client_id }}"
 GITHUB_APP_SECRET="{{ .Data.client_secret }}"
 GITHUB_APP_PRIVATE_KEY="{{ .Data.private_key }}"
