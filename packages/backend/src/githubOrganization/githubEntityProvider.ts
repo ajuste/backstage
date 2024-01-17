@@ -140,7 +140,7 @@ export const buildEntityProviderOptions = (env: PluginEnvironment): GithubOrgEnt
         orgUrl: 'https://github.com/riskive',
         logger: env.logger,
         schedule: env.scheduler.createScheduledTaskRunner({
-            frequency: { minutes: 1 },
+            frequency: { minutes: 60 },
             timeout: { minutes: 15 },
         }),
         teamTransformer: async (team, ctx) => {
