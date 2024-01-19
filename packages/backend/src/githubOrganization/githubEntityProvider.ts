@@ -23,7 +23,7 @@ const isFeatureTeam = (entity: Entity): boolean => {
  * @param logger The logger to use
  * @returns The pillar, or null if it could not be pulled
  */
-const getPillarForEntity = async (entityRef: CompoundEntityRef, catalogClient: CatalogClient, logger: Logger): Promise<string | null> => {
+export const getPillarForEntity = async (entityRef: CompoundEntityRef, catalogClient: CatalogClient, logger: Logger): Promise<string | null> => {
     const entity = await catalogClient.getEntityByRef(entityRef)
     if (!entity) {
         logger.warn(`Failed to pull pillar from ${entityRef}: Not found`)

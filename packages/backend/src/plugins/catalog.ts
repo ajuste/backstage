@@ -12,8 +12,7 @@ export default async function createPlugin(
   env: PluginEnvironment,
 ): Promise<Router> {
   const builder = await CatalogBuilder.create(env);
-
-  builder.addProcessor(new GithubProcessor(env.config));
+  builder.addProcessor(new GithubProcessor(env.config, env.discovery, env.tokenManager, env.logger));
 
   // Fetches all users and teams from the riskive org
   builder.addEntityProvider(
