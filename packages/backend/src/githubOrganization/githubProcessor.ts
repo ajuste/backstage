@@ -20,6 +20,7 @@ import {
 import { CatalogClient } from '@backstage/catalog-client';
 import { Octokit } from "octokit";
 import { Logger } from 'winston';
+import { getPillarForEntity } from './githubEntityProvider'
 
 const OwningRoles: string[] = ['maintain', 'admin'];
 
@@ -158,7 +159,6 @@ export class GithubProcessor implements CatalogProcessor {
       }
     }
     return allRepos
-      .filter(e => e.role_name == 'admin' || e.role_name == 'write')
       .map(({ name }) => {
         return { owner: 'riskive', repo: name }
       })
@@ -268,10 +268,6 @@ export class GithubProcessor implements CatalogProcessor {
     // Emit relations.
     ownedEntities.forEach(ownedEntity => {
       this.logger.info(`Setting team ${entity.metadata.name} as owner of entity ${ownedEntity.metadata.name}`)
-      // if (!ownedEntity.spec) {
-      //   ownedEntity.spec = {};
-      // }
-      // ownedEntity.spec.owner = getCompoundEntityRef(ownedEntity)
 
       emit(
         processingResult.relation({
@@ -287,6 +283,53 @@ export class GithubProcessor implements CatalogProcessor {
           target: getCompoundEntityRef(entity),
         }),
       );
+    });
+  }
+
+  /**
+   * Syncs up the pillar to the entities owned by a pillar team.
+   * 
+   * @param entity The entity to sync up owners for
+   * @param emit The emit function
+   * @returns The entity
+   */
+  async setPillarToOwnedRepositories(entity: Entity, _: CatalogProcessorEmit) {
+
+    if (!this.isPillarTeam(entity)) {
+      this.logger.info(`Skipping non-pillar team ${entity.metadata.name} as owner of entities`)
+      return
+    }
+
+    const catalogClient = new CatalogClient({
+      discoveryApi: this.discovery,
+    });
+
+    const selfRef = getCompoundEntityRef(entity)
+    const pillar = await getPillarForEntity(selfRef, catalogClient, this.logger)
+    if (!pillar) {
+      this.logger.warn(`Failed to pull pillar from ${selfRef.name} entity has no pillar defined`)
+      return
+    }
+
+    if (!entity.metadata.annotations) {
+      entity.metadata.annotations = {};
+    }
+
+    // Get team's owned repositories from Github.
+    const ownedRepos = (await this.getTeamOwnedRepos(entity.metadata.name))
+
+    // Map repositories to Backstage entities.
+    const ownedEntities = await this.getEntitiesByRepos(ownedRepos)
+
+    this.logger.info(`Found ${ownedEntities.length} entities owned by pillar team ${entity.metadata.name}`)
+
+    ownedEntities.forEach(ownedEntity => {
+      this.logger.info(`Setting pillar ${pillar} as pillar of entity ${ownedEntity.metadata.name}`)
+
+      if (!ownedEntity.metadata.annotations) {
+        ownedEntity.metadata.annotations = {};
+      }
+      ownedEntity.metadata.annotations['zerofox.com/pillar'] = pillar
     });
   }
 
@@ -331,6 +374,9 @@ export class GithubProcessor implements CatalogProcessor {
       await this.syncUpTeamOwnedEntities(entity, emit);
     }
 
+    if (this.isPillarTeam(entity) && this.isGithubAPI(location)) {
+      await this.setPillarToOwnedRepositories(entity, emit);
+    }
 
     return entity;
   }
