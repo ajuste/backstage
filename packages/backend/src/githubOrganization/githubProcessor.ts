@@ -159,6 +159,7 @@ export class GithubProcessor implements CatalogProcessor {
       }
     }
     return allRepos
+      .filter(({ role_name }) => role_name === 'write')
       .map(({ name }) => {
         return { owner: 'riskive', repo: name }
       })
