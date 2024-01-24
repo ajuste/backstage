@@ -11,8 +11,9 @@ import { Logger } from 'winston';
  * @param entity The entity to check
  * @returns True if the entity is a feature team
  */
-const isFeatureTeam = (entity: Entity): boolean => {
-    return entity.metadata?.name?.includes('team-')
+export const isFeatureTeam = (entity: Entity): boolean => {
+    const parentName = entity.spec?.parent as (string | undefined)
+    return !!parentName && parentName.endsWith('-pillar')
 }
 
 /**
@@ -47,7 +48,7 @@ export const getPillarForEntity = async (entityRef: CompoundEntityRef, catalogCl
  * @param logger The logger to use
  * @returns The pillar, or null if it could not be pulled
  */
-const pullPillarFromParent = async (team: GithubTeam, catalogClient: CatalogClient, logger: Logger): Promise<string | null> => {
+export const pullPillarFromParent = async (team: GithubTeam, catalogClient: CatalogClient, logger: Logger): Promise<string | null> => {
     if (!team.parentTeam?.slug) {
         logger.warn(`Failed to pull pillar from ${team.slug}'s parent: parent not defined`)
         return null
@@ -130,7 +131,7 @@ const transformPillarTeam = async (entity: Entity, team: GithubTeam, _: Transfor
  * @param entity The entity to check
  * @returns True if the entity is a pillar team
  */
-const isPillarTeam = (entity: Entity): boolean => {
+export const isPillarTeam = (entity: Entity): boolean => {
     return entity.metadata?.name?.endsWith('-pillar')
 }
 

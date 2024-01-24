@@ -20,7 +20,7 @@ import {
 import { CatalogClient } from '@backstage/catalog-client';
 import { Octokit } from "octokit";
 import { Logger } from 'winston';
-import { getPillarForEntity } from './githubEntityProvider'
+import { getPillarForEntity, isFeatureTeam } from './githubEntityProvider'
 
 const OwningRoles: string[] = ['maintain', 'admin'];
 
@@ -218,15 +218,12 @@ export class GithubProcessor implements CatalogProcessor {
       .filter((collaborator) => OwningRoles.includes(collaborator.role_name))
       .forEach((collaborator) => {
         this.logger.info(`Setting collaborator ${collaborator.login} as owner of entity ${entity.metadata.name}`)
+        const userRef = { kind: 'User', namespace: 'default', name: collaborator.login }
         emit(
           processingResult.relation({
             source: selfRef,
-            type: RELATION_OWNER_OF,
-            target: {
-              kind: 'User',
-              namespace: 'default',
-              name: collaborator.login,
-            },
+            type: RELATION_OWNED_BY,
+            target: userRef,
           }),
         );
       });
@@ -334,16 +331,6 @@ export class GithubProcessor implements CatalogProcessor {
   }
 
   /**
-   * Returns true if the entity is a team.
-   * 
-   * @param entity The entity to check
-   * @returns True if the entity is a team
-   */
-  private isTeam(entity: Entity): boolean {
-    return entity.kind === 'Group';
-  }
-
-  /**
    * Returns true if the entity is a pillar team.
    * 
    * @param entity The entity to check
@@ -370,7 +357,7 @@ export class GithubProcessor implements CatalogProcessor {
       await this.syncUpOwnersOfEntity(entity, emit);
     }
 
-    if (this.isTeam(entity) && this.isGithubAPI(location)) {
+    if (isFeatureTeam(entity) && this.isGithubAPI(location)) {
       await this.syncUpTeamOwnedEntities(entity, emit);
     }
 
