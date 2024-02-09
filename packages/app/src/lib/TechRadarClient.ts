@@ -16,7 +16,7 @@ type GithubRepoDetails = {
  * It is responsible for fetching the data from the backend.
  */
 export class TechRadarClient implements TechRadarApi {
-  constructor(private githubResourceFetcherApi: GithubResourceFetcherApi) {}
+  constructor(private githubResourceFetcherApi: GithubResourceFetcherApi) { }
   async load(id: string | undefined): Promise<TechRadarLoaderResponse> {
     const details = this.getRepoDetails(id);
 
@@ -83,6 +83,13 @@ export class TechRadarClient implements TechRadarApi {
           path: '.backstage/radars/ai.json',
           owner: 'riskive',
           repo: 'ui-architecture',
+          branch: 'master',
+        };
+      case 'flutter-mobile':
+        return {
+          path: '.backstage/radars/mobile.json',
+          owner: 'riskive',
+          repo: 'mobile-architecture',
           branch: 'master',
         };
       default:

@@ -194,6 +194,19 @@ const routes = (
       }
     />
     <Route
+      path="/tech-radars/flutter-mobile"
+      element={
+        <TechRadarPage
+          id="flutter-mobile"
+          width={1500}
+          height={800}
+          title="Flutter Mobile"
+          subtitle="Use this radar to determine recommended technologies for new and existing Flutter mobile projects."
+          pageTitle="Flutter Mobile"
+        />
+      }
+    />
+    <Route
       path="/catalog-import"
       element={
         <RequirePermission permission={catalogEntityCreatePermission}>

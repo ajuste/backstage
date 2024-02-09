@@ -85,6 +85,7 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
               <SidebarSubmenuItem icon={MapIcon} to="tech-radars/sre" title="SRE: Core Infra" />
               <SidebarSubmenuItem icon={MapIcon} to="tech-radars/python" title="Python" />
               <SidebarSubmenuItem icon={MapIcon} to="tech-radars/ai" title="AI & Analysis" />
+              <SidebarSubmenuItem icon={MapIcon} to="tech-radars/flutter-mobile" title="Flutter Mobile" />
             </SidebarSubmenu>
           </SidebarItem>
         </SidebarScrollWrapper>
