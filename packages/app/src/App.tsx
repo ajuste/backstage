@@ -161,9 +161,9 @@ const routes = (
           id="sre"
           width={1500}
           height={800}
-          title="Site Reliability & Efficiency"
+          title="SRE: Core Infra"
           subtitle="Use this radar to determine recommended technologies for new and existing infrastructure projects."
-          pageTitle="SRE"
+          pageTitle="SRE: Core Infra"
         />
       }
     />

@@ -82,7 +82,7 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
               <SidebarSubmenuItem icon={MapIcon} to="tech-radars/ui-e" title="UI East" />
               <SidebarSubmenuItem icon={MapIcon} to="tech-radars/ui-w" title="UI West" />
               <SidebarSubmenuItem icon={MapIcon} to="tech-radars/qa" title="Testing / Quality" />
-              <SidebarSubmenuItem icon={MapIcon} to="tech-radars/sre" title="SRE" />
+              <SidebarSubmenuItem icon={MapIcon} to="tech-radars/sre" title="SRE: Core Infra" />
               <SidebarSubmenuItem icon={MapIcon} to="tech-radars/python" title="Python" />
               <SidebarSubmenuItem icon={MapIcon} to="tech-radars/ai" title="AI & Analysis" />
             </SidebarSubmenu>

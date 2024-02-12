@@ -101,7 +101,7 @@ metadata:
     zerofox.com/productowner: cvasquez
 spec:
   profile:
-    displayName: "SRE"
+    displayName: "SRE: Core Infra"
   type: team
   children: []
   members: [zwolf, craborg, jprotzman, emoody, cvasquez, rvasquez, mfuentes]
