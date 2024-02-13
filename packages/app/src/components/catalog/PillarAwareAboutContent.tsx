@@ -13,20 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+import Alert from '@material-ui/lab/Alert';
 import {
   Entity,
   RELATION_OWNED_BY,
   RELATION_PART_OF,
+  CompoundEntityRef,
 } from '@backstage/catalog-model';
 import {
   EntityRefLinks,
   getEntityRelations,
 } from '@backstage/plugin-catalog-react';
 import { Chip, Grid, makeStyles } from '@material-ui/core';
-import { MarkdownContent } from '@backstage/core-components';
+import { MarkdownContent, Progress, Link } from '@backstage/core-components';
 import React from 'react';
+import { useEffect, useState } from 'react';
 import { AboutField } from '@backstage/plugin-catalog';
+import { CatalogApi } from '@backstage/catalog-client';
+import {
+  catalogApiRef,
+} from '@backstage/plugin-catalog-react';
+import { useRouteRef, useApi } from '@backstage/core-plugin-api';
+import { JsonObject } from '@backstage/types';
+import { entityRouteRef, entityRouteParams, } from '@backstage/plugin-catalog-react';
 
 const useStyles = makeStyles({
   description: {
@@ -41,6 +50,39 @@ const useStyles = makeStyles({
  */
 export interface AboutContentProps {
   entity: Entity;
+}
+
+function useOwners(entity: Entity, catalogApiClient: CatalogApi) {
+  const [owners, setOwners] = useState([]) as [Entity[], any];
+  const [loading, setLoading] = useState(true) as [boolean, any];
+  const [error, setError] = useState(null) as [any, any];
+
+  useEffect(() => {
+    async function fetchOwners() {
+      try {
+        if (!entity.relations) {
+          setOwners([]);
+          setLoading(false);
+          return;
+        }
+
+        const ownerEntities = await Promise.all(entity.relations
+          .filter(relation => relation.type === RELATION_OWNED_BY)
+          .map((relation: any) => relation.target ? catalogApiClient.getEntityByRef(relation.target as CompoundEntityRef) : Promise.resolve())
+        );
+
+        setOwners(ownerEntities.filter(owner => owner) as any);
+      } catch (e) {
+        setError(e);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchOwners();
+  }, [entity, catalogApiClient]);
+
+  return { owners, loading, error };
 }
 
 /** @public */
@@ -68,29 +110,44 @@ export function PillarAwareAboutContent(props: AboutContentProps) {
   const partOfDomainRelations = getEntityRelations(entity, RELATION_PART_OF, {
     kind: 'domain',
   });
-  const ownedByRelations = getEntityRelations(entity, RELATION_OWNED_BY);
+  const catalogApiClient = useApi(catalogApiRef) as CatalogApi
+  const { owners, loading: ownersLoading, error: ownersError } = useOwners(entity, catalogApiClient);
+  const catalogEntityRoute = useRouteRef(entityRouteRef);
 
+  let ownerComponent = null;
+  if (ownersLoading) {
+    ownerComponent = <Progress />;
+  } else if (ownersError) {
+    ownerComponent = <Alert severity="error">{ownersError.message}</Alert>;
+  } else {
+
+    const ownerLinks = owners.map((owner, i) => {
+      const name = ( i > 0 ? ", " : '') + ((owner.spec?.profile as JsonObject)?.displayName || owner.metadata.name); 
+      const link = catalogEntityRoute(entityRouteParams(owner))
+      return <Link to={link} target="_blank">{name}</Link>;
+    });
+    ownerComponent = ownerLinks
+  }
   return (
     <Grid container>
-        <AboutField
-          label="Pillar"
-          value={entity?.metadata?.annotations?.["zerofox.com/pillar"] as string || "Not set"}
-          gridSizes={{ xs: 12, sm: 6, lg: 4 }}
-        />
+      <AboutField
+        label="Pillar"
+        value={entity?.metadata?.annotations?.["zerofox.com/pillar"] as string || "Not set"}
+        gridSizes={{ xs: 12, sm: 6, lg: 4 }}
+      />
       <AboutField label="Description" gridSizes={{ xs: 12 }}>
         <MarkdownContent
           className={classes.description}
           content={entity?.metadata?.description || 'No description'}
         />
       </AboutField>
+
       <AboutField
         label="Owner"
         value="No Owner"
         gridSizes={{ xs: 12, sm: 6, lg: 4 }}
       >
-        {ownedByRelations.length > 0 && (
-          <EntityRefLinks entityRefs={ownedByRelations} defaultKind="group" />
-        )}
+        {ownerComponent}
       </AboutField>
       {(isSystem || partOfDomainRelations.length > 0) && (
         <AboutField
@@ -110,19 +167,19 @@ export function PillarAwareAboutContent(props: AboutContentProps) {
         isComponent ||
         isResource ||
         partOfSystemRelations.length > 0) && (
-        <AboutField
-          label="System"
-          value="No System"
-          gridSizes={{ xs: 12, sm: 6, lg: 4 }}
-        >
-          {partOfSystemRelations.length > 0 && (
-            <EntityRefLinks
-              entityRefs={partOfSystemRelations}
-              defaultKind="system"
-            />
-          )}
-        </AboutField>
-      )}
+          <AboutField
+            label="System"
+            value="No System"
+            gridSizes={{ xs: 12, sm: 6, lg: 4 }}
+          >
+            {partOfSystemRelations.length > 0 && (
+              <EntityRefLinks
+                entityRefs={partOfSystemRelations}
+                defaultKind="system"
+              />
+            )}
+          </AboutField>
+        )}
       {isComponent && partOfComponentRelations.length > 0 && (
         <AboutField
           label="Parent Component"
@@ -142,21 +199,21 @@ export function PillarAwareAboutContent(props: AboutContentProps) {
         isGroup ||
         isLocation ||
         typeof entity?.spec?.type === 'string') && (
-        <AboutField
-          label="Type"
-          value={entity?.spec?.type as string}
-          gridSizes={{ xs: 12, sm: 6, lg: 4 }}
-        />
-      )}
+          <AboutField
+            label="Type"
+            value={entity?.spec?.type as string}
+            gridSizes={{ xs: 12, sm: 6, lg: 4 }}
+          />
+        )}
       {(isAPI ||
         isComponent ||
         typeof entity?.spec?.lifecycle === 'string') && (
-        <AboutField
-          label="Lifecycle"
-          value={entity?.spec?.lifecycle as string}
-          gridSizes={{ xs: 12, sm: 6, lg: 4 }}
-        />
-      )}
+          <AboutField
+            label="Lifecycle"
+            value={entity?.spec?.lifecycle as string}
+            gridSizes={{ xs: 12, sm: 6, lg: 4 }}
+          />
+        )}
       <AboutField
         label="Tags"
         value="No Tags"

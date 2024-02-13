@@ -18,7 +18,6 @@ export default class Github {
   ): Promise<string> {
     const integrations = ScmIntegrations.fromConfig(this.config);
     const ghIntegration = integrations.github.byHost('github.com');
-    debugger
     if (!ghIntegration) {
       throw new Error('No GitHub integration config found, please add config');
     }
