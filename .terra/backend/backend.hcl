@@ -10,6 +10,12 @@ group "backend" {
     driver         = "docker"
     shutdown_delay = "10s"
 
+    meta {
+      index_name    = "backstage-backend"
+      index_type    = "nodejs"
+      node_filebeat = true
+    }
+
     config {
       image   = "${ecr_url}/zf/${app}:${git_sha}"
       command = "node"
@@ -127,60 +133,6 @@ EOH
       destination = "$${NOMAD_SECRETS_DIR}/env"
       change_mode = "restart"
       env         = true
-    }
-  }
-
-  task "filebeat" {
-    driver = "docker"
-
-    env {
-      common_name = "${app}.$${NOMAD_GROUP_NAME}.$${NOMAD_TASK_NAME}"
-      index_name  = "${app}-$${NOMAD_GROUP_NAME}"
-      task_log    = "${app}-$${NOMAD_GROUP_NAME}"
-    }
-
-    config {
-      image = "${ecr_url}/zf/filebeat:master"
-    }
-
-    resources {
-      cpu    = "64"
-      memory = "128"
-
-      network {
-        mbits = 1
-      }
-    }
-
-    service {
-      name = "$${NOMAD_TASK_NAME}"
-      tags = ["${app}.$${NOMAD_GROUP_NAME}"]
-
-      check {
-        name     = "Filebeat check"
-        type     = "script"
-        command  = "pidof"
-        args     = ["filebeat"]
-        interval = "10s"
-        timeout  = "2s"
-      }
-    }
-
-    vault {
-      policies    = ["filebeat"]
-      change_mode = "restart"
-    }
-
-    template {
-      source      = "/nomad/templates/client.bundle.pem.ctmpl"
-      destination = "$${NOMAD_SECRETS_DIR}/client.bundle.pem"
-      change_mode = "restart"
-    }
-
-    template {
-      source      = "/nomad/templates/vault-core.crt.ctmpl"
-      destination = "$${NOMAD_TASK_DIR}/vault.crt"
-      change_mode = "noop"
     }
   }
 }
