@@ -20,7 +20,7 @@ metadata:
     zerofox.com/productowner: cvasquez
 spec:
   profile:
-    displayName: "Core DB Scaling"
+    displayName: "SRE: Observability"
   type: team
   children: []
   members: [zwolf, craborg, tceruti, ljury, cvasquez, jlago]
