@@ -1,0 +1,1295 @@
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Data Science
+  description: ai-metrics-prod database
+  name: ai-metrics-prod
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t4g.small
+  owner: default/unknown
+  type: database
+  version: '15.3'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Data Science
+  description: ai-metrics-stag database
+  name: ai-metrics-stag
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t4g.small
+  owner: default/unknown
+  type: database
+  version: '15.3'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Data Science
+  description: ai-metrics-qa database
+  name: ai-metrics-qa
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t4g.small
+  owner: default/unknown
+  type: database
+  version: '15.3'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Attack Surface
+  description: amass-runner-qa database
+  name: amass-runner-qa
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t4g.micro
+  owner: Group/t-attack-surface
+  type: database
+  version: '14.10'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: airflow-database database
+  name: airflow-database
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t4g.medium
+  owner: airflow/owner
+  type: database
+  version: '13.13'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Attack Surface
+  description: amass-runner-prod database
+  name: amass-runner-prod
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t4g.micro
+  owner: Group/t-attack-surface
+  type: database
+  version: '14.10'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Attack Surface
+  description: amass-runner-stag database
+  name: amass-runner-stag
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t4g.micro
+  owner: Group/t-attack-surface
+  type: database
+  version: '14.10'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Data Science
+  description: airflow-stag database
+  name: airflow-stag
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t4g.medium
+  owner: airflow/owner
+  type: database
+  version: '15.5'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Data Science
+  description: airflow-prod database
+  name: airflow-prod
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t4g.medium
+  owner: airflow/owner
+  type: database
+  version: '15.5'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: analysis-airflow-database database
+  name: analysis-airflow-database
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t4g.medium
+  owner: airflow/owner
+  type: database
+  version: '14.7'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Protection
+  description: dm-db-qa database
+  name: dm-db-qa
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: mysql
+  instanceClass: db.m5.large
+  owner: default/unknown
+  type: database
+  version: 8.0.33
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Protection
+  description: dm-db-stag database
+  name: dm-db-stag
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: mysql
+  instanceClass: db.m7g.large
+  owner: default/unknown
+  type: database
+  version: 8.0.33
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Protection
+  description: dm-db-prod database
+  name: dm-db-prod
+spec:
+  deploymentOption: Multi-AZ
+  encryption: true
+  engine: mysql
+  instanceClass: db.r7g.2xlarge
+  owner: default/unknown
+  type: database
+  version: 8.0.33
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Protection
+  description: di-prod-mysql database
+  name: di-prod-mysql
+spec:
+  deploymentOption: Multi-AZ
+  encryption: false
+  engine: mysql
+  instanceClass: db.t2.micro
+  owner: data-ingestion/owner
+  type: database
+  version: 8.0.33
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Protection
+  description: di-qa-mysql database
+  name: di-qa-mysql
+spec:
+  deploymentOption: Single-AZ
+  encryption: false
+  engine: mysql
+  instanceClass: db.t2.micro
+  owner: data-ingestion/owner
+  type: database
+  version: 8.0.35
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Attack Surface
+  description: att-surf-qa database
+  name: att-surf-qa
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t4g.small
+  owner: lightweight-datasources/owner
+  type: database
+  version: '16.2'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: backstage-prod database
+  name: backstage-prod
+spec:
+  deploymentOption: Multi-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t3.micro
+  owner: backstage-zf-cli/owner
+  type: database
+  version: '14.11'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Protection
+  description: di-stag-mysql database
+  name: di-stag-mysql
+spec:
+  deploymentOption: Single-AZ
+  encryption: false
+  engine: mysql
+  instanceClass: db.t2.micro
+  owner: data-ingestion/owner
+  type: database
+  version: 8.0.35
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: backstage-qa database
+  name: backstage-qa
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t3.micro
+  owner: backstage-zf-cli/owner
+  type: database
+  version: '14.11'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: cost-db-qa database
+  name: cost-db-qa
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t3.micro
+  owner: group:default/t-team-core-db-scaling
+  type: database
+  version: '15.5'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: eup-prod-mysql database
+  name: eup-prod-mysql
+spec:
+  deploymentOption: Multi-AZ
+  encryption: false
+  engine: mysql
+  instanceClass: db.t2.micro
+  owner: default/unknown
+  type: database
+  version: 8.0.33
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: eup-qa-mysql database
+  name: eup-qa-mysql
+spec:
+  deploymentOption: Single-AZ
+  encryption: false
+  engine: mysql
+  instanceClass: db.t2.micro
+  owner: default/unknown
+  type: database
+  version: 8.0.35
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: eup-stag-mysql database
+  name: eup-stag-mysql
+spec:
+  deploymentOption: Single-AZ
+  encryption: false
+  engine: mysql
+  instanceClass: db.t2.micro
+  owner: default/unknown
+  type: database
+  version: 8.0.33
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Sustaining
+  description: drone-stag database
+  name: drone-stag
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t3.small
+  owner: group:default/t-devops
+  type: database
+  version: '15.5'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Sustaining
+  description: gc-prod database
+  name: gc-prod
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: mysql
+  instanceClass: db.t4g.medium
+  owner: default/unknown
+  type: database
+  version: 8.0.35
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Sustaining
+  description: gc-qa database
+  name: gc-qa
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: mysql
+  instanceClass: db.t4g.medium
+  owner: default/unknown
+  type: database
+  version: 8.0.35
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Sustaining
+  description: gc-stag database
+  name: gc-stag
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: mysql
+  instanceClass: db.t4g.medium
+  owner: default/unknown
+  type: database
+  version: 8.0.35
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: grafana-qa database
+  name: grafana-qa
+spec:
+  deploymentOption: Single-AZ
+  encryption: false
+  engine: postgres
+  instanceClass: db.t4g.small
+  owner: group:default/t-sre
+  type: database
+  version: '16.1'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: grafana-stag database
+  name: grafana-stag
+spec:
+  deploymentOption: Single-AZ
+  encryption: false
+  engine: postgres
+  instanceClass: db.t4g.small
+  owner: group:default/t-sre
+  type: database
+  version: '16.1'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: grafana-prod database
+  name: grafana-prod
+spec:
+  deploymentOption: Single-AZ
+  encryption: false
+  engine: postgres
+  instanceClass: db.t4g.large
+  owner: group:default/t-sre
+  type: database
+  version: '16.1'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Intelligence
+  description: intel-dark-ops-portal-stag database
+  name: intel-dark-ops-portal-stag
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t3.micro
+  owner: default/unknown
+  type: database
+  version: '14.4'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Intelligence
+  description: intel-dark-ops-portal-qa database
+  name: intel-dark-ops-portal-qa
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t3.micro
+  owner: default/unknown
+  type: database
+  version: '14.4'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Protection
+  description: intel-graph-api-qa database
+  name: intel-graph-api-qa
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t3.micro
+  owner: default/unknown
+  type: database
+  version: '15.3'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: intel-dark-ops-portal-prod database
+  name: intel-dark-ops-portal-prod
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t3.medium
+  owner: default/unknown
+  type: database
+  version: '14.4'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Protection
+  description: intel-graph-api-prod database
+  name: intel-graph-api-prod
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t3.medium
+  owner: default/unknown
+  type: database
+  version: '15.3'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Data Science
+  description: insights-superset-qa database
+  name: insights-superset-qa
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t3.small
+  owner: superset/owner
+  type: database
+  version: '15.4'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Data Science
+  description: insights-superset-stag database
+  name: insights-superset-stag
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t3.small
+  owner: superset/owner
+  type: database
+  version: '15.4'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Protection
+  description: intel-graph-api-stag database
+  name: intel-graph-api-stag
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t3.micro
+  owner: default/unknown
+  type: database
+  version: '15.3'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Data Science
+  description: insights-superset-prod database
+  name: insights-superset-prod
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t4g.medium
+  owner: superset/owner
+  type: database
+  version: '15.4'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: managed-services-qa database
+  name: managed-services-qa
+spec:
+  deploymentOption: Single-AZ
+  encryption: false
+  engine: postgres
+  instanceClass: db.t3.micro
+  owner: cs-ma-api/owner
+  type: database
+  version: '14.10'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: metaflow-a-prod database
+  name: metaflow-a-prod
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: aurora-postgresql
+  instanceClass: db.serverless
+  owner: default/unknown
+  type: database
+  version: '15.3'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: metaflow-a-qa database
+  name: metaflow-a-qa
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: aurora-postgresql
+  instanceClass: db.serverless
+  owner: default/unknown
+  type: database
+  version: '15.3'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: matomo-prod database
+  name: matomo-prod
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: mysql
+  instanceClass: db.t4g.small
+  owner: matomo/owner
+  type: database
+  version: 8.0.35
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: matomo-qa database
+  name: matomo-qa
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: mysql
+  instanceClass: db.t4g.micro
+  owner: matomo/owner
+  type: database
+  version: 8.0.35
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: metaflow-b-qa database
+  name: metaflow-b-qa
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: aurora-postgresql
+  instanceClass: db.serverless
+  owner: default/unknown
+  type: database
+  version: '15.3'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: metaflow-b-prod database
+  name: metaflow-b-prod
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: aurora-postgresql
+  instanceClass: db.serverless
+  owner: default/unknown
+  type: database
+  version: '15.3'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: matomo-stag database
+  name: matomo-stag
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: mysql
+  instanceClass: db.t4g.micro
+  owner: matomo/owner
+  type: database
+  version: 8.0.35
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: metaflow-c-prod database
+  name: metaflow-c-prod
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: aurora-postgresql
+  instanceClass: db.serverless
+  owner: default/unknown
+  type: database
+  version: '15.3'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: metaflow-c-qa database
+  name: metaflow-c-qa
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: aurora-postgresql
+  instanceClass: db.serverless
+  owner: default/unknown
+  type: database
+  version: '15.3'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Data Science
+  description: openmetadata-prod database
+  name: openmetadata-prod
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: mysql
+  instanceClass: db.t4g.medium
+  owner: default/unknown
+  type: database
+  version: 8.0.36
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Data Science
+  description: openmetadata-qa database
+  name: openmetadata-qa
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: mysql
+  instanceClass: db.t4g.medium
+  owner: default/unknown
+  type: database
+  version: 8.0.36
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Data Science
+  description: openmetadata-stag database
+  name: openmetadata-stag
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: mysql
+  instanceClass: db.t4g.medium
+  owner: default/unknown
+  type: database
+  version: 8.0.36
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: prod-mysql-bizmetrics database
+  name: prod-mysql-bizmetrics
+spec:
+  deploymentOption: Single-AZ
+  encryption: false
+  engine: mysql
+  instanceClass: db.t4g.micro
+  owner: default/unknown
+  type: database
+  version: 8.0.35
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Protection
+  description: prod-cs-ma-api database
+  name: prod-cs-ma-api
+spec:
+  deploymentOption: Multi-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.m5.large
+  owner: cs-ma-api/owner
+  type: database
+  version: '14.6'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Protection
+  description: prod-cs-takedown-api-02 database
+  name: prod-cs-takedown-api-02
+spec:
+  deploymentOption: Multi-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.m5.xlarge
+  owner: cs-takedown-api/owner
+  type: database
+  version: '14.6'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: platform-qa-mysql database
+  name: platform-qa-mysql
+spec:
+  deploymentOption: Single-AZ
+  encryption: false
+  engine: mysql
+  instanceClass: db.m7g.large
+  owner: group:default/t-team-core-db-scaling
+  type: database
+  version: 8.0.33
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: platformdb-prod-b database
+  name: platformdb-prod-b
+spec:
+  deploymentOption: Multi-AZ
+  encryption: false
+  engine: mysql
+  instanceClass: db.r7g.8xlarge
+  owner: group:default/t-team-core-db-scaling
+  type: database
+  version: 8.0.33
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: platformdb-stag database
+  name: platformdb-stag
+spec:
+  deploymentOption: Single-AZ
+  encryption: false
+  engine: mysql
+  instanceClass: db.m7g.xlarge
+  owner: group:default/t-team-core-db-scaling
+  type: database
+  version: 8.0.33
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: qa-mysql-bizmetrics database
+  name: qa-mysql-bizmetrics
+spec:
+  deploymentOption: Single-AZ
+  encryption: false
+  engine: mysql
+  instanceClass: db.t4g.micro
+  owner: default/unknown
+  type: database
+  version: 8.0.35
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: prod-cs-ma-api-copy database
+  name: prod-cs-ma-api-copy
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.m5.large
+  owner: cs-ma-api/owner
+  type: database
+  version: '14.6'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: se-prod database
+  name: se-prod
+spec:
+  deploymentOption: Multi-AZ
+  encryption: false
+  engine: postgres
+  instanceClass: db.r6i.xlarge
+  owner: default/unknown
+  type: database
+  version: '14.8'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: quality-engineering-metrics database
+  name: quality-engineering-metrics
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t4g.medium
+  owner: default/unknown
+  type: database
+  version: '13.13'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: se-qa database
+  name: se-qa
+spec:
+  deploymentOption: Single-AZ
+  encryption: false
+  engine: postgres
+  instanceClass: db.t3.micro
+  owner: default/unknown
+  type: database
+  version: '14.10'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: se-stag database
+  name: se-stag
+spec:
+  deploymentOption: Single-AZ
+  encryption: false
+  engine: postgres
+  instanceClass: db.t3.micro
+  owner: default/unknown
+  type: database
+  version: '14.10'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: sla-tool-prod database
+  name: sla-tool-prod
+spec:
+  deploymentOption: Single-AZ
+  encryption: false
+  engine: mysql
+  instanceClass: db.t3.micro
+  owner: default/unknown
+  type: database
+  version: 8.0.35
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: sla-tool-stag database
+  name: sla-tool-stag
+spec:
+  deploymentOption: Single-AZ
+  encryption: false
+  engine: mysql
+  instanceClass: db.t3.micro
+  owner: default/unknown
+  type: database
+  version: 8.0.35
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Sustaining
+  description: sonarqube-qa database
+  name: sonarqube-qa
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t3.micro
+  owner: sonarqube/owner
+  type: database
+  version: '14.4'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Data Science
+  description: shadow-ai-metrics-qa database
+  name: shadow-ai-metrics-qa
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t4g.small
+  owner: matomo/owner
+  type: database
+  version: '15.5'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Data Science
+  description: shadow-ai-metrics-prod database
+  name: shadow-ai-metrics-prod
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t4g.small
+  owner: matomo/owner
+  type: database
+  version: '15.5'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Data Science
+  description: shadow-ai-metrics-stag database
+  name: shadow-ai-metrics-stag
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t4g.small
+  owner: matomo/owner
+  type: database
+  version: '15.5'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: stag-mysql-bizmetrics database
+  name: stag-mysql-bizmetrics
+spec:
+  deploymentOption: Single-AZ
+  encryption: false
+  engine: mysql
+  instanceClass: db.t4g.micro
+  owner: default/unknown
+  type: database
+  version: 8.0.35
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Protection
+  description: stag-cs-ma-api-v2 database
+  name: stag-cs-ma-api-v2
+spec:
+  deploymentOption: Single-AZ
+  encryption: false
+  engine: postgres
+  instanceClass: db.t3.micro
+  owner: cs-ma-api/owner
+  type: database
+  version: '14.10'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: threatops-misp-01 database
+  name: threatops-misp-01
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: mysql
+  instanceClass: db.t3.small
+  owner: default/unknown
+  type: database
+  version: 8.0.35
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Protection
+  description: stag-cs-takedown-api database
+  name: stag-cs-takedown-api
+spec:
+  deploymentOption: Single-AZ
+  encryption: false
+  engine: postgres
+  instanceClass: db.t3.micro
+  owner: cs-takedown-api/owner
+  type: database
+  version: '14.10'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: threatops-prodigy database
+  name: threatops-prodigy
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t3.medium
+  owner: default/unknown
+  type: database
+  version: '16.1'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Data Science
+  description: superset-prod database
+  name: superset-prod
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t4g.medium
+  owner: superset/owner
+  type: database
+  version: '15.4'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: zerofail-prod database
+  name: zerofail-prod
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t3.micro
+  owner: default/unknown
+  type: database
+  version: '12.17'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Intelligence
+  description: zammad-qa database
+  name: zammad-qa
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t3.micro
+  owner: default/unknown
+  type: database
+  version: '13.7'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Intelligence
+  description: zammad-stag database
+  name: zammad-stag
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t3.micro
+  owner: default/unknown
+  type: database
+  version: '13.7'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: Intelligence
+  description: zammad-prod database
+  name: zammad-prod
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t3.medium
+  owner: default/unknown
+  type: database
+  version: '13.7'
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  annotations:
+    zerofox.com/pillar: default/unknown
+  description: zerofail-qa database
+  name: zerofail-qa
+spec:
+  deploymentOption: Single-AZ
+  encryption: true
+  engine: postgres
+  instanceClass: db.t3.micro
+  owner: default/unknown
+  type: database
+  version: '12.17'
