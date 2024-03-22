@@ -40,6 +40,7 @@ import { HomePage } from './components/home/HomePage';
 import { ReportingPage, CodeCoveragePage, StalenessPage, EntitiesFactsPage } from 'plugin-reporting';
 import { ExplorePage } from './components/explore/ExplorePage';
 import { oktaAuthApiRef, configApiRef, useApi, githubAuthApiRef } from '@backstage/core-plugin-api';
+import { QetaPage } from '@drodil/backstage-plugin-qeta';
 
 
 import * as plugins from './plugins';
@@ -105,6 +106,7 @@ const routes = (
       {entityPage}
     </Route>
     <Route path="/docs" element={<TechDocsIndexPage initialFilter='all' />} />
+    <Route path="/qeta" element={<QetaPage title="Questions" />} />
     <Route
       path="/docs/:namespace/:kind/:name/*"
       element={<TechDocsReaderPage />}

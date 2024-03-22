@@ -8,6 +8,7 @@ import ReportingIcon from '@material-ui/icons/Assessment';
 import CategoryIcon from '@material-ui/icons/Category';
 import LogoFull from './LogoFull';
 import LogoIcon from './LogoIcon';
+import LiveHelpIcon from '@material-ui/icons/LiveHelp';
 import {
   Settings as SidebarSettings,
   UserSettingsSignInAvatar,
@@ -72,6 +73,7 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
         <SidebarItem icon={CategoryIcon} to="catalog" text="Catalog" />
         <SidebarItem icon={ExtensionIcon} to="api-docs" text="APIs" />
         <SidebarItem icon={LibraryBooks} to="docs" text="Docs" />
+        <SidebarItem icon={LiveHelpIcon} to="qeta" text="Q&A" />
         <SidebarItem icon={ReportingIcon} to="reporting" text="Reporting" />
 
         {/* End global nav */}

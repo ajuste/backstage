@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: theme.palette.background.paper,
         boxShadow: theme.shadows[1],
         padding: '8px 0',
-        borderRadius: '50px',
+        borderRadius: '45px',
         margin: 'auto',
     },
     toolkit: {
@@ -40,19 +40,19 @@ const useStyles = makeStyles(theme => ({
 const pillarToIcon = (pillar: Entity): JSX.Element => {
     switch (pillar.metadata?.annotations?.['zerofox.com/pillar']) {
         case 'Disruption':
-            return <DisruptionIcon htmlColor='#e0ca3c' style={{ 'fontSize': '60px' }}></DisruptionIcon>
+            return <DisruptionIcon htmlColor='#e0ca3c' style={{ 'fontSize': '45px' }}></DisruptionIcon>
         case 'Sustaining':
-            return <SustainingIcon htmlColor='#A2AEBB' style={{ 'fontSize': '60px' }}></SustainingIcon>
+            return <SustainingIcon htmlColor='#A2AEBB' style={{ 'fontSize': '45px' }}></SustainingIcon>
         case 'Attack Surface':
-            return <AttackSurfaceIcon htmlColor='#2d3047' style={{ 'fontSize': '60px' }}></AttackSurfaceIcon>
+            return <AttackSurfaceIcon htmlColor='#2d3047' style={{ 'fontSize': '45px' }}></AttackSurfaceIcon>
         case 'Response':
-            return <ResponseIcon htmlColor='#23B5D3' style={{ 'fontSize': '60px' }}></ResponseIcon>
+            return <ResponseIcon htmlColor='#23B5D3' style={{ 'fontSize': '45px' }}></ResponseIcon>
         case 'Protection':
-            return <ProtectionIcon htmlColor='#49a078' style={{ 'fontSize': '60px' }}></ProtectionIcon>
+            return <ProtectionIcon htmlColor='#49a078' style={{ 'fontSize': '45px' }}></ProtectionIcon>
         case 'Intelligence':
-            return <IntelligenceIcon htmlColor='#F42272' style={{ 'fontSize': '60px' }}></IntelligenceIcon>
+            return <IntelligenceIcon htmlColor='#F42272' style={{ 'fontSize': '45px' }}></IntelligenceIcon>
         case 'Data Science':
-            return <DataScienceIcon htmlColor='#DAC4F7' style={{ 'fontSize': '60px' }}></DataScienceIcon>
+            return <DataScienceIcon htmlColor='#DAC4F7' style={{ 'fontSize': '45px' }}></DataScienceIcon>
         default:
             return <UnknownIcon style={{ 'fontSize': '60px' }}></UnknownIcon>
     }

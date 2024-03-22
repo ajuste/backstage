@@ -40,7 +40,7 @@ const pillarAwareColumnFactories = Object.freeze({
   createNameColumn(): TableColumn<CatalogTableRow> {
     return {
       title: 'Name',
-      render: ({ entity, resolved }) => {
+      render: ({ entity }) => {
         const catalogEntityRoute = useRouteRef(entityRouteRef);
         const catalogApiClient = useApi(catalogApiRef) as CatalogApi
         const {

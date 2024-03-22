@@ -38,6 +38,7 @@
     "@backstage/plugin-tech-insights-backend": "^0.5.19",
     "@backstage/plugin-tech-insights-backend-module-jsonfc": "^0.1.37",
     "@backstage/plugin-techdocs-backend": "^1.7.2",
+    "@drodil/backstage-plugin-qeta-backend": "^1.23.3",
     "@internal/plugin-github-resource-fetcher-backend": "^0.1.0",
     "@internal/plugin-reporting-backend": "^0.1.0",
     "@internal/plugin-zf-tech-insights-backend": "^0.1.0",

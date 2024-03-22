@@ -5,8 +5,8 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 const useStyles = makeStyles(theme => ({
     card: {
         display: 'flex',
-        width: '125px',
-        height: '150px',
+        width: '80px',
+        height: '100px',
         justifyContent: 'center',
         margin: '0 15px 15px 0',
         boxShadow: theme.shadows[1],
@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
         flexDirection: 'column',
     },
     title: {
-        fontSize: '10pt',
+        fontSize: '9pt',
         textAlign: 'center',
         fontWeight: 500,
     },
@@ -28,14 +28,14 @@ const useStyles = makeStyles(theme => ({
         width: '55%',
     },
     bottom: {
-        fontSize: '8pt',
+        fontSize: '7pt',
         textAlign: 'center',
         textTransform: 'uppercase',
         display: 'flex',
         alignContent: 'center',
     },
     iconContainer: {
-        height: '75px',
+        height: '25px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',

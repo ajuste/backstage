@@ -33,9 +33,11 @@ import techInsights from './plugins/techInsights';
 import githubResourceFetcher from './plugins/githubResourceFetcher';
 import reporting from './plugins/reporting';
 import zfInsights from './plugins/zfTechInsights';
+import qeta from './plugins/qeta';
 import { PluginEnvironment } from './types';
 import { ServerPermissionClient } from '@backstage/plugin-permission-node';
 import { DefaultIdentityClient } from '@backstage/plugin-auth-node';
+
 
 function makeCreateEnv(config: Config) {
   const root = getRootLogger();
@@ -100,6 +102,7 @@ async function main() {
   );
   const reportingEnv = useHotMemoize(module, () => createEnv('reporting'));
   const zfInsightsEnv = useHotMemoize(module, () => createEnv('zfInsights'));
+  const qetaEnv = useHotMemoize(module, () => createEnv('qeta'));
 
   const apiRouter = Router();
   apiRouter.use('/tech-insights', await techInsights(techInsightsEnv));
@@ -116,6 +119,7 @@ async function main() {
     '/github-resource-fetcher',
     await githubResourceFetcher(githubResourceFetcherEnv),
   );
+  apiRouter.use('/qeta', await qeta(qetaEnv));
 
   // Add backends ABOVE this line; this 404 handler is the catch-all fallback
   apiRouter.use(notFoundHandler());
