@@ -30,7 +30,7 @@
     ]
   },
   "devDependencies": {
-    "@backstage/cli": "^0.22.12",
+    "@backstage/cli": "^0.22.14",
     "@spotify/prettier-config": "^12.0.0",
     "concurrently": "^8.0.0",
     "lerna": "^4.0.0",
@@ -39,7 +39,9 @@
   },
   "resolutions": {
     "@types/react": "^17",
-    "@types/react-dom": "^17"
+    "@types/react-dom": "^17",
+    "@azure/core-util": "^1.3.0",
+    "@azure/identity": "4.1.0-beta.1"
   },
   "prettier": "@spotify/prettier-config",
   "lint-staged": {
@@ -52,6 +54,8 @@
     ]
   },
   "dependencies": {
+    "@azure/core-util": "^1.3.0",
+    "@azure/identity": "4.1.0-beta.1",
     "headers-polyfill": "^3.1.2"
   }
 }
