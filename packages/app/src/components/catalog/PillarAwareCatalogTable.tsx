@@ -1,12 +1,11 @@
 import React, { useMemo } from 'react';
-import { useEffect, useState } from 'react';
 import Alert from '@material-ui/lab/Alert';
 import { TableColumn, Link, Progress, } from '@backstage/core-components';
 import { useEntityList, } from '@backstage/plugin-catalog-react';
 import { useRouteRef, useApi } from '@backstage/core-plugin-api';
 import { CatalogTable, CatalogTableProps, CatalogTableRow } from '@backstage/plugin-catalog';
 import { entityRouteRef, entityRouteParams, } from '@backstage/plugin-catalog-react';
-import { Entity, RELATION_OWNED_BY, CompoundEntityRef, stringifyEntityRef } from '@backstage/catalog-model';
+import { Entity, stringifyEntityRef } from '@backstage/catalog-model';
 import { CatalogApi } from '@backstage/catalog-client';
 import {
   catalogApiRef,
@@ -16,39 +15,6 @@ import useAsync from 'react-use/lib/useAsync';
 
 type PillarAwareCatalogTableProps = CatalogTableProps & {
   pillarEntities: Array<Entity> | undefined;
-}
-
-function useOwners(entity: Entity, catalogApiClient: CatalogApi) {
-  const [owners, setOwners] = useState([]) as [Entity[], any];
-  const [loading, setLoading] = useState(true) as [boolean, any];
-  const [error, setError] = useState(null) as [any, any];
-
-  useEffect(() => {
-    async function fetchOwners() {
-      try {
-        if (!entity.relations) {
-          setOwners([]);
-          setLoading(false);
-          return;
-        }
-
-        const ownerEntities = await Promise.all(entity.relations
-          .filter(relation => relation.type === RELATION_OWNED_BY)
-          .map((relation: any) => relation.target ? catalogApiClient.getEntityByRef(relation.target as CompoundEntityRef) : Promise.resolve())
-        );
-
-        setOwners(ownerEntities.filter(owner => owner) as any);
-      } catch (e) {
-        setError(e);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchOwners();
-  }, [entity, catalogApiClient]);
-
-  return { owners, loading, error };
 }
 
 const pillarAwareColumnFactories = Object.freeze({
@@ -71,50 +37,12 @@ const pillarAwareColumnFactories = Object.freeze({
       },
     };
   },
-  createOwnersColumn(): TableColumn<CatalogTableRow> {
-    return {
-      title: 'Owners',
-      render: ({ entity }) => {
-        const catalogApiClient = useApi(catalogApiRef) as CatalogApi
-        const { owners, loading, error } = useOwners(entity, catalogApiClient);
-        const catalogEntityRoute = useRouteRef(entityRouteRef);
-
-        if (loading) {
-          return <Progress />;
-        } else if (error) {
-          return null
-        }
-
-        const ownerLinks = owners.map(owner => {
-          const name = (owner.spec?.profile as JsonObject)?.displayName || owner.metadata.name;
-          const link = catalogEntityRoute(entityRouteParams(owner))
-          return <Link to={link} target="_blank">{name}</Link>;
-        });
-
-
-
-        return (
-          <>
-            {ownerLinks.map((link, i: number) => {
-              return (
-                <React.Fragment>
-                  {i > 0 && ', '}
-                  {link}
-                </React.Fragment>
-              );
-            })}
-          </>
-        );
-      },
-    };
-  },
   createNameColumn(): TableColumn<CatalogTableRow> {
     return {
       title: 'Name',
-      render: ({ entity }) => {
+      render: ({ entity, resolved }) => {
         const catalogEntityRoute = useRouteRef(entityRouteRef);
         const catalogApiClient = useApi(catalogApiRef) as CatalogApi
-
         const {
           value,
           loading,
@@ -154,7 +82,6 @@ export const PillarAwareCatalogTable = (props: PillarAwareCatalogTableProps) => 
       pillarAwareColumnFactories.createNameColumn(),
       pillarAwareColumnFactories.createPillarColumn(pillarEntities),
       ...createEntitySpecificColumns(),
-      CatalogTable.columns.createOwnerColumn(),
       CatalogTable.columns.createMetadataDescriptionColumn(),
       CatalogTable.columns.createTagsColumn(),
     ];
@@ -165,7 +92,7 @@ export const PillarAwareCatalogTable = (props: PillarAwareCatalogTableProps) => 
           return [];
         case 'domain':
         case 'system':
-          return [pillarAwareColumnFactories.createOwnersColumn()];
+          return [CatalogTable.columns.createOwnerColumn()];
         case 'group':
         case 'template':
           return [CatalogTable.columns.createSpecTypeColumn()];
@@ -177,7 +104,7 @@ export const PillarAwareCatalogTable = (props: PillarAwareCatalogTableProps) => 
         default:
           return [
             CatalogTable.columns.createSystemColumn(),
-            pillarAwareColumnFactories.createOwnersColumn(),
+            CatalogTable.columns.createOwnerColumn(),
             CatalogTable.columns.createSpecTypeColumn(),
             CatalogTable.columns.createSpecLifecycleColumn(),
           ];
