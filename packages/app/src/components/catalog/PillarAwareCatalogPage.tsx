@@ -3,7 +3,7 @@ import React from 'react';
 import Alert from '@material-ui/lab/Alert';
 import useAsync from 'react-use/lib/useAsync';
 import { Content, ContentHeader, CreateButton, PageWithHeader, SupportButton, Progress } from '@backstage/core-components';
-import { usePluginOptions } from '@backstage/core-plugin-api/alpha';
+import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
 import { configApiRef, useApi, useRouteRef, } from '@backstage/core-plugin-api';
 import { EntityPillarPicker } from './EntityPillarPicker';
 import { PillarAwareCatalogTable } from './PillarAwareCatalogTable';
@@ -19,16 +19,9 @@ import {
   EntityTypePicker,
   UserListPicker,
 } from '@backstage/plugin-catalog-react';
+import { usePermission } from '@backstage/plugin-permission-react';
 
-import { catalogPlugin, DefaultCatalogPageProps, } from '@backstage/plugin-catalog';
-
-
-type CatalogPluginOptions = {
-  createButtonTitle: string;
-};
-
-const useCatalogPluginOptions = () =>
-  usePluginOptions<CatalogPluginOptions>();
+import { catalogPlugin, DefaultCatalogPageProps } from '@backstage/plugin-catalog';
 
 export const PillarAwareCatalogPage = (props: DefaultCatalogPageProps): JSX.Element => {
   const {
@@ -50,6 +43,13 @@ export const PillarAwareCatalogPage = (props: DefaultCatalogPageProps): JSX.Elem
     loading,
     error,
   } = useAsync(async () => catalogClient.getPillars());
+  
+
+  const { allowed } = usePermission({
+    permission: catalogEntityCreatePermission,
+  });
+
+  
 
   if (loading) {
     return <Progress />;
@@ -57,16 +57,16 @@ export const PillarAwareCatalogPage = (props: DefaultCatalogPageProps): JSX.Elem
     return <Alert severity="error">{error.message}</Alert>;
   }
 
-  const { createButtonTitle } = useCatalogPluginOptions();
-
   return (
     <PageWithHeader title={`${orgName} Catalog`} themeId="home">
       <Content>
-        <ContentHeader title="">
-          <CreateButton
-            title={createButtonTitle}
-            to={createComponentLink && createComponentLink()}
-          />
+        <ContentHeader title="">  
+        {allowed && (
+            <CreateButton
+              title="Create"
+              to={createComponentLink && createComponentLink()}
+            />
+          )}
           <SupportButton>All your software catalog entities</SupportButton>
         </ContentHeader>
         <EntityListProvider>

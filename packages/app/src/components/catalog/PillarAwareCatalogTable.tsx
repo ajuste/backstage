@@ -154,6 +154,7 @@ export const PillarAwareCatalogTable = (props: PillarAwareCatalogTableProps) => 
       pillarAwareColumnFactories.createNameColumn(),
       pillarAwareColumnFactories.createPillarColumn(pillarEntities),
       ...createEntitySpecificColumns(),
+      CatalogTable.columns.createOwnerColumn(),
       CatalogTable.columns.createMetadataDescriptionColumn(),
       CatalogTable.columns.createTagsColumn(),
     ];
