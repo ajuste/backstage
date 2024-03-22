@@ -39,7 +39,7 @@ import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/
 import { HomePage } from './components/home/HomePage';
 import { ReportingPage, CodeCoveragePage, StalenessPage, EntitiesFactsPage } from 'plugin-reporting';
 import { ExplorePage } from './components/explore/ExplorePage';
-import { oktaAuthApiRef, configApiRef, useApi, githubAuthApiRef } from '@backstage/core-plugin-api';
+import { configApiRef, useApi, githubAuthApiRef } from '@backstage/core-plugin-api';
 import { QetaPage } from '@drodil/backstage-plugin-qeta';
 
 
@@ -56,11 +56,6 @@ const app = createApp({
       let providers: IdentityProviders = !GuestDisabledEnvs.includes(configApi.getOptionalString('auth.environment') || "") ? ['guest'] : []
       providers = [...providers,
       {
-        id: 'okta-auth-provider',
-        title: 'Okta',
-        message: 'Sign in using Okta',
-        apiRef: oktaAuthApiRef,
-      }, {
         id: 'github-auth-provider',
         title: 'GitHub',
         message: 'Sign in using GitHub',
