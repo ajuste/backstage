@@ -27,8 +27,12 @@
   node-pre-gyp WARN Hit error response status 404 Not Found on https://github.com/Automattic/node-canvas/releases/download/v2.11.2/canvas-v2.11.2-node-v108-darwin-unknown-arm64.tar.gz
   ```
 
-  A workaround would be to remove canvas from [packages/app/packages.json][../packages/app/packages.json]] and [yarn.lock](../yarn.lock), 
-  then running `yarn install` again. 
+  A workaround is to run:
+  ```
+  > brew install pixma
+  > brew install cairo
+  > brew install pango
+  ```
 
   > @craborg I have not found a way to force yarn to install canvas using a different architecture. This is the only thing I've found that works so far :(
 

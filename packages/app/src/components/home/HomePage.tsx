@@ -3,7 +3,6 @@ import {
     HomePageStarredEntities,
 } from '@backstage/plugin-home';
 import { HomePageSearchBar } from '@backstage/plugin-search';
-import { QuestionTableCard } from '@drodil/backstage-plugin-qeta';
 
 import { Content, Page, InfoCard } from '@backstage/core-components';
 import { Grid, makeStyles } from '@material-ui/core';
@@ -52,9 +51,6 @@ export const HomePage = () => {
                         </Grid>
                         <Grid item md={4}>
                             <HomePageStarredEntities />
-                        </Grid>
-                        <Grid item md={12}>
-                            <QuestionTableCard />
                         </Grid>
                     </Grid>
                 </Grid>

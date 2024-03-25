@@ -83,6 +83,7 @@ group "backend" {
 {{ end }}
 ENV=${env}
 TECHDOCS_AWSS3_BUCKET_NAME=${bucket_name}
+BACKEND_BUCKET=${backend_bucket}
 
 # for reading git repositories from GitHub, using GitHub for auth
 {{ with secret "secret/${app}/github" }}

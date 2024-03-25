@@ -65,3 +65,19 @@ catalog:
       target: https://github.com/riskive/backstage-docs/blob/master/goldenpath-add_documentation/catalog-info.yaml
       rules:
         - allow: [Component]
+
+qeta:
+  allowAnonymous: false
+  allowMetadataInput: true
+  allowGlobalEdits: false
+  entities:
+    kinds: ['System']
+    max: 3
+  tags:
+    allowCreation: true
+    max: 5
+  moderators:
+    - group:default/developer-portal-qa-moderators
+  storage:
+    type: database
+    folder: /tmp/qeta-attachments

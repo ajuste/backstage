@@ -96,18 +96,19 @@ data "template_file" "nomad_group" {
   template = file("./backend/backend.hcl")
 
   vars = {
-    app           = var.app
-    aws_region    = var.aws_region
-    count         = local.container_count[var.env]
-    database_host = local.database_host[var.env]
-    ecr_url       = var.ecr_url
-    env           = var.env
-    git_sha       = var.git_sha
-    config_file   = local.config_file[var.env]
-    bucket_name   = aws_s3_bucket.techdocs.id
-    bucket_region = aws_s3_bucket.techdocs.region
-    subdomain     = local.subdomain[var.env]
-    db_address    = var.db_address
+    app            = var.app
+    aws_region     = var.aws_region
+    count          = local.container_count[var.env]
+    database_host  = local.database_host[var.env]
+    ecr_url        = var.ecr_url
+    env            = var.env
+    git_sha        = var.git_sha
+    config_file    = local.config_file[var.env]
+    bucket_name    = aws_s3_bucket.techdocs.id
+    bucket_region  = aws_s3_bucket.techdocs.region
+    subdomain      = local.subdomain[var.env]
+    db_address     = var.db_address
+    backend_bucket = "${var.env}-backstage"
   }
 }
 

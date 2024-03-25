@@ -90,9 +90,12 @@ qeta:
   moderators:
     - group:default/developer-portal-qa-moderators
   storage:
-    disabled: true
-    type: database
-    folder: /tmp/my-attachments
+    type: s3
+    folder: /qeta-attachments
+    bucket: ${BACKEND_BUCKET}
+    accessKeyId: ${AWS_ACCESS_KEY_ID}
+    secretAccessKey: ${AWS_SECRET_ACCESS_KEY}
+    region: us-west-2
 
 integrations:
   # This is a Personal Access Token or PAT from GitHub. You can find out how to generate this token, and more information

@@ -36,7 +36,7 @@
     "@backstage/plugin-techdocs-react": "^1.1.11",
     "@backstage/plugin-user-settings": "^0.7.10",
     "@backstage/theme": "^0.4.2",
-    "@drodil/backstage-plugin-qeta": "^1.23.3",
+    "@drodil/backstage-plugin-qeta": "1.24.3",
     "@internal/plugin-github-resource-fetcher": "^0.1.0",
     "@k-phoen/backstage-plugin-grafana": "^0.1.16",
     "@material-ui/core": "^4.12.2",
