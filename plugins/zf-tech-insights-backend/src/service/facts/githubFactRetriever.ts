@@ -6,7 +6,7 @@ import {
     FactRetriever,
     FactRetrieverContext,
     TechInsightFact,
-} from '@backstage/plugin-tech-insights-node';
+} from '@backstage-community/plugin-tech-insights-node';
 import { DateTime } from 'luxon';
 import { CatalogClient, CATALOG_FILTER_EXISTS } from '@backstage/catalog-client';
 import {
@@ -286,24 +286,10 @@ const githubFactRetriever: FactRetriever = {
             description: 'Django version',
         },
     },
-    handler: async ({
-        discovery,
-        entityFilter,
-        tokenManager,
-        config,
-        logger,
-    }: FactRetrieverContext): Promise<Array<TechInsightFact>> => {
-        const retriever = new GithubFactRetriever({
-            discovery,
-            entityFilter,
-            tokenManager,
-            config,
-            logger,
-        });
+    handler: async (context: FactRetrieverContext): Promise<Array<TechInsightFact>> => {
+        const retriever = new GithubFactRetriever(context);
         return retriever.fetchFacts();
     },
-
-
 };
 
 export function getGithubFactRetriever() {

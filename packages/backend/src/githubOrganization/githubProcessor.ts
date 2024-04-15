@@ -22,6 +22,49 @@ import { Octokit } from "octokit";
 import { Logger } from 'winston';
 import { getPillarForEntity, isFeatureTeam } from './githubEntityProvider'
 
+const Pillars: Record<string, { value: string, grafana: string, githubName: string }> = {
+  'attacksurface': {
+    value: 'Attack Surface',
+    grafana: 'attack surface',
+    githubName: 'attacksurface-pillar',
+  },
+  'disruption': {
+    value: 'Disruption',
+    grafana: 'disruption',
+    githubName: 'disruption-pillar',
+  },
+  'intelligence': {
+    value: 'Intelligence',
+    grafana: 'intelligence',
+    githubName: 'intelligence-pillar',
+  },
+  'protection': {
+    value: 'Protection',
+    grafana: 'protection',
+    githubName: 'protection-pillar',
+  },
+  'response': {
+    value: 'Response',
+    grafana: 'response',
+    githubName: 'response-pillar',
+  },
+  'sustaining': {
+    value: 'Sustaining',
+    grafana: 'sustaining',
+    githubName: 'sustaining-pillar',
+  },
+  'datascience': {
+    value: 'Data Science',
+    grafana: 'data-science',
+    githubName: 'data-science-pillar',
+  },
+  'foxteam': {
+    value: 'FoxTeam',
+    grafana: 'fox-team',
+    githubName: 'fox-team-pillar',
+  },
+};
+
 const OwningRoles: string[] = ['maintain', 'admin'];
 
 type Collaborator = {
@@ -184,6 +227,7 @@ export class GithubProcessor implements CatalogProcessor {
         filter: [{
           'metadata.annotations.github.com/project-slug': `${owner}/${repo}`,
         }],
+
       },
       { token },
     ));
@@ -332,6 +376,61 @@ export class GithubProcessor implements CatalogProcessor {
   }
 
   /**
+   * Emits the pillar to the entities owned by a pillar team.
+   * 
+   */
+  async emitPillar(entity: Entity, emit: CatalogProcessorEmit) {
+
+    if (!this.isPillarTeam(entity)) {
+      this.logger.info(`Skipping non-pillar team ${entity.metadata.name} so it won't be emitted`)
+      return
+    }
+
+    let pillarName = Object.keys(Pillars).find((pillar: string) => {
+      return Pillars[pillar].githubName === entity.metadata.name
+    })
+
+    if (!pillarName) {
+      pillarName = entity.metadata.name.replaceAll('-pillar', '')
+      this.logger.warn(`Pillar not found for ${entity.metadata.name}, using name as pillar ${pillarName}`)
+    }
+    let pillar = Pillars[pillarName.toLowerCase()]
+
+    if (!pillar) {
+      pillar = {
+        value: entity.metadata.name.replaceAll('-pillar', ''),
+        grafana: entity.metadata.name.replaceAll('-pillar', ''),
+        githubName: entity.metadata.name
+      };
+    }
+
+    const pillarEntity = {
+      apiVersion: 'backstage.io/v1alpha1',
+      kind: 'Component',
+      metadata: {
+        name: entity.metadata.name,
+        description: entity.metadata.description,
+        annotations:
+        {
+          'zerofox.com/pillar': pillar.value,
+          'grafana/tag-selector': pillar.grafana,
+        },
+      },
+      spec: {
+        type: 'pillar',
+        lifecycle: 'production',
+        owner: 'noowner',
+      },
+    }
+    const pillarLocation = {
+      type: "url",
+      target: `github.com/orgs/riskive/teams/${entity.metadata.name}`
+    }
+    this.logger.info(`Emitting pillar ${entity.metadata.name} as pillar of entities`)
+    emit(processingResult.entity(pillarLocation, pillarEntity))
+  }
+
+  /**
    * Returns true if the entity is a pillar team.
    * 
    * @param entity The entity to check
@@ -354,6 +453,8 @@ export class GithubProcessor implements CatalogProcessor {
     emit: CatalogProcessorEmit,
   ): Promise<Entity> {
 
+    this.logger.debug(`Starting post process entity for ${entity.metadata.namespace}/${entity.kind}/${entity.metadata.name}`)
+
     if (this.canSyncUpOwnersOfEntity(entity)) {
       await this.syncUpOwnersOfEntity(entity, emit);
     }
@@ -363,6 +464,7 @@ export class GithubProcessor implements CatalogProcessor {
     }
 
     if (this.isPillarTeam(entity) && this.isGithubAPI(location)) {
+      await this.emitPillar(entity, emit);
       await this.setPillarToOwnedRepositories(entity, emit);
     }
 

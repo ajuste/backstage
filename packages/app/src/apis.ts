@@ -1,11 +1,15 @@
 import {
+  createApiExtension,
+  ExtensionDefinition,
+} from '@backstage/frontend-plugin-api';
+
+import {
   ScmIntegrationsApi,
   scmIntegrationsApiRef,
   ScmAuth,
 } from '@backstage/integration-react';
 
 import {
-  AnyApiFactory,
   configApiRef,
   createApiFactory,
   analyticsApiRef,
@@ -13,11 +17,15 @@ import {
 } from '@backstage/core-plugin-api';
 
 import { techRadarApiRef } from '@backstage/plugin-tech-radar';
-import { TechRadarClient } from './lib/TechRadarClient';
+import { TechRadarClient } from '../src/extensions/TechRadar';
 import { githubResourceFetcherApiRef } from '@internal/plugin-github-resource-fetcher';
+import { catalogUnprocessedEntitiesPlugin } from '@backstage/plugin-catalog-unprocessed-entities';
 import { MatomoAnalytics } from 'plugin-analytics-matomo';
 
-export const apis: AnyApiFactory[] = [
+// const catalogUnprocessedEntitiesApi =  useApi(catalogUnprocessedEntitiesApiRef)
+
+export const apis: ExtensionDefinition<any>[] = [
+  ...catalogUnprocessedEntitiesPlugin.getApis(),
   createApiFactory({
     api: scmIntegrationsApiRef,
     deps: { configApi: configApiRef },
@@ -41,4 +49,4 @@ export const apis: AnyApiFactory[] = [
         identityApi,
       }),
   }),
-];
+].map(factory => createApiExtension({factory}));

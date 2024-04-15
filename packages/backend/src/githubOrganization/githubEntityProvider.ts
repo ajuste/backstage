@@ -1,9 +1,10 @@
 
-import { defaultOrganizationTeamTransformer, GithubOrgEntityProviderOptions, GithubTeam, TransformerContext } from '@backstage/plugin-catalog-backend-module-github';
+
+import { defaultOrganizationTeamTransformer, GithubTeam, TransformerContext } from '@backstage/plugin-catalog-backend-module-github';
 import { Entity, CompoundEntityRef, stringifyEntityRef } from '@backstage/catalog-model';
-import { PluginEnvironment } from '../types';
 import { CatalogClient } from '@backstage/catalog-client';
 import { Logger } from 'winston';
+import { DiscoveryService } from '@backstage/backend-plugin-api';
 
 /**
  * Checks if the entity is a feature team.
@@ -33,8 +34,9 @@ export const getPillarForEntity = async (entityRef: CompoundEntityRef, catalogCl
 
     const pillar = entity.metadata.annotations ? entity.metadata.annotations['zerofox.com/pillar'] : null
     if (!pillar) {
-        logger.warn(`Failed to pull pillar from ${entityRef}: pillar not set in the annotations`)
-        return null
+        const entityName = entity.metadata.name
+        logger.warn(`Failed to pull pillar from ${entityRef}: pillar not set in the annotations. Using pillar name ${entityName}`)
+        return entityName.replaceAll('-pillar', '')
     }
 
     return pillar
@@ -135,35 +137,27 @@ export const isPillarTeam = (entity: Entity): boolean => {
     return entity.metadata?.name?.endsWith('-pillar')
 }
 
-export const buildEntityProviderOptions = (env: PluginEnvironment): GithubOrgEntityProviderOptions => {
-    return {
-        id: 'production',
-        orgUrl: 'https://github.com/riskive',
-        logger: env.logger,
-        schedule: env.scheduler.createScheduledTaskRunner({
-            frequency: { minutes: 60 },
-            timeout: { minutes: 15 },
-        }),
-        teamTransformer: async (team, ctx) => {
-            const entity = await defaultOrganizationTeamTransformer(team, ctx);
-            if (!entity) {
-                return
-            }
-
-            const catalogClient = new CatalogClient({
-                discoveryApi: env.discovery,
-            });
-
-            switch (true) {
-                case isFeatureTeam(entity):
-                    return await transformFeatureTeam(entity, team, ctx, catalogClient, env.logger);
-
-                case isPillarTeam(entity):
-                    return transformPillarTeam(entity, team, ctx, catalogClient, env.logger);
-
-                default:
-                    return entity;
-            }
-        },
+export const transformTream = async (team: GithubTeam, ctx: TransformerContext, logger: Logger, discovery: DiscoveryService): Promise<Entity | undefined> => {
+    logger.info(`Transforming team ${team.slug}`)
+    const entity = await defaultOrganizationTeamTransformer(team, ctx);
+    if (!entity) {
+        return
     }
+
+
+    const catalogClient = new CatalogClient({
+        discoveryApi: discovery,
+    });
+
+    switch (true) {
+        case isFeatureTeam(entity):
+            return await transformFeatureTeam(entity, team, ctx, catalogClient, logger);
+
+        case isPillarTeam(entity):
+            return transformPillarTeam(entity, team, ctx, catalogClient, logger);
+
+        default:
+            return entity;
+    }
+
 }

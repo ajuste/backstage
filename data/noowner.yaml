@@ -1,0 +1,11 @@
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: noowner
+spec:
+  lifecycle: production
+  type: team
+  profile:
+      displayName: noowner
+  children: []
+  members: []

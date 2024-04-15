@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import useAsync from 'react-use/lib/useAsync';
 import Alert from '@material-ui/lab/Alert';
-import { FactSchema } from '@backstage/plugin-tech-insights-common';
-import { Content, Progress, Header, Page, InfoCard, HeaderLabel, Select, SelectItem } from '@backstage/core-components';
 import { Grid, Typography } from '@material-ui/core';
+import { Content, Progress, Header, Page, InfoCard, HeaderLabel, Select, SelectItem } from '@backstage/core-components';
+import { useApi } from '@backstage/core-plugin-api';
+import { techInsightsApiRef, TechInsightsClient } from '@backstage-community/plugin-tech-insights';
+import { FactSchema } from '@backstage-community/plugin-tech-insights-common';
 import { EntitiesFactReportFetchComponent } from '../EntitiesFactReportFetchComponent';
-import { useApi, } from '@backstage/core-plugin-api';
-import { techInsightsApiRef, TechInsightsClient } from '@backstage/plugin-tech-insights';
-
-
 
 const toNonCamelCaseUpperCaseFirst = function (str: string): string {
   // Insert a space before all caps
@@ -17,8 +15,7 @@ const toNonCamelCaseUpperCaseFirst = function (str: string): string {
   return result.charAt(0).toUpperCase() + result.slice(1).trim();
 }
 
-export const EntitiesFactReportComponent = () => {
-
+const SchemaComponent = (): any => {
   const techInsightsClient = useApi(techInsightsApiRef) as TechInsightsClient
   const {
     value: availableSchemas,
@@ -48,7 +45,20 @@ export const EntitiesFactReportComponent = () => {
       }
     }
   }
+  return [(
+    <Select selected={value} items={items} onChange={val => {
+      const [schema, fact] = (val as string).split(".")
+      setValue(val as string)
+      setFactRetrieverIdschema(schema)
+      setFactId(fact)
+    }} label="Fact" />),
+  value ?
+    <EntitiesFactReportFetchComponent factRetrieverIdschema={factRetrieverIdschema} factId={factId} /> :
+    null
+  ];
+}
 
+export const EntitiesFactReportComponent = () => {
   return (
     <Page themeId="tool">
       <Header title="Entities fact report" subtitle="Get facts for all entities">
@@ -64,16 +74,7 @@ export const EntitiesFactReportComponent = () => {
             </InfoCard>
           </Grid>
           <Grid item>
-            <Select selected={value} items={items} onChange={val => {
-              const [schema, fact] = (val as string).split(".")
-              setValue(val as string)
-              setFactRetrieverIdschema(schema)
-              setFactId(fact)
-            }} label="Fact" />
-            {value ?
-              <EntitiesFactReportFetchComponent factRetrieverIdschema={factRetrieverIdschema} factId={factId} />
-              : null
-            }
+            <SchemaComponent></SchemaComponent>
           </Grid>
         </Grid>
       </Content>

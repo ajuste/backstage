@@ -29,7 +29,7 @@ describe('createRouter', () => {
   beforeAll(async () => {
     const router = await createRouter({
       logger: getVoidLogger(),
-      catalogClient: {} as any,
+      catalogServiceClient: {} as any,
       discovery: {} as any,
       config: {} as any,
       tokenManager: {} as any,

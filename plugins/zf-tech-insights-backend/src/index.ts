@@ -20,3 +20,5 @@ export * from './service/project-analyzer';
 
 import ZFCatalogService from './service/catalog';
 export { ZFCatalogService };
+
+export { zfInsightsPlugin  as default } from './service/plugin'

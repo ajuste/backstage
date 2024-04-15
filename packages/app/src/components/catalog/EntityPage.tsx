@@ -58,7 +58,7 @@ import {
   isJiraAvailable,
 } from '@roadiehq/backstage-plugin-jira';
 import { EntityCodeCoverageContent } from '@backstage/plugin-code-coverage';
-import { EntityTechInsightsScorecardContent } from '@backstage/plugin-tech-insights';
+import { EntityTechInsightsScorecardContent } from '@backstage-community/plugin-tech-insights';
 import {
   EntityGrafanaDashboardsCard,
   EntityGrafanaAlertsCard,
@@ -67,7 +67,6 @@ import {
 import { EntityTechdocsContent } from '@backstage/plugin-techdocs';
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
-import { DocumentsComponent, EntityHasUisCard, DomainHasApisCard, } from '../domain';
 import { DocumentsComponent as PillarDocumentsComponent, UIsCardComponent as PillarUIsCardComponent, APICardComponent as PillarAPICardComponent, SystemCardComponent as PillarSystemCardComponent, TeamsCardComponent as PillarTeamsCardComponent } from '../pillar';
 
 import { PillarAwareAboutCard } from './PillarAwareAboutCard';
@@ -489,19 +488,10 @@ const domainPage = (
         <Grid item md={6}>
           <EntityHasSystemsCard></EntityHasSystemsCard>
         </Grid>
-        <Grid item md={6}>
-          <DomainHasApisCard></DomainHasApisCard>
-        </Grid>
-        <Grid item md={6}>
-          <EntityHasUisCard></EntityHasUisCard>
-        </Grid>
       </Grid>
     </EntityLayout.Route>
     <EntityLayout.Route path="/health" title="Health" if={isGrafanaAvailable}>
       <HealthContent />
-    </EntityLayout.Route>
-    <EntityLayout.Route path="/docs" title="Documentation">
-      <DocumentsComponent />
     </EntityLayout.Route>
   </EntityLayout>
 );

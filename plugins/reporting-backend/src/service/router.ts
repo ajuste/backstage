@@ -13,22 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import { PluginEndpointDiscovery } from '@backstage/backend-common';
 import { errorHandler } from '@backstage/backend-common';
 import express from 'express';
 import Router from 'express-promise-router';
-import { Logger } from 'winston';
-import { ConfigApi } from '@backstage/core-plugin-api';
-import { TokenManager } from '@backstage/backend-common';
-import { ZFCatalogAPI } from 'backstage-plugin-zf-tech-insights-common';
+import { coreServices, createBackendPlugin } from '@backstage/backend-plugin-api';
+import { LoggerService } from '@backstage/backend-plugin-api';
 
 export interface RouterOptions {
-  logger: Logger;
-  config: ConfigApi;
-  discovery: PluginEndpointDiscovery;
-  tokenManager: TokenManager;
-  zfCatalogService: ZFCatalogAPI;
+  logger: LoggerService;
 }
 
 export async function createRouter(
@@ -47,3 +39,19 @@ export async function createRouter(
   router.use(errorHandler());
   return router;
 }
+
+export const reportingBackend = createBackendPlugin({
+  pluginId: 'reporting',
+  register(env) {
+    env.registerInit({
+      deps: {
+        logger: coreServices.logger,
+        http: coreServices.httpRouter,
+      },
+      async init({ logger, http }) {
+        const router = await createRouter({logger});
+        http.use(router);
+      },
+    });
+  },
+});

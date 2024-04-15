@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, waitFor, screen } from '@testing-library/react';
 import { ComponentStalenessReportFetchComponent } from './ComponentStalenessReportFetchComponent';
-import { techInsightsApiRef, } from '@backstage/plugin-tech-insights';
+import { techInsightsApiRef, } from '@backstage-community/plugin-tech-insights';
 import { catalogApiRef, entityRouteRef } from '@backstage/plugin-catalog-react';
 import { GetEntitiesResponse, } from '@backstage/catalog-client';
 import { TestApiRegistry, wrapInTestApp } from '@backstage/test-utils';

@@ -1,0 +1,98 @@
+integrations:
+  # This is a Personal Access Token or PAT from GitHub. You can find out how to generate this token, and more information
+  # about setting up the GitHub integration here: https://backstage.io/docs/getting-started/configuration#setting-up-a-github-integration
+  github:
+    - host: github.com
+      token: ${GITHUB_TOKEN}
+      apps:
+        - appId: ${GITHUB_APP_ID}
+          clientId: ${GITHUB_CLIENT_ID}
+          clientSecret: ${GITHUB_APP_SECRET}
+          webhookSecret: dummy
+          privateKey: ${GITHUB_APP_PRIVATE_KEY}
+  
+  # for accessing git repositories in Azure DevOps. credential type uses a PAT
+  # do NOT use the credential keyword described in the docs: https://backstage.io/docs/integrations/azure/locations/
+  azure:
+    - host: dev.azure.com
+      organizations:
+        - idexperts
+      token: ${AZURE_TOKEN}
+    
+auth:
+  providers:
+    guest:
+      dangerouslyAllowOutsideDevelopment: true
+    github:
+      development:
+        clientId: ${GITHUB_CLIENT_ID}
+        clientSecret: ${GITHUB_APP_SECRET}
+        resolvers:
+          - resolver: usernameMatchingUserEntityName
+        signIn:
+          resolvers:
+            - resolver: usernameMatchingUserEntityName
+          clientId: ${GITHUB_CLIENT_ID}
+          clientSecret: ${GITHUB_APP_SECRET}
+        guest:
+          dangerouslyAllowOutsideDevelopment: true
+      qa:
+        clientId: ${GITHUB_CLIENT_ID}
+        clientSecret: ${GITHUB_APP_SECRET}
+        resolvers:
+          - resolver: usernameMatchingUserEntityName
+        signIn:
+          resolvers:
+            - resolver: usernameMatchingUserEntityName
+          clientId: ${GITHUB_CLIENT_ID}
+          clientSecret: ${GITHUB_APP_SECRET}
+        guest:
+          dangerouslyAllowOutsideDevelopment: true
+      prod:
+        clientId: ${GITHUB_CLIENT_ID}
+        clientSecret: ${GITHUB_APP_SECRET}
+        resolvers:
+          - resolver: usernameMatchingUserEntityName
+        signIn:
+          resolvers:
+            - resolver: usernameMatchingUserEntityName
+          clientId: ${GITHUB_CLIENT_ID}
+          clientSecret: ${GITHUB_APP_SECRET}
+        guest:
+          dangerouslyAllowOutsideDevelopment: true
+
+catalog:
+  processingInterval:
+    seconds: 3600
+    
+  rules:
+    - allow: [Component, System, API, Resource, Location, User, Group, Template, Domain]
+
+  locations:
+    - type: github-discovery
+      target: https://github.com/riskive
+
+    - type: file
+      target: ../../data/noowner.yaml
+
+qeta:
+  allowAnonymous: false
+  allowMetadataInput: true
+  allowGlobalEdits: false
+  entities:
+    kinds: ['System']
+    max: 3
+  tags:
+    allowCreation: true
+    max: 5
+  moderators:
+    - group:default/developer-portal-qa-moderators
+  storage:
+    type: s3
+    folder: /qeta-attachments
+    bucket: ${BACKEND_BUCKET}
+    accessKeyId: ${AWS_ACCESS_KEY_ID}
+    secretAccessKey: ${AWS_SECRET_ACCESS_KEY}
+    sessionToken: ${AWS_SESSION_TOKEN}
+    region: us-west-2
+    

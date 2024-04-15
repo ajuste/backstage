@@ -23,11 +23,11 @@
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
-    "@backstage/backend-common": "^0.19.7",
-    "@backstage/catalog-client": "^1.4.4",
-    "@backstage/catalog-model": "^1.4.2",
-    "@backstage/config": "^1.1.0",
-    "@backstage/plugin-tech-insights-node": "^0.4.11",
+    "@backstage-community/plugin-tech-insights-node": "^0.6.1",
+    "@backstage/backend-common": "^0.21.6",
+    "@backstage/catalog-client": "^1.6.3",
+    "@backstage/catalog-model": "^1.4.5",
+    "@backstage/config": "^1.2.0",
     "@octokit/graphql": "^5.0.4",
     "@types/express": "*",
     "express": "^4.17.3",
@@ -38,7 +38,7 @@
     "yn": "^4.0.0"
   },
   "devDependencies": {
-    "@backstage/cli": "^0.22.14",
+    "@backstage/cli": "^0.26.2",
     "@types/supertest": "^2.0.12",
     "msw": "^0.47.0",
     "supertest": "^6.2.4"

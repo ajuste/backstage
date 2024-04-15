@@ -13,6 +13,7 @@ import DisruptionIcon from '@material-ui/icons/FlashOn';
 import ResponseIcon from '@material-ui/icons/RecentActors';
 import IntelligenceIcon from '@material-ui/icons/GroupWork';
 import DataScienceIcon from '@material-ui/icons/Functions';
+import FoxTeamIcon from '@material-ui/icons/FastForward';
 import UnknownIcon from '@material-ui/icons/BrokenImage';
 import { Entity } from '@backstage/catalog-model';
 
@@ -40,11 +41,11 @@ const useStyles = makeStyles(theme => ({
 const pillarToIcon = (pillar: Entity): JSX.Element => {
     switch (pillar.metadata?.annotations?.['zerofox.com/pillar']) {
         case 'Disruption':
-            return <DisruptionIcon htmlColor='#e0ca3c' style={{ 'fontSize': '45px' }}></DisruptionIcon>
+            return <DisruptionIcon htmlColor='#ffca3c' style={{ 'fontSize': '45px' }}></DisruptionIcon>
         case 'Sustaining':
             return <SustainingIcon htmlColor='#A2AEBB' style={{ 'fontSize': '45px' }}></SustainingIcon>
         case 'Attack Surface':
-            return <AttackSurfaceIcon htmlColor='#2d3047' style={{ 'fontSize': '45px' }}></AttackSurfaceIcon>
+            return <AttackSurfaceIcon htmlColor='#2d5080' style={{ 'fontSize': '45px' }}></AttackSurfaceIcon>
         case 'Response':
             return <ResponseIcon htmlColor='#23B5D3' style={{ 'fontSize': '45px' }}></ResponseIcon>
         case 'Protection':
@@ -53,6 +54,8 @@ const pillarToIcon = (pillar: Entity): JSX.Element => {
             return <IntelligenceIcon htmlColor='#F42272' style={{ 'fontSize': '45px' }}></IntelligenceIcon>
         case 'Data Science':
             return <DataScienceIcon htmlColor='#DAC4F7' style={{ 'fontSize': '45px' }}></DataScienceIcon>
+        case 'FoxTeam':
+            return <FoxTeamIcon htmlColor='#d64f1e' style={{ 'fontSize': '45px' }}></FoxTeamIcon>
         default:
             return <UnknownIcon style={{ 'fontSize': '60px' }}></UnknownIcon>
     }

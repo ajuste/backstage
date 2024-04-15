@@ -35,8 +35,7 @@ export const HomePage = () => {
     return (
         <Page themeId="home">
             <Content>
-                <HomePageSearchBar className={classes.searchBar} style={{ backgroundColor: 'white' }} />
-
+                <HomePageSearchBar className={classes.searchBar} />
                 <Grid item md={12} className={classes.contentContainer}>
                     <Grid container spacing={3} alignItems="stretch">
                         <Grid item md={4}>

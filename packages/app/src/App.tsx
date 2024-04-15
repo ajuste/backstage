@@ -1,93 +1,37 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
-import { apiDocsPlugin, ApiExplorerPage } from '@backstage/plugin-api-docs';
 
-import {
-  CatalogIndexPage,
-  CatalogEntityPage,
-  catalogPlugin,
-} from '@backstage/plugin-catalog';
-import {
-  CatalogImportPage,
-  catalogImportPlugin,
-} from '@backstage/plugin-catalog-import';
-import { ScaffolderPage, scaffolderPlugin } from '@backstage/plugin-scaffolder';
-import { orgPlugin } from '@backstage/plugin-org';
-import { SearchPage } from '@backstage/plugin-search';
-import { TechRadarPage } from '@backstage/plugin-tech-radar';
-import {
-  TechDocsIndexPage,
-  techdocsPlugin,
-  TechDocsReaderPage,
-} from '@backstage/plugin-techdocs';
+import orgPlugin from '@backstage/plugin-org/alpha';
+import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
+import { TechDocsReaderPage, TechDocsIndexPage } from '@backstage/plugin-techdocs';
+import techdocsPlugin from '@backstage/plugin-techdocs/alpha';
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
-import { UserSettingsPage } from '@backstage/plugin-user-settings';
-import { apis } from './apis';
-import { entityPage } from './components/catalog/EntityPage';
-import { searchPage } from './components/search/SearchPage';
-import { PillarAwareCatalogPage } from './components/catalog/PillarAwareCatalogPage'
-import { Root } from './components/Root';
-
-
-import { AlertDisplay, OAuthRequestDialog, SignInPage, IdentityProviders } from '@backstage/core-components';
-import { createApp } from '@backstage/app-defaults';
-import { AppRouter, FlatRoutes } from '@backstage/core-app-api';
-import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
-import { RequirePermission } from '@backstage/plugin-permission-react';
-import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
-import { HomePage } from './components/home/HomePage';
-import { ReportingPage, CodeCoveragePage, StalenessPage, EntitiesFactsPage } from 'plugin-reporting';
-import { ExplorePage } from './components/explore/ExplorePage';
-import { configApiRef, useApi, githubAuthApiRef } from '@backstage/core-plugin-api';
+import { ApiExplorerPage } from '@backstage/plugin-api-docs';
+import { CatalogUnprocessedEntitiesPage } from '@backstage/plugin-catalog-unprocessed-entities';
+import catalogPlugin from '@backstage/plugin-catalog/alpha';
+import scaffolderPlugin from '@backstage/plugin-scaffolder/alpha';
+import { createApp } from '@backstage/frontend-app-api';
+import { createExtensionOverrides } from '@backstage/frontend-plugin-api';
+import { FlatRoutes } from '@backstage/core-app-api';
+import { CatalogEntityPage, CatalogIndexPage, } from '@backstage/plugin-catalog';
+import catalogImportPlugin from '@backstage/plugin-catalog-import/alpha';
+import zfTechInsightsPlugin from 'backstage-plugin-zf-tech-insights/alpha';
+import reportingPlugin from 'plugin-reporting/alpha';
+import githubResourceFetcherPlugin from '@internal/plugin-github-resource-fetcher/alpha';
+import grafanaPlugin from 'plugin-grafana/alpha';
 import { QetaPage } from '@drodil/backstage-plugin-qeta';
-
-
-import * as plugins from './plugins';
-
-const GuestDisabledEnvs = ['qa', 'stag', 'prod'];
-
-const app = createApp({
-  apis,
-  plugins: Object.values(plugins),
-  components: {
-    SignInPage: props => {
-      const configApi = useApi(configApiRef);
-      let providers: IdentityProviders = !GuestDisabledEnvs.includes(configApi.getOptionalString('auth.environment') || "") ? ['guest'] : []
-      providers = [...providers,
-      {
-        id: 'github-auth-provider',
-        title: 'GitHub',
-        message: 'Sign in using GitHub',
-        apiRef: githubAuthApiRef,
-      }];
-      return (
-        <SignInPage {...props} providers={providers} />);
-
-    },
-  },
-  bindRoutes({ bind }) {
-    bind(catalogPlugin.externalRoutes, {
-      createComponent: scaffolderPlugin.routes.root,
-      viewTechDoc: techdocsPlugin.routes.docRoot,
-      createFromTemplate: scaffolderPlugin.routes.selectedTemplate,
-    });
-    bind(apiDocsPlugin.externalRoutes, {
-      registerApi: catalogImportPlugin.routes.importPage,
-    });
-    bind(scaffolderPlugin.externalRoutes, {
-      registerComponent: catalogImportPlugin.routes.importPage,
-      viewTechDoc: techdocsPlugin.routes.docRoot,
-    });
-    bind(orgPlugin.externalRoutes, {
-      catalogIndex: catalogPlugin.routes.catalogIndex,
-    });
-  },
-});
+import { apis } from './apis';
+import { convertLegacyApp } from '@backstage/core-compat-api'
+import { AppNav } from './extensions/AppNav';
+import { SigninPage } from './extensions/SignInPage';
+import { techRadarExtensionOverride } from './extensions/TechRadar';
+import { entityPage } from './components/catalog/EntityPage';
+import { PillarAwareCatalogPage } from './components/catalog/PillarAwareCatalogPage';
+import homePlugin, { HomeNavIcon, homePageExtension } from './extensions/Home';
 
 const routes = (
   <FlatRoutes>
-    <Route path="/" element={<HomePage />} />
     <Route
       path="/catalog"
       element={<CatalogIndexPage initialKind="system" />}
@@ -100,136 +44,59 @@ const routes = (
     >
       {entityPage}
     </Route>
+    <Route path="/catalog-graph" element={<CatalogGraphPage />} />
     <Route path="/docs" element={<TechDocsIndexPage initialFilter='all' />} />
-    <Route path="/qeta" element={<QetaPage title="Questions" />} />
     <Route
-      path="/docs/:namespace/:kind/:name/*"
+      path="/docs/:namespace/:kind/:name"
       element={<TechDocsReaderPage />}
     >
       <TechDocsAddons>
         <ReportIssue />
       </TechDocsAddons>
     </Route>
-    <Route path="/create" element={<ScaffolderPage />} />
     <Route path="/api-docs" element={<ApiExplorerPage />} />
-    <Route
-      path="/tech-radars/ui-e"
-      element={
-        <TechRadarPage
-          id="ui-e"
-          width={1500}
-          height={800}
-          title="UI - East"
-          subtitle="Use this radar to determine recommended technologies for new and existing frontend projects."
-          pageTitle="UI-East"
-        />
-      }
+    <Route path="/qeta" element={<QetaPage title="Questions" />} />
+    <Route path="/catalog-unprocessed-entities" element={<CatalogUnprocessedEntitiesPage />}
     />
-    <Route
-      path="/tech-radars/ui-w"
-      element={
-        <TechRadarPage
-          id="ui-w"
-          width={1500}
-          height={800}
-          title="UI - West"
-          subtitle="Use this radar to determine recommended technologies for new and existing frontend projects."
-          pageTitle="UI-West"
-        />
-      }
-    />
-    <Route
-      path="/tech-radars/qa"
-      element={
-        <TechRadarPage
-          id="qa"
-          width={1500}
-          height={800}
-          title="Testing & Quality"
-          subtitle="Use this radar to determine recommended technologies for testing and quality purposes."
-          pageTitle="QA"
-        />
-      }
-    />
-    <Route
-      path="/tech-radars/sre"
-      element={
-        <TechRadarPage
-          id="sre"
-          width={1500}
-          height={800}
-          title="SRE: Core Infra"
-          subtitle="Use this radar to determine recommended technologies for new and existing infrastructure projects."
-          pageTitle="SRE: Core Infra"
-        />
-      }
-    />
-    <Route
-      path="/tech-radars/python"
-      element={
-        <TechRadarPage
-          id="python"
-          width={1500}
-          height={800}
-          title="Python"
-          subtitle="Use this radar to determine recommended technologies for new and existing Python projects."
-          pageTitle="Python"
-        />
-      }
-    />
-    <Route
-      path="/tech-radars/ai"
-      element={
-        <TechRadarPage
-          id="ai"
-          width={1500}
-          height={800}
-          title="AI & Analysis"
-          subtitle="Use this radar to determine recommended technologies for new and existing AI projects."
-          pageTitle="AI & Analysis"
-        />
-      }
-    />
-    <Route
-      path="/tech-radars/flutter-mobile"
-      element={
-        <TechRadarPage
-          id="flutter-mobile"
-          width={1500}
-          height={800}
-          title="Flutter Mobile"
-          subtitle="Use this radar to determine recommended technologies for new and existing Flutter mobile projects."
-          pageTitle="Flutter Mobile"
-        />
-      }
-    />
-    <Route
-      path="/catalog-import"
-      element={
-        <RequirePermission permission={catalogEntityCreatePermission}>
-          <CatalogImportPage />
-        </RequirePermission>
-      }
-    />
-    <Route path="/search" element={<SearchPage />}>
-      {searchPage}
-    </Route>
-    <Route path="/settings" element={<UserSettingsPage />} />
-    <Route path="/catalog-graph" element={<CatalogGraphPage />} />
-    <Route path="/reporting" element={<ReportingPage />} />
-    <Route path="/reporting/code-coverage" element={<CodeCoveragePage />} />
-    <Route path="/reporting/service-staleness" element={<StalenessPage />} />
-    <Route path="/reporting/entities-fact" element={<EntitiesFactsPage />} />
-    <Route path="/explore" element={<ExplorePage />} />
   </FlatRoutes>
 );
 
-export default app.createRoot(
-  <>
-    <AlertDisplay />
-    <OAuthRequestDialog />
-    <AppRouter>
-      <Root>{routes}</Root>
-    </AppRouter>
-  </>
-);
+const legacyFeatures = convertLegacyApp(routes);
+const app = createApp({
+  features: [
+    orgPlugin,
+    zfTechInsightsPlugin,
+    githubResourceFetcherPlugin,
+    grafanaPlugin,
+    homePlugin,
+    catalogImportPlugin,
+    techRadarExtensionOverride,
+    reportingPlugin,
+    ...legacyFeatures,
+    createExtensionOverrides({
+      extensions: [
+        HomeNavIcon,
+        AppNav,
+        homePageExtension,
+        SigninPage,
+        ...apis
+      ],
+    }),
+  ],
+  bindRoutes({ bind }) {
+    bind(orgPlugin.externalRoutes, {
+      catalogIndex: catalogPlugin.routes.catalogIndex,
+    });
+    bind(scaffolderPlugin.externalRoutes, {
+      registerComponent: catalogImportPlugin.routes.importPage,
+      viewTechDoc: techdocsPlugin.routes.docRoot,
+    });
+    bind(catalogPlugin.externalRoutes, {
+      createComponent: scaffolderPlugin.routes.root,
+      viewTechDoc: techdocsPlugin.routes.docRoot,
+      createFromTemplate: scaffolderPlugin.routes.selectedTemplate,
+    });
+  }
+});
+
+export default app.createRoot();

@@ -9,33 +9,50 @@ app:
   reporting:
     pillarAdoption:
       excludedRepositories: ${REPORTING_PILLAR_ADOPTION_EXCLUDED_REPOSITORIES}
-
+  experimental:
+    packages: all
+    
 auth:
-  environment: development
   providers:
+    guest:
+      dangerouslyAllowOutsideDevelopment: true
     github:
       development:
-        clientId: ${AUTH_GITHUB_CLIENT_ID}
-        clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
+        clientId: ${GITHUB_CLIENT_ID}
+        clientSecret: ${GITHUB_APP_SECRET}
+        resolvers:
+          - resolver: usernameMatchingUserEntityName
+        signIn:
+          resolvers:
+            - resolver: usernameMatchingUserEntityName
+          clientId: ${GITHUB_CLIENT_ID}
+          clientSecret: ${GITHUB_APP_SECRET}
+        guest:
+          dangerouslyAllowOutsideDevelopment: true
       qa:
-        clientId: ${AUTH_GITHUB_CLIENT_ID}
-        clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
+        clientId: ${GITHUB_CLIENT_ID}
+        clientSecret: ${GITHUB_APP_SECRET}
+        resolvers:
+          - resolver: usernameMatchingUserEntityName
+        signIn:
+          resolvers:
+            - resolver: usernameMatchingUserEntityName
+          clientId: ${GITHUB_CLIENT_ID}
+          clientSecret: ${GITHUB_APP_SECRET}
+        guest:
+          dangerouslyAllowOutsideDevelopment: true
       prod:
-        clientId: ${AUTH_GITHUB_CLIENT_ID}
-        clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
-    okta:
-      development:
-        clientId: ${AUTH_OKTA_CLIENT_ID}
-        clientSecret: ${AUTH_OKTA_CLIENT_SECRET}
-        audience: https://zerofox.okta.com
-      qa:
-        clientId: ${AUTH_OKTA_CLIENT_ID}
-        clientSecret: ${AUTH_OKTA_CLIENT_SECRET}
-        audience: https://zerofox.okta.com
-      prod:
-        clientId: ${AUTH_OKTA_CLIENT_ID}
-        clientSecret: ${AUTH_OKTA_CLIENT_SECRET}
-        audience: https://zerofox.okta.com
+        clientId: ${GITHUB_CLIENT_ID}
+        clientSecret: ${GITHUB_APP_SECRET}
+        resolvers:
+          - resolver: usernameMatchingUserEntityName
+        signIn:
+          resolvers:
+            - resolver: usernameMatchingUserEntityName
+          clientId: ${GITHUB_CLIENT_ID}
+          clientSecret: ${GITHUB_APP_SECRET}
+        guest:
+          dangerouslyAllowOutsideDevelopment: true
 
 organization:
   name: Zerofox
@@ -47,21 +64,11 @@ grafana:
   domain: https://grafana-qa.zerofox.com
 
 backend:
-  # Used for enabling authentication, secret is shared by all backend plugins
-  # See https://backstage.io/docs/tutorials/backend-to-backend-auth for
-  # information on the format
-  # auth:
-  #   keys:
-  #     - secret: ${BACKEND_SECRET}
   baseUrl: http://localhost:7007
   listen:
     port: 7007
-    # Uncomment the following host directive to bind to specific interfaces
-    # host: 127.0.0.1
   csp:
     connect-src: ["'self'", '*.zerofox.com']
-    # Content-Security-Policy directives follow the Helmet format: https://helmetjs.github.io/#reference
-    # Default Helmet Content-Security-Policy values can be removed by setting the key to false
     script-src: ["'self'", "'unsafe-eval'", '*.zerofox.com']
     img-src: ["'self'", 'data:', '*.zerofox.com', '*.github.com', '*.githubusercontent.com']
     default-src: ["'self'", '*.zerofox.com']
@@ -70,12 +77,14 @@ backend:
     origin: http://localhost:3003
     methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
     credentials: true
-  # This is for local development only, it is not recommended to use this in production
-  # The production database configuration is stored in app-config.production.yaml
   database:
     client: better-sqlite3
     connection: ':memory:'
-  # workingDirectory: /tmp # Use this to configure a working directory for the scaffolder, defaults to the OS temp-dir
+  
+  auth:
+    dangerouslyDisableDefaultAuthPolicy: true
+    keys:
+     - secret: 'Q@w:;@RUnLgr@&Z'
 
 qeta:
   allowAnonymous: false
@@ -95,6 +104,7 @@ qeta:
     bucket: ${BACKEND_BUCKET}
     accessKeyId: ${AWS_ACCESS_KEY_ID}
     secretAccessKey: ${AWS_SECRET_ACCESS_KEY}
+    sessionToken: ${AWS_SESSION_TOKEN}
     region: us-west-2
 
 integrations:
@@ -102,6 +112,7 @@ integrations:
   # about setting up the GitHub integration here: https://backstage.io/docs/getting-started/configuration#setting-up-a-github-integration
   github:
     - host: github.com
+      token: ${GITHUB_TOKEN}
       apps:
         - appId: ${GITHUB_APP_ID}
           clientId: ${GITHUB_CLIENT_ID}
@@ -133,10 +144,6 @@ proxy:
       headers:
         Authorization: Bearer ${GRAFANA_TOKEN}
 
-# Reference documentation http://backstage.io/docs/features/techdocs/configuration
-# Note: After experimenting with basic setup, use CI/CD to generate docs
-# and an external cloud storage when deploying TechDocs for production use-case.
-# https://backstage.io/docs/features/techdocs/how-to-guides#how-to-migrate-from-techdocs-basic-to-recommended-deployment-approach
 techdocs:
   builder: 'local' # Alternatives - 'external'
   generator:
@@ -147,95 +154,33 @@ techdocs:
 scaffolder:
   # see https://backstage.io/docs/features/software-templates/configuration for software template options
 
+techInsights:
+  factRetrievers:
+    entityOwnershipFactRetriever:
+      cadence: '0 1 * * *'
+      lifecycle: { timeToLive: { weeks: 2 } }
+    entityMetadataFactRetriever:
+      cadence: '0 1 * * *'
+      lifecycle: { timeToLive: { weeks: 2 } }
+    techdocsFactRetriever:
+      cadence: '0 3 * * *'
+      lifecycle: { timeToLive: { weeks: 2 } }
+    githubFactRetriever:
+      cadence: '0 6 * * *'
+      lifecycle: { timeToLive: { weeks: 2 } }
+      timeout: 
+        hours: 2
+
 catalog:
+  processingInterval:
+    seconds: 3600
+
   rules:
     - allow: [Component, System, API, Resource, Location, User, Group, Template, Domain]
 
-  providers:
-    github:
-      # the provider ID can be any camelCase string
-      providerId:
-        organization: 'riskive' # string
-        catalogPath: '/catalog-info.yaml' # string
-        filters:
-          branch: 'master' # string
-          repository: '.*' # Regex
-          visibility: ['private', 'internal']
-        schedule: # same options as in TaskScheduleDefinition
-          # supports cron, ISO duration, "human duration" as used in code
-          frequency: { minutes: 60 }
-          # supports ISO duration, "human duration" as used in code
-          timeout: { minutes: 3 }
-
   locations:
-    
-    - type: url
-      target: https://github.com/riskive/backstage/blob/master/data/roles.yaml
-      rules:
-        - allow: [Group]
+    - type: github-discovery
+      target: https://github.com/riskive
 
-    - type: url
-      target: https://github.com/riskive/backstage/blob/master/data/teams.yaml
-      rules:
-        - allow: [Group]
-        
-    - type: url
-      target: https://github.com/riskive/backstage/blob/master/data/users.yaml
-      rules:
-        - allow: [User]
-        
-    - type: url
-      target: https://github.com/riskive/backstage/blob/master/data/pillar-attack-surface.yaml
-      rules:
-        - allow: [Component, Group]
-        
-    - type: url
-      target: https://github.com/riskive/backstage/blob/master/data/pillar-cti.yaml
-      rules:
-        - allow: [Component, Group]
-        
-    - type: url
-      target: https://github.com/riskive/backstage/blob/master/data/pillar-data-science.yaml
-      rules:
-        - allow: [Component, Group]
-        
-    - type: url
-      target: https://github.com/riskive/backstage/blob/master/data/pillar-protection.yaml
-      rules:
-        - allow: [Component, Group]
-        
-    - type: url
-      target: https://github.com/riskive/backstage/blob/master/data/pillar-response.yaml
-      rules:
-        - allow: [Component, Group]
-        
-    - type: url
-      target: https://github.com/riskive/backstage/blob/master/data/pillar-sustaining.yaml
-      rules:
-        - allow: [Component, Group]
-        
-    - type: url
-      target: https://github.com/riskive/backstage/blob/master/data/pillar-disruption.yaml
-      rules:
-        - allow: [Component, Group]
-        
-    - type: url
-      target: https://github.com/riskive/backstage/blob/master/data/domains.yaml
-      rules:
-        - allow: [Domain]
-
-    # backstage
-    - type: url
-      target: https://github.com/riskive/backstage/blob/master/catalog-info.yaml
-      rules:
-        - allow: [Component, API, Group, System]
-
-    # backstage golden paths
-    - type: url
-      target: https://github.com/riskive/backstage-docs/blob/master/goldenpath-creating_goldenpaths/catalog-info.yaml
-      rules:
-        - allow: [Component]
-    - type: url
-      target: https://github.com/riskive/backstage-docs/blob/master/goldenpath-add_documentation/catalog-info.yaml
-      rules:
-        - allow: [Component]
+    - type: file
+      target: ../../data/noowner.yaml

@@ -23,7 +23,7 @@ import { usePermission } from '@backstage/plugin-permission-react';
 
 import { catalogPlugin, DefaultCatalogPageProps } from '@backstage/plugin-catalog';
 
-export const PillarAwareCatalogPage = (props: DefaultCatalogPageProps): JSX.Element => {
+export const PillarAwareCatalogPage = (props: DefaultCatalogPageProps) => {
   const {
     actions,
     initiallySelectedFilter = 'all',

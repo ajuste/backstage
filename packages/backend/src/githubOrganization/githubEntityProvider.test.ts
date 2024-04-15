@@ -26,24 +26,5 @@ describe('githubEntityProvider', () => {
       expect(mockCatalogClient.getEntityByRef).toHaveBeenCalledWith(entityRef);
       expect(pillar).toBe('test-pillar');
     });
-
-    it('should return the null pillar for a given entity when no pillar', async () => {
-      const entityRef: CompoundEntityRef = { kind: 'Component', namespace: 'default', name: 'test-entity' };
-      const mockCatalogClient = {
-        getEntityByRef: jest.fn(),
-      };
-      mockCatalogClient.getEntityByRef.mockImplementation(async () =>
-        Promise.resolve({
-          metadata: {
-            name: 'test-entity',
-          },
-          spec: {}
-        } as Entity));
-
-      const pillar = await getPillarForEntity(entityRef, mockCatalogClient as any, getVoidLogger());
-
-      expect(mockCatalogClient.getEntityByRef).toHaveBeenCalledWith(entityRef);
-      expect(pillar).toBeNull();
-    });
   });
 });

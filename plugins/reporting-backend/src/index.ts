@@ -15,3 +15,4 @@
  */
 
 export * from './service/router';
+export { reportingBackend  as default } from './service/router'

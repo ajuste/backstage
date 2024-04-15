@@ -9,7 +9,7 @@ import {
   createRoutableExtension,
 } from '@backstage/core-plugin-api';
 import { catalogApiRef } from '@backstage/plugin-catalog-react';
-import { techInsightsApiRef } from '@backstage/plugin-tech-insights';
+import { techInsightsApiRef } from '@backstage-community/plugin-tech-insights';
 import { factAiRef } from './api/api';
 import FactServiceClient from './api/FactServiceClient';
 

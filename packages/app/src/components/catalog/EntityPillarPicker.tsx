@@ -1,17 +1,15 @@
-import React, {useEffect, useMemo, useState} from 'react';
-
-import {Entity} from '@backstage/catalog-model';
-
-import {DefaultEntityFilters, EntityFilter, useEntityList,} from '@backstage/plugin-catalog-react';
-
-import {Box, Checkbox, FormControlLabel, TextField, Typography} from '@material-ui/core';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Box, Checkbox, FormControlLabel, TextField, Typography } from '@material-ui/core';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import {Autocomplete} from '@material-ui/lab';
+import { Autocomplete } from '@material-ui/lab';
 
-const icon = <CheckBoxOutlineBlankIcon fontSize="small"/>;
-const checkedIcon = <CheckBoxIcon fontSize="small"/>;
+import { Entity } from '@backstage/catalog-model';
+import { DefaultEntityFilters, EntityFilter, useEntityList } from '@backstage/plugin-catalog-react';
+
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 type PillarFilters = DefaultEntityFilters & {
     pillars?: EntityPillarFilter;
@@ -33,10 +31,10 @@ class EntityPillarFilter implements EntityFilter {
 
 export const EntityPillarPicker = () => {
     const {
-        filters: {pillars},
+        filters: { pillars },
         updateFilters,
         backendEntities,
-        queryParameters: {pillars: pillarsParameter},
+        queryParameters: { pillars: pillarsParameter },
     } = useEntityList<PillarFilters>();
 
     const queryParamPillars = useMemo(
@@ -72,6 +70,7 @@ export const EntityPillarPicker = () => {
                 'Response',
                 'Sustaining',
                 'Data Science',
+                'FoxTeam',
             ];
 
             return [...new Set([...backendPillars, ...defaultPillars])].sort();
@@ -98,8 +97,8 @@ export const EntityPillarPicker = () => {
                     multiple
                     options={availablePillars}
                     value={selectedPillars}
-                    onChange={(_: object, value: string[]) => setSelectedPillars(value)}
-                    renderOption={(option, {selected}) => (
+                    onChange={(_, value) => setSelectedPillars(value)}
+                    renderOption={(option, { selected }) => (
                         <FormControlLabel
                             control={
                                 <Checkbox
@@ -112,7 +111,7 @@ export const EntityPillarPicker = () => {
                         />
                     )}
                     size="small"
-                    popupIcon={<ExpandMoreIcon data-testid="pillar-picker-expand"/>}
+                    popupIcon={<ExpandMoreIcon data-testid="pillar-picker-expand" />}
                     renderInput={params => (
                         <TextField
                             {...params}

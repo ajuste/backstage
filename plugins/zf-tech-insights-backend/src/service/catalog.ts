@@ -1,23 +1,24 @@
 import { ConfigApi } from '@backstage/core-plugin-api';
 import { TokenManager } from '@backstage/backend-common';
 import {
-  CatalogClient,
   CATALOG_FILTER_EXISTS,
+  CatalogApi,
 } from '@backstage/catalog-client';
 import {
   GroupEntity,
   ComponentEntity,
 } from '@backstage/catalog-model';
 
+
 import { ZFCatalogAPI } from 'backstage-plugin-zf-tech-insights-common';
 
 export default class ZFCatalogService implements ZFCatalogAPI {
-  private catalogClient: CatalogClient;
+  private catalogClient: CatalogApi;
   private tokenManager: TokenManager;
 
   constructor(
     _: ConfigApi,
-    catalogClient: CatalogClient,
+    catalogClient: CatalogApi,
     tokenManager: TokenManager,
   ) {
     this.catalogClient = catalogClient;
@@ -55,6 +56,7 @@ export default class ZFCatalogService implements ZFCatalogAPI {
       ? (entities.items[0] as ComponentEntity)
       : undefined;
   }
+  
 
   async getTeamsForPillar(pillar: string): Promise<Array<GroupEntity>> {
     const { token } = await this.tokenManager.getToken();

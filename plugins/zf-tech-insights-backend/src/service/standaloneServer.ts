@@ -43,7 +43,7 @@ export async function startStandaloneServer(
     logger,
   });
   const discovery = SingleHostDiscovery.fromConfig(config);
-  const catalogClient = new CatalogClient({
+  const catalogServiceClient = new CatalogClient({
     discoveryApi: discovery,
   });
   const router = await createRouter({
@@ -51,7 +51,7 @@ export async function startStandaloneServer(
     config,
     discovery,
     tokenManager,
-    catalogClient,
+    catalogServiceClient,
   });
 
   let service = createServiceBuilder(module)

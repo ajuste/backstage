@@ -6,8 +6,8 @@ import { useApi, useRouteRef } from '@backstage/core-plugin-api';
 import { CatalogApi, CATALOG_FILTER_EXISTS } from '@backstage/catalog-client';
 import { catalogApiRef, entityRouteParams, entityRouteRef, } from '@backstage/plugin-catalog-react';
 import { Entity, stringifyEntityRef, getCompoundEntityRef } from '@backstage/catalog-model';
-import { techInsightsApiRef, TechInsightsClient, Check, } from '@backstage/plugin-tech-insights';
-import { CheckResult } from '@backstage/plugin-tech-insights-common';
+import { techInsightsApiRef, TechInsightsClient, Check, } from '@backstage-community/plugin-tech-insights';
+import { CheckResult } from '@backstage-community/plugin-tech-insights-common';
 const CHECK = { id: "staleRepoCheck" } as Check;
 
 type BulkCheckResponseWithEntity = Array<{

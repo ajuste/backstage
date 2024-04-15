@@ -6,3 +6,4 @@
  */
 export * from './types';
 export * from './api/ZFCatalogAPIClient';
+export * from './pillars';

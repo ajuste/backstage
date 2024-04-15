@@ -8,7 +8,7 @@ import {
   getCompoundEntityRef,
 } from '@backstage/catalog-model';
 
-import { TechInsightsApi } from '@backstage/plugin-tech-insights';
+import { TechInsightsApi } from '@backstage-community/plugin-tech-insights';
 
 export default class FactServiceClient implements FactsServiceAPI {
   protected catalogApi: CatalogApi;

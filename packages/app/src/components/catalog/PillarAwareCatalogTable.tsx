@@ -65,10 +65,19 @@ const pillarAwareColumnFactories = Object.freeze({
 
         const name = (value.spec?.profile as JsonObject)?.displayName || value.metadata.name;
         const link = catalogEntityRoute(entityRouteParams(value))
-        return <Link to={link} target="_blank">{name}</Link>;
+        return <Link to={link} target="_blank">{String(name)}</Link>;
       },
     };
-  }
+  },
+  createHiddenNameColumn(): TableColumn<CatalogTableRow> {
+    return {
+      title: 'Owner',
+      field: 'resolved.name',
+      hidden: true,
+      searchable: true,
+      filtering: true,
+    };
+  },
 });
 
 export const PillarAwareCatalogTable = (props: PillarAwareCatalogTableProps) => {
@@ -79,6 +88,7 @@ export const PillarAwareCatalogTable = (props: PillarAwareCatalogTableProps) => 
   const columns: TableColumn<CatalogTableRow>[] = useMemo(() => {
     return [
       CatalogTable.columns.createTitleColumn({ hidden: true }),
+      pillarAwareColumnFactories.createHiddenNameColumn(),
       pillarAwareColumnFactories.createNameColumn(),
       pillarAwareColumnFactories.createPillarColumn(pillarEntities),
       ...createEntitySpecificColumns(),
@@ -106,7 +116,6 @@ export const PillarAwareCatalogTable = (props: PillarAwareCatalogTableProps) => 
             CatalogTable.columns.createSystemColumn(),
             CatalogTable.columns.createOwnerColumn(),
             CatalogTable.columns.createSpecTypeColumn(),
-            CatalogTable.columns.createSpecLifecycleColumn(),
           ];
       }
     }

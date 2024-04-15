@@ -16,25 +16,27 @@
 
 import express from 'express';
 import Router from 'express-promise-router';
-import { Logger } from 'winston';
 import { errorHandler } from '@backstage/backend-common';
 import { PluginEndpointDiscovery } from '@backstage/backend-common';
-import { ConfigApi } from '@backstage/core-plugin-api';
-import { CatalogClient } from '@backstage/catalog-client';
+import { ConfigApi, } from '@backstage/core-plugin-api';
 import { TokenManager } from '@backstage/backend-common';
+import { LoggerService } from '@backstage/backend-plugin-api';
+import { CatalogApi } from '@backstage/catalog-client';
+
 import ZFCatalogService from './catalog';
 
 export interface RouterOptions {
-  logger: Logger;
+  logger: LoggerService;
   config: ConfigApi;
   discovery: PluginEndpointDiscovery;
   tokenManager: TokenManager;
-  catalogClient: CatalogClient;
+  catalogServiceClient: CatalogApi;
 }
 
 export async function createRouter(
   options: RouterOptions,
 ): Promise<express.Router> {
+
   const { logger } = options;
 
   const router = Router();
@@ -43,7 +45,7 @@ export async function createRouter(
   const buildCatalogServiceRouter = (): ZFCatalogService => {
     return new ZFCatalogService(
       options.config,
-      options.catalogClient,
+      options.catalogServiceClient,
       options.tokenManager,
     );
   };

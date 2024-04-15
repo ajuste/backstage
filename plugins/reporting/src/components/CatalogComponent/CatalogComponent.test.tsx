@@ -1,16 +1,14 @@
 import React from 'react';
-import { render, waitFor, screen } from '@testing-library/react';
+import { renderInTestApp } from '@backstage/test-utils';
+import { waitFor, screen } from '@testing-library/react';
 import { CatalogComponent } from './CatalogComponent';
-import { wrapInTestApp } from '@backstage/test-utils';
 
 describe('CatalogComponent', () => {
   it('should render available components', async () => {
 
-    render(
-      wrapInTestApp(
-        <CatalogComponent />
-      ),
-    );
+    await renderInTestApp(
+      <CatalogComponent />
+    )
     await waitFor(() => screen.queryByTestId('code-coverage'));
 
     expect(screen.getByTestId('code-coverage')).toBeInTheDocument();
