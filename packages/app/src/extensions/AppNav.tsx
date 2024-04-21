@@ -24,6 +24,8 @@ import CategoryIcon from '@material-ui/icons/Category';
 import CreateIcon from '@material-ui/icons/AddCircleOutline';
 import SettingsIcons from '@material-ui/icons/Settings';
 import LiveHelpIcon from '@material-ui/icons/LiveHelp';
+import ScoreIcon from '@material-ui/icons/Score';
+
 import {
   createExtension,
   coreExtensionData,
@@ -118,6 +120,8 @@ export const AppNav = createExtension({
             <SidebarItem icon={LibraryBooks} to="docs" text="Docs" />
             <SidebarItem icon={LiveHelpIcon} to="qeta" text="Q&A" />
             <SidebarItem icon={ReportingIcon} to="reporting" text="Reporting" />
+            <SidebarItem icon={ScoreIcon} to="score-board" text="Score board" />
+
             <SidebarDivider />
             <SidebarScrollWrapper>
               <SidebarItem icon={MapIcon} text="Tech Radars">

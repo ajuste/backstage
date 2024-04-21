@@ -1,0 +1,364 @@
+---
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: service-assessment
+  title: Service Assessment
+  description: Submit an assessment for a service.
+  annotations:
+    backstage.io/time-saved: PT10M
+spec:
+  owner: user:default/ajuste
+  type: maturity
+  parameters:
+    - title: Basic information
+      required:
+        - service
+        - subsystem
+      properties:
+        service:
+          title: Service name
+          type: string
+          ui:field: EntityPicker
+          ui:options:
+            allowArbitraryValues: false
+            catalogFilter:
+              kind: System
+        subsystem:
+          title: Subsystem Being Assessed
+          description: You will have to submit one assessment for each subsystem that may live on a repo. Try to be as specific as possible.
+          type: string
+          default: gp2
+          enum:
+            - angular
+            - django
+            - golang
+            - node
+            - python
+            - angularjs
+            - javascript
+            - typescript
+            - other
+          enumNames:
+            - 'Angular'
+            - 'Django'
+            - 'GoLang'
+            - 'Node'
+            - 'Python'
+            - 'AngularJS'
+            - 'Javascript'
+            - 'Typescript'
+            - 'Other'
+            
+    - title: Safety
+      description: How much can you rely on the system to indicate breaking changes to your team's work or previously built functionality?
+      required:
+        - static_typing
+        - unit_tests
+        - integration_tests
+        - e2e_tests
+        - testing_coverage
+      properties:
+      
+        static_typing:
+          title: Static Typing
+          type: string
+          enum:
+            - not_available
+            - available_unenforced
+            - available_enforced
+            - available_enforced_cross_service
+          enumNames:
+            - 'Static typing is not available.'
+            - 'Static typing is available but ignored/unused/unenforced.'
+            - 'Static typing is available and enforced.'
+            - 'Static typing is available, enforced and cross-service types are separated out.'
+
+        unit_tests:
+          title: Unit Tests
+          description: 'See Small Tests for a definition to apply here\: https://testing.googleblog.com/2010/12/test-sizes.html'
+          type: string
+          enum:
+            - not_available
+            - available_unenforced
+            - available_enforced_incomplete
+            - available_enforced_complete
+          enumNames:
+            - 'Unit test framework is not available.'
+            - 'Unit test framework is available but unenforced.'
+            - 'Unit test framework is available and enforced for new pull requests, but incomplete.'
+            - 'Unit test framework is available, enforced, and provides enough coverage to effectively catch regressions.'
+
+        integration_tests:
+          title: Integration Tests
+          description: 'See "Medium Tests" for a definition to apply here: https://testing.googleblog.com/2010/12/test-sizes.html'
+          type: string
+          enum:
+            - not_available
+            - available_unenforced
+            - available_enforced_incomplete
+            - available_enforced_complete
+          enumNames:
+          - 'Integration test framework is not available.'
+          - 'Integration test framework is available but unenforced.'
+          - 'Integration test framework is available and enforced for new pull requests, but incomplete.'
+          - 'Integration test framework is available, enforced, and provides enough coverage to effectively catch regressions.'
+
+        e2e_tests:
+          title: E2E Tests
+          description: 'See "Large Tests" for a definition to apply here: https://testing.googleblog.com/2010/12/test-sizes.html'
+          type: string
+          enum:
+            - not_available
+            - available_unenforced
+            - available_enforced_incomplete
+            - available_enforced_complete
+          enumNames:
+            - 'E2E test framework is not available.'
+            - 'E2E test framework is available but unenforced.'
+            - 'E2E test framework is available and enforced for new pull requests, but incomplete.'
+            - 'E2E test framework is available, enforced, and provides enough coverage to effectively catch regressions.'
+
+        testing_coverage:
+          title: E2E Tests
+          type: string
+          enum:
+            - not_available
+            - available_unenforced
+            - available_enforced_incomplete
+            - available_enforced_complete
+          enumNames:
+            - 'Testing coverage is not collected.'
+            - 'Testing coverage is collected, but not reported.'
+            - 'Testing coverage is collected and reported, but minimums are unenforced.'
+            - 'Testing coverage is collected, reported, and minimums are enforced.'
+
+    - title: Knowledge
+      description: How well known, either implicitly or explicitly, is the service to the organization? How well distributed is this knowledge?
+      required:
+        - ramp_up
+        - users
+        - expected_output
+        - internal_functionality
+        - business_importance
+      properties:
+      
+        ramp_up:
+          title: Ramp-up
+          description: An SME is a subject matter expert who is knowledgable about running the service.
+          type: string
+          enum:
+            - requires_1_day_or_more_with_help
+            - requires_1_hour_with_help
+            - requires_1_hour_with_readme
+            - requires_5_minutes_with_readme
+          enumNames:
+            - 'Developing service locally requires 1 day or more of setup with an SMEs help.'
+            - 'Developing service locally requires 1 hour of setup with an SMEs help.'
+            - 'Developing service locally requires 1 hour of setup following just the README.'
+            - 'Developing service locally requires 5 minutes of setup following just the README.'
+      
+        users:
+          title: Users
+          description: Users do not mean Humans, any service that uses another service can be a "User" in this definition.
+          type: string
+          enum:
+            - not_well_understood
+            - well_understood_by_several_engineers
+            - architecturally_documented_but_not_well_understood_by_engineers
+            - architecturally_documented_and_well_understood_by_engineers
+          enumNames:
+            - 'Users are not well understood.'
+            - 'Users are well understood by several engineers, but not documented.'
+            - 'The users are architecturally documented, but not well understood by engineers.'
+            - 'The users are architecturally documented and well understood by engineers.'
+      
+        expected_output:
+          title: Expected Output
+          description: By defined, we mean behavior can be communicated easily without requiring an investigation.
+          type: string
+          enum:
+            - not_well_defined
+            - well_defined_by_several_engineers_but_not_documented
+            - architecturally_documented_but_not_well_understood_by_engineers
+            - architecturally_documented_and_well_understood_by_engineers
+          enumNames:
+            - 'Expected output is not well defined.'
+            - 'Expected output is well defined by several engineers, but not documented.'
+            - 'Expected output is architecturally documented, but not well understood by engineers.'
+            - 'Expected output is architecturally documented and well understood by engineers.'
+      
+        internal_functionality:
+          title: Internal functionality
+          description: By defined, we mean behavior can be communicated easily without requiring an investigation.
+          type: string
+          enum:
+            - not_well_defined
+            - well_defined_by_several_engineers_but_not_documented
+            - architecturally_documented_but_not_well_understood_by_engineers
+            - architecturally_documented_and_well_understood_by_engineers
+          enumNames:
+            - 'Internal functionality is not well defined.'
+            - 'Internal functionality is well defined by several engineers, but not documented.'
+            - 'Internal functionality is architecturally documented, but not well understood by engineers.'
+            - 'Internal functionality is architecturally documented and well understood by engineers.'
+      
+        business_importance:
+          title: Business Importance
+          description: Service downtime is described as the entire service becoming unavailable.
+          type: string
+          enum:
+            - service_downtime_is_acceptable
+            - service_downtime_requires_hotfix_deploy_within_5_days
+            - service_downtime_requires_hotfix_deploy_within_1_day
+            - service_is_critical_and_downtime_requires_hotfix_deploy_as_soon_as_possible
+          enumNames:
+            - 'Service downtime is acceptable.'
+            - 'Service downtime requires a hotfix deploy within 5 days.'
+            - 'Service downtime requires a hotfix deploy within 1 day.'
+            - 'Service is critical and downtime requires a hotfix deploy as soon as possible.'
+    
+    - title: Infrastructure
+      description: How much does the build system enforce good safety and practices before merging pull requests? How much of the deployment process is automated and reproducible locally?
+      required:
+        - environments
+        - continuos_integration
+        - continuos_deployment
+        - monitoring_alerting
+      properties:
+      
+        environments:
+          title: Environments
+          type: string
+          enum:
+            - production_only
+            - production_and_staging
+            - production_staging_qa
+            - production_staging_qa_local
+          enumNames:
+            - 'Service can only be validated on Production.'
+            - 'Service can only be validated on Production and Staging.'
+            - 'Service can only be validated on Production, Staging and QA.'
+            - 'Service can be validated on Production, Staging, QA and Locally.'
+      
+        continuos_integration:
+          title: Continuous Integration
+          description: How much of the peer review process is automated to enforce good practices?
+          type: string
+          enum:
+            - best_practices_not_defined
+            - best_practices_defined_but_not_enforced
+            - best_practices_defined_and_enforced_but_not_reproducible
+            - best_practices_defined_and_enforced_and_reproducible
+          enumNames:
+            - 'Best practices such as linting, testing, and structure are not defined.'
+            - 'Best practices are well defined, but not enforced.'
+            - 'Best practices are well defined and enforced, but engineers cannot reproduce issues locally.'
+            - 'Best practices are well defined, enforced and reproducible.'
+      
+        continuos_deployment:
+          title: Continuous Deployment
+          description: How much of the deployment process is automated and reproducible locally?
+          type: string
+          enum:
+            - deployment_not_automated
+            - deployment_automated_not_containerized
+            - deployment_automated_containerized_not_orchestrated
+            - deployment_fully_automated_containerized_orchestrated
+          enumNames:
+            - 'Deployment of service is not automated (E.C. Drone/Jenkins).'
+            - 'Deployment of service is automated, but not containerized (E.C. Docker).'
+            - 'Deployment of service is automated and containerized, but not orchestrated (E.C. Nomad).'
+            - 'Deployment of service is fully automated, containerized and orchestrated.'
+      
+        monitoring_alerting:
+          title: Monitoring / Alerting
+          description: What automated systems do we have to ensure availability and expected functionality?
+          type: string
+          enum:
+            - uptime_requirements_not_defined
+            - uptime_requirements_defined_but_not_monitored
+            - uptime_requirements_defined_and_monitored_but_logs_uncaptured
+            - uptime_requirements_defined_monitored_and_logs_captured
+          enumNames:
+            - 'Uptime requirements have not been defined.'
+            - 'Uptime requirements have been defined, but the service is not monitored.'
+            - 'Uptime requirements have been defined and the service is monitored, but logs are uncaptured.'
+            - 'Uptime requirements have been defined, the service is monitored, and logs are being captured.'
+    
+    - title: Service Ownership
+      description: Do engineers exist in the organization who own, promote and maintain the service?
+      required:
+        - service_ownership
+        - maintenance
+        - code_standards
+        - analytics_analysis
+      properties:
+      
+        service_ownership:
+          title: Service Ownership
+          type: string
+          enum:
+            - primary_or_secondary_not_specified
+            - primary_not_knowledgable
+            - primary_owns_secondary_not_knowledgable
+            - primary_and_secondary_knowledgable
+          enumNames:
+            - 'Either the primary or secondary service owner is not specified.'
+            - 'Primary and secondary service owners are specified, but the primary isnt knowledgable about the service.'
+            - 'Primary owns the service, and the secondary is specified, but cannot own the service in the primarys absence.'
+            - 'Primary and secondary are specified and knowledgable owners of the service.'
+      
+        code_standards:
+          title: Code Standards
+          type: string
+          description: Scaffolding represents any sort of templates available for adding features to the service.
+          enum:
+            - no_code_standards_defined
+            - linting_no_guidance_on_organization
+            - linting_well_organized_no_scaffolding
+            - linting_organization_scaffolding
+          enumNames:
+            - 'No code standards have been defined.'
+            - 'The service implements linting, but doesnt offer any guidance on file organization.'
+            - 'The service implements linting and is well organized, but doesnt provide scaffolding.'
+            - 'The service implements linting, organization, and scaffolding.'
+      
+        maintenance:
+          title: Maintenance
+          type: string
+          description: Is the service being actively maintained and is in a ready state for changes?
+          enum:
+            - service_not_changed_in_3_months
+            - service_deployed_recently_security_issues_outstanding
+            - service_deployed_recently_security_issues_fixed_framework_out_of_date
+            - service_actively_deployed_maintained_up_to_date
+          enumNames:
+            - 'The service has not been changed/deployed in the last 3 months.'
+            - 'The service has been deployed recently, but identified security issues have been outstanding for more than 2 weeks.'
+            - 'The service has been deployed recently, and security issues fixed, but the services framework/language is out of date with the current LTS version.'
+            - 'The service is being actively deployed, maintained, and kept up to date.'
+      
+        analytics_analysis:
+          title: Analytics / Analysis
+          type: string
+          description: Is it possible for the business to determine how valuable the service is?
+          enum:
+            - no_usage_reporting
+            - usage_reporting_no_dashboard
+            - usage_reporting_dashboard_no_bigquery
+            - usage_reporting_dashboard_bigquery
+          enumNames:
+            - 'The service does not report usage to any external/internal service.'
+            - 'The service reports usage, but no dashboard has been developed to track important metrics'
+            - 'The service reports usage, and a dashboard has been developed, but the data isnt accessible in BigQuery.'
+            - 'The service reports usage, a dashboard has been developed, and the data is accessible in BigQuery.'
+            
+  steps:
+    - id: fetch-base
+      name: Fetch Base
+      action: fetch:template
+      input:
+        url: ./template
+        values:
+          name: ${{parameters.name}}

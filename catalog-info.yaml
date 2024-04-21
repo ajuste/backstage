@@ -12,3 +12,21 @@ spec:
     lifecycle: experimental
     type: website
     children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: service-assessment-template
+spec:
+  type: url
+  targets:
+    - https://github.com/riskive/backstage/blob/master/data/templates/service-assessment.yaml
+---
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: no-owner
+spec:
+  type: url
+  targets:
+    - https://github.com/riskive/backstage/blob/master/data/templates/no-owner.yaml

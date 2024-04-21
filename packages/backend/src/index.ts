@@ -28,9 +28,12 @@ async function main() {
   backend.add(import('@backstage/plugin-search-backend-module-techdocs/alpha'));
 
   // Scaffold
+  backend.add(import('@backstage/plugin-scaffolder-backend/alpha'));
   backend.add(
     import('@backstage/plugin-catalog-backend-module-scaffolder-entity-model'),
   );
+
+  // Auth
   backend.add(import('@backstage/plugin-permission-backend/alpha'));
   backend.add(
     import('@backstage/plugin-permission-backend-module-allow-all-policy'),

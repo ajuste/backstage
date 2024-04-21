@@ -8,7 +8,6 @@ import techdocsPlugin from '@backstage/plugin-techdocs/alpha';
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
 import { ApiExplorerPage } from '@backstage/plugin-api-docs';
-import { CatalogUnprocessedEntitiesPage } from '@backstage/plugin-catalog-unprocessed-entities';
 import catalogPlugin from '@backstage/plugin-catalog/alpha';
 import scaffolderPlugin from '@backstage/plugin-scaffolder/alpha';
 import { createApp } from '@backstage/frontend-app-api';
@@ -17,6 +16,7 @@ import { FlatRoutes } from '@backstage/core-app-api';
 import { CatalogEntityPage, CatalogIndexPage, } from '@backstage/plugin-catalog';
 import catalogImportPlugin from '@backstage/plugin-catalog-import/alpha';
 import zfTechInsightsPlugin from 'backstage-plugin-zf-tech-insights/alpha';
+import { ScoreBoardPage } from '@oriflame/backstage-plugin-score-card';
 import reportingPlugin from 'plugin-reporting/alpha';
 import githubResourceFetcherPlugin from '@internal/plugin-github-resource-fetcher/alpha';
 import grafanaPlugin from 'plugin-grafana/alpha';
@@ -56,8 +56,7 @@ const routes = (
     </Route>
     <Route path="/api-docs" element={<ApiExplorerPage />} />
     <Route path="/qeta" element={<QetaPage title="Questions" />} />
-    <Route path="/catalog-unprocessed-entities" element={<CatalogUnprocessedEntitiesPage />}
-    />
+     <Route path="/score-board" element={<ScoreBoardPage />} />
   </FlatRoutes>
 );
 
