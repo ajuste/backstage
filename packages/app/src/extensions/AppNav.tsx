@@ -1,19 +1,3 @@
-/*
- * Copyright 2023 The Backstage Authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 import React from 'react';
 import HomeIcon from '@material-ui/icons/Home';
 import ExtensionIcon from '@material-ui/icons/Extension';
@@ -21,7 +5,7 @@ import MapIcon from '@material-ui/icons/MyLocation';
 import LibraryBooks from '@material-ui/icons/LibraryBooks';
 import ReportingIcon from '@material-ui/icons/Assessment';
 import CategoryIcon from '@material-ui/icons/Category';
-import CreateIcon from '@material-ui/icons/AddCircleOutline';
+import CreateIcon from '@material-ui/icons/MapRounded';
 import SettingsIcons from '@material-ui/icons/Settings';
 import LiveHelpIcon from '@material-ui/icons/LiveHelp';
 import ScoreIcon from '@material-ui/icons/Score';
@@ -120,7 +104,7 @@ export const AppNav = createExtension({
             <SidebarItem icon={LibraryBooks} to="docs" text="Docs" />
             <SidebarItem icon={LiveHelpIcon} to="qeta" text="Q&A" />
             <SidebarItem icon={ReportingIcon} to="reporting" text="Reporting" />
-            <SidebarItem icon={ScoreIcon} to="score-board" text="Score board" />
+            <SidebarItem icon={ScoreIcon} to="score-board" text="Service Assessment" />
 
             <SidebarDivider />
             <SidebarScrollWrapper>
@@ -138,7 +122,7 @@ export const AppNav = createExtension({
             </SidebarScrollWrapper>
           </SidebarGroup>
           <SidebarDivider />
-          <SidebarItem icon={CreateIcon} to="/create" text="Create..." />
+          <SidebarItem icon={CreateIcon} to="/create" text="Golden paths" />
           <SidebarSpace />
           <SidebarDivider />
           <SidebarItem icon={SettingsIcons} to="settings" text="Settings" />

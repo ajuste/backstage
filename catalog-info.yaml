@@ -1,32 +1,119 @@
 apiVersion: backstage.io/v1alpha1
-kind: Component
+kind: Group
 metadata:
-    name: devportal
-    description: Backstage devportal
+    name: owner
+    description: Owners of airflow
     annotations:
-        backstage.io/techdocs-ref: dir:.
-        github.com/project-slug: backstage/backstage
-        zerofox.com/pillar: Other
+        zerofox.com/pillar: Airflow
+    namespace: airflow
 spec:
-    owner: ajuste
-    lifecycle: experimental
-    type: website
+    lifecycle: production
+    type: team
+    profile:
+        displayName: airflow-team
+    children: []
+    members: [default/noowner]
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+    name: airflow
+    annotations:
+        backstage.io/code-coverage: enabled
+        backstage.io/techdocs-ref: dir:.
+        zerofox.com/pillar: Airflow
+    links:
+        - url: https://nomad-qa.zerofox.com/ui/jobs/airflow
+          title: Nomad QA
+        - url: https://nomad-stag.zerofox.com/ui/jobs/airflow
+          title: Nomad Stag
+        - url: https://nomad-prod.zerofox.com/ui/jobs/airflow
+          title: Nomad Prod
+spec:
+    owner: airflow/owner
+    lifecycle: production
     children: []
 ---
 apiVersion: backstage.io/v1alpha1
-kind: Location
+kind: Component
 metadata:
-  name: service-assessment-template
+    name: airflow
+    annotations:
+        zerofox.com/pillar: Airflow
+    namespace: airflow
+    links:
+        - url: https://nomad-qa.zerofox.com/ui/jobs/airflow/airflow
+          title: Nomad QA
+        - url: https://nomad-stag.zerofox.com/ui/jobs/airflow/airflow
+          title: Nomad Stag
+        - url: https://nomad-prod.zerofox.com/ui/jobs/airflow/airflow
+          title: Nomad Prod
 spec:
-  type: url
-  targets:
-    - https://github.com/riskive/backstage/blob/master/data/templates/service-assessment.yaml
+    owner: airflow/owner
+    lifecycle: production
+    type: service
+    system: default/airflow
+    children: []
 ---
 apiVersion: backstage.io/v1alpha1
-kind: Location
+kind: Component
 metadata:
-  name: no-owner
+    name: scheduler
+    annotations:
+        zerofox.com/pillar: Airflow
+    namespace: airflow
+    links:
+        - url: https://nomad-qa.zerofox.com/ui/jobs/airflow/airflow-scheduler
+          title: Nomad QA
+        - url: https://nomad-stag.zerofox.com/ui/jobs/airflow/airflow-scheduler
+          title: Nomad Stag
+        - url: https://nomad-prod.zerofox.com/ui/jobs/airflow/airflow-scheduler
+          title: Nomad Prod
 spec:
-  type: url
-  targets:
-    - https://github.com/riskive/backstage/blob/master/data/templates/no-owner.yaml
+    owner: airflow/owner
+    lifecycle: production
+    type: service
+    system: default/airflow
+    children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+    name: worker
+    annotations:
+        zerofox.com/pillar: Airflow
+    namespace: airflow
+    links:
+        - url: https://nomad-qa.zerofox.com/ui/jobs/airflow/airflow-worker
+          title: Nomad QA
+        - url: https://nomad-stag.zerofox.com/ui/jobs/airflow/airflow-worker
+          title: Nomad Stag
+        - url: https://nomad-prod.zerofox.com/ui/jobs/airflow/airflow-worker
+          title: Nomad Prod
+spec:
+    owner: airflow/owner
+    lifecycle: production
+    type: service
+    system: default/airflow
+    children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+    name: celery-flower
+    annotations:
+        zerofox.com/pillar: Airflow
+    namespace: airflow
+    links:
+        - url: https://nomad-qa.zerofox.com/ui/jobs/airflow/airflow-celery-flower
+          title: Nomad QA
+        - url: https://nomad-stag.zerofox.com/ui/jobs/airflow/airflow-celery-flower
+          title: Nomad Stag
+        - url: https://nomad-prod.zerofox.com/ui/jobs/airflow/airflow-celery-flower
+          title: Nomad Prod
+spec:
+    owner: airflow/owner
+    lifecycle: production
+    type: service
+    system: default/airflow
+    children: []

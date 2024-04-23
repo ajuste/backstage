@@ -29,6 +29,10 @@ import { techRadarExtensionOverride } from './extensions/TechRadar';
 import { entityPage } from './components/catalog/EntityPage';
 import { PillarAwareCatalogPage } from './components/catalog/PillarAwareCatalogPage';
 import homePlugin, { HomeNavIcon, homePageExtension } from './extensions/Home';
+import { EntityPickerWithRepoExtension, NomadJobPickerExtension, MultipleNomadJobPickerExtension } from './extensions/ScaffolderPage';
+import { ScaffolderFieldExtensions, } from '@backstage/plugin-scaffolder-react';
+import { ScaffolderPage } from '@backstage/plugin-scaffolder';
+
 
 const routes = (
   <FlatRoutes>
@@ -56,7 +60,15 @@ const routes = (
     </Route>
     <Route path="/api-docs" element={<ApiExplorerPage />} />
     <Route path="/qeta" element={<QetaPage title="Questions" />} />
-     <Route path="/score-board" element={<ScoreBoardPage />} />
+    <Route path="/score-board" element={<ScoreBoardPage title='Service Assessment' subTitle='Aids tech leads and service owners to determine the overall risk of making changes to an existing service, and communicate that service level to other tech leads.' tableTitle="Scores overview"  />} />
+
+    <Route path="/create" element={<ScaffolderPage headerOptions={{ title: "Golden paths", subtitle: "Your guided route to best practices" }} />}>
+      <ScaffolderFieldExtensions>
+        <EntityPickerWithRepoExtension />
+        <NomadJobPickerExtension />
+        <MultipleNomadJobPickerExtension />
+      </ScaffolderFieldExtensions>
+    </Route>
   </FlatRoutes>
 );
 
@@ -71,6 +83,7 @@ const app = createApp({
     catalogImportPlugin,
     techRadarExtensionOverride,
     reportingPlugin,
+   // scaffolderExtensionOverride,
     ...legacyFeatures,
     createExtensionOverrides({
       extensions: [

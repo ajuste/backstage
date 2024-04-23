@@ -68,7 +68,7 @@ import { EntityTechdocsContent } from '@backstage/plugin-techdocs';
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
 import { DocumentsComponent as PillarDocumentsComponent, UIsCardComponent as PillarUIsCardComponent, APICardComponent as PillarAPICardComponent, SystemCardComponent as PillarSystemCardComponent, TeamsCardComponent as PillarTeamsCardComponent } from '../pillar';
-
+import { EntityScoreCardContent } from '@oriflame/backstage-plugin-score-card';
 import { PillarAwareAboutCard } from './PillarAwareAboutCard';
 
 const techdocsContent = (
@@ -470,6 +470,14 @@ const systemPage = (
 
     <EntityLayout.Route path="/code-coverage" title="Code Coverage">
       <EntityCodeCoverageContent />
+    </EntityLayout.Route>
+    
+    <EntityLayout.Route path="/score" title="Service Assessment">
+      <Grid container spacing={3} alignItems="stretch">
+        <Grid item xs={12}>
+          <EntityScoreCardContent />
+        </Grid>
+      </Grid>
     </EntityLayout.Route>
   </EntityLayout>
 );

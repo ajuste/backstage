@@ -1,0 +1,1 @@
+export { awsResourceFetcherPlugin } from './plugin';

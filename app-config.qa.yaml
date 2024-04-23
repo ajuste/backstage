@@ -60,6 +60,9 @@ catalog:
     - type: file
       target: ../../data/noowner.yaml
 
+nomad:
+  addr: 'https://nomad-prod.zerofox.com'
+
 
 qeta:
   allowAnonymous: false

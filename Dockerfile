@@ -15,13 +15,25 @@ RUN apt-get update && \
     echo "${SSH_PRIVATE_KEY}" > /root/.ssh/id_rsa && \
     chmod 0600 /root/.ssh/id_rsa && \
     ssh-keyscan -H github.com >> ~/.ssh/known_hosts && \
-    git config --global url."git@github.com:".insteadOf "https://github.com/"
+    git config --global url."git@github.com:".insteadOf "https://github.com/" && \
+    GOPRIVATE=github.com/riskive go install github.com/riskive/backstage-zf-cli@latest
 
 WORKDIR /builder
 COPY . .
 #RUN yarn install
 
 # Register every plugin like this
+
+WORKDIR /builder/plugins/aws-resource-fetcher-common
+RUN yarn link
+
+WORKDIR /builder/plugins/aws-resource-fetcher
+RUN yarn link
+RUN yarn link "@internal/backstage-plugin-aws-resource-fetcher-common"
+
+WORKDIR /builder/plugins/aws-resource-fetcher-backend
+RUN yarn link
+RUN yarn link "@internal/backstage-plugin-aws-resource-fetcher-common"
 
 WORKDIR /builder/plugins/reporting-common
 RUN yarn link
@@ -62,6 +74,8 @@ RUN yarn link
 
 # Link every backend plugin from zerofox here
 WORKDIR /builder/packages/backend
+RUN yarn link "@internal/backstage-plugin-aws-resource-fetcher-common"
+RUN yarn link "@internal/backstage-plugin-aws-resource-fetcher-backend"
 RUN yarn link "@internal/plugin-github-resource-fetcher-backend"
 RUN yarn link "@internal/plugin-reporting-common"
 RUN yarn link "@internal/plugin-reporting-backend"
@@ -70,6 +84,8 @@ RUN yarn link "@internal/plugin-zf-tech-insights-backend"
 
 # Link every frontend plugin from zerofox here
 WORKDIR /builder/packages/app
+RUN yarn link "@internal/backstage-plugin-aws-resource-fetcher-common"
+RUN yarn link "@internal/backstage-plugin-aws-resource-fetcher"
 RUN yarn link "plugin-reporting"
 RUN yarn link "@internal/plugin-github-resource-fetcher"
 RUN yarn link "backstage-plugin-zf-tech-insights-common"

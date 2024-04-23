@@ -2,6 +2,7 @@ import { legacyPlugin } from '@backstage/backend-common';
 import { createBackend } from '@backstage/backend-defaults';
 import { techInsightsExtensions } from './plugins/techInsights'
 
+
 async function main() {
   const backend = createBackend()
 
@@ -32,6 +33,8 @@ async function main() {
   backend.add(
     import('@backstage/plugin-catalog-backend-module-scaffolder-entity-model'),
   );
+  backend.add((await import('./plugins/scaffolder')).scaffolderCustomActions);
+  backend.add(import('@backstage/plugin-scaffolder-backend-module-github'))
 
   // Auth
   backend.add(import('@backstage/plugin-permission-backend/alpha'));
@@ -58,6 +61,13 @@ async function main() {
 
   // Github resource fetcher
   backend.add(legacyPlugin('github-resource-fetcher', import('./plugins/githubResourceFetcher')));
+
+  // AWS resource fetcher
+  backend.add(import('@internal/backstage-plugin-aws-resource-fetcher-backend'));
+
+  // Nomad
+  backend.add(legacyPlugin('nomad', import('./plugins/nomad')));
+
 
   return backend.start();
 }

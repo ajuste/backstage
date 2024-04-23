@@ -10,7 +10,12 @@ import { rootRouteRef } from './routes';
 import {
   ZFCatalogAPIClient,
   zfCatalogApiRef,
+  nomadApiRef,
 } from 'backstage-plugin-zf-tech-insights-common';
+
+import {
+  NomadAPIClient
+} from './api';
 
 const zfCatalogAPI = createApiExtension({
   factory: createApiFactory({
@@ -20,9 +25,17 @@ const zfCatalogAPI = createApiExtension({
   }),
 });
 
+const nomadAPI = createApiExtension({
+  factory: createApiFactory({
+    api: nomadApiRef,
+    deps: { discoveryApi: discoveryApiRef },
+    factory: ({ discoveryApi }) => new NomadAPIClient(discoveryApi),
+  }),
+});
+
 export default createPlugin({
   id: 'zf-insights',
-  extensions: [zfCatalogAPI],
+  extensions: [zfCatalogAPI, nomadAPI],
   routes: convertLegacyRouteRefs({
     root: rootRouteRef,
   }),

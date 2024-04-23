@@ -4,7 +4,9 @@ kind: Template
 metadata:
   name: service-assessment
   title: Service Assessment
-  description: Submit an assessment for a service.
+  description: |
+    This form allows tech leads and service owners to determine the overall risk of making changes to an existing service, 
+    and communicate that service level to other tech leads.
   annotations:
     backstage.io/time-saved: PT10M
 spec:
@@ -18,12 +20,17 @@ spec:
       properties:
         service:
           title: Service name
+          description: 'If you can''t find the service you are looking for, you may need to add it to the catalog. Go to the back to the golden paths and filter by devportal-onboarding category.'
           type: string
-          ui:field: EntityPicker
+          ui:field: ExtendedEntityPicker
           ui:options:
+            tryShowDisplayName: true
+            showRepo: true
             allowArbitraryValues: false
             catalogFilter:
-              kind: System
+              metadata.annotations.github.com/project-slug:
+                exists: true
+              
         subsystem:
           title: Subsystem Being Assessed
           description: You will have to submit one assessment for each subsystem that may live on a repo. Try to be as specific as possible.
@@ -355,10 +362,79 @@ spec:
             - 'The service reports usage, a dashboard has been developed, and the data is accessible in BigQuery.'
             
   steps:
-    - id: fetch-base
-      name: Fetch Base
-      action: fetch:template
+    
+    - id: current-user
+      name: Get current user
+      action: zf:user:get
+
+    - id: generate-score-assessment
+      name: Saving latest assessment
+      action: zf:serviceAssessment:generateScore
       input:
-        url: ./template
-        values:
-          name: ${{parameters.name}}
+        reviewerRef: ${{ steps["current-user"].output.ref }}
+        reviwerName: ${{ steps["current-user"].output.entityName }}
+        service: ${{ parameters.service }}
+        subsystem: ${{ parameters.subsystem }}
+        static_typing: ${{ parameters.static_typing }}
+        unit_tests: ${{ parameters.unit_tests }}
+        integration_tests: ${{ parameters.integration_tests }}
+        e2e_tests: ${{ parameters.e2e_tests }}
+        testing_coverage: ${{ parameters.testing_coverage }}
+        ramp_up: ${{ parameters.ramp_up }}
+        users: ${{ parameters.users }}
+        expected_output: ${{ parameters.expected_output }}
+        internal_functionality: ${{ parameters.internal_functionality }}
+        business_importance: ${{ parameters.business_importance }}
+        environments: ${{ parameters.environments }}
+        continuous_integration: ${{ parameters.continuos_integration }}
+        continuous_deployment: ${{ parameters.continuos_deployment }}
+        monitoring_alerting: ${{ parameters.monitoring_alerting }}
+        service_ownership: ${{ parameters.service_ownership }}
+        code_standards: ${{ parameters.code_standards }}
+        maintenance: ${{ parameters.maintenance }}
+        analytics_analysis: ${{ parameters.analytics_analysis }}
+        kind: ${{parameters.service | parseEntityRef | pick('kind') }}
+        name: ${{parameters.service | parseEntityRef | pick('name') }}
+
+    - id: save-assessment
+      name: Saving latest assessment
+      action: zf:s3:putObject
+      input:
+        bucket: backstage
+        filename: service_assessment/${{parameters.service | parseEntityRef | pick('namespace') }}/${{parameters.service | parseEntityRef | pick('kind') }}/${{parameters.service | parseEntityRef | pick('name') }}.json
+        contents: ${{ steps["generate-score-assessment"].output.assessment }}
+    
+    - id: create-historic
+      name: Creating historic entry
+      action: zf:s3:putObject
+      input:
+        bucket: backstage
+        append_date: true
+        filename: service_assessment/${{parameters.service | parseEntityRef | pick('namespace') }}/${{parameters.service | parseEntityRef | pick('kind') }}/${{parameters.service | parseEntityRef | pick('name') }}/
+        contents: ${{ steps["generate-score-assessment"].output.assessment }}
+    
+    - id: generate-all-entry-assessment
+      name: Generating catalog entry
+      action: zf:serviceAssessment:generateAllEntry
+      input:
+        bucket: backstage
+        path: service_assessment/
+        assessment: ${{ steps["generate-score-assessment"].output.assessment }}
+
+    - id: save-all-entry-assessment
+      name: Saving catalog entry
+      action: zf:s3:putObject
+      input:
+        bucket: backstage
+        filename: service_assessment/all.json
+        contents: ${{ steps["generate-all-entry-assessment"].output.allEntry }}
+
+  output:
+    links:
+      - title: See assessment
+        icon: catalog
+        url: /catalog/${{parameters.service | parseEntityRef | pick('namespace') }}/${{parameters.service | parseEntityRef | pick('kind') }}/${{parameters.service | parseEntityRef | pick('name') }}/score
+    text:
+      - title: All done
+        content: |
+          **Thanks for submitting your assessment.**

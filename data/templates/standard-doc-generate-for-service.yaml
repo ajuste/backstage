@@ -1,0 +1,104 @@
+---
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: standard-doc-generate-for-service
+  title: Generate documentation for a service
+  description: |
+    You have a repo that hosts a service and want to generate standard documentation.
+  annotations:
+    backstage.io/time-saved: PT30M
+spec:
+  owner: user:default/ajuste
+  type: standard documentation
+  parameters:
+    - title: Basic information
+      required:
+        - service
+        - purpose
+      properties:
+
+        service:
+          title: Service
+          description: |
+            Service that you want to generate documentation for.
+          type: string
+          ui:field: ExtendedEntityPicker
+          ui:options:
+            tryShowDisplayName: true
+            showRepo: true
+            allowArbitraryValues: false
+            catalogFilter:
+              kind: System
+              metadata.annotations.github.com/project-slug:
+                exists: true
+
+        purpose:
+          title: Purpose
+          type: string
+          ui:widget: "textarea"
+          description: |
+            Briefly describe the purpose of this service.
+            
+        overwrite_all_docs:
+          title: Overwrite all docs
+          type: boolean
+          ui:help: |
+            Check this option to overwrite every doc with default ones.
+
+  steps:
+    
+    - id: current-user
+      name: Get current user
+      action: zf:user:get
+    
+    - id: workspace
+      name: Prepare worksapce
+      action: zf:workspacePath
+    
+    - id: fetch-entity
+      name: Get entity
+      action: zf:entity:get
+      input:
+        entityRef: ${{ parameters.service }}
+    
+    - id: clone-repo
+      name: Clone target repository
+      action: zf:execute
+      input:
+        command: git
+        args: clone git@github.com:${{ steps["fetch-entity"].output.entity.metadata.annotations["github.com/project-slug"] }}.git ${{ steps["workspace"].output.path }}
+    
+    - id: run-backstage-zf-cli
+      name: Updating repository
+      action: zf:execute
+      input:
+        command: backstage-zf-cli
+        args: service generate_std_docs
+        basePath: ${{ steps["workspace"].output.path }}
+    
+    - id: generate-branch-name
+      name: Generate branch name
+      action: zf:util:randomBranchName
+    
+    - id: submit-pr
+      name: Submit pull request
+      action: publish:github:pull-request
+      input:
+        repoUrl: ${{ parameters.repoUrl }}
+        title: 'Standard documentation update'
+        description: 'Documentation update for service: ${{ steps["fetch-entity"].output.entity.metadata.name }}'
+        branchName: ${{ steps["generate-branch-name"].output.branchName }}
+
+  output:
+    links:
+      - title: Pull request
+        icon: catalog
+        url: test #${{ steps["submit-pr"].output.remoteUrl }}
+    text:
+      - title: Next steps
+        content: |
+          1. Get the associated pull request merged.
+          2. Once the PR is merged, the developer portal will automatically pull in the updated documentation.
+          
+

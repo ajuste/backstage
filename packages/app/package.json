@@ -7,6 +7,7 @@
     "role": "frontend"
   },
   "dependencies": {
+    "@backstage-community/plugin-nomad": "^0.1.16",
     "@backstage-community/plugin-tech-insights": "^0.3.27",
     "@backstage/app-defaults": "^1.5.3",
     "@backstage/catalog-model": "^1.4.5",
@@ -40,7 +41,8 @@
     "@backstage/plugin-techdocs-react": "^1.2.2",
     "@backstage/plugin-user-settings": "^0.8.4",
     "@backstage/theme": "^0.5.2",
-    "@drodil/backstage-plugin-qeta": "^2.0.1",
+    "@drodil/backstage-plugin-qeta": "^2.2.0",
+    "@internal/backstage-plugin-aws-resource-fetcher": "^0.1.0",
     "@internal/plugin-github-resource-fetcher": "^0.1.0",
     "@k-phoen/backstage-plugin-grafana": "^0.1.16",
     "@material-ui/core": "^4.12.2",

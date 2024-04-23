@@ -1,0 +1,109 @@
+---
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: onboard-library-repo
+  title: Onboard library repository
+  description: |
+    You have a repo that hosts a library.
+    This golden path will help you onboard your service to the developer portal.
+  annotations:
+    backstage.io/time-saved: PT30M
+spec:
+  owner: user:default/ajuste
+  type: devportal onboarding
+  parameters:
+    - title: Basic information
+      required:
+        - repoUrl
+        - pillar
+        - purpose
+      properties:
+        repoUrl:
+          title: Repository Location
+          type: string
+          description: Enter the name of the repository (i.e. rule-engine)
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
+            allowedOwners:
+              - riskive
+
+        purpose:
+          title: Purpose
+          type: string
+          ui:widget: "textarea"
+          description: |
+            Briefly describe the purpose of this service.
+
+        pillar:
+          title: Pillar
+          type: string
+          description: Pillar that your repo belongs to
+          ui:field: ExtendedEntityPicker
+          ui:options:
+            showPillarOnly: true
+            allowArbitraryValues: false
+            catalogFilter:
+              spec.type: pillar
+              kind: Component
+
+  steps:
+    
+    - id: current-user
+      name: Get current user
+      action: zf:user:get
+    
+    - id: workspace
+      name: Prepare worksapce
+      action: zf:workspacePath
+    
+    - id: fetch-pillar
+      name: Get pillar
+      action: zf:entity:get
+      input:
+        entityRef: ${{ parameters.pillar }}
+    
+    - id: clone-repo
+      name: Clone target repository
+      action: zf:execute
+      input:
+        command: git
+        args: clone git@${{ parameters.repoUrl | parseRepoUrl | pick('host') }}:${{ parameters.repoUrl | projectSlug }}.git ${{ steps["workspace"].output.path }}
+    
+    - id: run-backstage-zf-cli
+      name: Updating repository
+      action: zf:execute
+      input:
+        command: backstage-zf-cli
+        args: library enroll --name=${{ parameters.repoUrl | parseRepoUrl | pick('repo') }} --pillar="${{ steps["fetch-pillar"].output.entity.metadata.annotations["zerofox.com/pillar"] }}" --owners=noowner
+        basePath: ${{ steps["workspace"].output.path }}
+    
+    - id: generate-branch-name
+      name: Generate branch name
+      action: zf:util:randomBranchName
+    
+    # - id: submit-pr
+    #   name: Submit pull request
+    #   action: publish:github:pull-request
+    #   input:
+    #     repoUrl: ${{ parameters.repoUrl }}
+    #     title: 'Devportal onboarding'
+    #     description: 'Onboarding repo into developer portal'
+    #     branchName: ${{ steps["generate-branch-name"].output.branchName }}
+    #     commitMessage: |
+    #         Onboarding repository to the developer portal
+    #         Refs: ZFE-0000
+
+  output:
+    links:
+      - title: Pull request
+        icon: catalog
+        url: test #${{ steps["submit-pr"].output.remoteUrl }}
+    text:
+      - title: Next steps
+        content: |
+          1. Get the associated pull request merged.
+          2. Once the PR is merged, the developer portal will automatically add your repository to the catalog.
+          
