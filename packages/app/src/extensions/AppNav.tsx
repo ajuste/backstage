@@ -9,6 +9,7 @@ import CreateIcon from '@material-ui/icons/MapRounded';
 import SettingsIcons from '@material-ui/icons/Settings';
 import LiveHelpIcon from '@material-ui/icons/LiveHelp';
 import ScoreIcon from '@material-ui/icons/Score';
+import RDSIcon from '@material-ui/icons/Storage';
 
 import {
   createExtension,
@@ -101,6 +102,8 @@ export const AppNav = createExtension({
             <SidebarItem icon={HomeIcon} to="/" text="Home" />
             <SidebarItem icon={CategoryIcon} to="catalog" text="Catalog" />
             <SidebarItem icon={ExtensionIcon} to="api-docs" text="APIs" />
+            <SidebarItem icon={CategoryIcon} to="catalog" text="Catalog" />
+            <SidebarItem icon={RDSIcon} to="databases" text="Databases" />
             <SidebarItem icon={LibraryBooks} to="docs" text="Docs" />
             <SidebarItem icon={LiveHelpIcon} to="qeta" text="Q&A" />
             <SidebarItem icon={ReportingIcon} to="reporting" text="Reporting" />

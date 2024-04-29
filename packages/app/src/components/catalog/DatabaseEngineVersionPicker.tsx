@@ -86,7 +86,7 @@ export const DatabaseEngineVersionPicker = () => {
                     multiple
                     options={facets?.facets["spec.version"].map(({ value }) => String(value)) || []}
                     value={selectedValue}
-                    onChange={(_: object, value: string[]) => setSelectedValue(value)}
+                    onChange={(_, value: string[]) => setSelectedValue(value)}
                     renderOption={(option, { selected }) => (
                         <FormControlLabel
                             control={

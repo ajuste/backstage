@@ -95,7 +95,7 @@ export const DatabaseInstanceClassPicker = () => {
                     multiple
                     options={facets?.facets["spec.instanceClass"].map(({value}) => value) || []}
                     value={selectedValue}
-                    onChange={(_: object, value: string[]) => setSelectedValue(value)}
+                    onChange={(_, value: string[]) => setSelectedValue(value)}
                     renderOption={(option, { selected }) => (
                         <FormControlLabel
                             control={

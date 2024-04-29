@@ -7,8 +7,8 @@ import LibraryBooks from '@material-ui/icons/LibraryBooks';
 import ReportingIcon from '@material-ui/icons/Assessment';
 import CategoryIcon from '@material-ui/icons/Category';
 import RDSIcon from '@material-ui/icons/Storage';
-import LogoFull from './LogoFull';
-import LogoIcon from './LogoIcon';
+import LogoFull from '../logos/Full';
+import LogoIcon from '../logos/Icon';
 import {
   Settings as SidebarSettings,
   UserSettingsSignInAvatar,
