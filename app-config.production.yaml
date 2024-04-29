@@ -48,6 +48,9 @@ proxy:
       headers:
         Authorization: Bearer ${GRAFANA_TOKEN}
 
+scorecards:
+  jsonDataUrl: /api/aws-resource-fetcher/s3/prod-backstage/service_assessment/
+
 catalog:
   processingInterval:
     seconds: 3600
