@@ -127,7 +127,7 @@ spec:
             - 'E2E test framework is available, enforced, and provides enough coverage to effectively catch regressions.'
 
         testing_coverage:
-          title: E2E Tests
+          title: Testing Coverage
           type: string
           enum:
             - not_available
