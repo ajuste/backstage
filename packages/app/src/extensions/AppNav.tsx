@@ -102,7 +102,6 @@ export const AppNav = createExtension({
             <SidebarItem icon={HomeIcon} to="/" text="Home" />
             <SidebarItem icon={CategoryIcon} to="catalog" text="Catalog" />
             <SidebarItem icon={ExtensionIcon} to="api-docs" text="APIs" />
-            <SidebarItem icon={CategoryIcon} to="catalog" text="Catalog" />
             <SidebarItem icon={RDSIcon} to="databases" text="Databases" />
             <SidebarItem icon={LibraryBooks} to="docs" text="Docs" />
             <SidebarItem icon={LiveHelpIcon} to="qeta" text="Q&A" />

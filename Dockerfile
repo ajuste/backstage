@@ -15,14 +15,15 @@ RUN apt-get update && \
     echo "${SSH_PRIVATE_KEY}" > /root/.ssh/id_rsa && \
     chmod 0600 /root/.ssh/id_rsa && \
     ssh-keyscan -H github.com >> ~/.ssh/known_hosts && \
-    git config --global url."git@github.com:".insteadOf "https://github.com/" && \
-    GOPRIVATE=github.com/riskive go install github.com/riskive/backstage-zf-cli@latest
+    git config --global url."git@github.com:".insteadOf "https://github.com/"
 
 # install Go
 RUN curl -o go.tar.gz https://dl.google.com/go/go1.22.2.linux-amd64.tar.gz && \
     tar -C /usr/local -xzf go.tar.gz && \
-    export PATH=$PATH:/usr/local/go/bin && \
     rm go.tar.gz
+
+# install backstage-zf-cli
+RUN GOPRIVATE=github.com/riskive /usr/local/go/bin/go install github.com/riskive/backstage-zf-cli@latest
 
 WORKDIR /builder
 COPY . .
