@@ -4,7 +4,7 @@ ARG SSH_PRIVATE_KEY
 
 # (libsqlite3-dev, curl, ca-certificates, gnupg, lsb-release, update && apt-get install -y python3 python3-pip) can be removed when dropping docker (used for POC only)
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends libsqlite3-dev python3 build-essential procps make python3-pip git && \
+    apt-get install -y --no-install-recommends libsqlite3-dev python3 build-essential procps make python3-pip git curl && \
     pip3 install mkdocs-techdocs-core==1.0.1 && \
     npm install -g node-gyp && \
     rm -rf /var/lib/apt/lists/* && \
@@ -17,6 +17,12 @@ RUN apt-get update && \
     ssh-keyscan -H github.com >> ~/.ssh/known_hosts && \
     git config --global url."git@github.com:".insteadOf "https://github.com/" && \
     GOPRIVATE=github.com/riskive go install github.com/riskive/backstage-zf-cli@latest
+
+# install Go
+RUN curl -o go.tar.gz https://dl.google.com/go/go1.22.2.linux-amd64.tar.gz && \
+    tar -C /usr/local -xzf go.tar.gz && \
+    export PATH=$PATH:/usr/local/go/bin && \
+    rm go.tar.gz
 
 WORKDIR /builder
 COPY . .
