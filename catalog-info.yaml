@@ -117,3 +117,19 @@ spec:
     type: service
     system: default/airflow
     children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+    name: backstage-templates
+    annotations:
+        zerofox.com/pillar: Sustaining
+spec:
+    lifecycle: production
+    type: url
+    children: []
+    targets:
+        - ./data/templates/onboard-library-repo.yaml
+        - ./data/templates/onboard-nomad-repo.yaml
+        - ./data/templates/service-assessment.yaml
+        - ./data/templates/standard-doc-generate-for-service.yaml
