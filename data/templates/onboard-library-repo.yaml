@@ -76,7 +76,7 @@ spec:
       name: Updating repository
       action: zf:execute
       input:
-        command: backstage-zf-cli
+        command: ~/go/bin/backstage-zf-cli
         args: library enroll --name=${{ parameters.repoUrl | parseRepoUrl | pick('repo') }} --pillar="${{ steps["fetch-pillar"].output.entity.metadata.annotations["zerofox.com/pillar"] }}" --owners=noowner
         basePath: ${{ steps["workspace"].output.path }}
     
@@ -84,17 +84,17 @@ spec:
       name: Generate branch name
       action: zf:util:randomBranchName
     
-    # - id: submit-pr
-    #   name: Submit pull request
-    #   action: publish:github:pull-request
-    #   input:
-    #     repoUrl: ${{ parameters.repoUrl }}
-    #     title: 'Devportal onboarding'
-    #     description: 'Onboarding repo into developer portal'
-    #     branchName: ${{ steps["generate-branch-name"].output.branchName }}
-    #     commitMessage: |
-    #         Onboarding repository to the developer portal
-    #         Refs: ZFE-0000
+    - id: submit-pr
+      name: Submit pull request
+      action: publish:github:pull-request
+      input:
+        repoUrl: ${{ parameters.repoUrl }}
+        title: 'Devportal onboarding'
+        description: 'Onboarding repo into developer portal'
+        branchName: ${{ steps["generate-branch-name"].output.branchName }}
+        commitMessage: |
+            Onboarding repository to the developer portal
+            Refs: ZFE-0000
 
   output:
     links:

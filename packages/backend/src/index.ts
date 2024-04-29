@@ -2,7 +2,6 @@ import { legacyPlugin } from '@backstage/backend-common';
 import { createBackend } from '@backstage/backend-defaults';
 import { techInsightsExtensions } from './plugins/techInsights'
 
-
 async function main() {
   const backend = createBackend()
 
@@ -24,9 +23,11 @@ async function main() {
 
   // Search
   backend.add(import('@backstage/plugin-search-backend/alpha'));
+  backend.add(import('@backstage/plugin-search-backend-module-explore/alpha'));
   backend.add(import('@backstage/plugin-search-backend-module-pg/alpha'))
   backend.add(import('@backstage/plugin-search-backend-module-catalog/alpha'));
   backend.add(import('@backstage/plugin-search-backend-module-techdocs/alpha'));
+  
 
   // Scaffold
   backend.add(import('@backstage/plugin-scaffolder-backend/alpha'));
@@ -58,6 +59,7 @@ async function main() {
 
   // Q&A
   backend.add(import('@drodil/backstage-plugin-qeta-backend'));
+  backend.add(import('@drodil/backstage-plugin-search-backend-module-qeta'));
 
   // Github resource fetcher
   backend.add(legacyPlugin('github-resource-fetcher', import('./plugins/githubResourceFetcher')));

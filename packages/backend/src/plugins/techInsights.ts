@@ -18,9 +18,7 @@ export const techInsightsExtensions = createBackendModule({
         logger: coreServices.logger,
       },
       async init({ factCheckerFactory, factRetrievers, logger }) {
-
-        
-        if (process.env.NOMAD_ALLOC_INDEX === '0') {
+        if (process.env.NOMAD_ALLOC_INDEX === '0' || !process.env.env ||  process.env.env == 'local' ) {
           factRetrievers.addFactRetrievers(factRetrieversCatalog);
         }
         factCheckerFactory.setFactCheckerFactory(new JsonRulesEngineFactCheckerFactory({ operators, logger, checks }));

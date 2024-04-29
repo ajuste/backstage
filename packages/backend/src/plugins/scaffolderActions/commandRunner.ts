@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { exec } from 'child_process';
 
 export const commandRunner = () => {
-    const commandWhitelist = ['backstage-zf-cli', 'git', 'cd', 'pwd', 'ls'];
+    const commandWhitelist = ['backstage-zf-cli', '~/go/bin/backstage-zf-cli', 'git', 'cd', 'pwd', 'ls'];
 
     return createTemplateAction({
         id: 'zf:execute',

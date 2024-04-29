@@ -51,6 +51,7 @@
     "@backstage/plugin-search-backend-node": "^1.2.21",
     "@backstage/plugin-techdocs-backend": "^1.10.3",
     "@drodil/backstage-plugin-qeta-backend": "^2.2.0",
+    "@drodil/backstage-plugin-search-backend-module-qeta": "^2.2.1",
     "@internal/backstage-plugin-aws-resource-fetcher-backend": "^0.1.0",
     "@internal/plugin-github-resource-fetcher-backend": "^0.1.0",
     "@internal/plugin-reporting-backend": "^0.1.0",

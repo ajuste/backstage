@@ -6271,6 +6271,15 @@
     "@backstage/plugin-search-common" "^1.2.11"
     ajv "^8.12.0"
 
+"@drodil/backstage-plugin-qeta-common@^2.2.1":
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/@drodil/backstage-plugin-qeta-common/-/backstage-plugin-qeta-common-2.2.1.tgz#0d140da4e99d4d61104b6f4a1c6de0ccd25b016c"
+  integrity sha512-VII4mksOT9FLbDmfdYwPhfeJyqgG0h15QHjwm8fyDgCMq9tyEsJx4fETMS9dxPMWv+NuTgE98AWJWygpnt3t5g==
+  dependencies:
+    "@backstage/plugin-permission-common" "^0.7.13"
+    "@backstage/plugin-search-common" "^1.2.11"
+    ajv "^8.12.0"
+
 "@drodil/backstage-plugin-qeta-react@^2.2.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@drodil/backstage-plugin-qeta-react/-/backstage-plugin-qeta-react-2.2.0.tgz#91635c1ecccf8d1effef1675ffcf844497f3f461"
@@ -6307,6 +6316,21 @@
     react-mde "^11.5.0"
     react-relative-time "^0.0.9"
     react-use "^17.4.0"
+
+"@drodil/backstage-plugin-search-backend-module-qeta@^2.2.1":
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/@drodil/backstage-plugin-search-backend-module-qeta/-/backstage-plugin-search-backend-module-qeta-2.2.1.tgz#e583369c972936231877bc580f6233f76b000fec"
+  integrity sha512-QSr8S1XDfV5MB8eFIfJ/4JYgKCv508o/gsEJwiQFZeYxwbnOTtpMOYsoL5QoKbjTsMydrRyPO9i0e6g8q5FSoA==
+  dependencies:
+    "@backstage/backend-common" "^0.21.7"
+    "@backstage/backend-plugin-api" "^0.6.17"
+    "@backstage/backend-tasks" "^0.5.22"
+    "@backstage/config" "^1.2.0"
+    "@backstage/core-plugin-api" "^1.9.2"
+    "@backstage/errors" "^1.2.4"
+    "@backstage/plugin-search-backend-node" "^1.2.21"
+    "@backstage/plugin-search-common" "^1.2.11"
+    "@drodil/backstage-plugin-qeta-common" "^2.2.1"
 
 "@emotion/babel-plugin@^11.11.0":
   version "11.11.0"
@@ -12812,9 +12836,9 @@
   integrity sha512-EEhsLsD6UsDM1yFhAvy0Cjr6VwmpMWqFBCb9w07wVugF7w9nfajxLuVmngTIpgS6svCnm6Vaw+MZhoDCKnOfsw==
 
 "@types/react-dom@^18.0.0", "@types/react-dom@^18.2.25":
-  version "18.2.25"
-  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-18.2.25.tgz#2946a30081f53e7c8d585eb138277245caedc521"
-  integrity sha512-o/V48vf4MQh7juIKZU2QGDfli6p1+OOi5oXx36Hffpc9adsHeXjVp8rHuPkjd8VT8sOJ2Zp05HR7CdpGTIUFUA==
+  version "18.3.0"
+  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-18.3.0.tgz#0cbc818755d87066ab6ca74fbedb2547d74a82b0"
+  integrity sha512-EhwApuTmMBmXuFOikhQLIBUn6uFg81SwLMOAUgodJF14SOBOCMdU04gDoYi0WOJJHD144TL32z4yDqCW3dnkQg==
   dependencies:
     "@types/react" "*"
 
@@ -12864,9 +12888,9 @@
     "@types/react" "*"
 
 "@types/react@*", "@types/react@^16.13.1 || ^17.0.0 || ^18.0.0", "@types/react@^18.0.0":
-  version "18.2.79"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.79.tgz#c40efb4f255711f554d47b449f796d1c7756d865"
-  integrity sha512-RwGAGXPl9kSXwdNTafkOEuFrTBD5SA2B3iEB96xi8+xu5ddUa/cpvyVCSNn+asgLCTHkb5ZxN8gbuibYJi4s1w==
+  version "18.3.1"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.3.1.tgz#fed43985caa834a2084d002e4771e15dfcbdbe8e"
+  integrity sha512-V0kuGBX3+prX+DQ/7r2qsv1NsdfnCLnTgnRJ1pYnxykBhGMz+qj+box5lq7XsO5mtZsBqpjwwTu/7wszPfMBcw==
   dependencies:
     "@types/prop-types" "*"
     csstype "^3.0.2"

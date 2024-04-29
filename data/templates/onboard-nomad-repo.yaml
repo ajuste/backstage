@@ -102,7 +102,7 @@ spec:
       name: Updating repository
       action: zf:execute
       input:
-        command: backstage-zf-cli
+        command: ~/go/bin/backstage-zf-cli
         args: service nomad_enroll --nomad_task_group=${{ parameters.task_group }} --service_name=${{ parameters.repoUrl | parseRepoUrl | pick('repo') }} --pillar="${{ steps["fetch-pillar"].output.entity.metadata.annotations["zerofox.com/pillar"] }}" --service_owners=noowner --write_mode=REPLACE --preview=0 --batches_nomad_task_group_prefix=${{parameters.batches_task_group_prefixes.join(',') }}
         basePath: ${{ steps["workspace"].output.path }}
     

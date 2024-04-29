@@ -73,7 +73,7 @@ spec:
       name: Updating repository
       action: zf:execute
       input:
-        command: backstage-zf-cli
+        command: ~/go/bin/backstage-zf-cli
         args: service generate_std_docs
         basePath: ${{ steps["workspace"].output.path }}
     
@@ -85,7 +85,7 @@ spec:
       name: Submit pull request
       action: publish:github:pull-request
       input:
-        repoUrl: ${{ parameters.repoUrl }}
+        repoUrl: ${{ steps["fetch-entity"].output.entity | entitySlugToRepoUrl }}
         title: 'Standard documentation update'
         description: 'Documentation update for service: ${{ steps["fetch-entity"].output.entity.metadata.name }}'
         branchName: ${{ steps["generate-branch-name"].output.branchName }}
