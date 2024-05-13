@@ -6,6 +6,7 @@ import { CatalogApi, entityRouteParams, entityRouteRef } from '@backstage/plugin
 import { useApi, useRouteRef } from '@backstage/core-plugin-api';
 import { catalogApiRef } from '@backstage/plugin-catalog-react';
 import { CompoundEntityRef, Entity, RELATION_OWNED_BY } from '@backstage/catalog-model';
+import AlertIcon from '@material-ui/icons/Alarm';
 
 type DatabaseCatalogTableProps = {
   pillarEntities: Array<Entity>;
@@ -54,9 +55,11 @@ export const DatabaseCatalogTable = (props: DatabaseCatalogTableProps): JSX.Elem
       title: 'ID',
       field: 'metadata.name',
       render: ({ entity }) => (
-        <Link to={catalogEntityRoute({ kind: 'Resource', namespace: 'default', name: entity.metadata.name })} target="_blank">
-          {entity.metadata.name}
-        </Link>
+        <div style={{ whiteSpace: 'nowrap' }}>
+          <Link to={catalogEntityRoute({ kind: 'Resource', namespace: 'default', name: entity.metadata.name })} target="_blank">
+            {entity.metadata.name}
+          </Link>
+        </div>
       ),
     },
     {
@@ -98,9 +101,37 @@ export const DatabaseCatalogTable = (props: DatabaseCatalogTableProps): JSX.Elem
           const catalogEntityRoute = useRouteRef(entityRouteRef);
           link = catalogEntityRoute(entityRouteParams(pillarComponent))
         }
-        return <Link to={link} target="_blank">{pillar}</Link>
+        return <div style={{ whiteSpace: 'nowrap' }}><Link to={link} target="_blank">{pillar}</Link></div>
       }
     },
+    {
+      title: 'Maintenance/Health Event',
+      field: 'entity.metadata.upcoming_event_days_left',
+      render: ({ entity }) => {
+        const daysLeft = entity.metadata?.upcoming_event_days_left;
+        if (daysLeft && daysLeft !== null) {
+          if (Number(daysLeft) > 30) {
+            return (
+              <Link to={catalogEntityRoute({ kind: 'Resource', namespace: 'default', name: entity.metadata.name })} target="_blank">
+                <Alert severity="success" variant="outlined" icon={<AlertIcon />}>
+                  {String(daysLeft)} days left
+                </Alert>
+              </Link>
+            );
+          }
+          if (Number(daysLeft) < 31) {
+            return (
+              <Link to={catalogEntityRoute({ kind: 'Resource', namespace: 'default', name: entity.metadata.name })} target="_blank">
+                <Alert severity="error" variant="outlined" icon={<AlertIcon />}>
+                  {String(daysLeft)} days left
+                </Alert>
+              </Link>
+            );
+          }
+        }
+        return null;
+            }
+        },
     {
       title: 'Ownership',
       render: ({ entity }) => {
