@@ -1,9 +1,9 @@
 import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import { z } from 'zod';
-import { Config } from '@backstage/config';
 import { _Object } from '@aws-sdk/client-s3';
 import { getLabelForScore } from './utils';
-import { listEntries, getEntries, S3ClientGetter } from './utils';
+import { listEntries, getEntries } from './utils';
+import { ScaffolderActionFactoryOptions } from '../types';
 
 /**
  * Generate a single entry for all catalog
@@ -36,7 +36,7 @@ const generateSingleEntryForAllCatalog = (entry: Record<string, any>): object =>
  * @param config The config object
  * @returns The action to generate all entries
  */
-export const generateAllEntry = (getS3Client: S3ClientGetter, config: Config) => {
+const generateAllEntry = (opts: ScaffolderActionFactoryOptions) => {
     return createTemplateAction({
         id: 'zf:serviceAssessment:generateAllEntry',
         schema: {
@@ -51,9 +51,11 @@ export const generateAllEntry = (getS3Client: S3ClientGetter, config: Config) =>
         },
 
         async handler(ctx): Promise<any> {
-            const assessmentsFiles = await listEntries(getS3Client, config);
-            const assessmentContents = await getEntries(getS3Client, config, assessmentsFiles.map((object) => object.Key ?? ""));
+            const assessmentsFiles = await listEntries(opts.getS3Client, opts.config);
+            const assessmentContents = await getEntries(opts.getS3Client, opts.config, assessmentsFiles.map((object) => object.Key ?? ""));
             ctx.output('allEntry', assessmentContents.map(generateSingleEntryForAllCatalog));
         },
     });
 }
+
+export default generateAllEntry;

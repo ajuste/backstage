@@ -9,6 +9,8 @@ import { CatalogApi } from '@backstage/catalog-client';
 
 import ZFCatalogService from './catalog';
 import NomadProxyAPIClient from './nomadProxy';
+import { JiraProxyAPIClient } from './jiraProxy';
+
 
 export interface RouterOptions {
   logger: LoggerService;
@@ -88,7 +90,8 @@ export async function createRouter(
       });
   });
 
-  router.get('/jobs', (request, response) => {
+  // Nomad routes
+  router.get('/nomad/jobs', (request, response) => {
     logger.info(`Listing jobs`);
     const service = new NomadProxyAPIClient(options.config)
     const filter = request.query.filter as string;
@@ -100,6 +103,74 @@ export async function createRouter(
         response.end();
       }
       ).catch(err => {
+        logger.error(err);
+        response.status(500).json({ error: err });
+      });
+  });
+
+  // JIRA routes
+  router.put('/jira/jobs', (request, response) => {
+    const body = JSON.parse(request.body);
+
+    logger.info(`Creating JIRA issue ${JSON.stringify(request.body)}`);
+
+    const service = new JiraProxyAPIClient(options.config)
+    service
+      .addNewIssue(body)
+      .then(res => {
+        response.send(res);
+        response.end();
+      })
+      .catch(err => {
+        logger.error(err);
+        response.status(500).json({ error: err });
+      });
+  });
+
+  router.post('/jira/jobs/:issueId', (request, response) => {
+    const body = JSON.parse(request.body);
+    const issueId = request.params.issueId;
+
+    logger.info(`Updating JIRA issue ${issueId} and payload ${JSON.stringify(request.body)}`);
+
+    const { issueUpdate, query } = body;
+
+    if (!issueUpdate) {
+      response.status(400).json({ error: 'issueUpdate is required' });
+      return;
+    }
+
+    const service = new JiraProxyAPIClient(options.config)
+    service
+      .updateIssue(issueId, issueUpdate, query)
+      .then(res => {
+        response.send(res);
+        response.end();
+      })
+      .catch(err => {
+        logger.error(err);
+        response.status(500).json({ error: err });
+      });
+  });
+
+  router.get('/jira/search', (request, response) => {
+    const searchString = request.query.searchString as string;
+    const startAt = request.query.startAt as number | undefined;
+    const maxResults = request.query.maxResults as number | undefined;
+    const fields = request.query.fields as string[] | undefined;
+    const expand = request.query.expand as string[] | undefined;
+
+    logger.info(`Searching JIRA for ${searchString} with startAt ${startAt}, maxResults ${maxResults}, fields ${fields} and expand ${expand}`);
+
+    const optional = startAt || maxResults || fields || expand ? { startAt, maxResults, fields, expand } : undefined;
+    const service = new JiraProxyAPIClient(options.config)
+    service
+      .searchJira(searchString, optional)
+      .then(res => {
+        response.send(res);
+        response.end();
+      })
+      .catch(err => {
         logger.error(err);
         response.status(500).json({ error: err });
       });

@@ -15,7 +15,6 @@ spec:
     - title: Basic information
       required:
         - service
-        - purpose
       properties:
 
         service:
@@ -32,13 +31,6 @@ spec:
               kind: System
               metadata.annotations.github.com/project-slug:
                 exists: true
-
-        purpose:
-          title: Purpose
-          type: string
-          ui:widget: "textarea"
-          description: |
-            Briefly describe the purpose of this service.
             
         overwrite_all_docs:
           title: Overwrite all docs
@@ -68,37 +60,69 @@ spec:
       input:
         command: git
         args: clone git@github.com:${{ steps["fetch-entity"].output.entity.metadata.annotations["github.com/project-slug"] }}.git ${{ steps["workspace"].output.path }}
+
+    - id: run-backstage-zf-cli-args
+      name: Generating arguments for backstage-zf-cli
+      action: zf:utils:if
+      input:
+        condition: ${{ parameters.overwrite_all_docs }}
+        returnOnTrue: service generate_std_docs --overwrite=1
+        returnOnFalse: service generate_std_docs --overwrite=1
     
     - id: run-backstage-zf-cli
       name: Updating repository
       action: zf:execute
       input:
         command: ~/go/bin/backstage-zf-cli
-        args: service generate_std_docs
+        args: ${{ steps["run-backstage-zf-cli-args"].output.return }}
         basePath: ${{ steps["workspace"].output.path }}
     
     - id: generate-branch-name
       name: Generate branch name
       action: zf:util:randomBranchName
     
+    - id: create-jira-issue
+      name: Create JIRA Issue
+      action: zf:jira:addNewIssue
+      input:
+        projectKey: ZFE
+        summary: |
+          Generate standard documentation for ${{ steps["fetch-entity"].output.entity.metadata.annotations["github.com/project-slug"] }}
+        description: 'Generate for a service using the developer portal.'
+        issueType: 10001
+    
+    - id: generate-pullrequest-texts
+      name: Generate pull request texts
+      action: zf:generatePRTexts:generateStandardDocs
+      input:
+        githubAuthor: ${{ steps["current-user"].output.githubUser }}
+        jiraTicket: ${{ steps["create-jira-issue"].output.url }}
+    
     - id: submit-pr
       name: Submit pull request
       action: publish:github:pull-request
       input:
         repoUrl: ${{ steps["fetch-entity"].output.entity | entitySlugToRepoUrl }}
-        title: 'Standard documentation update'
-        description: 'Documentation update for service: ${{ steps["fetch-entity"].output.entity.metadata.name }}'
+        title: 'Standard documentation generation'
+        description: ${{ steps["generate-pullrequest-texts"].output.description }}
         branchName: ${{ steps["generate-branch-name"].output.branchName }}
+        commitMessage: ${{ steps["generate-pullrequest-texts"].output.commitMessage }}
 
   output:
     links:
       - title: Pull request
         icon: catalog
-        url: test #${{ steps["submit-pr"].output.remoteUrl }}
+        url: ${{ steps["submit-pr"].output.remoteUrl }}
+      - title: JIRA issue
+        url: ${{ steps["create-jira-issue"].output.url }}
+
     text:
       - title: Next steps
         content: |
-          1. Get the associated pull request merged.
-          2. Once the PR is merged, the developer portal will automatically pull in the updated documentation.
+          ### 1. Merge the pull request
+          A PR has been created; you can check it by clicking on the Pull Request tab. Once it is merged, the developer portal will automatically pick the documentation.
+          Keep in mind you can check the changes in the PR and modify as needed.
+          ### 2. A Jira ticket has been created.
+          As part of tracking your work, please close the issue once you are finished. You can see in associated ticket on the JIRA issue tab.
           
 

@@ -103,6 +103,8 @@ AZURE_TOKEN="{{ .Data.access_token }}"
 # for reading tickets from JIRA
 {{ with secret "secret/${app}/jira" }}
 JIRA_TOKEN="{{ .Data.token }}"
+JIRA_USER="{{ .Data.user }}"
+JIRA_PASSWORD="{{ .Data.password }}"
 {{ end }}
 
 # for reading dashboards, alerts from Grafana

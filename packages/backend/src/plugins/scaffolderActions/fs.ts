@@ -2,8 +2,9 @@ import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import { z } from 'zod';
 import { mkdtemp } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
+import { ScaffolderActionFactoryOptions } from './types';
 
-export const createTempFolder = () => {
+const createTempFolder = (_: ScaffolderActionFactoryOptions) => {
 
     return createTemplateAction({
         id: 'zf:fs:mkTempFolder',
@@ -19,3 +20,5 @@ export const createTempFolder = () => {
         },
     });
 };
+
+export default { createTempFolder }

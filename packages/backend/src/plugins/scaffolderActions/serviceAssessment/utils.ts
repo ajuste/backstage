@@ -1,6 +1,7 @@
 import { Config } from '@backstage/config';
-import { _Object, GetObjectCommand, ListObjectsV2Command, ListObjectsV2CommandOutput, S3Client } from '@aws-sdk/client-s3';
+import { _Object, GetObjectCommand, ListObjectsV2Command, ListObjectsV2CommandOutput } from '@aws-sdk/client-s3';
 import { Stream } from 'stream';
+import { S3ClientGetter } from '../types';
 
 export const newId = (): number => Math.round(Math.random() * 100000000)
 
@@ -91,5 +92,3 @@ export const getEntries = async (getS3Client: S3ClientGetter, config: Config, ke
 }
 
 
-
-export type S3ClientGetter = (config: Config) => S3Client;

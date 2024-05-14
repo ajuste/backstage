@@ -1,7 +1,7 @@
 import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import { z } from 'zod';
 
-export const workspacePath = () => {
+const workspacePath = () => {
 
     return createTemplateAction({
         id: 'zf:workspacePath',
@@ -16,3 +16,5 @@ export const workspacePath = () => {
         },
     });
 };
+
+export default { workspacePath }

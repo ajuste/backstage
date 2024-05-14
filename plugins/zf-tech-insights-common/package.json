@@ -31,6 +31,7 @@
   ],
   "dependencies": {
     "@backstage/catalog-model": "^1.4.5",
-    "@backstage/core-plugin-api": "^1.9.1"
+    "@backstage/core-plugin-api": "^1.9.1",
+    "@types/jira-client": "^7.1.9"
   }
 }

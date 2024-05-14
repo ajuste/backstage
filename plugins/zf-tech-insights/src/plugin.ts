@@ -9,6 +9,8 @@ import {
   ZFCatalogAPIClient,
   zfCatalogApiRef,
   nomadApiRef,
+  jiraApiRef,
+  JiraAPIClient,
 } from 'backstage-plugin-zf-tech-insights-common';
 
 import {
@@ -29,6 +31,12 @@ export const zfTechInsightsPlugin = createPlugin({
       deps: { discoveryApi: discoveryApiRef },
       factory: ({ discoveryApi }) =>
         new NomadAPIClient(discoveryApi),
+    }),
+    createApiFactory({
+      api: jiraApiRef,
+      deps: { discoveryApi: discoveryApiRef },
+      factory: ({ discoveryApi }) =>
+        new JiraAPIClient(discoveryApi),
     }),
   ],
   routes: {

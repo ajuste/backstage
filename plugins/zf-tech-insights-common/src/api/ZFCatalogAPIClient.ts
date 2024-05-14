@@ -6,6 +6,7 @@ import {
 } from '@backstage/core-plugin-api';
 import { ZFCatalogAPI } from '../types';
 import { ComponentEntity, GroupEntity } from '@backstage/catalog-model';
+
 export const zfCatalogApiRef: ApiRef<ZFCatalogAPI> = createApiRef({
   id: 'zfcatalog',
 });

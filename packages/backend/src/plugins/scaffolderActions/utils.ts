@@ -1,9 +1,9 @@
-import { CatalogApi } from '@backstage/catalog-client';
 import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import { z } from 'zod';
+import { ScaffolderActionFactoryOptions } from './types';
 
 
-export const randomBranchName = () => {
+const randomBranchName = (_: ScaffolderActionFactoryOptions) => {
     return createTemplateAction({
         id: 'zf:util:randomBranchName',
         schema: {
@@ -19,7 +19,7 @@ export const randomBranchName = () => {
     });
 };
 
-export const getEntity = (catalogApi: CatalogApi) => {
+const getEntity = (opts: ScaffolderActionFactoryOptions) => {
     return createTemplateAction({
         id: 'zf:entity:get',
         schema: {
@@ -33,8 +33,100 @@ export const getEntity = (catalogApi: CatalogApi) => {
 
         async handler(ctx) {
             const ref = ctx.input.entityRef;
-            const entity = await catalogApi.getEntityByRef(ref);
+            const entity = await opts.catalogApi.getEntityByRef(ref);
             ctx.output("entity", entity);
         },
     });
 };
+
+const generatePullRequestTextsForLibraryOnboarding = (_: ScaffolderActionFactoryOptions) => {
+    return createTemplateAction({
+        id: 'zf:generatePRTexts:libraryOnBoarding',
+        schema: {
+            input: z.object({
+                githubAuthor: z.string(),
+                jiraTicket: z.string(),
+            }),
+            output: z.object({
+                description: z.string(),
+                commitMessage: z.string(),
+            }),
+        },
+
+        async handler(ctx) {
+            ctx.output("description", `This PR is created as part of the library onboarding process, the author is @${ctx.input.githubAuthor} and is associated with the JIRA ticket ${ctx.input.jiraTicket}.`);
+            ctx.output("commitMessage", `Library onboarding.\n\nRefs: ${ctx.input.jiraTicket}`);
+        },
+    });
+};
+
+const generatePullRequestTextsForNomadServiceOnboarding = (_: ScaffolderActionFactoryOptions) => {
+    return createTemplateAction({
+        id: 'zf:generatePRTexts:nomadServiceOnBoarding',
+        schema: {
+            input: z.object({
+                githubAuthor: z.string(),
+                jiraTicket: z.string(),
+            }),
+            output: z.object({
+                description: z.string(),
+                commitMessage: z.string(),
+            }),
+        },
+
+        async handler(ctx) {
+            ctx.output("description", `This PR is created as part of the Nomad service onboarding process, the author is @${ctx.input.githubAuthor} and is associated with the JIRA ticket ${ctx.input.jiraTicket}.`);
+            ctx.output("commitMessage", `Nomad service onboarding.\n\nRefs: ${ctx.input.jiraTicket}`);
+        },
+    });
+};
+
+const generatePullRequestTextsForStandardDocumentationGeneration = (_: ScaffolderActionFactoryOptions) => {
+    return createTemplateAction({
+        id: 'zf:generatePRTexts:generateStandardDocs',
+        schema: {
+            input: z.object({
+                githubAuthor: z.string(),
+                jiraTicket: z.string(),
+            }),
+            output: z.object({
+                description: z.string(),
+                commitMessage: z.string(),
+            }),
+        },
+
+        async handler(ctx) {
+            ctx.output("description", `This PR is created as part of the standard documentation generation, the author is @${ctx.input.githubAuthor} and is associated with the JIRA ticket ${ctx.input.jiraTicket}.`);
+            ctx.output("commitMessage", `Standard documentation generation.\n\nRefs: ${ctx.input.jiraTicket}`);
+        },
+    });
+};
+
+const ifAction = (_: ScaffolderActionFactoryOptions) => {
+    return createTemplateAction({
+        id: 'zf:utils:if',
+        schema: {
+            input: z.object({
+                condition: z.any(),
+                returnOnTrue: z.any(),
+                returnOnFalse: z.any(),
+            }),
+            output: z.object({
+                return: z.any(),
+            }),
+        },
+
+        async handler(ctx) {
+            ctx.output("return", ctx.input.condition ? ctx.input.returnOnTrue : ctx.input.returnOnFalse);
+        },
+    });
+};
+
+export default {
+    randomBranchName,
+    getEntity,
+    generatePullRequestTextsForLibraryOnboarding,
+    generatePullRequestTextsForNomadServiceOnboarding,
+    generatePullRequestTextsForStandardDocumentationGeneration,
+    ifAction,
+}

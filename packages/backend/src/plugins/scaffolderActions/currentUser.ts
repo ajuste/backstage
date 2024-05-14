@@ -1,8 +1,9 @@
 import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import { z } from 'zod';
+import { ScaffolderActionFactoryOptions } from './types';
 
 
-export const getCurrentUser = () => {
+const getCurrentUser = (_: ScaffolderActionFactoryOptions) => {
     return createTemplateAction({
         id: 'zf:user:get',
         schema: {
@@ -11,6 +12,7 @@ export const getCurrentUser = () => {
                 ref: z.string().describe('The reference of the current user'),
                 entityName: z.string().describe('The entity name'),
                 displayName: z.string().describe('The user name'),
+                githubUser: z.string().optional().describe('The github username'),
             }),
         },
 
@@ -18,7 +20,10 @@ export const getCurrentUser = () => {
             ctx.output("ref", ctx.user?.ref ? ctx.user.ref : 'guest')
             ctx.output("entityName", ctx.user?.entity?.metadata.name ? ctx.user?.entity?.metadata.name : 'guest')
             ctx.output("displayName", ctx.user?.entity?.spec.profile?.displayName ? ctx.user?.entity?.spec.profile?.displayName : 'guest')
+            ctx.output("githubUser", ctx.user?.entity?.metadata.annotations?.['github.com/user-login'] ? ctx.user?.entity?.metadata.annotations?.['github.com/user-login'] : 'guest')
 
         },
     });
 };
+
+export default { getCurrentUser }

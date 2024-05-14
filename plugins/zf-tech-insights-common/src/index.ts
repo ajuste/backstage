@@ -6,4 +6,5 @@
 export * from './types';
 export * from './api/ZFCatalogAPIClient';
 export * from './api/NomadAPIClient';
+export * from './api/JiraAPIClient';
 export * from './pillars';

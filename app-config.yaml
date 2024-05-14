@@ -59,6 +59,9 @@ organization:
 
 jira:
   proxyPath: /jira/api
+  user: ${JIRA_USER}
+  password: ${JIRA_PASSWORD}
+  addr: zf.atlassian.net
 
 grafana:
   domain: https://grafana-qa.zerofox.com
@@ -161,6 +164,11 @@ scaffolderActions:
     secretAccessKey: ${AWS_SECRET_ACCESS_KEY}
     sessionToken: ${AWS_SESSION_TOKEN}
     region: us-west-2
+  jira:
+    proxyPath: /jira/api
+    user: ${JIRA_USER}
+    password: ${JIRA_PASSWORD}
+    addr: zf.atlassian.net
 
 awsResourceFetcher:
   env: ${ENV}

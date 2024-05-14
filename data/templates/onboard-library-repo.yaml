@@ -17,7 +17,6 @@ spec:
       required:
         - repoUrl
         - pillar
-        - purpose
       properties:
         repoUrl:
           title: Repository Location
@@ -29,13 +28,6 @@ spec:
               - github.com
             allowedOwners:
               - riskive
-
-        purpose:
-          title: Purpose
-          type: string
-          ui:widget: "textarea"
-          description: |
-            Briefly describe the purpose of this service.
 
         pillar:
           title: Pillar
@@ -73,7 +65,7 @@ spec:
         args: clone git@${{ parameters.repoUrl | parseRepoUrl | pick('host') }}:${{ parameters.repoUrl | projectSlug }}.git ${{ steps["workspace"].output.path }}
     
     - id: run-backstage-zf-cli
-      name: Updating repository
+      name: Updating local repository
       action: zf:execute
       input:
         command: ~/go/bin/backstage-zf-cli
@@ -84,26 +76,45 @@ spec:
       name: Generate branch name
       action: zf:util:randomBranchName
     
+    - id: create-jira-issue
+      name: Create JIRA Issue
+      action: zf:jira:addNewIssue
+      input:
+        projectKey: ZFE
+        summary: 'Onboarding library repo into the developer portal'
+        description: 'Onboarding library repo into the developer portal'
+        issueType: 10001
+    
+    - id: generate-pullrequest-texts
+      name: Generate pull request texts
+      action: zf:generatePRTexts:libraryOnBoarding
+      input:
+        githubAuthor: ${{ steps["current-user"].output.githubUser }}
+        jiraTicket: ${{ steps["create-jira-issue"].output.url }}
+    
     - id: submit-pr
       name: Submit pull request
       action: publish:github:pull-request
       input:
         repoUrl: ${{ parameters.repoUrl }}
         title: 'Devportal onboarding'
-        description: 'Onboarding repo into developer portal'
+        description: ${{ steps["generate-pullrequest-texts"].output.description }}
         branchName: ${{ steps["generate-branch-name"].output.branchName }}
-        commitMessage: |
-            Onboarding repository to the developer portal
-            Refs: ZFE-0000
+        commitMessage: ${{ steps["generate-pullrequest-texts"].output.commitMessage }}
 
   output:
     links:
       - title: Pull request
         icon: catalog
-        url: test #${{ steps["submit-pr"].output.remoteUrl }}
+        url: ${{ steps["submit-pr"].output.remoteUrl }}
+      - title: JIRA issue
+        url: ${{ steps["create-jira-issue"].output.url }}
+
     text:
       - title: Next steps
         content: |
-          1. Get the associated pull request merged.
-          2. Once the PR is merged, the developer portal will automatically add your repository to the catalog.
+          ### 1. Merge onboarding pull request
+          A PR has been created; you can check it by clicking on the Pull Request tab. Once it is merged, the developer portal will automatically pick the repository and add it to the catalog.
+          ### 2. A Jira ticket has been created.
+          As part of tracking your work, please close the issue once you are finished. You can see in associated ticket on the JIRA issue tab.
           

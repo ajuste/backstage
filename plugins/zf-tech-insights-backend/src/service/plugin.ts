@@ -5,7 +5,9 @@ import {
   createBackendPlugin,
 } from '@backstage/backend-plugin-api';
 
-import { createRouter }  from './router'
+import { createRouter } from './router'
+
+export { JiraProxyAPIClient } from './jiraProxy';
 
 export const zfInsightsPlugin = createBackendPlugin({
   pluginId: 'zf-insights',

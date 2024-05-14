@@ -7,6 +7,7 @@ import { generateKnowledgeAreaScore } from './knowledge';
 import { generateInfrastructureAreaScore } from './infraestructure';
 import { generateServiceOwnershipAreaScore } from './serviceOwnership';
 import { getLabelForScore } from './utils';
+import { ScaffolderActionFactoryOptions } from '../types';
 
 const assessmentSchema = z.object({
     entityRef: z.object({
@@ -35,7 +36,7 @@ const assessmentSchema = z.object({
  * Generate a score for a service
  * @returns The action to generate a score
  */
-export const generateScore = () => {
+const generateScore = (_: ScaffolderActionFactoryOptions) => {
     return createTemplateAction({
         id: 'zf:serviceAssessment:generateScore',
         schema: {
@@ -97,3 +98,5 @@ export const generateScore = () => {
         },
     });
 }
+
+export default generateScore

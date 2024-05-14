@@ -11,6 +11,8 @@ import {
   ZFCatalogAPIClient,
   zfCatalogApiRef,
   nomadApiRef,
+  jiraApiRef,
+  JiraAPIClient,
 } from 'backstage-plugin-zf-tech-insights-common';
 
 import {
@@ -33,9 +35,17 @@ const nomadAPI = createApiExtension({
   }),
 });
 
+const jiraAPI = createApiExtension({
+  factory: createApiFactory({
+    api: jiraApiRef,
+    deps: { discoveryApi: discoveryApiRef },
+    factory: ({ discoveryApi }) => new JiraAPIClient(discoveryApi),
+  }),
+});
+
 export default createPlugin({
   id: 'zf-insights',
-  extensions: [zfCatalogAPI, nomadAPI],
+  extensions: [zfCatalogAPI, nomadAPI, jiraAPI],
   routes: convertLegacyRouteRefs({
     root: rootRouteRef,
   }),

@@ -1,8 +1,9 @@
 import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import { z } from 'zod';
 import { exec } from 'child_process';
+import { ScaffolderActionFactoryOptions } from './types';
 
-export const commandRunner = () => {
+const commandRunner = (_: ScaffolderActionFactoryOptions) => {
     const commandWhitelist = ['backstage-zf-cli', '~/go/bin/backstage-zf-cli', 'git', 'cd', 'pwd', 'ls'];
 
     return createTemplateAction({
@@ -54,3 +55,5 @@ export const commandRunner = () => {
         }
     });
 }
+
+export default { commandRunner }

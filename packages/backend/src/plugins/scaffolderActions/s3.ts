@@ -2,6 +2,7 @@ import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import { Config } from '@backstage/config';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { z } from 'zod';
+import { ScaffolderActionFactoryOptions } from './types';
 
 /**
  * Returns an S3 client based on the configuration.
@@ -26,7 +27,7 @@ export const getS3Client = (config: Config): S3Client => {
     return new S3Client({ region });
 }
 
-export const putObject = (config: Config) => {
+const putObject = (opts: ScaffolderActionFactoryOptions) => {
     return createTemplateAction({
         id: 'zf:s3:putObject',
         schema: {
@@ -41,13 +42,13 @@ export const putObject = (config: Config) => {
         },
 
         async handler(ctx) {
-            const client = getS3Client(config);
+            const client = getS3Client(opts.config);
             let key = ctx.input.filename;
             if (ctx.input.append_date) {
                 key = `${key}${new Date().toISOString().slice(0, 10)}`;
             }
             const uploadArgs = {
-                Bucket: `${config.getOptionalString('env')}-${ctx.input.bucket}`,
+                Bucket: `${opts.config.getOptionalString('env')}-${ctx.input.bucket}`,
                 Key: key,
                 Body: JSON.stringify(ctx.input.contents),
             };
@@ -55,3 +56,5 @@ export const putObject = (config: Config) => {
         },
     });
 };
+
+export default { putObject }
