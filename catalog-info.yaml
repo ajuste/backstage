@@ -2,120 +2,58 @@ apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
     name: owner
-    description: Owners of airflow
+    description: Owners of backstage
     annotations:
-        zerofox.com/pillar: Airflow
-    namespace: airflow
+        zerofox.com/pillar: Sustaining
+    namespace: backstage
 spec:
     lifecycle: production
     type: team
     profile:
-        displayName: airflow-team
+        displayName: backstage-team
     children: []
-    members: [default/noowner]
+    members: [default/ajuste]
 ---
 apiVersion: backstage.io/v1alpha1
 kind: System
 metadata:
-    name: airflow
+    name: backstage
     annotations:
         backstage.io/code-coverage: enabled
         backstage.io/techdocs-ref: dir:.
-        zerofox.com/pillar: Airflow
+        github.com/project-slug: riskive/backstage
+        zerofox.com/pillar: Sustaining
     links:
-        - url: https://nomad-qa.zerofox.com/ui/jobs/airflow
+        - url: https://nomad-qa.zerofox.com/ui/jobs/backstage
           title: Nomad QA
-        - url: https://nomad-stag.zerofox.com/ui/jobs/airflow
+        - url: https://nomad-stag.zerofox.com/ui/jobs/backstage
           title: Nomad Stag
-        - url: https://nomad-prod.zerofox.com/ui/jobs/airflow
+        - url: https://nomad-prod.zerofox.com/ui/jobs/backstage
           title: Nomad Prod
 spec:
-    owner: airflow/owner
+    owner: backstage/owner
     lifecycle: production
     children: []
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-    name: airflow
+    name: backend
     annotations:
-        zerofox.com/pillar: Airflow
-    namespace: airflow
+        zerofox.com/pillar: Sustaining
+    namespace: backstage
     links:
-        - url: https://nomad-qa.zerofox.com/ui/jobs/airflow/airflow
+        - url: https://nomad-qa.zerofox.com/ui/jobs/backstage/backend
           title: Nomad QA
-        - url: https://nomad-stag.zerofox.com/ui/jobs/airflow/airflow
+        - url: https://nomad-stag.zerofox.com/ui/jobs/backstage/backend
           title: Nomad Stag
-        - url: https://nomad-prod.zerofox.com/ui/jobs/airflow/airflow
+        - url: https://nomad-prod.zerofox.com/ui/jobs/backstage/backend
           title: Nomad Prod
 spec:
-    owner: airflow/owner
+    owner: backstage/owner
     lifecycle: production
     type: service
-    system: default/airflow
-    children: []
----
-apiVersion: backstage.io/v1alpha1
-kind: Component
-metadata:
-    name: scheduler
-    annotations:
-        zerofox.com/pillar: Airflow
-    namespace: airflow
-    links:
-        - url: https://nomad-qa.zerofox.com/ui/jobs/airflow/airflow-scheduler
-          title: Nomad QA
-        - url: https://nomad-stag.zerofox.com/ui/jobs/airflow/airflow-scheduler
-          title: Nomad Stag
-        - url: https://nomad-prod.zerofox.com/ui/jobs/airflow/airflow-scheduler
-          title: Nomad Prod
-spec:
-    owner: airflow/owner
-    lifecycle: production
-    type: service
-    system: default/airflow
-    children: []
----
-apiVersion: backstage.io/v1alpha1
-kind: Component
-metadata:
-    name: worker
-    annotations:
-        zerofox.com/pillar: Airflow
-    namespace: airflow
-    links:
-        - url: https://nomad-qa.zerofox.com/ui/jobs/airflow/airflow-worker
-          title: Nomad QA
-        - url: https://nomad-stag.zerofox.com/ui/jobs/airflow/airflow-worker
-          title: Nomad Stag
-        - url: https://nomad-prod.zerofox.com/ui/jobs/airflow/airflow-worker
-          title: Nomad Prod
-spec:
-    owner: airflow/owner
-    lifecycle: production
-    type: service
-    system: default/airflow
-    children: []
----
-apiVersion: backstage.io/v1alpha1
-kind: Component
-metadata:
-    name: celery-flower
-    annotations:
-        zerofox.com/pillar: Airflow
-    namespace: airflow
-    links:
-        - url: https://nomad-qa.zerofox.com/ui/jobs/airflow/airflow-celery-flower
-          title: Nomad QA
-        - url: https://nomad-stag.zerofox.com/ui/jobs/airflow/airflow-celery-flower
-          title: Nomad Stag
-        - url: https://nomad-prod.zerofox.com/ui/jobs/airflow/airflow-celery-flower
-          title: Nomad Prod
-spec:
-    owner: airflow/owner
-    lifecycle: production
-    type: service
-    system: default/airflow
+    system: default/backstage
     children: []
 ---
 apiVersion: backstage.io/v1alpha1
@@ -127,6 +65,7 @@ metadata:
 spec:
     lifecycle: production
     type: url
+    system: default/backstage
     children: []
     targets:
         - ./data/templates/onboard-library-repo.yaml

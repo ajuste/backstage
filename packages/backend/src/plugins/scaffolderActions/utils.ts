@@ -14,7 +14,7 @@ const randomBranchName = (_: ScaffolderActionFactoryOptions) => {
         },
 
         async handler(ctx) {
-            ctx.output("branchName", `feature/${Math.random().toString(36).substring(7)}`);
+            ctx.output("branchName", `feature-${Math.random().toString(36).substring(7)}`);
         },
     });
 };

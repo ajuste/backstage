@@ -1,15 +1,15 @@
-site_name: 'Backstage devportal'
+site_name: backstage documentation
 repo_url: https://github.com/riskive/backstage/
-
 nav:
-  - Home: README.md
-  - Contributing: CONTRIBUTING.md
-  - Playbooks:
-    - Development:
-      - Running locally: playbook-running_locally.md
-      - Writing tests: playbook-writing_tests.md
-      - Creating plugins: playbook-creating_plugins.md
-      - Generating an Azure DevOps PAT: playbook-generating-azure-pat.md
-    
+    - Home: README.md
+    - Contributing: CONTRIBUTING.md
+    - Playbooks:
+        - Development:
+            - Running locally: playbook-running_locally.md
+            - Writing tests: playbook-writing_tests.md
+            - Creating plugins: playbook-creating_plugins.md
+            - Generating an Azure DevOps PAT: playbook-generating-azure-pat.md
+    - Release+Deploy: RELEASE+DEPLOY.md
+    - Decisions: decisions/README.md
 plugins:
-  - techdocs-core
+    - techdocs-core
