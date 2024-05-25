@@ -9,7 +9,6 @@ import {
   ComponentEntity,
 } from '@backstage/catalog-model';
 
-
 import { ZFCatalogAPI } from 'backstage-plugin-zf-tech-insights-common';
 
 export default class ZFCatalogService implements ZFCatalogAPI {
@@ -23,6 +22,29 @@ export default class ZFCatalogService implements ZFCatalogAPI {
   ) {
     this.catalogClient = catalogClient;
     this.tokenManager = tokenManager;
+  }
+
+  async getEntityWithRepos(): Promise<ComponentEntity[]> {
+    const { token } = await this.tokenManager.getToken();
+    const entities = await Promise.all([
+      this.catalogClient.getEntities({
+        filter: {
+          'metadata.annotations.github.com/project-slug': CATALOG_FILTER_EXISTS,
+          kind: 'System',
+        },
+      },
+        { token },
+      ),
+      this.catalogClient.getEntities({
+        filter: {
+          'metadata.annotations.github.com/project-slug': CATALOG_FILTER_EXISTS,
+          kind: 'Component',
+        },
+      },
+        { token },
+      )
+    ]);
+    return entities.reduce((acc, e) => acc.concat(e.items as ComponentEntity[]), [] as ComponentEntity[]);
   }
 
   async getPillars(): Promise<Array<ComponentEntity>> {
@@ -56,7 +78,7 @@ export default class ZFCatalogService implements ZFCatalogAPI {
       ? (entities.items[0] as ComponentEntity)
       : undefined;
   }
-  
+
 
   async getTeamsForPillar(pillar: string): Promise<Array<GroupEntity>> {
     const { token } = await this.tokenManager.getToken();

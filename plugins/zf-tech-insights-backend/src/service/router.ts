@@ -42,6 +42,21 @@ export async function createRouter(
     response.json({ status: 'ok' });
   });
 
+  router.get('/entities/with-repo', (_, response) => {
+    logger.info(`Fetching entities with repos`);
+    const service = buildCatalogServiceRouter();
+    service
+      .getEntityWithRepos()
+      .then(res => {
+        response.send(res);
+        response.end();
+      })
+      .catch(err => {
+        logger.error(err);
+        response.status(500).json({ error: err });
+      });
+  });
+
   router.get('/pillar', (_, response) => {
     logger.info(`Fetching all pillar components`);
     const service = buildCatalogServiceRouter();
