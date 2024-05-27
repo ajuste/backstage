@@ -194,6 +194,11 @@ techInsights:
       lifecycle: { timeToLive: { weeks: 2 } }
       timeout: 
         hours: 2
+    ownershipFactRetriever:
+      cadence: '0 1 * * *'
+      lifecycle: { timeToLive: { weeks: 2 } }
+      timeout: 
+        hours: 2
 
 nomad:
   addr: 'https://nomad-qa.zerofox.com'
