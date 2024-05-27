@@ -8,6 +8,8 @@ import { techInsightsApiRef, TechInsightsClient } from '@backstage-community/plu
 import { FactSchema } from '@backstage-community/plugin-tech-insights-common';
 import { EntitiesFactReportFetchComponent } from '../EntitiesFactReportFetchComponent';
 
+const ignoredFactRetrievers = ["techdocsFactRetriever", "entityOwnershipFactRetriever", "entityMetadataFactRetriever"]
+
 const toNonCamelCaseUpperCaseFirst = function (str: string): string {
   // Insert a space before all caps
   let result = str.replace(/([A-Z])/g, ' $1');
@@ -38,6 +40,7 @@ const SchemaComponent = (): any => {
   let items = [];
   for (let schema of availableSchemas || []) {
     for (const key in schema) {
+      if ((ignoredFactRetrievers).indexOf(String((schema as FactSchema).id)) !== -1) continue
       if (!schema.hasOwnProperty(key)) continue
       let value = (schema as FactSchema)[key as string] ?? {}
       if (typeof value === "object" && "type" in value) {
