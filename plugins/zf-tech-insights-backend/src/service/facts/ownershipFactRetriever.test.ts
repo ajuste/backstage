@@ -162,7 +162,7 @@ describe('getOwnershipFactRetriever', () => {
 
     expect(factRetriever.id).toEqual('ownershipFactRetriever');
     expect(factRetriever.version).toEqual('0.0.1');
-    expect(factRetriever.title).toEqual('Zerofox Entity Ownership');
+    expect(factRetriever.title).toEqual('Entity Ownership');
     expect(factRetriever.description).toEqual('Generates ownership level facts for entities');
   });
 });
