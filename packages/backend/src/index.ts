@@ -27,7 +27,7 @@ async function main() {
   backend.add(import('@backstage/plugin-search-backend-module-pg/alpha'))
   backend.add(import('@backstage/plugin-search-backend-module-catalog/alpha'));
   backend.add(import('@backstage/plugin-search-backend-module-techdocs/alpha'));
-  
+
 
   // Scaffold
   backend.add(import('@backstage/plugin-scaffolder-backend/alpha'));
@@ -66,6 +66,10 @@ async function main() {
 
   // AWS resource fetcher
   backend.add(import('@internal/backstage-plugin-aws-resource-fetcher-backend'));
+
+  // Badges
+  backend.add(import('@backstage-community/plugin-badges-backend'));
+
 
   // Nomad
   backend.add(legacyPlugin('nomad', import('./plugins/nomad')));

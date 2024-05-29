@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode, useMemo, useState } from 'react';
 import { Button, Grid } from '@material-ui/core';
 import {
   EntityApiDefinitionCard,
@@ -70,6 +70,34 @@ import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
 import { DocumentsComponent as PillarDocumentsComponent, UIsCardComponent as PillarUIsCardComponent, APICardComponent as PillarAPICardComponent, SystemCardComponent as PillarSystemCardComponent, TeamsCardComponent as PillarTeamsCardComponent } from '../pillar';
 import { EntityScoreCardContent } from '@oriflame/backstage-plugin-score-card';
 import { PillarAwareAboutCard } from './PillarAwareAboutCard';
+import { EntityBadgesDialog } from '@backstage-community/plugin-badges';
+import BadgeIcon from '@material-ui/icons/CallToAction';
+
+const EntityLayoutWrapper = (props: { children?: ReactNode }) => {
+  const [badgesDialogOpen, setBadgesDialogOpen] = useState(false);
+
+  const extraMenuItems = useMemo(() => {
+    return [
+      {
+        title: 'Badges',
+        Icon: BadgeIcon,
+        onClick: () => setBadgesDialogOpen(true),
+      },
+    ];
+  }, []);
+
+  return (
+    <>
+      <EntityLayout UNSTABLE_extraContextMenuItems={extraMenuItems}>
+        {props.children}
+      </EntityLayout>
+      <EntityBadgesDialog
+        open={badgesDialogOpen}
+        onClose={() => setBadgesDialogOpen(false)}
+      />
+    </>
+  );
+};
 
 const techdocsContent = (
   <EntityTechdocsContent>
@@ -283,7 +311,7 @@ const websiteEntityPage = (
  */
 
 const defaultEntityPage = (
-  <EntityLayout>
+  <EntityLayoutWrapper>
     <EntityLayout.Route path="/" title="Overview">
       {overviewContent}
     </EntityLayout.Route>
@@ -295,7 +323,7 @@ const defaultEntityPage = (
     <EntityLayout.Route path="/health" title="Health" if={isGrafanaAvailable}>
       <HealthContent />
     </EntityLayout.Route>
-  </EntityLayout>
+  </EntityLayoutWrapper>
 );
 
 const pillarPage = (
@@ -471,7 +499,7 @@ const systemPage = (
     <EntityLayout.Route path="/code-coverage" title="Code Coverage">
       <EntityCodeCoverageContent />
     </EntityLayout.Route>
-    
+
     <EntityLayout.Route path="/score" title="Service Assessment">
       <Grid container spacing={3} alignItems="stretch">
         <Grid item xs={12}>

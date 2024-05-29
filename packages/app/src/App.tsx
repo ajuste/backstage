@@ -34,6 +34,8 @@ import { ScaffolderFieldExtensions, } from '@backstage/plugin-scaffolder-react';
 import { ScaffolderPage } from '@backstage/plugin-scaffolder';
 import { RDSDatabasePage } from './extensions/DatabasesPage';
 import { TechInsightsScorecardPage } from '@backstage-community/plugin-tech-insights';
+import { badgesPlugin } from '@backstage-community/plugin-badges';
+
 
 const routes = (
   <FlatRoutes>
@@ -87,7 +89,8 @@ const app = createApp({
     catalogImportPlugin,
     techRadarExtensionOverride,
     reportingPlugin,
-    // scaffolderExtensionOverride,
+    badgesPlugin,
+   // scaffolderExtensionOverride,
     ...legacyFeatures,
     createExtensionOverrides({
       extensions: [

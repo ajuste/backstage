@@ -1,10 +1,10 @@
 apiVersion: backstage.io/v1alpha1
 kind: User
 metadata:
-  name: ajuste
-  github.com/user-login: ajuste
+  name: tgunther-zerofox
+  github.com/user-login: tgunther-zerofox
 spec:
   profile:
-    displayName: Alvaro Juste
-    email: ajuste@zerofox.com
+    displayName: Tomas Gunther
+    email: tgunther@zerofox.com
   memberOf: [engineers]
