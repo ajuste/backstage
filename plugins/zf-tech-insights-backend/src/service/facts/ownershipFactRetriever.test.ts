@@ -36,9 +36,9 @@ describe('OwnershipFactRetriever', () => {
         } as any,
       ],
     };
-    const level = retriever.getOwnershipLevel(entity);
-
-    expect(level).toEqual('full');
+    expect(retriever.hasPillar(entity)).toEqual(true);
+    expect(retriever.hasUserOwner(entity)).toEqual(true);
+    expect(retriever.hasTeamOwner(entity)).toEqual(true);
   });
 
   it('should get no-user-owner ownership level', () => {
@@ -63,9 +63,9 @@ describe('OwnershipFactRetriever', () => {
         } as any,
       ],
     };
-    const level = retriever.getOwnershipLevel(entity);
-
-    expect(level).toEqual('no-user-owner');
+    expect(retriever.hasPillar(entity)).toEqual(true);
+    expect(retriever.hasUserOwner(entity)).toEqual(false);
+    expect(retriever.hasTeamOwner(entity)).toEqual(true);
   });
 
   it('should get no-team-owner ownership level', () => {
@@ -90,9 +90,9 @@ describe('OwnershipFactRetriever', () => {
         } as any,
       ],
     };
-    const level = retriever.getOwnershipLevel(entity);
-
-    expect(level).toEqual('no-team-owner');
+    expect(retriever.hasPillar(entity)).toEqual(true);
+    expect(retriever.hasUserOwner(entity)).toEqual(true);
+    expect(retriever.hasTeamOwner(entity)).toEqual(false);
   });
 
   it('should get no-pillar ownership level', () => {
@@ -115,9 +115,9 @@ describe('OwnershipFactRetriever', () => {
         } as any,
       ],
     };
-    const level = retriever.getOwnershipLevel(entity);
-
-    expect(level).toEqual('no-pillar');
+    expect(retriever.hasPillar(entity)).toEqual(false);
+    expect(retriever.hasUserOwner(entity)).toEqual(true);
+    expect(retriever.hasTeamOwner(entity)).toEqual(false);
   });
 
   it('should get no-owner ownership level', () => {
@@ -131,9 +131,9 @@ describe('OwnershipFactRetriever', () => {
       },
       relations: [],
     };
-    const level = retriever.getOwnershipLevel(entity);
-
-    expect(level).toEqual('no-owner');
+    expect(retriever.hasPillar(entity)).toEqual(false);
+    expect(retriever.hasUserOwner(entity)).toEqual(false);
+    expect(retriever.hasTeamOwner(entity)).toEqual(false);
   });
 
   it('should get no-owner ownership level for empty entity', () => {
@@ -150,9 +150,9 @@ describe('OwnershipFactRetriever', () => {
         } as any,
       ],
     };
-    const level = retriever.getOwnershipLevel(entity);
-
-    expect(level).toEqual('no-owner');
+    expect(retriever.hasPillar(entity)).toEqual(false);
+    expect(retriever.hasUserOwner(entity)).toEqual(false);
+    expect(retriever.hasTeamOwner(entity)).toEqual(false);
   });
 });
 
@@ -161,7 +161,7 @@ describe('getOwnershipFactRetriever', () => {
     const factRetriever = getOwnershipFactRetriever();
 
     expect(factRetriever.id).toEqual('ownershipFactRetriever');
-    expect(factRetriever.version).toEqual('0.0.1');
+    expect(factRetriever.version).toEqual('0.0.2');
     expect(factRetriever.title).toEqual('Entity Ownership');
     expect(factRetriever.description).toEqual('Generates ownership level facts for entities');
   });

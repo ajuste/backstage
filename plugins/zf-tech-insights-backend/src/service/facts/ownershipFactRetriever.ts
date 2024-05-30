@@ -25,7 +25,7 @@ export class OwnershipFactRetriever {
      * @param entity 
      * @returns 
      */
-    private hasUserOwner(entity: Entity): boolean {
+    hasUserOwner(entity: Entity): boolean {
         return entity.relations?.some((relation) => {
             const r = (relation as RelationWithTarget);
             return r.type === 'ownedBy' && r.target?.kind === 'user';
@@ -37,7 +37,7 @@ export class OwnershipFactRetriever {
      * @param entity 
      * @returns 
      */
-    private hasTeamOwner(entity: Entity): boolean {
+    hasTeamOwner(entity: Entity): boolean {
         return entity.relations?.some((relation) => {
             const r = (relation as RelationWithTarget);
             return r.type === 'ownedBy' && r.target?.kind === 'group' && r.target?.name.startsWith('team-');
@@ -49,29 +49,8 @@ export class OwnershipFactRetriever {
      * @param entity
      * @returns 
      */
-    private hasPillar(entity: Entity): boolean {
+    hasPillar(entity: Entity): boolean {
         return !!entity.metadata.annotations?.['zerofox.com/pillar'] ?? false;
-    }
-
-    /**
-     * Get ownership level for an entity.
-     * @param entity 
-     * @returns 
-     */
-    getOwnershipLevel(entity: Entity): string {
-        if (!this.hasUserOwner(entity) && !this.hasTeamOwner(entity) && !this.hasPillar(entity)) {
-            return 'no-owner';
-        }
-        if (!this.hasPillar(entity)) {
-            return 'no-pillar';
-        }
-        if (!this.hasTeamOwner(entity)) {
-            return 'no-team-owner';
-        }
-        if (!this.hasUserOwner(entity)) {
-            return 'no-user-owner';
-        }
-        return 'full';
     }
 
     /**
@@ -101,7 +80,9 @@ export class OwnershipFactRetriever {
                         name: entity.metadata.name,
                     },
                     facts: {
-                        ownershipLevel: this.getOwnershipLevel(entity),
+                        hasPillar: this.hasPillar(entity),
+                        hasTeamOwer: this.hasTeamOwner(entity),
+                        hasUserOwner: this.hasUserOwner(entity),
                     }
                 };
                 result.push(response);
@@ -121,7 +102,7 @@ export class OwnershipFactRetriever {
  */
 const ownershipFactRetriever: FactRetriever = {
     id: 'ownershipFactRetriever',
-    version: '0.0.1',
+    version: '0.0.2',
     title: 'Entity Ownership',
     description:
         'Generates ownership level facts for entities',
@@ -131,9 +112,17 @@ const ownershipFactRetriever: FactRetriever = {
         },
     ],
     schema: {
-        ownershipLevel: {
-            type: 'string',
-            description: 'Level of ownership for this entity',
+        hasPillar: {
+            type: 'boolean',
+            description: 'Has pillar defined',
+        },
+        hasTeamOwer: {
+            type: 'boolean',
+            description: 'There is a team owner',
+        },
+        hasUserOwner: {
+            type: 'boolean',
+            description: 'There is a user owner',
         },
     },
     handler: async (context: FactRetrieverContext): Promise<Array<TechInsightFact>> => {
