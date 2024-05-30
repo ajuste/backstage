@@ -78,9 +78,19 @@ const checks = [
       conditions: {
         all: [
           {
-            fact: 'ownershipLevel',
+            fact: 'hasPillar',
             operator: 'equal',
-            value: 'full',
+            value: true,
+          },
+          {
+            fact: 'hasTeamOwer',
+            operator: 'equal',
+            value: true,
+          },
+          {
+            fact: 'hasUserOwner',
+            operator: 'equal',
+            value: true,
           },
         ],
       },
