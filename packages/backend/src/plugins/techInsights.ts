@@ -83,7 +83,7 @@ const checks = [
             value: true,
           },
           {
-            fact: 'hasTeamOwer',
+            fact: 'hasTeamOwner',
             operator: 'equal',
             value: true,
           },

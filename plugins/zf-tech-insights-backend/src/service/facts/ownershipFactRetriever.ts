@@ -81,7 +81,7 @@ export class OwnershipFactRetriever {
                     },
                     facts: {
                         hasPillar: this.hasPillar(entity),
-                        hasTeamOwer: this.hasTeamOwner(entity),
+                        hasTeamOwner: this.hasTeamOwner(entity),
                         hasUserOwner: this.hasUserOwner(entity),
                     }
                 };
@@ -116,7 +116,7 @@ const ownershipFactRetriever: FactRetriever = {
             type: 'boolean',
             description: 'Has pillar defined',
         },
-        hasTeamOwer: {
+        hasTeamOwner: {
             type: 'boolean',
             description: 'There is a team owner',
         },
