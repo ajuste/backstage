@@ -48,7 +48,7 @@ export default class FactServiceClient implements FactsServiceAPI {
             try {
               const entityRef = getCompoundEntityRef(entity);
               const facts = await this.techInsightsApi.getFacts(entityRef, [factRetrieverId])
-              if (!facts[factRetrieverId] || !facts[factRetrieverId].facts[factId]) resolve(null);
+              if (!facts[factRetrieverId] || typeof facts[factRetrieverId].facts[factId] === 'undefined') resolve(null);
 
               resolve({
                 factRetrieverId,

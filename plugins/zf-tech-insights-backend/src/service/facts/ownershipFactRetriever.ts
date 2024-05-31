@@ -86,6 +86,7 @@ export class OwnershipFactRetriever {
                     }
                 };
                 result.push(response);
+                this.context.logger.info(`Ownership facts for ${entity.metadata.name}: ${JSON.stringify(response)}`);
 
             } catch (error) {
                 this.context.logger.error(`Error while fetching github facts for ${entity.metadata.name}: ${error}`)
@@ -102,13 +103,20 @@ export class OwnershipFactRetriever {
  */
 const ownershipFactRetriever: FactRetriever = {
     id: 'ownershipFactRetriever',
-    version: '0.0.2',
+    version: '0.0.3',
     title: 'Entity Ownership',
     description:
         'Generates ownership level facts for entities',
     entityFilter: [
         {
+            "kind": 'Component',
             "metadata.annotations.github.com/project-slug": CATALOG_FILTER_EXISTS,
+        },
+        {
+            "kind": 'System',
+        },
+        {
+            "kind": 'API',
         },
     ],
     schema: {

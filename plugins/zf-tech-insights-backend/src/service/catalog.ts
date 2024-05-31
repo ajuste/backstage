@@ -26,25 +26,21 @@ export default class ZFCatalogService implements ZFCatalogAPI {
 
   async getEntityWithRepos(): Promise<ComponentEntity[]> {
     const { token } = await this.tokenManager.getToken();
-    const entities = await Promise.all([
-      this.catalogClient.getEntities({
-        filter: {
-          'metadata.annotations.github.com/project-slug': CATALOG_FILTER_EXISTS,
-          kind: 'System',
-        },
+    const entities = await this.catalogClient.getEntities({
+      filter: [{
+        "kind": 'Component',
+        "metadata.annotations.github.com/project-slug": CATALOG_FILTER_EXISTS,
       },
-        { token },
-      ),
-      this.catalogClient.getEntities({
-        filter: {
-          'metadata.annotations.github.com/project-slug': CATALOG_FILTER_EXISTS,
-          kind: 'Component',
-        },
+      {
+        "kind": 'System',
       },
-        { token },
-      )
-    ]);
-    return entities.reduce((acc, e) => acc.concat(e.items as ComponentEntity[]), [] as ComponentEntity[]);
+      {
+        "kind": 'API',
+      }],
+    },
+      { token },
+    );
+    return entities.items as ComponentEntity[];
   }
 
   async getPillars(): Promise<Array<ComponentEntity>> {
