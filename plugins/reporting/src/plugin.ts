@@ -72,3 +72,14 @@ export const EntitiesFactsPage = reportingPlugin.provide(
     mountPoint: rootRouteRef,
   }),
 );
+
+export const EntitiesChecksPage = reportingPlugin.provide(
+  createRoutableExtension({
+    name: 'EntitiesChecksPage',
+    component: () =>
+      import('./components/EntitiesChecksReportComponent').then(
+        m => m.EntitiesChecksReportComponent,
+      ),
+    mountPoint: rootRouteRef,
+  }),
+);

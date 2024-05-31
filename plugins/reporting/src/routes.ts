@@ -15,3 +15,7 @@ export const serviceStalenessRouteRef = createRouteRef({
 export const entitiesFactRouteRef = createRouteRef({
   id: 'entities-facts',
 });
+
+export const entitiesCheckRouteRef = createRouteRef({
+  id: 'entities-checks',
+});

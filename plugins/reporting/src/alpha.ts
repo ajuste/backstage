@@ -10,7 +10,7 @@ import {
 } from '@backstage/core-compat-api';
 import { techInsightsApiRef } from '@backstage-community/plugin-tech-insights';
 import { convertLegacyRouteRefs } from '@backstage/core-compat-api'
-import { rootRouteRef, codeCoverageRouteRef, serviceStalenessRouteRef, entitiesFactRouteRef } from './routes';
+import { rootRouteRef, codeCoverageRouteRef, serviceStalenessRouteRef, entitiesFactRouteRef, entitiesCheckRouteRef } from './routes';
 import { catalogApiRef } from '@backstage/plugin-catalog-react';
 import { factAiRef } from './api/api';
 import FactServiceClient from './api/FactServiceClient';
@@ -18,6 +18,7 @@ import { CatalogComponent } from './components/CatalogComponent';
 import { CodeCoverageReportComponent } from './components/CodeCoverageReportComponent';
 import { ComponentStalenessReportComponent } from './components/ComponentStalenessReportComponent';
 import { EntitiesFactReportComponent } from './components/EntitiesFactReportComponent';
+import { EntitiesChecksReportComponent } from './components/EntitiesChecksReportComponent';
 
 const apiExtension = createApiExtension({
   factory: createApiFactory({
@@ -59,9 +60,17 @@ export const componentEntitiesFactPageExtension = createPageExtension({
   loader: () => Promise.resolve(compatWrapper(EntitiesFactReportComponent())),
 });
 
+export const componentEntitiesCheckPageExtension = createPageExtension({
+  defaultPath: '/reporting/entities-checks',
+  name: 'ComponentEntitiesCheckPage',
+  namespace: 'code-coverage',
+  routeRef: convertLegacyRouteRef(entitiesCheckRouteRef),
+  loader: () => Promise.resolve(compatWrapper(EntitiesChecksReportComponent())),
+});
+
 export default createPlugin({
   id: 'reporting',
-  extensions: [apiExtension, reportingPageExtension, codeCoveragePageExtension, componentStalenessPageExtension, componentEntitiesFactPageExtension],
+  extensions: [apiExtension, reportingPageExtension, codeCoveragePageExtension, componentStalenessPageExtension, componentEntitiesFactPageExtension, componentEntitiesCheckPageExtension],
   routes: convertLegacyRouteRefs({
     root: rootRouteRef,
   }),

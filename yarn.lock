@@ -1850,9 +1850,9 @@
     tslib "^2.2.0"
 
 "@azure/identity@^4.0.0":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@azure/identity/-/identity-4.1.0.tgz#dd78bd3f78b3dec623445402abde5a56460b52d8"
-  integrity sha512-BhYkF8Xr2gXjyDxocm0pc9RI5J5a1jw8iW0dw6Bx95OGdYbuMyFZrrwNw4eYSqQ2BB6FZOqpJP3vjsAqRcvDhw==
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/@azure/identity/-/identity-4.2.0.tgz#acaee2f50785cc87778ec7eedcc20d6e72c1da23"
+  integrity sha512-ve3aYv79qXOJ8wRxQ5jO0eIz2DZ4o0TyME4m4vlGV5YyePddVZ+pFMzusAMODNAflYAAv1cBIhKnd4xytmXyig==
   dependencies:
     "@azure/abort-controller" "^1.0.0"
     "@azure/core-auth" "^1.5.0"
@@ -1877,11 +1877,11 @@
     tslib "^2.2.0"
 
 "@azure/msal-browser@^3.11.1":
-  version "3.13.0"
-  resolved "https://registry.yarnpkg.com/@azure/msal-browser/-/msal-browser-3.13.0.tgz#dc52c5d4957c33209e8a343a8c31fcf662285024"
-  integrity sha512-fD906nmJei3yE7la6DZTdUtXKvpwzJURkfsiz9747Icv4pit77cegSm6prJTKLQ1fw4iiZzrrWwxnhMLrTf5gQ==
+  version "3.15.0"
+  resolved "https://registry.yarnpkg.com/@azure/msal-browser/-/msal-browser-3.15.0.tgz#a3b223e79e46db827f54057021a200f3755cbdf7"
+  integrity sha512-jqngIR0zGLtEHCAhgXLl+VZTFcU/9DmRSjGj5RbrLnFPL/0L9Hr68k8grvLrTIq7tjhTM5Xgh6Xc0l7JlViHQQ==
   dependencies:
-    "@azure/msal-common" "14.9.0"
+    "@azure/msal-common" "14.10.0"
 
 "@azure/msal-browser@^3.5.0":
   version "3.6.0"
@@ -1890,15 +1890,15 @@
   dependencies:
     "@azure/msal-common" "14.5.0"
 
+"@azure/msal-common@14.10.0":
+  version "14.10.0"
+  resolved "https://registry.yarnpkg.com/@azure/msal-common/-/msal-common-14.10.0.tgz#215449726717b53d549953db77562cad6cb8421c"
+  integrity sha512-Zk6DPDz7e1wPgLoLgAp0349Yay9RvcjPM5We/ehuenDNsz/t9QEFI7tRoHpp/e47I4p20XE3FiDlhKwAo3utDA==
+
 "@azure/msal-common@14.5.0":
   version "14.5.0"
   resolved "https://registry.yarnpkg.com/@azure/msal-common/-/msal-common-14.5.0.tgz#5a891e5f8eaf23f598bdb4e285e938fb606cd716"
   integrity sha512-Gx5rZbiZV/HiZ2nEKfjfAF/qDdZ4/QWxMvMo2jhIFVz528dVKtaZyFAOtsX2Ak8+TQvRsGCaEfuwJFuXB6tu1A==
-
-"@azure/msal-common@14.9.0":
-  version "14.9.0"
-  resolved "https://registry.yarnpkg.com/@azure/msal-common/-/msal-common-14.9.0.tgz#ce1895b4eefccaa0e6aaa39db869611eaec4e37f"
-  integrity sha512-yzBPRlWPnTBeixxLNI3BBIgF5/bHpbhoRVuuDBnYjCyWRavaPUsKAHUDYLqpGkBLDciA6TCc6GOxN4/S3WiSxg==
 
 "@azure/msal-node@^2.5.1":
   version "2.6.0"
@@ -1910,11 +1910,11 @@
     uuid "^8.3.0"
 
 "@azure/msal-node@^2.6.6":
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/@azure/msal-node/-/msal-node-2.7.0.tgz#8641ab846704dd4fcbeed30aef94544c5fecfa30"
-  integrity sha512-wXD8LkUvHICeSWZydqg6o8Yvv+grlBEcmLGu+QEI4FcwFendbTEZrlSygnAXXSOCVaGAirWLchca35qrgpO6Jw==
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/@azure/msal-node/-/msal-node-2.9.0.tgz#e06d45ceb80b8f689d7007c5300b01fd2966d695"
+  integrity sha512-QHAvP6wduXzNKdmZviT1dXKUR3w/FTqgkhg7UrZndHwdihRZzxVR7KxlUw/Eq+vIeLSh1n0vxiULnaEqrLnJ6w==
   dependencies:
-    "@azure/msal-common" "14.9.0"
+    "@azure/msal-common" "14.10.0"
     jsonwebtoken "^9.0.0"
     uuid "^8.3.0"
 
@@ -3272,10 +3272,10 @@
     "@types/luxon" "^3.0.0"
     luxon "^3.0.0"
 
-"@backstage-community/plugin-tech-insights@^0.3.27":
-  version "0.3.27"
-  resolved "https://registry.yarnpkg.com/@backstage-community/plugin-tech-insights/-/plugin-tech-insights-0.3.27.tgz#564b00298e80e3481c998296ccf018f8a8aa50aa"
-  integrity sha512-vHIdRtwrKPZxtuqmBZpdUdkpMynFQ0E04/Mw5gNXw21NbXPqxXJcwTeecQ6R9ztgeXX5ANuUw0KxTzcE+1ne6w==
+"@backstage-community/plugin-tech-insights@^0.3.28":
+  version "0.3.28"
+  resolved "https://registry.yarnpkg.com/@backstage-community/plugin-tech-insights/-/plugin-tech-insights-0.3.28.tgz#4b41ce8838076402f64ec1c48551a1c9a44ca554"
+  integrity sha512-QYR+TTEFCLN1vMTMVU5T5IHqqh4Vh/vfStoYZThIvP6LVXUP0E9MAi1on/9tTcSUBvx0JRgJMWsKzREajpRGKA==
   dependencies:
     "@backstage-community/plugin-tech-insights-common" "^0.2.13"
     "@backstage/catalog-model" "^1.4.5"
@@ -12922,9 +12922,9 @@
     "@types/react" "*"
 
 "@types/react@*", "@types/react@^16.13.1 || ^17.0.0 || ^18.0.0", "@types/react@^18.0.0":
-  version "18.3.1"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.3.1.tgz#fed43985caa834a2084d002e4771e15dfcbdbe8e"
-  integrity sha512-V0kuGBX3+prX+DQ/7r2qsv1NsdfnCLnTgnRJ1pYnxykBhGMz+qj+box5lq7XsO5mtZsBqpjwwTu/7wszPfMBcw==
+  version "18.3.3"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.3.3.tgz#9679020895318b0915d7a3ab004d92d33375c45f"
+  integrity sha512-hti/R0pS0q1/xx+TsI73XIqk26eBsISZ2R0wUijXIngRK9R/e7Xw/cXVxQK7R5JjW+SV4zGcn5hXjudkN/pLIw==
   dependencies:
     "@types/prop-types" "*"
     csstype "^3.0.2"
@@ -13812,7 +13812,7 @@ anymatch@^3.0.3, anymatch@~3.1.2:
   version "0.0.0"
   dependencies:
     "@backstage-community/plugin-nomad" "^0.1.16"
-    "@backstage-community/plugin-tech-insights" "^0.3.27"
+    "@backstage-community/plugin-tech-insights" "^0.3.28"
     "@backstage/app-defaults" "^1.5.3"
     "@backstage/catalog-model" "^1.4.5"
     "@backstage/cli" "^0.26.2"

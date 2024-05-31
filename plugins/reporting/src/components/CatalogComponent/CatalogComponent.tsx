@@ -63,6 +63,19 @@ export const CatalogComponent = () => (
             </Button>
           </CardActions>
         </Card>
+        <Card key="entities-checks" data-testid='entities-checks'>
+          <CardMedia>
+            <ItemCardHeader title="Entities checks" subtitle="checks" />
+          </CardMedia>
+          <CardContent>
+            Checkout what is the checks for every entity.
+          </CardContent>
+          <CardActions>
+            <Button color="primary" to="/reporting/entities-checks" data-testid='entities-checks'>
+              See report
+            </Button>
+          </CardActions>
+        </Card>
       </ItemCardGrid>
     </Content>
   </Page>

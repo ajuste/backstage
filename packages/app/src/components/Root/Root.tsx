@@ -9,6 +9,7 @@ import CategoryIcon from '@material-ui/icons/Category';
 import RDSIcon from '@material-ui/icons/Storage';
 import LogoFull from '../logos/Full';
 import LogoIcon from '../logos/Icon';
+import EmojiObjectsIcon from '@material-ui/icons/EmojiObjects';
 import {
   Settings as SidebarSettings,
   UserSettingsSignInAvatar,
@@ -75,6 +76,8 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
         <SidebarItem icon={RDSIcon} to="databases" text="Databases" />
         <SidebarItem icon={LibraryBooks} to="docs" text="Docs" />
         <SidebarItem icon={ReportingIcon} to="reporting" text="Reporting" />
+        
+        <SidebarItem icon={EmojiObjectsIcon} to="tech-insights" text="Tech insight" />
 
         {/* End global nav */}
         <SidebarDivider />

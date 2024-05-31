@@ -1,0 +1,1 @@
+export { EntitiesChecksReportComponent } from './EntitiesChecksReportComponent';
