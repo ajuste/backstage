@@ -68,7 +68,8 @@ async function main() {
   backend.add(import('@internal/backstage-plugin-aws-resource-fetcher-backend'));
 
   // Badges
-  backend.add(import('@backstage-community/plugin-badges-backend'));
+  //backend.add(import('@backstage-community/plugin-badges-backend'));
+  backend.add(legacyPlugin('badges', import('./plugins/badges')));
 
 
   // Nomad

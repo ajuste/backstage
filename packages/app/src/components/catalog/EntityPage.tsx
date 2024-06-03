@@ -217,7 +217,7 @@ const overviewContent = (
 );
 
 const serviceEntityPage = (
-  <EntityLayout>
+  <EntityLayoutWrapper>
     <EntityLayout.Route path="/" title="Overview">
       {overviewContent}
     </EntityLayout.Route>
@@ -265,7 +265,7 @@ const serviceEntityPage = (
         description="Items required for service to be discoverable"
       />
     </EntityLayout.Route>
-  </EntityLayout>
+  </EntityLayoutWrapper>
 );
 
 const websiteEntityPage = (
@@ -452,7 +452,7 @@ const groupPage = (
 );
 
 const systemPage = (
-  <EntityLayout>
+  <EntityLayoutWrapper>
     <EntityLayout.Route path="/" title="Overview">
       <Grid container spacing={3} alignItems="stretch">
         {entityWarningContent}
@@ -507,7 +507,7 @@ const systemPage = (
         </Grid>
       </Grid>
     </EntityLayout.Route>
-  </EntityLayout>
+  </EntityLayoutWrapper>
 );
 
 const domainPage = (
