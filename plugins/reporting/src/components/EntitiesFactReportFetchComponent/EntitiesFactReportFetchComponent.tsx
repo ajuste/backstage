@@ -46,10 +46,10 @@ export const DenseTable = (props: DenseTableProps) => {
     const entity = {
       metadata: {
         name: fact.entityRef.name,
+        namespace: fact.entityRef.namespace,
       },
       apiVersion: "",
       kind: fact.entityRef.kind,
-      namespace: fact.entityRef.namespace,
       name: fact.entityRef.name,
     }
     const catalogLink = catalogEntityRoute(entityRouteParams(entity));
