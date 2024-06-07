@@ -15,6 +15,7 @@ spec:
     - title: Basic information
       required:
         - service
+        - releaseBundle
       properties:
 
         service:
@@ -31,6 +32,17 @@ spec:
               kind: System
               metadata.annotations.github.com/project-slug:
                 exists: true
+
+        releaseBundle:
+          title: Release bundle
+          type: string
+          description: Describe your release + deployment process.
+          enum:
+            - tag
+            - branch
+          enumNames:
+            - 'Tag'
+            - 'Branch'
             
         overwrite_all_docs:
           title: Overwrite all docs
@@ -66,8 +78,8 @@ spec:
       action: zf:utils:if
       input:
         condition: ${{ parameters.overwrite_all_docs }}
-        returnOnTrue: service generate_std_docs --overwrite=1
-        returnOnFalse: service generate_std_docs --overwrite=1
+        returnOnTrue: service generate_std_docs --overwrite=1 --releaseBundle=${{ parameters.releaseBundle }}
+        returnOnFalse: service generate_std_docs --overwrite=1 --releaseBundle=${{ parameters.releaseBundle }}
     
     - id: run-backstage-zf-cli
       name: Updating repository

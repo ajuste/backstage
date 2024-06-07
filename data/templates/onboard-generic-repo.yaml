@@ -2,11 +2,11 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: onboard-nomad-repo
-  title: Onboard Nomad repository
+  name: onboard-generic-repo
+  title: Onboard generic repository
   description: |
-    You have a repo that hosts a service that runs on Nomad.
-    This golden path will help you onboard your service to the developer portal.
+    You have a repo that doesn't fall into any specific category.
+    This golden path will help you onboard your repository to the developer portal.
   annotations:
     backstage.io/time-saved: PT30M
 spec:
@@ -19,7 +19,6 @@ spec:
         - pillar
         - releaseBundle
       properties:
-        
         repoUrl:
           title: Repository Location
           type: string
@@ -53,31 +52,6 @@ spec:
             catalogFilter:
               spec.type: pillar
               kind: Component
-      
-    - title: Nomad
-      required:
-        - task_group
-      properties:
-        
-        task_group:
-          title: Main nomad job
-          type: string
-          description: Name of the job where your service runs
-          ui:field: NomadJobPicker
-          ui:options:
-            filter: 'ParentID is empty and Type == service'
-            allowArbitraryValues: false
-        
-        batches_task_group_prefixes:
-          title: Nomad batch prefixes
-          type: array
-          description: If your repository hosts Nomad batch jobs, add prefixes to match them. As you enter a prefix, you will see a list of matching batch jobs.
-          ui:field: MultipleNomadJobPicker
-          ui:options:
-            filter: 'ParentID is empty and Type == batch'
-            allowArbitraryValues: true
-            prefixMatching: true
-            previewMatches: true
 
   steps:
     
@@ -103,11 +77,11 @@ spec:
         args: clone git@${{ parameters.repoUrl | parseRepoUrl | pick('host') }}:${{ parameters.repoUrl | projectSlug }}.git ${{ steps["workspace"].output.path }}
     
     - id: run-backstage-zf-cli
-      name: Updating repository
+      name: Updating local repository
       action: zf:execute
       input:
         command: ~/go/bin/backstage-zf-cli
-        args: service nomad_enroll --nomad_task_group=${{ parameters.task_group }} --service_name=${{ parameters.repoUrl | parseRepoUrl | pick('repo') }} --pillar="${{ steps["fetch-pillar"].output.entity.metadata.annotations["zerofox.com/pillar"] }}" --write_mode=REPLACE --preview=0 --batches_nomad_task_group_prefix=${{parameters.batches_task_group_prefixes.join(',') }} --releaseBundle=${{ parameters.releaseBundle }}
+        args: generic enroll --project_name=${{ parameters.repoUrl | parseRepoUrl | pick('repo') }} --pillar="${{ steps["fetch-pillar"].output.entity.metadata.annotations["zerofox.com/pillar"] }}" --releaseBundle=${{ parameters.releaseBundle }}
         basePath: ${{ steps["workspace"].output.path }}
     
     - id: generate-branch-name
@@ -119,13 +93,13 @@ spec:
       action: zf:jira:addNewIssue
       input:
         projectKey: ZFE
-        summary: 'Onboarding Nomad service repo into the developer portal'
-        description: 'Onboarding Nomad service repo into the developer portal'
+        summary: 'Onboarding generic repo into the developer portal'
+        description: 'Onboarding generic repo into the developer portal'
         issueType: 10001
     
     - id: generate-pullrequest-texts
       name: Generate pull request texts
-      action: zf:generatePRTexts:nomadServiceOnBoarding
+      action: zf:generatePRTexts:genericOnBoarding
       input:
         githubAuthor: ${{ steps["current-user"].output.githubUser }}
         jiraTicket: ${{ steps["create-jira-issue"].output.url }}
@@ -155,3 +129,4 @@ spec:
           A PR has been created; you can check it by clicking on the Pull Request tab. Once it is merged, the developer portal will automatically pick the repository and add it to the catalog.
           ### 2. A Jira ticket has been created.
           As part of tracking your work, please close the issue once you are finished. You can see in associated ticket on the JIRA issue tab.
+          

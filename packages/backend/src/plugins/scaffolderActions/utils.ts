@@ -60,6 +60,27 @@ const generatePullRequestTextsForLibraryOnboarding = (_: ScaffolderActionFactory
     });
 };
 
+const generatePullRequestTextsForGenericOnBoarding = (_: ScaffolderActionFactoryOptions) => {
+    return createTemplateAction({
+        id: 'zf:generatePRTexts:genericOnBoarding',
+        schema: {
+            input: z.object({
+                githubAuthor: z.string(),
+                jiraTicket: z.string(),
+            }),
+            output: z.object({
+                description: z.string(),
+                commitMessage: z.string(),
+            }),
+        },
+
+        async handler(ctx) {
+            ctx.output("description", `This PR is created as part of the generic onboarding process, the author is @${ctx.input.githubAuthor} and is associated with the JIRA ticket ${ctx.input.jiraTicket}.`);
+            ctx.output("commitMessage", `Generic repository onboarding.\n\nRefs: ${ctx.input.jiraTicket}`);
+        },
+    });
+};
+
 const generatePullRequestTextsForNomadServiceOnboarding = (_: ScaffolderActionFactoryOptions) => {
     return createTemplateAction({
         id: 'zf:generatePRTexts:nomadServiceOnBoarding',
@@ -128,5 +149,6 @@ export default {
     generatePullRequestTextsForLibraryOnboarding,
     generatePullRequestTextsForNomadServiceOnboarding,
     generatePullRequestTextsForStandardDocumentationGeneration,
+    generatePullRequestTextsForGenericOnBoarding,
     ifAction,
 }

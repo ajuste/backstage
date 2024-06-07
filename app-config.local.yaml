@@ -91,6 +91,9 @@ catalog:
       target: ../../data/templates/onboard-library-repo.yaml
 
     - type: file
+      target: ../../data/templates/onboard-generic-repo.yaml
+
+    - type: file
       target: ../../data/templates/standard-doc-generate-for-service.yaml
 
     - type: url

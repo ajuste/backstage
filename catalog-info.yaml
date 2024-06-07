@@ -72,3 +72,4 @@ spec:
         - ./data/templates/onboard-nomad-repo.yaml
         - ./data/templates/service-assessment.yaml
         - ./data/templates/standard-doc-generate-for-service.yaml
+        - ./data/templates/onboard-generic-repo.yaml

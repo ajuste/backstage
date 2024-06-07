@@ -69,7 +69,7 @@ spec:
       action: zf:execute
       input:
         command: ~/go/bin/backstage-zf-cli
-        args: library enroll --name=${{ parameters.repoUrl | parseRepoUrl | pick('repo') }} --pillar="${{ steps["fetch-pillar"].output.entity.metadata.annotations["zerofox.com/pillar"] }}" --owners=noowner
+        args: library enroll --name=${{ parameters.repoUrl | parseRepoUrl | pick('repo') }} --pillar="${{ steps["fetch-pillar"].output.entity.metadata.annotations["zerofox.com/pillar"] }}"
         basePath: ${{ steps["workspace"].output.path }}
     
     - id: generate-branch-name
