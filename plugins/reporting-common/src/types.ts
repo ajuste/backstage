@@ -15,4 +15,5 @@ export type FactsReport = {
   factId: string;
   factValue: JsonObject | JsonArray | JsonPrimitive;
   entityRef: CompoundEntityRef;
+  pillar: string;
 };

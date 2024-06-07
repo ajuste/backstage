@@ -55,6 +55,7 @@ export default class FactServiceClient implements FactsServiceAPI {
                 factId,
                 entityRef,
                 factValue: facts[factRetrieverId].facts[factId],
+                pillar: entity.metadata?.annotations?.["zerofox.com/pillar"] ?? '',
               });
 
             } catch (err) {
