@@ -62,6 +62,7 @@ catalog:
 
 nomad:
   addr: 'https://nomad-prod.zerofox.com'
+  token: ${NOMAD_TOKEN}
 
 
 qeta:

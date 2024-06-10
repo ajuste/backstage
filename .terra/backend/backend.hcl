@@ -132,6 +132,11 @@ DB_PASSWORD="{{ .Data.password }}"
 AUTH_OKTA_CLIENT_ID="{{ .Data.client_id }}"
 AUTH_OKTA_CLIENT_SECRET="{{ .Data.client_secret }}"
 {{ end }}
+
+# for Nomad authentication
+{{ with secret "nomad/creds/backstage" }}
+NOMAD_TOKEN="{{ .Data.secret_id }}"
+{{ end }}
 EOH
       destination = "$${NOMAD_SECRETS_DIR}/env"
       change_mode = "restart"

@@ -75,13 +75,25 @@ spec:
       input:
         command: git
         args: clone git@${{ parameters.repoUrl | parseRepoUrl | pick('host') }}:${{ parameters.repoUrl | projectSlug }}.git ${{ steps["workspace"].output.path }}
+
+    - id: get-nomad-token
+      name: Read Nomad token
+      action: zf:util:getSetting
+      input:
+        key: nomad.token
+
+    - id: get-nomad-addr
+      name: Read Nomad address
+      action: zf:util:getSetting
+      input:
+        key: nomad.addr
     
     - id: run-backstage-zf-cli
       name: Updating local repository
       action: zf:execute
       input:
         command: ~/go/bin/backstage-zf-cli
-        args: generic enroll --project_name=${{ parameters.repoUrl | parseRepoUrl | pick('repo') }} --pillar="${{ steps["fetch-pillar"].output.entity.metadata.annotations["zerofox.com/pillar"] }}" --releaseBundle=${{ parameters.releaseBundle }}
+        args: generic enroll --project_name=${{ parameters.repoUrl | parseRepoUrl | pick('repo') }} --pillar="${{ steps["fetch-pillar"].output.entity.metadata.annotations["zerofox.com/pillar"] }}" --release_bundle=${{ parameters.releaseBundle }} --nomad_api_token=${{ steps["get-nomad-token"].output.value }} --nomad_api_base_url=${{ steps["get-nomad-addr"].output.value }}
         basePath: ${{ steps["workspace"].output.path }}
     
     - id: generate-branch-name

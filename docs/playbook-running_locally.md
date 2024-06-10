@@ -117,7 +117,8 @@ SSH_PRIVATE_KEY="$(< ~/.ssh/id_ed25519)" docker-compose up local
 
   A workaround is to run:
   ```
-  > brew install pixma
+  > brew install pkg-config
+  > brew install pixman
   > brew install cairo
   > brew install pango
   ```

@@ -143,6 +143,25 @@ const ifAction = (_: ScaffolderActionFactoryOptions) => {
     });
 };
 
+
+const getSetting = (opts: ScaffolderActionFactoryOptions) => {
+    return createTemplateAction({
+        id: 'zf:util:getSetting',
+        schema: {
+            input: z.object({
+                key: z.string(),
+            }),
+            output: z.object({
+                setting: z.any(),
+            }),
+        },
+
+        async handler(ctx) {
+            ctx.output("setting", opts.config.get(ctx.input.key));
+        },
+    });
+};
+
 export default {
     randomBranchName,
     getEntity,
@@ -151,4 +170,5 @@ export default {
     generatePullRequestTextsForStandardDocumentationGeneration,
     generatePullRequestTextsForGenericOnBoarding,
     ifAction,
+    getSetting,
 }

@@ -14,7 +14,10 @@ export default class NomadProxyAPIClient implements NomadAPI {
   }
 
   async getJobs(options: GetJobsOptions): Promise<NomadJob[]> {
-    const response = await fetch(`${this.configApi.getString('nomad.addr')}/v1/jobs?${options.filter ? `&filter=${encodeURIComponent(options.filter)}` : ''}`)
+    const token = this.configApi.getString("nomad.token");
+    const response = await fetch(`${this.configApi.getString('nomad.addr')}/v1/jobs?${options.filter ? `&filter=${encodeURIComponent(options.filter)}` : ''}`, {
+      headers: { "X-Nomad-Token": token }
+    });
     return await response.json() as NomadJob[]
   }
 }

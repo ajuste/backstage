@@ -102,12 +102,24 @@ spec:
         command: git
         args: clone git@${{ parameters.repoUrl | parseRepoUrl | pick('host') }}:${{ parameters.repoUrl | projectSlug }}.git ${{ steps["workspace"].output.path }}
     
+    - id: get-nomad-token
+      name: Clone target repository
+      action: zf:util:getSetting
+      input:
+        key: nomad.token
+
+    - id: get-nomad-addr
+      name: Clone target repository
+      action: zf:util:getSetting
+      input:
+        key: nomad.addr
+    
     - id: run-backstage-zf-cli
       name: Updating repository
       action: zf:execute
       input:
         command: ~/go/bin/backstage-zf-cli
-        args: service nomad_enroll --nomad_task_group=${{ parameters.task_group }} --service_name=${{ parameters.repoUrl | parseRepoUrl | pick('repo') }} --pillar="${{ steps["fetch-pillar"].output.entity.metadata.annotations["zerofox.com/pillar"] }}" --write_mode=REPLACE --preview=0 --batches_nomad_task_group_prefix=${{parameters.batches_task_group_prefixes.join(',') }} --releaseBundle=${{ parameters.releaseBundle }}
+        args: service nomad_enroll --nomad_task_group=${{ parameters.task_group }} --service_name=${{ parameters.repoUrl | parseRepoUrl | pick('repo') }} --pillar="${{ steps["fetch-pillar"].output.entity.metadata.annotations["zerofox.com/pillar"] }}" --write_mode=REPLACE --preview=0 --batches_nomad_task_group_prefix=${{parameters.batches_task_group_prefixes.join(',') }} --release_bundle=${{ parameters.releaseBundle }} --nomad_api_token=${{ steps["get-nomad-token"].output.value }} --nomad_api_base_url=${{ steps["get-nomad-addr"].output.value }}
         basePath: ${{ steps["workspace"].output.path }}
     
     - id: generate-branch-name

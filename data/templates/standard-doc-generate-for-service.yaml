@@ -78,8 +78,8 @@ spec:
       action: zf:utils:if
       input:
         condition: ${{ parameters.overwrite_all_docs }}
-        returnOnTrue: service generate_std_docs --overwrite=1 --releaseBundle=${{ parameters.releaseBundle }}
-        returnOnFalse: service generate_std_docs --overwrite=1 --releaseBundle=${{ parameters.releaseBundle }}
+        returnOnTrue: service generate_std_docs --overwrite=1 --release_bundle=${{ parameters.releaseBundle }}
+        returnOnFalse: service generate_std_docs --overwrite=1 --release_bundle=${{ parameters.releaseBundle }}
     
     - id: run-backstage-zf-cli
       name: Updating repository

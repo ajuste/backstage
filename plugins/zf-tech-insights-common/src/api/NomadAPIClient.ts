@@ -20,7 +20,10 @@ export class NomadAPIClient implements NomadAPI {
   }
 
   async getJobs(): Promise<NomadJob[]> {
-    const response = await fetch(`${this.configApi.getString('nomad.addr')}/v1/jobs`)
+    const token = this.configApi.getString("nomad.token");
+    const response = await fetch(`${this.configApi.getString('nomad.addr')}/v1/jobs`, {
+      headers: { "X-Nomad-Token": token }
+    });
     return await response.json() as NomadJob[]
   }
 }
