@@ -17,6 +17,7 @@ spec:
       required:
         - repoUrl
         - pillar
+        - readme_description
       properties:
         repoUrl:
           title: Repository Location
@@ -41,6 +42,11 @@ spec:
               spec.type: pillar
               kind: Component
 
+        readme_description:
+          title: Readme description
+          type: string
+          description: Write a small description so everyone knows what this library is for
+
   steps:
     
     - id: current-user
@@ -48,7 +54,7 @@ spec:
       action: zf:user:get
     
     - id: workspace
-      name: Prepare worksapce
+      name: Prepare workspace
       action: zf:workspacePath
     
     - id: fetch-pillar
@@ -69,7 +75,7 @@ spec:
       action: zf:execute
       input:
         command: ~/go/bin/backstage-zf-cli
-        args: library enroll --name=${{ parameters.repoUrl | parseRepoUrl | pick('repo') }} --pillar="${{ steps["fetch-pillar"].output.entity.metadata.annotations["zerofox.com/pillar"] }}"
+        args: library enroll --name=${{ parameters.repoUrl | parseRepoUrl | pick('repo') }} --pillar="${{ steps["fetch-pillar"].output.entity.metadata.annotations["zerofox.com/pillar"] }}" --readme_description="${{ parameters.readme_description }}"
         basePath: ${{ steps["workspace"].output.path }}
     
     - id: generate-branch-name

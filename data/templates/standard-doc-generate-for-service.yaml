@@ -16,6 +16,7 @@ spec:
       required:
         - service
         - releaseBundle
+        - readme_description
       properties:
 
         service:
@@ -50,6 +51,11 @@ spec:
           ui:help: |
             Check this option to overwrite every doc with default ones.
 
+        readme_description:
+          title: Readme description
+          type: string
+          description: Write a small description so everyone knows what this service does
+
   steps:
     
     - id: current-user
@@ -78,8 +84,8 @@ spec:
       action: zf:utils:if
       input:
         condition: ${{ parameters.overwrite_all_docs }}
-        returnOnTrue: service generate_std_docs --overwrite=1 --release_bundle=${{ parameters.releaseBundle }}
-        returnOnFalse: service generate_std_docs --overwrite=1 --release_bundle=${{ parameters.releaseBundle }}
+        returnOnTrue: service generate_std_docs --overwrite=1 --release_bundle=${{ parameters.releaseBundle }} --readme_description="${{ parameters.readme_description }}"
+        returnOnFalse: service generate_std_docs --overwrite=1 --release_bundle=${{ parameters.releaseBundle }} --readme_description="${{ parameters.readme_description }}"
     
     - id: run-backstage-zf-cli
       name: Updating repository

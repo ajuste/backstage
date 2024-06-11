@@ -18,6 +18,7 @@ spec:
         - repoUrl
         - pillar
         - releaseBundle
+        - readme_description
       properties:
         repoUrl:
           title: Repository Location
@@ -52,6 +53,11 @@ spec:
             catalogFilter:
               spec.type: pillar
               kind: Component
+
+        readme_description:
+          title: Readme description
+          type: string
+          description: Write a small description so everyone knows what this repository has
 
   steps:
     
@@ -93,7 +99,7 @@ spec:
       action: zf:execute
       input:
         command: ~/go/bin/backstage-zf-cli
-        args: generic enroll --project_name=${{ parameters.repoUrl | parseRepoUrl | pick('repo') }} --pillar="${{ steps["fetch-pillar"].output.entity.metadata.annotations["zerofox.com/pillar"] }}" --release_bundle=${{ parameters.releaseBundle }} --nomad_api_token=${{ steps["get-nomad-token"].output.value }} --nomad_api_base_url=${{ steps["get-nomad-addr"].output.value }}
+        args: generic enroll --project_name=${{ parameters.repoUrl | parseRepoUrl | pick('repo') }} --pillar="${{ steps["fetch-pillar"].output.entity.metadata.annotations["zerofox.com/pillar"] }}" --release_bundle=${{ parameters.releaseBundle }} --nomad_api_token=${{ steps["get-nomad-token"].output.value }} --nomad_api_base_url=${{ steps["get-nomad-addr"].output.value }} --readme_description="${{ parameters.readme_description }}"
         basePath: ${{ steps["workspace"].output.path }}
     
     - id: generate-branch-name
