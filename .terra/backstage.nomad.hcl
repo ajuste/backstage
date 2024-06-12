@@ -8,8 +8,10 @@ job "backstage" {
   }
 
   update {
-    stagger      = "10s"
-    max_parallel = 1
+    max_parallel     = 1
+    min_healthy_time = "5m"
+    healthy_deadline = "10m"
+    progress_deadline = "15m"
   }
 
   ${backend}
