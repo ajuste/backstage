@@ -42,11 +42,11 @@ export async function createRouter(
     response.json({ status: 'ok' });
   });
 
-  router.get('/entities/with-repo', (_, response) => {
-    logger.info(`Fetching entities with repos`);
+  router.get('/entities/standalone', (_, response) => {
+    logger.info(`Fetching standaalone entities`);
     const service = buildCatalogServiceRouter();
     service
-      .getEntityWithRepos()
+      .getStandaloneEntities()
       .then(res => {
         response.send(res);
         response.end();

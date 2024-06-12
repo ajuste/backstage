@@ -24,7 +24,7 @@ export default class ZFCatalogService implements ZFCatalogAPI {
     this.tokenManager = tokenManager;
   }
 
-  async getEntityWithRepos(): Promise<ComponentEntity[]> {
+  async getStandaloneEntities(): Promise<ComponentEntity[]> {
     const { token } = await this.tokenManager.getToken();
     const entities = await this.catalogClient.getEntities({
       filter: [{
@@ -36,6 +36,11 @@ export default class ZFCatalogService implements ZFCatalogAPI {
       },
       {
         "kind": 'API',
+      },
+      {
+        "kind": 'Component',
+        "metadata.annotations.backstage.io/source-location": CATALOG_FILTER_EXISTS,
+        "spec.type": "library",
       }],
     },
       { token },

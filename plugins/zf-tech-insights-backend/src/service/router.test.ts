@@ -73,11 +73,11 @@ describe('createRouter', () => {
     });
   });
 
-  describe('GET /entities/with-repo', () => {
+  describe('GET /entities/standalone', () => {
     it('returns all entities with repositories', async () => {
       (ZFCatalogService as jest.Mock).mockImplementation(() => {
         return {
-          getEntityWithRepos: jest.fn(() => {
+          getStandaloneEntities: jest.fn(() => {
             return Promise.resolve([
               {
                 id: '1',
@@ -89,7 +89,7 @@ describe('createRouter', () => {
         };
       });
 
-      const response = await request(app).get('/entities/with-repo');
+      const response = await request(app).get('/entities/standalone');
 
       expect(response.text).toEqual('[{\"id\":\"1\",\"name\":\"Component 1\",\"description\":\"Description\"}]');
       expect(response.status).toEqual(200);

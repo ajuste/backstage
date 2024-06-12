@@ -103,7 +103,7 @@ export class OwnershipFactRetriever {
  */
 const ownershipFactRetriever: FactRetriever = {
     id: 'ownershipFactRetriever',
-    version: '0.0.3',
+    version: '0.0.4',
     title: 'Entity Ownership',
     description:
         'Generates ownership level facts for entities',
@@ -118,6 +118,11 @@ const ownershipFactRetriever: FactRetriever = {
         {
             "kind": 'API',
         },
+        {
+            "kind": 'Component',
+            "metadata.annotations.backstage.io/source-location": CATALOG_FILTER_EXISTS,
+            "spec.type": "library",
+        }
     ],
     schema: {
         hasPillar: {

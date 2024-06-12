@@ -55,7 +55,7 @@ export class ZFCatalogAPIClient implements ZFCatalogAPI {
     return await this.internalGet(`/pillar/${pillar}/teams`);
   }
   
-  async getEntityWithRepos(): Promise<Array<ComponentEntity>> {
+  async getStandaloneEntities(): Promise<Array<ComponentEntity>> {
     return await this.internalGet(`/entities/with-repo`);
   }
 }
