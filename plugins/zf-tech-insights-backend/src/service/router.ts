@@ -31,7 +31,6 @@ export async function createRouter(
 
   const buildCatalogServiceRouter = (): ZFCatalogService => {
     return new ZFCatalogService(
-      options.config,
       options.catalogServiceClient,
       options.tokenManager,
     );

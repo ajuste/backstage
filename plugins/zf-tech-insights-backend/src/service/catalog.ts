@@ -1,4 +1,3 @@
-import { ConfigApi } from '@backstage/core-plugin-api';
 import { TokenManager } from '@backstage/backend-common';
 import {
   CATALOG_FILTER_EXISTS,
@@ -16,7 +15,6 @@ export default class ZFCatalogService implements ZFCatalogAPI {
   private tokenManager: TokenManager;
 
   constructor(
-    _: ConfigApi,
     catalogClient: CatalogApi,
     tokenManager: TokenManager,
   ) {
