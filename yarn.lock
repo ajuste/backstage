@@ -3131,7 +3131,7 @@
     "@babel/helper-validator-identifier" "^7.22.20"
     to-fast-properties "^2.0.0"
 
-"@backstage-community/plugin-badges-backend@^0.3.5":
+"@backstage-community/plugin-badges-backend@^0.4.1":
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/@backstage-community/plugin-badges-backend/-/plugin-badges-backend-0.4.1.tgz#3815d5f00a77c8ea5fca97506da3c7281f15075a"
   integrity sha512-hq3PvB8chJYp8rvZPY8JhwkreHcHyJto2wY7FJ9u5exJ9ut06ZLQu2jgV0DIi+kGkyQinPUSgFupDUh3kgAkZg==

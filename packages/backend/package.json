@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.556.0",
-    "@backstage-community/plugin-badges-backend": "^0.3.5",
+    "@backstage-community/plugin-badges-backend": "^0.4.1",
     "@backstage-community/plugin-nomad-backend": "^0.1.20",
     "@backstage-community/plugin-tech-insights-backend": "^0.5.32",
     "@backstage-community/plugin-tech-insights-backend-module-jsonfc": "^0.1.50",
