@@ -49,7 +49,7 @@ proxy:
         Authorization: Bearer ${GRAFANA_TOKEN}
 
 scorecards:
-  jsonDataUrl: /api/aws-resource-fetcher/s3/prod-backstage/service_assessment/
+  jsonDataUrl: /api/zf-insights/s3/prod-backstage/service_assessment/
 
 catalog:
   processingInterval:

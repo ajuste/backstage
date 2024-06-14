@@ -20,7 +20,7 @@ integrations:
       token: ${AZURE_TOKEN}
 
 scorecards:
-  jsonDataUrl: http://localhost:7007/api/aws-resource-fetcher/s3/qa-backstage/service_assessment/
+  jsonDataUrl: http://localhost:7007/api/zf-insights/s3/qa-backstage/service_assessment/
     
 auth:
   providers:
