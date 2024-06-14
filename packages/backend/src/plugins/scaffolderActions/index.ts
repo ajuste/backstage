@@ -7,6 +7,7 @@ import utilsFactories from './utils'
 import workspacePathFactories from './workspacePath'
 import currentUserFactories from './currentUser'
 import jiraFactories from './jira'
+import s3Factories from './s3'
 
 const factories = [
     ...Object.values(serviceAssessmentFactories),
@@ -16,6 +17,7 @@ const factories = [
     ...Object.values(workspacePathFactories),
     ...Object.values(currentUserFactories),
     ...Object.values(jiraFactories),
+    ...Object.values(s3Factories),
 ]
 
 export const buildActions = (opts: ScaffolderActionFactoryOptions) => factories.map((factory) => factory(opts) as TemplateAction)

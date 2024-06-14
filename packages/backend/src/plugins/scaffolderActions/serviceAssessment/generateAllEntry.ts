@@ -52,7 +52,7 @@ const generateAllEntry = (opts: ScaffolderActionFactoryOptions) => {
 
         async handler(ctx): Promise<any> {
             const assessmentsFiles = await listEntries(opts.getS3Client, opts.config);
-            const assessmentContents = await getEntries(opts.getS3Client, opts.config, assessmentsFiles.map((object) => object.Key ?? ""));
+            const assessmentContents = await getEntries(opts.getS3Client, opts.config, assessmentsFiles.map((object) => object.key ?? ""));
             ctx.output('allEntry', assessmentContents.map(generateSingleEntryForAllCatalog));
         },
     });

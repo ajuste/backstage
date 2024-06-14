@@ -8,6 +8,7 @@ import {
 import { createRouter } from './router'
 
 export { JiraProxyAPIClient } from './jiraProxy';
+export { S3Service } from './s3Service';
 
 export const zfInsightsPlugin = createBackendPlugin({
   pluginId: 'zf-insights',

@@ -64,9 +64,6 @@ async function main() {
   // Github resource fetcher
   backend.add(legacyPlugin('github-resource-fetcher', import('./plugins/githubResourceFetcher')));
 
-  // AWS resource fetcher
-  backend.add(import('@internal/backstage-plugin-aws-resource-fetcher-backend'));
-
   // Badges
   //backend.add(import('@backstage-community/plugin-badges-backend'));
   backend.add(legacyPlugin('badges', import('./plugins/badges')));

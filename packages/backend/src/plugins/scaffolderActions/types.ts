@@ -1,6 +1,7 @@
 import { CatalogApi } from '@backstage/catalog-client';
 import { Config } from '@backstage/config';
-import { _Object, S3Client } from '@aws-sdk/client-s3';
+
+import { S3API } from 'backstage-plugin-zf-tech-insights-common';
 import { TemplateAction } from '@backstage/plugin-scaffolder-node';
 
 /**
@@ -8,7 +9,7 @@ import { TemplateAction } from '@backstage/plugin-scaffolder-node';
  * @param config The configuration
  * @returns The S3 client
  */
-export type S3ClientGetter = (config: Config) => S3Client;
+export type S3ClientGetter = (config: Config) => S3API;
 
 /**
  * Options for creating a scaffolder action

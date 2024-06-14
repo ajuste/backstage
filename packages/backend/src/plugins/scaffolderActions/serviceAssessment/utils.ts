@@ -1,7 +1,6 @@
 import { Config } from '@backstage/config';
-import { _Object, GetObjectCommand, ListObjectsV2Command, ListObjectsV2CommandOutput } from '@aws-sdk/client-s3';
-import { Stream } from 'stream';
 import { S3ClientGetter } from '../types';
+import { S3Object } from 'backstage-plugin-zf-tech-insights-common';
 
 export const newId = (): number => Math.round(Math.random() * 100000000)
 
@@ -29,18 +28,19 @@ export const getLabelForScore = (score: number): string => {
  * @param config The config object
  * @returns The list of objects
  */
-export const listEntries = async (getS3Client: S3ClientGetter, config: Config): Promise<_Object[]> => {
+export const listEntries = async (getS3Client: S3ClientGetter, config: Config): Promise<S3Object[]> => {
     const client = getS3Client(config);
     const listResults = ["system", "component", "api"].map(async (kind) => {
-        const listArgs = new ListObjectsV2Command({
-            Bucket: `${config.getOptionalString('env')}-backstage`,
-            Prefix: `service_assessment/default/${kind}/`,
-        });
-        return client.send(listArgs) as Promise<ListObjectsV2CommandOutput>;
+        const listArgs = {
+            bucket: `${config.getOptionalString('env')}-backstage`,
+            prefix: `service_assessment/default/${kind}/`,
+        };
+        return client.listObjects(listArgs)
     })
     const results = (await Promise.all(listResults))
-        .reduce((a: _Object[], b: ListObjectsV2CommandOutput) => a.concat(b.Contents ?? []), [])
-        .filter((object) => object.Key?.endsWith(".json"))
+        .map((result) => result.objects ?? [])
+        .flat()
+        .filter((object) => object.key?.endsWith(".json"))
     return results
 }
 
@@ -53,11 +53,10 @@ export const listEntries = async (getS3Client: S3ClientGetter, config: Config): 
 export const getEntry = async (getS3Client: S3ClientGetter, config: Config, key: string): Promise<string> => {
     const client = getS3Client(config);
     const getArgs = {
-        Bucket: `${config.getOptionalString('env')}-backstage`,
-        Key: key,
+        bucket: `${config.getOptionalString('env')}-backstage`,
+        key: key,
     }
-    const res = await client.send(new GetObjectCommand(getArgs))
-    return await streamToString(res.Body as Stream);
+    return await client.getObject(getArgs)
 }
 
 /**

@@ -31,17 +31,6 @@ COPY . .
 
 # Register every plugin like this
 
-WORKDIR /builder/plugins/aws-resource-fetcher-common
-RUN yarn link
-
-WORKDIR /builder/plugins/aws-resource-fetcher
-RUN yarn link
-RUN yarn link "@internal/backstage-plugin-aws-resource-fetcher-common"
-
-WORKDIR /builder/plugins/aws-resource-fetcher-backend
-RUN yarn link
-RUN yarn link "@internal/backstage-plugin-aws-resource-fetcher-common"
-
 WORKDIR /builder/plugins/reporting-common
 RUN yarn link
 
@@ -81,8 +70,6 @@ RUN yarn link
 
 # Link every backend plugin from zerofox here
 WORKDIR /builder/packages/backend
-RUN yarn link "@internal/backstage-plugin-aws-resource-fetcher-common"
-RUN yarn link "@internal/backstage-plugin-aws-resource-fetcher-backend"
 RUN yarn link "@internal/plugin-github-resource-fetcher-backend"
 RUN yarn link "@internal/plugin-reporting-common"
 RUN yarn link "@internal/plugin-reporting-backend"
@@ -91,8 +78,6 @@ RUN yarn link "@internal/plugin-zf-tech-insights-backend"
 
 # Link every frontend plugin from zerofox here
 WORKDIR /builder/packages/app
-RUN yarn link "@internal/backstage-plugin-aws-resource-fetcher-common"
-RUN yarn link "@internal/backstage-plugin-aws-resource-fetcher"
 RUN yarn link "plugin-reporting"
 RUN yarn link "@internal/plugin-github-resource-fetcher"
 RUN yarn link "backstage-plugin-zf-tech-insights-common"

@@ -90,7 +90,10 @@ backend:
      - secret: 'Q@w:;@RUnLgr@&Z'
 
 scorecards:
-  jsonDataUrl: /api/aws-resource-fetcher/s3/qa-backstage/service_assessment/
+  jsonDataUrl: /api/zf-insights/s3/qa-backstage/service_assessment/
+
+badges:
+  bucket: ${BADGES_BUCKET}
 
 qeta:
   allowAnonymous: false
@@ -173,13 +176,11 @@ scaffolderActions:
     password: ${JIRA_PASSWORD}
     addr: zf.atlassian.net
 
-awsResourceFetcher:
-  env: ${ENV}
-  aws:
-    accessKeyId: ${AWS_ACCESS_KEY_ID}
-    secretAccessKey: ${AWS_SECRET_ACCESS_KEY}
-    sessionToken: ${AWS_SESSION_TOKEN}
-    region: us-west-2
+aws:
+  accessKeyId: ${AWS_ACCESS_KEY_ID}
+  secretAccessKey: ${AWS_SECRET_ACCESS_KEY}
+  sessionToken: ${AWS_SESSION_TOKEN}
+  region: us-west-2
   
 techInsights:
   factRetrievers:

@@ -1,8 +1,3 @@
----
-Service Owner: noowner
-Secondary: 
----
-
 <div align="center">
         <img src="images/cover.webp"/>
 </div>
@@ -18,6 +13,8 @@ Secondary:
 </div>
 
 ---
+![Service owners](https://cdn-qa.zerofox.com/repo-badges/040e7203bd9d970c3ca7ed4244f85fb28ebd1af1/service_owner.svg)
+
 # Monitoring
 Check the [health panel](https://devportal.zerofox.com/catalog/default/system/backstage/health) for the status of this service.
 

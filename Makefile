@@ -27,6 +27,7 @@ tools:
 	npm install --global yarn
 
 run-local:
+#	export NOMAD_TOKEN=$$(VAULT_ADDR=https://vault-qa.zerofox.com vault read nomad/creds/backstage -format=json | jq -r '.data.secret_id') && \ #
 	export VAULT_VARS=$$(vt vault login --echo | grep TOKEN) && \
 	export "$$VAULT_VARS"  && \
 	export AWS_CREDS=$$(VAULT_ADDR=https://vault-qa.zerofox.com vault read aws/creds/aws-s3-developer -format=json) && \
@@ -42,8 +43,8 @@ run-local:
 	export GITHUB_APP_SECRET="$$(echo $$GITHUB_SECRETS | jq -r '.data.local_client_secret')" && \
 	export BACKEND_BUCKET=qa-backstage && \
 	export NOMAD_ALLOC_INDEX=0 && \
-	export NOMAD_TOKEN=$$(VAULT_ADDR=https://vault-qa.zerofox.com vault read nomad/creds/backstage -format=json | jq -r '.data.secret_id') && \
 	export GRAFANA_TOKEN=$$(VAULT_ADDR=https://vault-qa.zerofox.com vault read secret/backstage/grafana -format=json | jq -r '.data.token') && \
 	export AWS_CREDS="" && \
 	export GITHUB_SECRETS="" && \
+	export BADGES_BUCKET="zf-dashboard-media-qa" && \
 	yarn dev

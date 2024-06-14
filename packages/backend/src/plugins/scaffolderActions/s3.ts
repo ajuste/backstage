@@ -1,30 +1,15 @@
 import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import { Config } from '@backstage/config';
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { z } from 'zod';
 import { ScaffolderActionFactoryOptions } from './types';
+import { S3API } from 'backstage-plugin-zf-tech-insights-common';
+import { S3Service } from '@internal/plugin-zf-tech-insights-backend';
 
 /**
  * Returns an S3 client based on the configuration.
  */
-export const getS3Client = (config: Config): S3Client => {
-    const accessKeyId = config.getOptionalString('aws.accessKeyId');
-    const secretAccessKey = config.getOptionalString(
-        'aws.secretAccessKey',
-    );
-    const region = config.getOptionalString('aws.region');
-    const sessionToken = config.getOptionalString('aws.sessionToken');
-    if (accessKeyId && secretAccessKey) {
-        return new S3Client({
-            credentials: {
-                accessKeyId,
-                secretAccessKey,
-                sessionToken,
-            },
-            region,
-        });
-    }
-    return new S3Client({ region });
+export const getS3Client = (config: Config): S3API => {
+    return new S3Service(config);
 }
 
 const putObject = (opts: ScaffolderActionFactoryOptions) => {
@@ -48,11 +33,11 @@ const putObject = (opts: ScaffolderActionFactoryOptions) => {
                 key = `${key}${new Date().toISOString().slice(0, 10)}`;
             }
             const uploadArgs = {
-                Bucket: `${opts.config.getOptionalString('env')}-${ctx.input.bucket}`,
-                Key: key,
-                Body: JSON.stringify(ctx.input.contents),
+                bucket: `${opts.config.getOptionalString('env')}-${ctx.input.bucket}`,
+                key: key,
+                body: JSON.stringify(ctx.input.contents),
             };
-            await client.send(new PutObjectCommand(uploadArgs));
+            await client.saveObject(uploadArgs);
         },
     });
 };

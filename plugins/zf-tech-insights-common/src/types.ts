@@ -92,3 +92,50 @@ export interface JiraAPI {
  */
   getAllSprints(boardId: string, startAt?: number, maxResults?: number, state?: "future" | "active" | "closed",): Promise<JiraApi.JsonResponse>;
 }
+
+/**
+ * Options for the getObject function.
+ */
+export type GetS3ObjectOptions = {
+  bucket: string;
+  key: string;
+}
+
+/**
+ * Options for the saveObject function.
+ */
+export type SaveS3ObjectOptions = {
+  bucket: string;
+  key: string;
+  body: string;
+  contentType?: string;
+}
+
+/**
+ * 
+ */
+export type ListS3ObjectOptions = {
+  bucket: string;
+  prefix: string;
+}
+
+/**
+ * 
+ */
+export type S3Object = {
+  key: string;
+}
+
+/**
+ * 
+ */
+export type ListS3ObjectOutput = {
+  objects: S3Object[];
+}
+
+/** @public */
+export interface S3API {
+  getObject(options: GetS3ObjectOptions): Promise<string>;
+  saveObject(options: SaveS3ObjectOptions): Promise<void>;
+  listObjects(options: ListS3ObjectOptions): Promise<ListS3ObjectOutput>;
+}

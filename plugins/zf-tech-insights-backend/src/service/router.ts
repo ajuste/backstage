@@ -10,6 +10,7 @@ import { CatalogApi } from '@backstage/catalog-client';
 import ZFCatalogService from './catalog';
 import NomadProxyAPIClient from './nomadProxy';
 import { JiraProxyAPIClient } from './jiraProxy';
+import { S3Service } from './s3Service';
 
 
 export interface RouterOptions {
@@ -189,6 +190,69 @@ export async function createRouter(
         response.status(500).json({ error: err });
       });
   });
+
+  // S3 API
+  router
+    .get(
+      '/s3/:bucketName/*',
+      async (req, res) => {
+
+        const service = new S3Service(options.config);
+        const objectKey = req.path.replace(`/s3/${req.params.bucketName}/`, '');
+        logger.info(`Fetching object from S3 bucket ${req.params.bucketName} with key ${objectKey}`);
+        const objectBody = await service.getObject({
+          bucket: req.params.bucketName,
+          key: objectKey,
+        });
+
+        res.send(objectBody);
+      },
+    )
+
+  router
+    .put(
+      '/s3/:bucketName/*',
+      async (req, res) => {
+
+        const objectKey = req.path.replace(`/s3/${req.params.bucketName}/`, '');
+        logger.info(`Saving object to S3 bucket ${req.params.bucketName} with key ${objectKey}`);
+
+        const body = JSON.parse(req.body);
+        if (!body) {
+          res.status(400).json({ error: 'body is required' });
+          return;
+        }
+        if (typeof body !== 'string') {
+          res.status(400).json({ error: 'body must be a string' });
+          return;
+        }
+        const service = new S3Service(options.config);
+        await service.saveObject({
+          bucket: req.params.bucketName,
+          key: objectKey,
+          body: body,
+          contentType: req.get('X-Content-Type'),
+        });
+
+        res.status(200).end();
+      },
+    )
+  router
+    .get(
+      '/s3/list/:bucketName/',
+      async (req, res) => {
+
+        const service = new S3Service(options.config);
+        const prefix = req.path.replace(`/s3/${req.params.bucketName}/`, '');
+        logger.info(`Listing objects from S3 bucket ${req.params.bucketName} with prefix ${prefix}`);
+        const objects = await service.listObjects({
+          bucket: req.params.bucketName,
+          prefix,
+        });
+
+        res.send(objects);
+      },
+    )
 
   router.use(errorHandler());
   return router;
