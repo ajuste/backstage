@@ -2,10 +2,11 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: standard-doc-generate-for-service
-  title: Generate documentation for a service
+  name: standard-doc-generate-for-generic
+  title: Generate documentation for a generic repository
   description: |
-    You have a repo that hosts a service and want to generate standard documentation.
+    You have a repo that doesn't fall into any specific category.
+    This golden path will help you generate standard documentation.
   annotations:
     backstage.io/time-saved: PT30M
 spec:
@@ -14,15 +15,15 @@ spec:
   parameters:
     - title: Basic information
       required:
-        - service
+        - repo
         - releaseBundle
         - readme_description
       properties:
 
-        service:
-          title: Service
+        repo:
+          title: repo
           description: |
-            Service that you want to generate documentation for.
+            Repository that you want to generate documentation for.
           type: string
           ui:field: ExtendedEntityPicker
           ui:options:
@@ -48,7 +49,7 @@ spec:
         readme_description:
           title: Readme description
           type: string
-          description: Write a small description so everyone knows what this service does.
+          description: Write a small description so everyone knows what this repository does
             
         overwrite_all_docs:
           title: Overwrite all docs
@@ -70,7 +71,7 @@ spec:
       name: Get entity
       action: zf:entity:get
       input:
-        entityRef: ${{ parameters.service }}
+        entityRef: ${{ parameters.repo }}
     
     - id: clone-repo
       name: Clone target repository
@@ -106,7 +107,7 @@ spec:
         projectKey: ZFE
         summary: |
           Generate standard documentation for ${{ steps["fetch-entity"].output.entity.metadata.annotations["github.com/project-slug"] }}
-        description: 'Generate for a service using the developer portal.'
+        description: 'Generate for a generic repository using the developer portal.'
         issueType: 10001
     
     - id: generate-pullrequest-texts

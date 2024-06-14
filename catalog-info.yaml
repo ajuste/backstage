@@ -73,3 +73,5 @@ spec:
         - ./data/templates/service-assessment.yaml
         - ./data/templates/standard-doc-generate-for-service.yaml
         - ./data/templates/onboard-generic-repo.yaml
+        - ./data/templates/standard-doc-generate-for-generic.yaml
+        - ./data/templates/standard-doc-generate-for-library.yaml

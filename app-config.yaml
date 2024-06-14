@@ -236,3 +236,9 @@ catalog:
 
     - type: file
       target: ./data/templates/standard-doc-generate-for-service.yaml
+
+    - type: file
+      target: ./data/templates/standard-doc-generate-for-generic.yaml
+
+    - type: file
+      target: ./data/templates/standard-doc-generate-for-library.yaml

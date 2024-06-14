@@ -96,6 +96,15 @@ catalog:
     - type: file
       target: ../../data/templates/standard-doc-generate-for-service.yaml
 
+    - type: file
+      target: ../../data/templates/onboard-generic-repo.yaml
+
+    - type: file
+      target: ../../data/templates/standard-doc-generate-for-generic.yaml
+
+    - type: file
+      target: ../../data/templates/standard-doc-generate-for-library.yaml
+
     - type: url
       target: https://github.com/riskive/go-dm/blob/master/catalog-info.yaml
 
