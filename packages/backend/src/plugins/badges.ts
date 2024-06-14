@@ -182,7 +182,7 @@ class BadgeConstructor {
     this.env.scheduler.scheduleTask({
       id: 'create-catalog-badges',
       frequency: { hours: 12 },
-      initialDelay: { hours: 1 },
+      initialDelay: { minutes: 5 },
       timeout: { hours: 1 },
       fn: this.constructBadges.bind(this),
     });
@@ -194,7 +194,7 @@ class BadgeConstructor {
   async configureCacheUpdate() {
     this.env.scheduler.scheduleTask({
       id: 'create-catalog-badges',
-      frequency: { minutes: 30 },
+      frequency: { hours: 1 },
       initialDelay: { seconds: 0 },
       timeout: { minutes: 10 },
       fn: this.updateCache.bind(this),

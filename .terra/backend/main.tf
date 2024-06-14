@@ -26,6 +26,12 @@ locals {
     stag = "app-config.staging.yaml"
     prod = "app-config.production.yaml"
   }
+
+  badges_bucket = {
+    qa   = "zf-dashboard-media-qa"
+    stag = "zf-platform-media-staging"
+    prod = "zf-dashboard-media"
+  }
 }
 
 //<<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>><<>>
@@ -109,6 +115,7 @@ data "template_file" "nomad_group" {
     subdomain      = local.subdomain[var.env]
     db_address     = var.db_address
     backend_bucket = "${var.env}-backstage"
+    badges_bucket  = local.badges_bucket[var.env]
   }
 }
 
