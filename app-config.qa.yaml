@@ -80,3 +80,23 @@ qeta:
     secretAccessKey: ${AWS_SECRET_ACCESS_KEY}
     sessionToken: ${AWS_SESSION_TOKEN}
     region: us-west-2
+
+nomad:
+  addr: 'https://nomad-qa.zerofox.com'
+  token: ${NOMAD_TOKEN}
+
+scaffolderActions:
+  env: ${ENV}
+  aws:
+    accessKeyId: ${AWS_ACCESS_KEY_ID}
+    secretAccessKey: ${AWS_SECRET_ACCESS_KEY}
+    sessionToken: ${AWS_SESSION_TOKEN}
+    region: us-west-2
+  nomad:
+    addr: 'https://nomad-qa.zerofox.com'
+    token: ${NOMAD_TOKEN}
+  jira:
+    proxyPath: /jira/api
+    user: ${JIRA_USER}
+    password: ${JIRA_PASSWORD}
+    addr: zf.atlassian.net
