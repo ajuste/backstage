@@ -47,6 +47,7 @@ export const EntityPickerFieldSchema = makeFieldSchemaFromZod(
       .describe(
         'The default entity kind. Options of this kind will not be prefixed.',
       ),
+    onlyStandalone: z.boolean().optional().describe('Only show standalone entities'),
     allowArbitraryValues: z
       .boolean()
       .optional()

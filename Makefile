@@ -27,7 +27,7 @@ tools:
 	npm install --global yarn
 
 run-local:
-#	export NOMAD_TOKEN=$$(VAULT_ADDR=https://vault-qa.zerofox.com vault read nomad/creds/backstage -format=json | jq -r '.data.secret_id') && \ #
+	export NOMAD_TOKEN=$$(VAULT_ADDR=https://vault-qa.zerofox.com vault read nomad/creds/backstage -format=json | jq -r '.data.secret_id') && \ #
 	export VAULT_VARS=$$(vt vault login --echo | grep TOKEN) && \
 	export "$$VAULT_VARS"  && \
 	export AWS_CREDS=$$(VAULT_ADDR=https://vault-qa.zerofox.com vault read aws/creds/aws-s3-developer -format=json) && \

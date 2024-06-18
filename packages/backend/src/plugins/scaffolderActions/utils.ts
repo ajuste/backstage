@@ -157,6 +157,7 @@ const getSetting = (opts: ScaffolderActionFactoryOptions) => {
         },
 
         async handler(ctx) {
+            debugger
             ctx.output("setting", opts.config.get(ctx.input.key));
         },
     });

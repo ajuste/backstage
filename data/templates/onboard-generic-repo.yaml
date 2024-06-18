@@ -18,7 +18,7 @@ spec:
         - repoUrl
         - pillar
         - releaseBundle
-        - readme_description
+        - readmeDescription
       properties:
         repoUrl:
           title: Repository Location
@@ -30,6 +30,11 @@ spec:
               - github.com
             allowedOwners:
               - riskive
+
+        readmeDescription:
+          title: Readme description
+          type: string
+          description: Write a small description so everyone knows what this repository has
 
         releaseBundle:
           title: Release bundle
@@ -54,11 +59,6 @@ spec:
               spec.type: pillar
               kind: Component
 
-        readme_description:
-          title: Readme description
-          type: string
-          description: Write a small description so everyone knows what this repository has
-
   steps:
     
     - id: current-user
@@ -81,25 +81,13 @@ spec:
       input:
         command: git
         args: clone git@${{ parameters.repoUrl | parseRepoUrl | pick('host') }}:${{ parameters.repoUrl | projectSlug }}.git ${{ steps["workspace"].output.path }}
-
-    - id: get-nomad-token
-      name: Read Nomad token
-      action: zf:util:getSetting
-      input:
-        key: nomad.token
-
-    - id: get-nomad-addr
-      name: Read Nomad address
-      action: zf:util:getSetting
-      input:
-        key: nomad.addr
     
     - id: run-backstage-zf-cli
       name: Updating local repository
       action: zf:execute
       input:
         command: ~/go/bin/backstage-zf-cli
-        args: generic enroll --project_name=${{ parameters.repoUrl | parseRepoUrl | pick('repo') }} --pillar="${{ steps["fetch-pillar"].output.entity.metadata.annotations["zerofox.com/pillar"] }}" --release_bundle=${{ parameters.releaseBundle }} --nomad_api_token=${{ steps["get-nomad-token"].output.value }} --nomad_api_base_url=${{ steps["get-nomad-addr"].output.value }} --readme_description="${{ parameters.readme_description }}"
+        args: generic enroll --project_name=${{ parameters.repoUrl | parseRepoUrl | pick('repo') }} --pillar="${{ steps["fetch-pillar"].output.entity.metadata.annotations["zerofox.com/pillar"] }}" --release_bundle=${{ parameters.releaseBundle }} --readme_description="${{ parameters.readmeDescription }}"
         basePath: ${{ steps["workspace"].output.path }}
     
     - id: generate-branch-name

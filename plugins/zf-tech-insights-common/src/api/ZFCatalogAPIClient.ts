@@ -56,6 +56,6 @@ export class ZFCatalogAPIClient implements ZFCatalogAPI {
   }
   
   async getStandaloneEntities(): Promise<Array<ComponentEntity>> {
-    return await this.internalGet(`/entities/with-repo`);
+    return await this.internalGet(`/entities/standalone`);
   }
 }

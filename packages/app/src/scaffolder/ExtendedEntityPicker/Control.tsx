@@ -12,6 +12,10 @@ import {
   catalogApiRef,
   humanizeEntityRef,
 } from '@backstage/plugin-catalog-react';
+import {
+  zfCatalogApiRef,
+  guessRepository,
+} from 'backstage-plugin-zf-tech-insights-common';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import Autocomplete, {
@@ -48,25 +52,46 @@ export const EntityPickerWithRepo = (props: EntityPickerProps) => {
     uiSchema['ui:options']?.defaultNamespace || undefined;
 
 
-const showRepo = uiSchema['ui:options']?.showRepo || false;
-const tryShowDisplayName = uiSchema['ui:options']?.tryShowDisplayName || false;
-const showPillarOnly = uiSchema['ui:options']?.showPillarOnly || false;
+  const showRepo = uiSchema['ui:options']?.showRepo || false;
+  const tryShowDisplayName = uiSchema['ui:options']?.tryShowDisplayName || false;
+  const showPillarOnly = uiSchema['ui:options']?.showPillarOnly || false;
+  const onlyStandalone = uiSchema['ui:options']?.onlyStandalone || false;
 
-  const catalogApi = useApi(catalogApiRef);
 
-  const { value: entities, loading } = useAsync(async () => {
-    const fields = ['metadata.name', 'metadata.namespace', 'kind', 'spec.profile.displayName', 'metadata.annotations.github.com/project-slug', 'metadata.annotations.zerofox.com/pillar'];
-    const { items } = await catalogApi.getEntities(
-      catalogFilter
-        ? { filter: catalogFilter, fields }
-        : { filter: undefined, fields },
-    );
-    return items;
-  });
+
+  let loading: boolean = false;
+  let entities: Entity[] = [];
+
+  if (onlyStandalone) {
+    const zfCatalogApi = useApi(zfCatalogApiRef);
+    const { value, loading: resLoad } = useAsync(async () => {
+      const entities = await zfCatalogApi.getStandaloneEntities();
+      return entities.filter(e => (e as any).kind?.toLowerCase() !== 'location' && (e as any).kind?.toLowerCase() !== 'user');
+    });
+    loading = resLoad;
+    entities = value || [];
+  } else {
+    const catalogApi = useApi(catalogApiRef);
+    const { value, loading: resLoad } = useAsync(async () => {
+      const fields = ['metadata.name', 'metadata.namespace', 'kind', 'spec.profile.displayName', 'metadata.annotations.github.com/project-slug', 'metadata.annotations.zerofox.com/pillar', 'metadata.annotations'];
+      const { items } = await catalogApi.getEntities(
+        catalogFilter
+          ? { filter: catalogFilter, fields }
+          : { filter: undefined, fields },
+      );
+      return items;
+    });
+    loading = resLoad;
+    entities = value || [];
+  }
+
+
+
   const allowArbitraryValues =
     uiSchema['ui:options']?.allowArbitraryValues ?? true;
 
-  const getLabelText = (entity: Entity|string) => {
+
+  const getLabelText = (entity: Entity | string) => {
     if (typeof entity === 'string') {
       return entity;
     }
@@ -83,7 +108,7 @@ const showPillarOnly = uiSchema['ui:options']?.showPillarOnly || false;
     }
 
     if (showRepo) {
-      parts.push(entity.metadata.annotations?.['github.com/project-slug'] || '');
+      parts.push(guessRepository(entity) ?? '');
     }
     return parts.join(' - ');
   }

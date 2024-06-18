@@ -16,7 +16,7 @@ spec:
       required:
         - service
         - releaseBundle
-        - readme_description
+        - readmeDescription
       properties:
 
         service:
@@ -34,6 +34,11 @@ spec:
               metadata.annotations.github.com/project-slug:
                 exists: true
 
+        readmeDescription:
+          title: Readme description
+          type: string
+          description: Write a small description so everyone knows what this service does.
+
         releaseBundle:
           title: Release bundle
           type: string
@@ -44,11 +49,6 @@ spec:
           enumNames:
             - 'Tag'
             - 'Branch'
-
-        readme_description:
-          title: Readme description
-          type: string
-          description: Write a small description so everyone knows what this service does.
             
         overwrite_all_docs:
           title: Overwrite all docs
@@ -84,8 +84,8 @@ spec:
       action: zf:utils:if
       input:
         condition: ${{ parameters.overwrite_all_docs }}
-        returnOnTrue: service generate_std_docs --overwrite=1 --release_bundle=${{ parameters.releaseBundle }} --readme_description="${{ parameters.readme_description }}"
-        returnOnFalse: service generate_std_docs --overwrite=1 --release_bundle=${{ parameters.releaseBundle }} --readme_description="${{ parameters.readme_description }}"
+        returnOnTrue: service generate_std_docs --overwrite=1 --release_bundle=${{ parameters.releaseBundle }} --readme_description="${{ parameters.readmeDescription }}"
+        returnOnFalse: service generate_std_docs --overwrite=0 --release_bundle=${{ parameters.releaseBundle }} --readme_description="${{ parameters.readmeDescription }}"
     
     - id: run-backstage-zf-cli
       name: Updating repository
@@ -105,7 +105,7 @@ spec:
       input:
         projectKey: ZFE
         summary: |
-          Generate standard documentation for ${{ steps["fetch-entity"].output.entity.metadata.annotations["github.com/project-slug"] }}
+          Generate standard documentation for ${{ steps["fetch-entity"].output.entity | entityToRepoUrl }}
         description: 'Generate for a service using the developer portal.'
         issueType: 10001
     
@@ -120,7 +120,7 @@ spec:
       name: Submit pull request
       action: publish:github:pull-request
       input:
-        repoUrl: ${{ steps["fetch-entity"].output.entity | entitySlugToRepoUrl }}
+        repoUrl: ${{ steps["fetch-entity"].output.entity | entityToRepoUrl }}
         title: 'Standard documentation generation'
         description: ${{ steps["generate-pullrequest-texts"].output.description }}
         branchName: ${{ steps["generate-branch-name"].output.branchName }}

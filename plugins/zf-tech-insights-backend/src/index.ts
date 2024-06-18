@@ -19,6 +19,7 @@ export * from './service/facts';
 export * from './service/project-analyzer';
 export * from './service/jiraProxy';
 export * from './service/s3Service';
+export * from './entity';
 
 import ZFCatalogService from './service/catalog';
 export { ZFCatalogService };

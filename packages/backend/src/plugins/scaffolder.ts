@@ -3,6 +3,7 @@ import { coreServices, createBackendModule } from '@backstage/backend-plugin-api
 import { catalogServiceRef } from '@backstage/plugin-catalog-node/alpha';
 import entitySlugToRepoUrl from './scaffolderFilters/entitySlugToRepoUrl';
 import entitySlugToRawRepoUrl from './scaffolderFilters/entitySlugToRawRepoUrl';
+import entityToRepoUrl from './scaffolderFilters/entityToRepoUrl';
 
 import { buildActions } from './scaffolderActions';
 import { getS3Client } from './scaffolderActions/s3';
@@ -22,6 +23,7 @@ export const scaffolderCustomActions = createBackendModule({
         templating.addTemplateFilters({
           "entitySlugToRepoUrl": entitySlugToRepoUrl,
           "entitySlugToRawRepoUrl": entitySlugToRawRepoUrl,
+          "entityToRepoUrl": entityToRepoUrl,
         })
         const scaffolderConfig = config.getConfig("scaffolderActions")
         const opts = {

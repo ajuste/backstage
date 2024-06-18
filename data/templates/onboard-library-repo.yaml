@@ -17,7 +17,8 @@ spec:
       required:
         - repoUrl
         - pillar
-        - readme_description
+        - readmeDescription
+        - releaseBundle
       properties:
         repoUrl:
           title: Repository Location
@@ -30,6 +31,22 @@ spec:
             allowedOwners:
               - riskive
 
+        readmeDescription:
+          title: Readme description
+          type: string
+          description: Write a small description so everyone knows what this repository has
+
+        releaseBundle:
+          title: Release bundle
+          type: string
+          description: Describe your release + deployment process.
+          enum:
+            - tag
+            - branch
+          enumNames:
+            - 'Tag'
+            - 'Branch'
+
         pillar:
           title: Pillar
           type: string
@@ -41,11 +58,6 @@ spec:
             catalogFilter:
               spec.type: pillar
               kind: Component
-
-        readme_description:
-          title: Readme description
-          type: string
-          description: Write a small description so everyone knows what this library is for
 
   steps:
     
@@ -75,7 +87,7 @@ spec:
       action: zf:execute
       input:
         command: ~/go/bin/backstage-zf-cli
-        args: library enroll --name=${{ parameters.repoUrl | parseRepoUrl | pick('repo') }} --pillar="${{ steps["fetch-pillar"].output.entity.metadata.annotations["zerofox.com/pillar"] }}" --readme_description="${{ parameters.readme_description }}"
+        args: library enroll --name=${{ parameters.repoUrl | parseRepoUrl | pick('repo') }} --pillar="${{ steps["fetch-pillar"].output.entity.metadata.annotations["zerofox.com/pillar"] }}" --readme_description="${{ parameters.readmeDescription }}" --release_bundle=${{ parameters.releaseBundle }}
         basePath: ${{ steps["workspace"].output.path }}
     
     - id: generate-branch-name
