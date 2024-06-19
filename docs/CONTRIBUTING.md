@@ -1,27 +1,21 @@
-# Contributing
 
-1. Fork this repository.
-2. Make changes and test locally.
-   - More details on `running locally` playbook.
-   - **Important**: Never commit secrets. Secrets for local development can be 
-   safely added under app-config.local.yaml since its ignored by git.
-3. Write tests (refer to `running tests` playbook).
-4. Create a PR and wait for service owner to review and merge.
-5. Test on QA environment.
-6. Deploy to production.
+# Contributing to `backstage`
 
-# Backend debugging
+## Prerequisites
 
-1. Run `yarn dev`
-2. Open chrome and browser `chrome://inspect/#devices`
-3. Add a breakpoint by adding a `debugger` statement in the code.
-4. Click inspect on the item that shows under the path `backstage/packages/dist/main.js`
-5. You will be able to see only the code from main.js, if you want to see other code
-   with pretty print, click on `add sources +` and include your app/backend/node_modules folder.
+{short description of what technology this repo uses and
+what versions of various tools/frameworks needed to
+contribute successfully to this repo.
 
-# Frontend debugging
+the Prerequisites section is required unless there are
+no tools/technologies required to contribute}
 
-1. Run `yarn dev`
-2. Add a breakpoint by adding a `debugger` statement in the code.
-3. Open debugger tools in chrome.
-4. Chrome will automatically stop at the breakpoint.
+## Developing
+
+{here is where you lay out a well-defined workflow of how one
+should develop a feature on this repo end-to-end. This really
+should cover all the bases, so that when it comes time for a
+service owner PR review, there will be minimal comments.
+
+This could include scripts (like testing, linting, etc) to run
+before requesting final review from service owners}

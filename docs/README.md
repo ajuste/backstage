@@ -1,27 +1,50 @@
 ---
-Service Owner: noowner
-Secondary: 
+Service Owner: <no value>
+Secondary: <no value>
 ---
 
 <div align="center">
-        <img src="images/cover.webp"/>
+        <img src="images/cover.png"/>
+        { generate an image using chatGPT or any other tool and add it here }
+
+        ![Certified by {README reviewer name}]({certification badge link})
+        ![Date Last Modified]({certification date})
 </div>
 
 <div align="center">
 
-<h1>Developer portal</h1>
+<h1>backstage</h1>
 
 <h3>Centralized platform providing resources like documentation, APIs, code samples, and tools to support and streamline software development</h3>
 
-[Link to Backstage Docs](https://devportal.zerofox.com/docs/default/system/backstage) | [Link to developer portal](https://devportal.zerofox.com/catalog/default/system/backstage)
+[![Owners](https://cdn.zerofox.com/repo-badges/a770203e022f275d2f6ff0fb5922bdfb416108e1/service_owner.svg)](https://devportal.zerofox.com/catalog/default/system/backstage) [![Docs](https://cdn.zerofox.com/repo-badges/a770203e022f275d2f6ff0fb5922bdfb416108e1/docs.svg)](https://devportal.zerofox.com/docs/default/system/backstage) [![Catalog](https://cdn.zerofox.com/repo-badges/a770203e022f275d2f6ff0fb5922bdfb416108e1/catalog.svg)](https://devportal.zerofox.com/catalog/default/system/backstage)
 
 </div>
 
 ---
-# Monitoring
+
+
+### Table of contents
+
+1. [Home](README.md)
+
+1. [Contributing](CONTRIBUTING.md)
+
+1. [Release+Deploy](RELEASE+DEPLOY.md)
+
+1. [Decisions](decisions/README.md)
+
+
+
+
+### Monitoring
 Check the [health panel](https://devportal.zerofox.com/catalog/default/system/backstage/health) for the status of this service.
 
-# Components
+
+
+### Components
+
 - [backend](https://devportal.zerofox.com/catalog/backstage/component/backend)
+
 
 

@@ -18,6 +18,7 @@ apiVersion: backstage.io/v1alpha1
 kind: System
 metadata:
     name: backstage
+    description: Centralized platform providing resources like documentation, APIs, code samples, and tools to support and streamline software development
     annotations:
         backstage.io/code-coverage: enabled
         backstage.io/techdocs-ref: dir:.
