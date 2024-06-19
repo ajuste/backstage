@@ -21,11 +21,15 @@ Secondary: <no value>
 
 
 ### Table of contents
-
 1. [Home](README.md)
 1. [Contributing](CONTRIBUTING.md)
+1. [Running locally playbook](playbook-running_locally.md)
+1. [Writing tests playbook](playbook-writing_tests.md)
+1. [Creating plugins playbook](playbook-creating_plugins.md)
+1. [Generating an Azure DevOps PAT playbook](playbook-generating-azure-pat.md)
+1. [Deleting entities playbook](playbook-moving_deleting_entities.md)
 1. [Release+Deploy](RELEASE+DEPLOY.md)
-1. [Decisions](decisions/README.md)
+1. [Testing](TESTING.md)
 
 ### Monitoring
 Check the [health panel](https://devportal.zerofox.com/catalog/default/system/backstage/health) for the status of this service.

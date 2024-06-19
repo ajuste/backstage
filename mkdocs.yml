@@ -3,13 +3,12 @@ repo_url: https://github.com/riskive/backstage/
 nav:
     - Home: README.md
     - Contributing: CONTRIBUTING.md
-    - Playbooks:
-        - Development:
-            - Running locally: playbook-running_locally.md
-            - Writing tests: playbook-writing_tests.md
-            - Creating plugins: playbook-creating_plugins.md
-            - Generating an Azure DevOps PAT: playbook-generating-azure-pat.md
+    - Running locally playbook: playbook-running_locally.md
+    - Writing tests playbook: playbook-writing_tests.md
+    - Creating plugins playbook: playbook-creating_plugins.md
+    - Generating an Azure DevOps PAT playbook: playbook-generating-azure-pat.md
+    - Deleting entities playbook: playbook-moving_deleting_entities.md
     - Release+Deploy: RELEASE+DEPLOY.md
-    - Decisions: decisions/README.md
+    - Testing: TESTING.md
 plugins:
     - techdocs-core
