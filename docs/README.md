@@ -4,11 +4,7 @@ Secondary: <no value>
 ---
 
 <div align="center">
-        <img src="images/cover.png"/>
-        { generate an image using chatGPT or any other tool and add it here }
-
-        ![Certified by {README reviewer name}]({certification badge link})
-        ![Date Last Modified]({certification date})
+        <img src="images/cover.webp"/>
 </div>
 
 <div align="center">
@@ -27,20 +23,12 @@ Secondary: <no value>
 ### Table of contents
 
 1. [Home](README.md)
-
 1. [Contributing](CONTRIBUTING.md)
-
 1. [Release+Deploy](RELEASE+DEPLOY.md)
-
 1. [Decisions](decisions/README.md)
-
-
-
 
 ### Monitoring
 Check the [health panel](https://devportal.zerofox.com/catalog/default/system/backstage/health) for the status of this service.
-
-
 
 ### Components
 

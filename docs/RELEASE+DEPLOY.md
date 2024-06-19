@@ -3,8 +3,6 @@
 
 ## Workflow
 
-
-
 This repository uses the `Release Branch Deployment Bundle` Bundle:
 1. **Feature Branches**: A separate branch is created from the main branch for each new feature or bug fix. This is where all the development work happens.
 1. **Code Review and Testing**: Once the feature is complete, the code is reviewed by other team members and thoroughly tested. This helps to maintain code quality and catch any potential issues early.
@@ -19,27 +17,12 @@ This methodology allows us to work on multiple features simultaneously without a
 
 ### QA
 
-{description of all the steps needed to take after a service
-owner has approved a contributors PR for the QA deployment
-pipeline. This section should include steps like how to deploy
-on QA, how to confirm a successful deployment, what steps to
-take in the scenario where a deployment fails, etc.}
+Deploy using [Jenkins job](https://jenkins.zerofox.com/job/backstage-deploy-qa/)
 
 ### Staging
 
-{description of all the steps needed to take after a service
-owner has approved a contributors PR for the Staging deployment
-pipeline. This section should include steps like how to deploy
-on Staging, how to confirm a successful deployment, what steps to
-take in the scenario where a deployment fails, etc.}
+There is no staging environment.
 
 ### Production
 
-{description of all the steps needed to take after a service
-owner has approved a contributors PR for the Production deployment
-pipeline. This section should include steps like how to deploy
-on Production, how to confirm a successful deployment, what steps to
-take in the scenario where a deployment fails, etc.}
-
-{a good example of release/deployment documentation is with the
-[API repo](https://github.com/riskive/API/blob/master/docs/deploy.md)}
+Deploy using [Jenkins job](https://jenkins.zerofox.com/job/backstage-deploy-prod/)
