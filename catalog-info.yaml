@@ -1,20 +1,4 @@
 apiVersion: backstage.io/v1alpha1
-kind: Group
-metadata:
-    name: owner
-    description: Owners of backstage
-    annotations:
-        zerofox.com/pillar: Sustaining
-    namespace: backstage
-spec:
-    lifecycle: production
-    type: team
-    profile:
-        displayName: backstage-team
-    children: []
-    members: [default/ajuste]
----
-apiVersion: backstage.io/v1alpha1
 kind: System
 metadata:
     name: backstage
@@ -32,7 +16,7 @@ metadata:
         - url: https://nomad-prod.zerofox.com/ui/jobs/backstage
           title: Nomad Prod
 spec:
-    owner: backstage/owner
+    owner: noowner
     lifecycle: production
     children: []
 ---
@@ -40,6 +24,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
     name: backend
+    description: Component that servces both frontend and backend for Backstage.
     annotations:
         zerofox.com/pillar: Sustaining
     namespace: backstage

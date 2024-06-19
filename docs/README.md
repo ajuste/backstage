@@ -32,7 +32,7 @@ Check the [health panel](https://devportal.zerofox.com/catalog/default/system/ba
 
 ### Components
 
-- [backend](https://devportal.zerofox.com/catalog/backstage/component/backend)
+- [backend](https://devportal.zerofox.com/catalog/backstage/component/backend): Component that servces both frontend and backend for Backstage.
 
 
 
