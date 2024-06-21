@@ -1,4 +1,4 @@
-import { CatalogProcessor, CatalogProcessorEmit, processingResult } from '@backstage/plugin-catalog-node';
+import { CatalogProcessor, CatalogProcessorEmit, processingResult, CatalogProcessorCache } from '@backstage/plugin-catalog-node';
 
 import {
   Entity,
@@ -129,13 +129,6 @@ export class GithubProcessor implements CatalogProcessor {
     });
   }
 
-  // Run first
-  async preProcessEntity(
-    entity: Entity,
-  ): Promise<Entity> {
-    return entity;
-  }
-
   // Run after preProcess
   async validateEntityKind(_: Entity): Promise<boolean> {
     // Return true if entity kind and it's fields are valid
@@ -206,6 +199,15 @@ export class GithubProcessor implements CatalogProcessor {
       .map(({ name }) => {
         return { owner: 'riskive', repo: name }
       })
+  }
+
+  async getEntityFromCatalog(entity: Entity): Promise<Entity | undefined> {
+    const catalogClient = new CatalogClient({
+      discoveryApi: this.discovery,
+    });
+    const { token } = await this.tokenManager.getToken();
+
+    return await catalogClient.getEntityByRef(getCompoundEntityRef(entity), { token })
   }
 
   /**
@@ -444,6 +446,68 @@ export class GithubProcessor implements CatalogProcessor {
   private isGithubAPI(location: LocationSpec): boolean {
     const githubUrlRegex = /^https:\/\/github\.com\/orgs\/([^\/]+)\/teams\/([^\/]+)$/;
     return location.type == "url" && githubUrlRegex.exec(location.target) !== null;
+  }
+
+  /**
+   * Returns true if the location is a catalog file.
+   * @param location The location
+   * @returns True if the location is a catalog file
+   */
+  private isFromCatalogFile(location: LocationSpec): boolean {
+    return location.type == "url" && (
+      location.target.endsWith(".yaml") ||
+      location.target.endsWith(".yml")
+    );
+  }
+
+  /**
+   * Returns true if the entity has an owner set by a catalog file.
+   * 
+   * @param entity The entity to check
+   * @returns True if the entity has an owner set by a catalog file
+   */
+  private hasOwnerSetByCatalogFile(entity: Entity): boolean {
+    return !!entity.spec?.owner
+  }
+
+  private async overrideCatalogOwner(entity: Entity): Promise<Entity> {
+    const catalogEntity = await this.getEntityFromCatalog(entity);
+    if (!this.hasOwnerSetByCatalogFile(entity)) {
+      return entity;
+    }
+    const catalogOwner = String(entity.spec?.owner)
+    // Find out if the entity has owners that are different
+    // from the ones set by the catalog file. that means that
+    // the owners are coming from somwhere else (ie github).
+    // In that case, we want to override owner with the first
+    // owner coming from outside.
+    const hasOwnersFromOutsideCatalog = catalogEntity?.relations?.filter(
+      relation => relation.type === RELATION_OWNED_BY && 
+      !relation.targetRef.endsWith(catalogOwner)
+    )
+
+    if (hasOwnersFromOutsideCatalog?.length) {
+      if (!entity.spec) {
+        entity.spec = {}
+      }
+      entity.spec.owner = hasOwnersFromOutsideCatalog[0].targetRef
+    }
+    return entity;
+  }
+
+  /**
+   * Pre-processes the entity.
+   * 
+   * @param entity The entity to pre-process
+   * @param originLocation The origin location
+   * @returns The entity
+   */
+  async preProcessEntity(entity: Entity, _1: LocationSpec, _2: CatalogProcessorEmit, originLocation: LocationSpec, _3: CatalogProcessorCache): Promise<Entity> {
+
+    if (this.isFromCatalogFile(originLocation) && this.hasOwnerSetByCatalogFile(entity)) {
+      entity = await this.overrideCatalogOwner(entity);
+    }
+    return entity
   }
 
   // Run after validateEntityKind
