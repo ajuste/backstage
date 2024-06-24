@@ -242,3 +242,6 @@ catalog:
 
     - type: file
       target: ./data/templates/standard-doc-generate-for-library.yaml
+
+codeCoverage:
+  bodySizeLimit: 5mb # Defaults to 100kb, see https://www.npmjs.com/package/body-parser#limit
