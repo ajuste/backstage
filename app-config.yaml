@@ -94,6 +94,7 @@ scorecards:
 
 badges:
   bucket: ${BADGES_BUCKET}
+  bucket_region: ${BADGES_BUCKET_REGION}
 
 qeta:
   allowAnonymous: false

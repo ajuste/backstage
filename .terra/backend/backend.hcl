@@ -85,6 +85,7 @@ ENV=${env}
 TECHDOCS_AWSS3_BUCKET_NAME=${bucket_name}
 BACKEND_BUCKET=${backend_bucket}
 BADGES_BUCKET=${badges_bucket}
+BADGES_BUCKET_REGION=${badges_bucket_region}
 
 # for reading git repositories from GitHub, using GitHub for auth
 {{ with secret "secret/${app}/github" }}

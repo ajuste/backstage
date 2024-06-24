@@ -46,6 +46,9 @@ export class S3APIClient implements S3API {
     if (options.contentType) {
       (headers as any)['X-Content-Type'] = options.contentType;
     }
+    if (options.region) {
+      (headers as any)['X-Region'] = options.region;
+    }
     const resp = await fetch(`${url}/s3/${options.bucket}/${options.key}`, {
       method: 'PUT',
       headers,

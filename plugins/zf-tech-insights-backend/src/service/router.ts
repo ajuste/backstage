@@ -232,6 +232,7 @@ export async function createRouter(
           key: objectKey,
           body: body,
           contentType: req.get('X-Content-Type'),
+          region: req.get('X-Region'),
         });
 
         res.status(200).end();

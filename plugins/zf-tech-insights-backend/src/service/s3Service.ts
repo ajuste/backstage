@@ -67,6 +67,7 @@ export class S3Service implements S3API {
       Key: options.key,
       Body: options.body,
       ContentType: options.contentType,
+      Region: options.region,
     };
     await this.s3Client.send(new PutObjectCommand(args));
   }

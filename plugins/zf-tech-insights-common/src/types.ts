@@ -109,6 +109,7 @@ export type SaveS3ObjectOptions = {
   key: string;
   body: string;
   contentType?: string;
+  region?: string;
 }
 
 /**
