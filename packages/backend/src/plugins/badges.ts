@@ -45,7 +45,12 @@ class BadgeConstructor {
    * Get the owners for an entity.
    */
   async getOwnersForEntity(entity: Entity, catalogClient: CatalogClient): Promise<string[]> {
-    const ownedByRelations = entity.relations?.filter(relation => relation.type === RELATION_OWNED_BY);
+    const noownerEntityRef = stringifyEntityRef({
+      kind: 'group',
+      namespace: 'default',
+      name: 'noowner',
+    });
+    const ownedByRelations = entity.relations?.filter(relation => relation.type === RELATION_OWNED_BY && relation.targetRef !== noownerEntityRef);
     if (!ownedByRelations) {
       return [];
     } else {
