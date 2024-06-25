@@ -5,6 +5,10 @@ import { GetS3ObjectOptions, ListS3ObjectOptions, ListS3ObjectOutput, S3API, Sav
 import { GetObjectCommand, PutObjectCommand, S3Client, ListObjectsV2Command } from '@aws-sdk/client-s3';
 import { Readable } from 'stream';
 
+export type S3ServiceOptions = {
+  region?: string;
+}
+
 export class S3Service implements S3API {
 
   private configApi: ConfigApi;
@@ -12,13 +16,14 @@ export class S3Service implements S3API {
 
   constructor(
     configApi: ConfigApi,
+    options?: S3ServiceOptions,
   ) {
     this.configApi = configApi;
     const accessKeyId = this.configApi.getOptionalString('aws.accessKeyId');
     const secretAccessKey = this.configApi.getOptionalString(
       'aws.secretAccessKey',
     );
-    const region = this.configApi.getOptionalString('aws.region');
+    const region = options?.region ? options.region : this.configApi.getOptionalString('aws.region');
     const sessionToken = this.configApi.getOptionalString('aws.sessionToken');
     if (accessKeyId && secretAccessKey) {
       this.s3Client = new S3Client({
@@ -34,7 +39,7 @@ export class S3Service implements S3API {
       this.s3Client = new S3Client({ region });
     }
   }
-  
+
   async listObjects(options: ListS3ObjectOptions): Promise<ListS3ObjectOutput> {
     const command = new ListObjectsV2Command({
       Bucket: options.bucket,

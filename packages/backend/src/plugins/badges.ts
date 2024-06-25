@@ -38,7 +38,7 @@ class BadgeConstructor {
 
   constructor(env: PluginEnvironment) {
     this.env = env
-    this.s3Api = new S3Service(env.config);
+    this.s3Api = new S3Service(env.config, { region: env.config.getString('badges.bucket_region') });
   }
 
   /**
@@ -101,6 +101,7 @@ class BadgeConstructor {
       key: `repo-badges/${shasum.digest('hex')}/${badgeType}.svg`,
       body: badgeContent,
       contentType: 'image/svg+xml',
+      region: this.env.config.getString('badges.bucket_region'),
     });
   }
 
@@ -193,7 +194,7 @@ class BadgeConstructor {
    */
   async configureCacheUpdate() {
     this.env.scheduler.scheduleTask({
-      id: 'create-catalog-badges',
+      id: 'update-cache',
       frequency: { hours: 1 },
       initialDelay: { seconds: 0 },
       timeout: { minutes: 10 },
