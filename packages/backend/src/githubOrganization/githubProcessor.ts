@@ -5,6 +5,7 @@ import {
   getCompoundEntityRef,
   RELATION_OWNED_BY,
   RELATION_OWNER_OF,
+  stringifyEntityRef,
 } from '@backstage/catalog-model';
 import { Config } from '@backstage/config';
 import { LocationSpec } from '@backstage/plugin-catalog-common';
@@ -206,8 +207,9 @@ export class GithubProcessor implements CatalogProcessor {
       discoveryApi: this.discovery,
     });
     const { token } = await this.tokenManager.getToken();
-
-    return await catalogClient.getEntityByRef(getCompoundEntityRef(entity), { token })
+    const entityRef = stringifyEntityRef(entity);
+    const res = await catalogClient.getEntityByRef(entityRef, { token })
+    return res
   }
 
   /**
@@ -229,7 +231,6 @@ export class GithubProcessor implements CatalogProcessor {
         filter: [{
           'metadata.annotations.github.com/project-slug': `${owner}/${repo}`,
         }],
-
       },
       { token },
     ));
@@ -471,26 +472,31 @@ export class GithubProcessor implements CatalogProcessor {
   }
 
   private async overrideCatalogOwner(entity: Entity): Promise<Entity> {
-    const catalogEntity = await this.getEntityFromCatalog(entity);
     if (!this.hasOwnerSetByCatalogFile(entity)) {
+      this.logger.info(`Skipping overriding catalog owner from catalog for entity ${entity.metadata.namespace}/${entity.kind}/${entity.metadata.name} as it has no owner set by a catalog file`)
       return entity;
     }
+    const catalogEntity = await this.getEntityFromCatalog(entity);
     const catalogOwner = String(entity.spec?.owner)
     // Find out if the entity has owners that are different
     // from the ones set by the catalog file. that means that
     // the owners are coming from somwhere else (ie github).
     // In that case, we want to override owner with the first
     // owner coming from outside.
+    this.logger.info(`Got catalogOwner: ${catalogOwner} ${entity.metadata.namespace}/${entity.kind}/${entity.metadata.name} ${entity.spec?.owner} ${catalogEntity?.relations?.map(r => r.targetRef + " " + r.type).join(", ")}`) // eslint-disable-line no-console
     const hasOwnersFromOutsideCatalog = catalogEntity?.relations?.filter(
-      relation => relation.type === RELATION_OWNED_BY && 
-      !relation.targetRef.endsWith(catalogOwner)
+      relation => relation.type === RELATION_OWNED_BY &&
+        !relation.targetRef.endsWith(catalogOwner)
     )
 
     if (hasOwnersFromOutsideCatalog?.length) {
+      this.logger.info(`Overriding catalog owner from file for entity ${entity.metadata.namespace ?? 'default'}/${entity.kind}/${entity.metadata.name} with ${hasOwnersFromOutsideCatalog?.map(o => o?.targetRef).join(", ")} owners that are not set by the catalog file ${catalogOwner}`)
       if (!entity.spec) {
         entity.spec = {}
       }
       entity.spec.owner = hasOwnersFromOutsideCatalog[0].targetRef
+    } else {
+      this.logger.info(`Skipping overriding catalog owner from catalog for entity ${entity.metadata.namespace ?? 'default'}/${entity.kind}/${entity.metadata.name} as it has the same owner set by the catalog file ${catalogOwner}`)
     }
     return entity;
   }
@@ -498,14 +504,18 @@ export class GithubProcessor implements CatalogProcessor {
   /**
    * Pre-processes the entity.
    * 
-   * @param entity The entity to pre-process
-   * @param originLocation The origin location
+   * @param entity - The (possibly partial) entity to process
+   * @param location - The location that the entity came from
+   * @param emit - A sink for auxiliary items resulting from the processing
+   * @param originLocation - The location that the entity originally came from.
    * @returns The entity
    */
-  async preProcessEntity(entity: Entity, _1: LocationSpec, _2: CatalogProcessorEmit, originLocation: LocationSpec, _3: CatalogProcessorCache): Promise<Entity> {
+  async preProcessEntity(entity: Entity, location: LocationSpec, _2: CatalogProcessorEmit, originLocation: LocationSpec, _3: CatalogProcessorCache): Promise<Entity> {
 
-    if (this.isFromCatalogFile(originLocation) && this.hasOwnerSetByCatalogFile(entity)) {
+    if ((this.isFromCatalogFile(originLocation) || this.isFromCatalogFile(location)) && this.hasOwnerSetByCatalogFile(entity)) {
       entity = await this.overrideCatalogOwner(entity);
+    } else {
+      this.logger.info(`Skipping entity ${entity.metadata.namespace}/${entity.kind}/${entity.metadata.name} as it has no owner set by a catalog file ${originLocation?.target} ${location?.target}`)
     }
     return entity
   }
