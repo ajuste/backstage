@@ -323,6 +323,10 @@ const defaultEntityPage = (
     <EntityLayout.Route path="/health" title="Health" if={isGrafanaAvailable}>
       <HealthContent />
     </EntityLayout.Route>
+    
+    <EntityLayout.Route path="/code-coverage" title="Code Coverage">
+      <EntityCodeCoverageContent />
+    </EntityLayout.Route>
   </EntityLayoutWrapper>
 );
 
