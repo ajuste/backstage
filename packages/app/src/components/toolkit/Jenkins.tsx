@@ -5,6 +5,6 @@ const image = "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0
 export default Tool({
     title: "Jenkins", image: image, links: [{
         text: "Open",
-        link: "https://build.zerofox.com/",
+        link: "https://jenkins.zerofox.com/",
     }]
 });
