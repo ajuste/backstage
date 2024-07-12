@@ -16,4 +16,7 @@ export type FactsReport = {
   factValue: JsonObject | JsonArray | JsonPrimitive;
   entityRef: CompoundEntityRef;
   pillar: string;
+  sourceLocation: string | undefined;
+  kind: string;
+  type: string | undefined;
 };

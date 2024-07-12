@@ -37,9 +37,12 @@ export const DenseTable = (props: DenseTableProps) => {
 
   const columns: TableColumn<RowProps>[] = [
     { title: 'Name', field: 'rawName', hidden: true, searchable: true, export: true, },
-    { title: 'Name', field: 'name', width: '40%', customSort: sortName, export: false },
-    { title: 'Value', field: 'factValue', width: '25%', export: true },
-    { title: 'Pillar', field: 'pillar', width: '25%', export: true },
+    { title: 'Name', field: 'name', width: '30%', customSort: sortName, export: false },
+    { title: 'Value', field: 'factValue', width: '15%', export: true },
+    { title: 'Pillar', field: 'pillar', width: '10%', export: true },
+    { title: 'Location', field: 'sourceLocation', width: '25%', export: true },
+    { title: 'Kind', field: 'kind', width: '10%', export: true },
+    { title: 'Type', field: 'type', width: '10%', export: true },
   ];
 
   const data = props.facts.map(fact => {
@@ -62,6 +65,8 @@ export const DenseTable = (props: DenseTableProps) => {
       kind: entity.kind,
       factValue: String(fact.factValue),
       pillar: fact.pillar,
+      sourceLocation: fact.sourceLocation,
+      type: fact.type,
     }
   });
 
