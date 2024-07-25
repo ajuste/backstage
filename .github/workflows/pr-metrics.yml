@@ -1,8 +1,5 @@
 name: Monthly PR metrics
 on:
-  push:
-    branches:
-      - feat/track-pr-times
   workflow_dispatch:
     schedule:
     - cron: '0 7 * * 3'  # At 7:00am on Wednesday.
