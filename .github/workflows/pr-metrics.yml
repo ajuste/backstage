@@ -1,7 +1,7 @@
 name: Monthly PR metrics
 on:
   workflow_dispatch:
-    schedule:
+  schedule:
     - cron: '0 7 * * 3'  # At 7:00am on Wednesday.
 
 permissions:
@@ -13,6 +13,8 @@ env:
   # Every second week of the bi-weekly cycle, the action is going to be skipped.
   # The cron time can be set to any time of the day.
   FIRST_RUN_DATE: 2024-05-20
+  EXCLUDE_USERS: 'dependabot[bot]'
+
 jobs:
   weekindex:
     runs-on: ubuntu-latest
@@ -53,6 +55,7 @@ jobs:
           - data-science
           - easm-exposure-mitigation
           - ml-enricher
+          - ai-workers
     steps:
     - name: ${{ matrix.repo }} Get dates for last 90 days
       shell: bash
@@ -69,7 +72,7 @@ jobs:
       uses: github/issue-metrics@v3
       env:
         GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-        SEARCH_QUERY: 'repo:riskive/${{ matrix.repo }} is:pr created:${{ env.date_range }}'
+        SEARCH_QUERY: 'repo:riskive/${{ matrix.repo }} is:pr created:${{ env.date_range }} -author:${{ env.EXCLUDED_USERS }}'
 
     - name: Create issue
       uses: peter-evans/create-issue-from-file@v5
