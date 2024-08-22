@@ -13,7 +13,7 @@ env:
   # Every second week of the bi-weekly cycle, the action is going to be skipped.
   # The cron time can be set to any time of the day.
   FIRST_RUN_DATE: 2024-05-20
-  EXCLUDE_USERS: 'dependabot[bot]'
+  EXCLUDED_USERS: "dependabot[bot]"
 
 jobs:
   weekindex:
