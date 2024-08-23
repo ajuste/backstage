@@ -1,0 +1,278 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: data-line-sql-to-bq
+  title: Create a DAG to ingest data from the Monolith DB to BigQuery
+  description: |
+    You want to ingest data from the Monolith DB to BigQuery.
+    This golden path will create a DAG in the Airflow SDK repo that will ingest data from the Monolith DB to BigQuery.
+  annotations:
+    backstage.io/time-saved: PT2H
+spec:
+  owner: user:default/sebasaave
+  type: Data Engineering
+  parameters:
+    - title: Dataline Details
+      required:
+        - dataLineName
+        - dataLineSchedule
+        - dataLinePillar
+      properties:
+        dataLineName:
+          title: Dataline Name
+          type: string
+          description: Name of the DAG
+
+        dataLineSchedule:
+          title: Dataline Schedule
+          type: string
+          description: CRON expression for the schedule
+
+        dataLineSlackAlertChannel:
+          title: Slack Alert Channel
+          type: string
+          description: Slack channel to send alerts to in case of failure
+          enum:
+            - BI_CHANNEL
+            - DS_CHANNEL
+            - AS_CHANNEL
+            - DIS_CHANNEL
+            - DE_CHANNEL
+            - DE_HEALTH_CHANNEL
+          enumNames:
+            - '#t-bi-team'
+            - '#t-data-science-health-prod'
+            - '#t-pillar-asm'
+            - '#t-disruption'
+            - '#t-data-engineering'
+            - '#t-data-health-prod'
+
+        dataLinePillar:
+          title: Dataline Pillar
+          type: string
+          description: Pillar that the dataline belongs to
+          ui:field: ExtendedEntityPicker
+          ui:options:
+            showPillarOnly: true
+            allowArbitraryValues: false
+            catalogFilter:
+              spec.type: pillar
+              kind: Component
+
+    - title: Data Task Details
+      required:
+        - dataTaskName
+        - dataTaskDescription
+        - dataTaskSourceSchema
+        - dataTaskSourceTable
+        - dataTaskQuery
+        - dataTaskBqTableDDL
+        - dataTaskBqSchema
+        - dataTaskBqTable
+      properties:
+        dataTaskName:
+          title: Data Task Name
+          type: string
+          description: Name of the task (how it will appear in the DAG)
+          ui:widget: text
+
+        dataTaskDescription:
+          title: Data Task Description
+          type: string
+          description: Description of the task
+          ui:widget: text
+
+        dataTaskSourceSchema:
+          title: Data Task Source Schema
+          type: string
+          description: Schema of the source data
+          ui:widget: text
+
+        dataTaskSourceTable:
+          title: Data Task Source Table
+          type: string
+          description: Table of the source data
+          ui:widget: text
+
+        dataTaskQuery:
+          title: Data Task Query
+          type: string
+          description: Query to be executed in the monolith
+          ui:widget: textarea
+        
+        dataTaskBqTableDDL:
+          title: BigQuery Table DDL
+          type: string
+          description: BigQuery table DDL to be used
+          ui:widget: textarea
+        
+        dataTaskBqSchema:
+          title: BigQuery Schema
+          type: string
+          description: BigQuery schema to be used (csdataanalysis)
+          ui:widget: text
+
+        dataTaskBqTable:
+          title: BigQuery Table
+          type: string
+          description: BigQuery table to be used
+          ui:widget: text
+
+        dataTaskMode:
+          title: Mode
+          type: string
+          description: Mode to add to BQ
+          enum:
+            - overwrite
+            - append
+            - upsert
+          enumNames:
+            - 'Overwrite'
+            - 'Append'
+            - 'Upsert'
+
+    - title: Pull Request Details
+      required:
+        - dataTaskJiraTicketUrl
+      properties:
+        dataTaskJiraTicketUrl:
+          title: JIRA Ticket URL
+          type: string
+          description: Ticket to be used in the PR description
+          ui:widget: text
+
+        additionalNotes:
+          title: Additional Notes
+          type: string
+          description: Any additional notes or reminders to include in the PR
+          ui:widget: textarea
+
+  steps:
+    - id: current-user
+      name: Get current user
+      action: zf:user:get
+    
+    - id: workspace
+      name: Prepare workspace
+      action: zf:workspacePath
+    
+    - id: fetch-pillar
+      name: Get pillar
+      action: zf:entity:get
+      input:
+        entityRef: ${{ parameters.dataLinePillar }}
+
+    - id: format-names
+      name: Format dataline and datatask names
+      action: zf:formatDataLineNames:dataLine
+      input:
+        dataLineName: ${{ parameters.dataLineName }}
+        dataTaskName: ${{ parameters.dataTaskName }}
+
+    - id: clone-repo
+      name: Clone target repository
+      action: zf:execute
+      input:
+        command: git 
+        args: clone git@github.com:riskive/airflow-sdk.git ${{ steps["workspace"].output.path }}
+
+    # note, this won't be needed when the airflow-sdk PR is merged (we will have the template at master)
+    - id: checkout-branch
+      name: Checkout specific branch
+      action: zf:execute
+      input:
+        command: git 
+        args: -C ${{ steps["workspace"].output.path }} checkout feat/monolith-ingestion-dag-template
+
+    - id: create-data-line-directories
+      name: Create dataline directories
+      action: zf:createDatalineDirectories:dataLine
+      input:
+        basePath: ${{ steps["workspace"].output.path }}/dags/data_lines 
+        dataLineName: ${{ steps["format-names"].output.snake_case_data_line_name }}
+
+    - id: create-data-line-file
+      name: Create dataline file
+      action: zf:createDatalineFile:dataLine
+      input:
+        dataLineDir: ${{ steps["create-data-line-directories"].output.dataLineDir }}  # This should reference the correct base path
+        templatePath: ${{ steps["workspace"].output.path }}/dags/data_lines/sql_to_bq/monolith_db/templates/data_line/data_line.py.template
+        dataLineName: ${{ steps["format-names"].output.snake_case_data_line_name }}
+        dataTaskName: ${{ steps["format-names"].output.snake_case_data_task_name }}
+        owner: ${{ steps["fetch-pillar"].output.entity.metadata.annotations["zerofox.com/pillar"] }}
+        scheduleInterval: ${{ parameters.dataLineSchedule }}
+        slackAlertChannel: ${{ parameters.dataLineSlackAlertChannel }}
+
+    - id: create-data-task-factory
+      name: Create dataline factory
+      action: zf:createDataTaskFactory:dataLine
+      input:
+        ingestionDir: ${{ steps["create-data-line-directories"].output.dataLineDir }}/ingestion  # Reference the ingestion directory
+        templatePath: ${{ steps["workspace"].output.path }}/dags/data_lines/sql_to_bq/monolith_db/templates/data_line/data_task_factory.py.template
+        dataLineName: ${{ steps["format-names"].output.snake_case_data_line_name }}
+        dataTaskName: ${{ steps["format-names"].output.snake_case_data_task_name }}
+
+    - id: create-sql-files
+      name: Create SQL files
+      action: zf:createDataTaskSQLFiles:dataTask
+      input:
+        ddlDir: ${{ steps["create-data-line-directories"].output.ddlDir }}
+        sqlDir: ${{ steps["create-data-line-directories"].output.sqlDir }}
+        dataTaskName: ${{ steps["format-names"].output.snake_case_data_task_name }}
+        dataTaskDescription: ${{ parameters.dataTaskDescription }}
+        dataTaskSourceSchema: ${{ parameters.dataTaskSourceSchema }}
+        dataTaskSourceTable: ${{ parameters.dataTaskSourceTable }}
+        dataTaskQuery: ${{ parameters.dataTaskQuery }}
+        dataTaskBqTableDDL: ${{ parameters.dataTaskBqTableDDL }}
+        dataTaskBqSchema: ${{ parameters.dataTaskBqSchema }}
+        dataTaskBqTable: ${{ parameters.dataTaskBqTable }}
+
+    - id: add-data-task
+      name: Add dataline task
+      action: zf:addDataTask:dataTask
+      input:
+        ingestionDir: ${{ steps["create-data-line-directories"].output.ingestionDir }}/data_tasks
+        templatePath: ${{ steps["workspace"].output.path }}/dags/data_lines/sql_to_bq/monolith_db/templates/data_task/data_task.py.template
+        dataTaskName: ${{ steps["format-names"].output.snake_case_data_task_name }}
+        srcDatabase: ${{ parameters.dataTaskSourceSchema }}
+        srcTable: ${{ parameters.dataTaskSourceTable }}
+        tgtSchema: ${{ parameters.dataTaskBqSchema }}
+        tgtTable: ${{ parameters.dataTaskBqTable }}
+        mode: ${{ parameters.dataTaskMode }}
+
+
+    
+    - id: generate-pullrequest-texts
+      name: Generate pull request texts
+      action: zf:generatePRTexts:dataLine
+      input:
+        githubAuthor: ${{ steps["current-user"].output.githubUser }}
+        jiraTicket: ${{ parameters.dataTaskJiraTicketUrl }}
+        dataLineName: ${{ steps["format-names"].output.snake_case_data_line_name }}
+        additionalNotes: ${{ parameters.additionalNotes }}
+    
+    - id: submit-pr
+      name: Submit pull request
+      action: publish:github:pull-request
+      input:
+        repoUrl: github.com?repo=airflow-sdk&owner=riskive
+        title: Data Line - SQL to BQ - monolith_db - ${{ parameters.dataLineName }}
+        description: ${{ steps["generate-pullrequest-texts"].output.description }}
+        branchName: feat/data-line-sql-to-bq-${{ steps["format-names"].output.kebab_case_data_line_name }}
+        commitMessage: ${{ steps["generate-pullrequest-texts"].output.commitMessage }}
+
+  output:
+    links:
+      - title: Pull Request
+        icon: catalog
+        url: ${{ steps["submit-pr"].output.remoteUrl }}
+
+    text:
+      - title: Next steps
+        content: |
+          ### Review the PR
+          Review the generated PR
+          ### Test the DAG
+          Test the DAG in the Airflow QA - STAG environments
+          ### Merge the PR
+          Ask for a review and merge the PR

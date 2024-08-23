@@ -1,0 +1,157 @@
+---
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: foxtask-monolith-bigquery # WIP
+  title: Add a task to an existing DAG to ingest data from the Monolith DB to BigQuery
+  description: |
+    You want to ingest new data from the Monolith DB to BigQuery.
+    This golden path will add a task to an existing DAG in the Airflow SDK repo that will ingest data from the Monolith DB to BigQuery.
+  annotations:
+    backstage.io/time-saved: PT2H
+spec:
+  owner: user:default/sebasaave
+  type: Data Engineering
+  parameters:
+
+    - title: Foxtask Details
+      required:
+        - foxlineName
+        - foxtaskName
+        - foxtaskQuery
+        - foxtaskMode
+        - foxtaskIdCols
+        - foxtaskBqSchema
+        - foxtaskBqTable
+      properties:
+        foxlineName:
+          title: Foxline Name
+          type: string
+          description: Name of the DAG where the task will be added
+          enum:
+            - test1
+            - test2
+            - test3
+          enumNames:
+            - 'Test 1'
+            - 'Test 2'
+            - 'Test 3'
+        foxtaskName:
+          title: Foxtask Name
+          type: string
+          description: Name of the task (how it will appear in the DAG)
+        foxtaskQuery:
+          title: Foxtask Query
+          type: string
+          description: Query to be executed in the monolith
+        foxtaskMode:
+          title: Mode
+          type: string
+          description: Mode to add to BQ
+          enum:
+            - overwrite
+            - append
+            - upsert
+          enumNames:
+            - 'Overwrite'
+            - 'Append'
+            - 'Upsert'
+        foxtaskIdCols:
+          title: Foxtask ID Columns
+          type: string
+          description: Columns to be used as ID (upsert only)
+        bqSchema:
+          title: bqSchema
+          type: string
+          description: BigQuery schema to be used.
+        bqTable:
+          title: bqTable
+          type: string
+          description: BigQuery table to be used.
+
+  steps:
+    
+    - id: current-user
+      name: Get current user
+      action: zf:user:get
+    
+    - id: workspace
+      name: Prepare worksapce
+      action: zf:workspacePath
+    
+    - id: fetch-pillar
+      name: Get pillar
+      action: zf:entity:get
+      input:
+        entityRef: ${{ parameters.foxtaskPillar }}
+
+    - id: fetch-template
+      action: fetch:template
+      name: Fetch template
+      input:
+        url: /data/test-templates/template.yaml
+        targetPath: /data/test-templates/template-2.yaml
+        values:
+          name: parameters.dagName
+    
+    - id: clone-repo
+      name: Clone target repository
+      action: zf:execute
+      input:
+        command: git
+        args: clone git@${{ parameters.repoUrl | parseRepoUrl | pick('host') }}:${{ parameters.repoUrl | projectSlug }}.git ${{ steps["workspace"].output.path }}
+    
+    # - id: run-backstage-zf-cli
+    #   name: Updating local repository
+    #   action: zf:execute
+    #   input:
+    #     command: ~/go/bin/backstage-zf-cli
+    #     args: library enroll --name=${{ parameters.repoUrl | parseRepoUrl | pick('repo') }} --pillar="${{ steps["fetch-pillar"].output.entity.metadata.annotations["zerofox.com/pillar"] }}" --owners=noowner
+    #     basePath: ${{ steps["workspace"].output.path }}
+    
+    - id: generate-branch-name
+      name: Generate branch name
+      action: zf:util:randomBranchName
+    
+    - id: create-jira-issue
+      name: Create JIRA Issue
+      action: zf:jira:addNewIssue
+      input:
+        projectKey: ZFE
+        summary: 'Onboarding library repo into the developer portal'
+        description: 'Onboarding library repo into the developer portal'
+        issueType: 10001
+    
+    - id: generate-pullrequest-texts
+      name: Generate pull request texts
+      action: zf:generatePRTexts:monolithIngestion
+      input:
+        githubAuthor: ${{ steps["current-user"].output.githubUser }}
+        jiraTicket: ${{ steps["create-jira-issue"].output.url }}
+    
+    - id: submit-pr
+      name: Submit pull request
+      action: publish:github:pull-request
+      input:
+        repoUrl: github.com?repo=airflow-sdk&owner=riskive
+        title: 'DAG creation'
+        description: ${{ steps["generate-pullrequest-texts"].output.description }}
+        branchName: ${{ steps["generate-branch-name"].output.branchName }}
+        commitMessage: ${{ steps["generate-pullrequest-texts"].output.commitMessage }}
+
+  output:
+    links:
+      - title: Pull request
+        icon: catalog
+        url: ${{ steps["submit-pr"].output.remoteUrl }}
+      - title: JIRA issue
+        url: ${{ steps["create-jira-issue"].output.url }}
+
+    text:
+      - title: Next steps
+        content: |
+          ### 1. Merge onboarding pull request
+          A PR has been created; you can check it by clicking on the Pull Request tab. Once it is merged, the developer portal will automatically pick the repository and add it to the catalog.
+          ### 2. A Jira ticket has been created.
+          As part of tracking your work, please close the issue once you are finished. You can see in associated ticket on the JIRA issue tab.
+          

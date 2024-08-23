@@ -115,6 +115,9 @@ catalog:
 
     - type: file
       target: ../../data/templates/standard-doc-generate-for-service.yaml
+    
+    - type: file
+      target: ../../data/templates/data-line-sql-to-bq.yaml
 
     - type: file
       target: ../../data/templates/onboard-generic-repo.yaml
