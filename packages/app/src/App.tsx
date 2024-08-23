@@ -28,12 +28,13 @@ import { SigninPage } from './extensions/SignInPage';
 import { techRadarExtensionOverride } from './extensions/TechRadar';
 import { entityPage } from './components/catalog/EntityPage';
 import { PillarAwareCatalogPage } from './components/catalog/PillarAwareCatalogPage';
-import homePlugin, { HomeNavIcon, homePageExtension } from './extensions/Home';
+import homePlugin from './extensions/Home';
 import { EntityPickerWithRepoExtension, NomadJobPickerExtension, MultipleNomadJobPickerExtension, JiraIssuePickeExtension } from './extensions/ScaffolderPage';
 import { ScaffolderFieldExtensions, } from '@backstage/plugin-scaffolder-react';
 import { ScaffolderPage } from '@backstage/plugin-scaffolder';
 import { RDSDatabasePage } from './extensions/DatabasesPage';
 import { TechInsightsScorecardPage } from '@backstage-community/plugin-tech-insights';
+import AIAssistangPlugin from './extensions/AIAssistant';
 import badgesPlugin from './extensions/Badges';
 
 
@@ -90,12 +91,11 @@ const app = createApp({
     techRadarExtensionOverride,
     reportingPlugin,
     badgesPlugin,
+    AIAssistangPlugin,
     ...legacyFeatures,
     createExtensionOverrides({
       extensions: [
-        HomeNavIcon,
         AppNav,
-        homePageExtension,
         SigninPage,
         ...apis
       ],

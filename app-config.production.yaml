@@ -10,6 +10,9 @@ app:
 auth:
   environment: prod
 
+ai:
+  supportedSources: ['catalog']
+
 backend:
   baseUrl: https://devportal.zerofox.com
   listen:

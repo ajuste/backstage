@@ -12,11 +12,16 @@ import ScoreIcon from '@material-ui/icons/Score';
 import RDSIcon from '@material-ui/icons/Storage';
 
 import {
+  compatWrapper,
+} from '@backstage/core-compat-api';
+
+import {
   createExtension,
   coreExtensionData,
   createExtensionInput,
   createNavItemExtension,
   createNavLogoExtension,
+  createComponentExtension,
 } from '@backstage/frontend-plugin-api';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -37,6 +42,7 @@ import LogoFull from '../components/logos/Full';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import { Radars } from './TechRadar';
+import { RagModal, SidebarRagModal} from './AIAssistant';
 
 const useSidebarLogoStyles = makeStyles({
   root: {
@@ -78,25 +84,21 @@ export const AppNav = createExtension({
     items: createExtensionInput({
       target: createNavItemExtension.targetDataRef,
     }),
-    logos: createExtensionInput(
-      {
-        elements: createNavLogoExtension.logoElementsDataRef,
-      },
-      {
-        singleton: true,
-        optional: true,
-      },
-    ),
+    globals: createExtensionInput({
+      target: createComponentExtension.componentDataRef
+    }),
   },
   output: {
     element: coreExtensionData.reactElement,
   },
-  factory() {
+  factory({ inputs }) {
     return {
       element: (
         <Sidebar>
           <SidebarLogo />
           <SidebarDivider />
+          {compatWrapper(<RagModal />)}
+          
           <SidebarGroup label="Menu" icon={<MenuIcon />}>
             <SidebarItem icon={SearchIcon} to="/search" text="Search" />
             <SidebarItem icon={HomeIcon} to="/" text="Home" />
@@ -108,6 +110,9 @@ export const AppNav = createExtension({
             <SidebarItem icon={ReportingIcon} to="reporting" text="Reporting" />
             <SidebarItem icon={ScoreIcon} to="score-board" text="Service Assessment" />
 
+            {inputs.globals.map(item => {
+              return <li>{<item.output.target.impl />}</li>;
+            })}
             <SidebarDivider />
             <SidebarScrollWrapper>
               <SidebarItem icon={MapIcon} text="Tech Radars">
@@ -125,6 +130,7 @@ export const AppNav = createExtension({
           </SidebarGroup>
           <SidebarDivider />
           <SidebarItem icon={CreateIcon} to="/create" text="Golden paths" />
+          {compatWrapper(<SidebarRagModal />)}
           <SidebarSpace />
           <SidebarDivider />
           <SidebarItem icon={SettingsIcons} to="settings" text="Settings" />

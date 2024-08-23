@@ -10,6 +10,9 @@ app:
 auth:
   environment: qa
 
+ai:
+  supportedSources: ['catalog']
+
 backend:
   baseUrl: https://devportal-qa.zerofox.com
   listen:

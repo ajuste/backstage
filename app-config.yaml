@@ -11,6 +11,9 @@ app:
       excludedRepositories: ${REPORTING_PILLAR_ADOPTION_EXCLUDED_REPOSITORIES}
   experimental:
     packages: all
+
+ai:
+  supportedSources: ['catalog']
     
 auth:
   providers:

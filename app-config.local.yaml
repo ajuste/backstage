@@ -19,6 +19,9 @@ integrations:
         - idexperts
       token: ${AZURE_TOKEN}
 
+ai:
+  supportedSources: ['catalog']
+
 scorecards:
   jsonDataUrl: http://localhost:7007/api/zf-insights/s3/qa-backstage/service_assessment/
     

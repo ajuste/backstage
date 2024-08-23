@@ -7,11 +7,8 @@ import {
   createPageExtension,
   createPlugin,
   createRouteRef,
-  createNavItemExtension,
-  createExtension,
 } from '@backstage/frontend-plugin-api';
 import { compatWrapper } from '@backstage/core-compat-api';
-import HomeIcon from '@material-ui/icons/Home';
 import { HomePage } from '../components/home/HomePage'
 
 
@@ -43,26 +40,4 @@ const homePage = createPageExtension({
 export default createPlugin({
   id: 'home',
   extensions: [homePage],
-});
-
-export const HomeNavIcon = createNavItemExtension({
-  routeRef: rootRouteRef,
-  title: 'Home',
-  icon: HomeIcon,
-  name: "home"
-});
-
-export const homePageExtension = createExtension({
-  name: 'home',
-  attachTo: { id: 'home', input: 'props' },
-  output: {
-    children: coreExtensionData.reactElement,
-    title: titleExtensionDataRef,
-  },
-  factory() {
-    return {
-      children: <HomePage />,
-      title: 'Home',
-    };
-  },
 });
