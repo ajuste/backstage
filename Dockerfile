@@ -2,6 +2,8 @@ FROM node:18-bullseye-slim
 
 ARG SSH_PRIVATE_KEY
 
+# RUN dpkg --add-architecture amd64 
+
 # (libsqlite3-dev, curl, ca-certificates, gnupg, lsb-release, update && apt-get install -y python3 python3-pip) can be removed when dropping docker (used for POC only)
 RUN apt-get update && \
     apt-get install -y --no-install-recommends libsqlite3-dev python3 build-essential procps make python3-pip git curl && \
@@ -17,20 +19,39 @@ RUN apt-get update && \
     ssh-keyscan -H github.com >> ~/.ssh/known_hosts && \
     git config --global url."git@github.com:".insteadOf "https://github.com/"
 
+# for arm64 we need to install some additional packages, otherwise we get errors when building the image on yarn install
+RUN set -eux; \
+    ARCH="$(dpkg --print-architecture)"; \
+    if [ "$ARCH" = "arm64" ]; then \
+        apt-get update && apt-get install -y \
+        build-essential \
+        libcairo2-dev \
+        libpango1.0-dev \
+        libjpeg-dev \
+        libgif-dev \
+        librsvg2-dev \
+        pkg-config \
+        && apt-get clean && rm -rf /var/lib/apt/lists/*; \
+    fi
+
 # install Go
 RUN curl -o go.tar.gz https://dl.google.com/go/go1.22.2.linux-amd64.tar.gz && \
     tar -C /usr/local -xzf go.tar.gz && \
     rm go.tar.gz
 
 # install backstage-zf-cli
-RUN GOPRIVATE=github.com/riskive /usr/local/go/bin/go install github.com/riskive/backstage-zf-cli@latest
+RUN set -eux; \
+    ARCH="$(dpkg --print-architecture)"; \
+    if [ "$ARCH" = "arm64" ]; then \
+        CC=x86_64-linux-gnu-gcc CGO_ENABLED=0 GOPRIVATE=github.com/riskive /usr/local/go/bin/go install github.com/riskive/backstage-zf-cli@latest; \
+    else \
+        GOPRIVATE=github.com/riskive /usr/local/go/bin/go install github.com/riskive/backstage-zf-cli@latest; \
+    fi
 
 WORKDIR /builder
 COPY . .
-#RUN yarn install
 
 # Register every plugin like this
-
 WORKDIR /builder/plugins/reporting-common
 RUN yarn link
 
@@ -88,7 +109,9 @@ RUN yarn link 'plugin-grafana'
 
 RUN export NODE_OPTIONS=--max_old_space_size=16192
 WORKDIR /builder
-RUN yarn --verbose install && yarn tsc && yarn --verbose build:backend
+RUN yarn install
+RUN yarn tsc
+RUN yarn build:backend
 
 WORKDIR /app
 RUN cp /builder/yarn.lock /builder/package.json /builder/packages/backend/dist/skeleton.tar.gz ./

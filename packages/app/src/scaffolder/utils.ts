@@ -1,5 +1,4 @@
 import { JSONSchema7 } from 'json-schema';
-import { z } from 'zod';
 import zodToJsonSchema from 'zod-to-json-schema';
 import {
   CustomFieldExtensionSchema,
@@ -22,18 +21,10 @@ export interface FieldSchema<TReturn, TUiOptions> {
  * Utility function to convert zod return and UI options schemas to a
  * CustomFieldExtensionSchema with FieldExtensionComponentProps type inference
  */
-export function makeFieldSchemaFromZod<
-  TReturnSchema extends z.ZodType,
-  TUiOptionsSchema extends z.ZodType = z.ZodType<any, any, {}>,
->(
-  returnSchema: TReturnSchema,
-  uiOptionsSchema?: TUiOptionsSchema,
-): FieldSchema<
-  TReturnSchema extends z.ZodType<any, any, infer IReturn> ? IReturn : never,
-  TUiOptionsSchema extends z.ZodType<any, any, infer IUiOptions>
-    ? IUiOptions
-    : never
-> {
+export function makeFieldSchemaFromZod(
+  returnSchema: any,
+  uiOptionsSchema?: any,
+): FieldSchema<any, any> {
   return {
     schema: {
       returnValue: zodToJsonSchema(returnSchema) as JSONSchema7,

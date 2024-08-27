@@ -2,6 +2,8 @@
 
 *Jump to troubleshooting section below if you encounter any issue*
 
+**Note:** ia-rag-assistant plugin only works with Postgresql db, see below how to initialize.
+
 * ⚒️ Install tools
   * **[Make sure to have Go Lang installed](https://go.dev/doc/install)**
   * Run the following command to get all the tools required for local development: 
@@ -27,7 +29,8 @@
 
 ### ⚡️ in-memory database
 
-Backstage will use a in-memory database.
+> Backstage will use a in-memory database.
+
 This suits most of the use-cases when developing, its pretty straightforward and fast. If your change requires database alterations you can perform a final verification using docker-compose (explained below).
 
   * A memory DB is used.
@@ -39,28 +42,20 @@ This suits most of the use-cases when developing, its pretty straightforward and
 Backstage runs in non local environment using pgsql database.
 In case you need to test with a real instance you can follow these steps:
 
-
 #### 🚢 docker-compose
 
-In order to get docker-compose running follow these steps:
-```sh
-# First we need to install awscli for authenticating against AWS ECR (Elastic Container Registry)
-# This will be needed to pull the gold-docker base image
-pip install awscli
+1. If you are running on ARM architecture then run:
 
-# Then we must provide credentials for awscli
-# These can be generated via https://vault-qa.zerofox.com/ui/vault/secrets/aws/credentials/aws-ecr-ro
-# MUST access vault through VPN
-# Hint: Authenticate to Vault using a Github token!
-# Github > Profile > Developer Settings > Personal Access Tokens > Permissions ['read:user', 'read:email', 'read:follow']
-aws configure
+    `> brew install FiloSottile/musl-cross/musl-cross`
 
-# Then we can authenticate against ECR and supply credentials to docker
-aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 012321959326.dkr.ecr.us-west-2.amazonaws.com
+1. Login into ECR after installing [vt](https://github.com/riskive/vt):
 
-# Finally we can run docker-compose (make sure to use the right ssh key)
-SSH_PRIVATE_KEY="$(< ~/.ssh/id_ed25519)" docker-compose up local
-```
+    `vt aws ecr-login`
+
+1. Finally we can run docker-compose (make sure to use the right ssh key)
+
+    `> SSH_PRIVATE_KEY="$(< ~/.ssh/id_ed25519)" docker-compose up local`
+
 
 #### Run trusted mode (Backstage's db user has access to everything)
 * Run docker compose following instructions from docker-compose section.
@@ -68,6 +63,7 @@ SSH_PRIVATE_KEY="$(< ~/.ssh/id_ed25519)" docker-compose up local
 * Backstage will be accessible under `http://localhost:7007`
   
 #### Run with same permission from prod:
+* If you are under arm64 architecture, then build image with: `DOCKER_DEFAULT_PLATFORM=linux/arm64 docker compose build`
 * Run docker compose following instructions from docker-compose section.
   * **Important:** Make sure `POSTGRES_HOST_AUTH_METHOD: trust`.
   is set on docker-compose file for db instance.

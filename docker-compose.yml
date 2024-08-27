@@ -32,7 +32,7 @@ services:
       - base
     ports:
       - '7007:7007'
-      - '3000:3000'
+      - '3003:3003'
     stdin_open: true
     tty: true
     environment:
@@ -40,6 +40,8 @@ services:
       APP_CONFIG_backend_database_connection_host: db
       APP_CONFIG_backend_database_connection_port: 5432
       APP_CONFIG_backend_database_connection_user: backstage
+    env_file:
+      - .env
     restart: always
     volumes:
        - .:/app
