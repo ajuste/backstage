@@ -12,6 +12,9 @@ auth:
 
 ai:
   supportedSources: ['catalog']
+  embeddings:
+    openai:
+      openAIApiKey: ${OPENAI_API_KEY}
 
 backend:
   baseUrl: https://devportal.zerofox.com
