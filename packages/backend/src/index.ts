@@ -73,9 +73,7 @@ async function main() {
 
   // IA - Allow on every env except in local, except local with pg; otherwise
   // won't be able to crate vector store on mysqlite.
-  if (process.env.env && process.env.env != 'local' || process.env.APP_CONFIG_backend_database_client === 'pg') {
-    backend.add(legacyPlugin('rag-ia-assistant', import('./plugins/ia')));
-  }
+  backend.add(legacyPlugin('rag-ai', import('./plugins/ia')));
 
   return backend.start();
 }

@@ -50,7 +50,7 @@
     "@oriflame/backstage-plugin-score-card": "^0.8.0",
     "@roadiehq/backstage-plugin-github-insights": "^2.0.6",
     "@roadiehq/backstage-plugin-jira": "^2.1.1",
-    "@roadiehq/rag-ai": "^1.0.0",
+    "@roadiehq/rag-ai": "1.1.0",
     "@types/react-dom": "^18.2.25",
     "@vscode/sqlite3": "^5.0.8",
     "add": "^2.0.6",

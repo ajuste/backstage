@@ -11,7 +11,7 @@ auth:
   environment: prod
 
 ai:
-  supportedSources: ['catalog']
+  supportedSources: ['catalog', 'techdocs', 'tech-docs']
   embeddings:
     openai:
       openAIApiKey: ${OPENAI_API_KEY}

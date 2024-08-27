@@ -13,7 +13,7 @@ app:
     packages: all
 
 ai:
-  supportedSources: ['catalog']
+  supportedSources: ['catalog', 'techdocs', 'tech-docs']
   embeddings:
     openai:
       openAIApiKey: ${OPENAI_API_KEY}

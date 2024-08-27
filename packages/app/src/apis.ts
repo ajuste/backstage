@@ -14,6 +14,8 @@ import {
   createApiFactory,
   analyticsApiRef,
   identityApiRef,
+  discoveryApiRef,
+  fetchApiRef,
 } from '@backstage/core-plugin-api';
 
 import { techRadarApiRef } from '@backstage/plugin-tech-radar';
@@ -21,6 +23,7 @@ import { TechRadarClient } from '../src/extensions/TechRadar';
 import { githubResourceFetcherApiRef } from '@internal/plugin-github-resource-fetcher';
 import { catalogUnprocessedEntitiesPlugin } from '@backstage/plugin-catalog-unprocessed-entities';
 import { MatomoAnalytics } from 'plugin-analytics-matomo';
+import { ragAiApiRef, RoadieRagAiClient } from '@roadiehq/rag-ai';
 
 // const catalogUnprocessedEntitiesApi =  useApi(catalogUnprocessedEntitiesApiRef)
 
@@ -48,5 +51,22 @@ export const apis: ExtensionDefinition<any>[] = [
       MatomoAnalytics.fromConfig(configApi, {
         identityApi,
       }),
+  }),
+  createApiFactory({
+    api: ragAiApiRef,
+    deps: {
+      configApi: configApiRef,
+      discoveryApi: discoveryApiRef,
+      fetchApi: fetchApiRef,
+      identityApi: identityApiRef,
+    },
+    factory: ({ discoveryApi, fetchApi, configApi, identityApi }) => {
+      return new RoadieRagAiClient({
+        discoveryApi,
+        fetchApi,
+        configApi,
+        identityApi,
+      });
+    },
   }),
 ].map(factory => createApiExtension({factory}));

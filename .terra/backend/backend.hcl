@@ -143,7 +143,7 @@ NOMAD_TOKEN="{{ .Data.secret_id }}"
 # openAPI
 {{ with secret "secret/backstage/openapi" }}
 OPENAI_API_KEY="{{ .Data.key }}"
-{{end}
+{{end}}
 EOH
       destination = "$${NOMAD_SECRETS_DIR}/env"
       change_mode = "restart"

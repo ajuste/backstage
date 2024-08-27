@@ -20,7 +20,7 @@ integrations:
       token: ${AZURE_TOKEN}
 
 ai:
-  supportedSources: ['catalog']
+  supportedSources: ['catalog', 'tech-docs']
 
 scorecards:
   jsonDataUrl: http://localhost:7007/api/zf-insights/s3/qa-backstage/service_assessment/
