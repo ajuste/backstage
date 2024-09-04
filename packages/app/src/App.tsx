@@ -29,7 +29,7 @@ import { techRadarExtensionOverride } from './extensions/TechRadar';
 import { entityPage } from './components/catalog/EntityPage';
 import { PillarAwareCatalogPage } from './components/catalog/PillarAwareCatalogPage';
 import homePlugin from './extensions/Home';
-import { EntityPickerWithRepoExtension, NomadJobPickerExtension, MultipleNomadJobPickerExtension, JiraIssuePickeExtension } from './extensions/ScaffolderPage';
+import { EntityPickerWithRepoExtension, NomadJobPickerExtension, MultipleNomadJobPickerExtension, JiraIssuePickeExtension, DatabasePickerExtension, TablePickerExtension } from './extensions/ScaffolderPage';
 import { ScaffolderFieldExtensions, } from '@backstage/plugin-scaffolder-react';
 import { ScaffolderPage } from '@backstage/plugin-scaffolder';
 import { RDSDatabasePage } from './extensions/DatabasesPage';
@@ -74,6 +74,8 @@ const routes = (
         <NomadJobPickerExtension />
         <MultipleNomadJobPickerExtension />
         <JiraIssuePickeExtension />
+        <DatabasePickerExtension />
+        <TablePickerExtension />
       </ScaffolderFieldExtensions>
     </Route>
   </FlatRoutes>

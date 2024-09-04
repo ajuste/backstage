@@ -21,8 +21,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Autocomplete, {
   AutocompleteChangeReason,
 } from '@material-ui/lab/Autocomplete';
-import React, { useCallback, useEffect } from 'react';
-import useAsync from 'react-use/esm/useAsync';
+import React, { useCallback, useEffect, useMemo, } from 'react';
 import {
   EntityPickerFilterQueryValue,
   EntityPickerProps,
@@ -51,45 +50,42 @@ export const EntityPickerWithRepo = (props: EntityPickerProps) => {
   const defaultNamespace =
     uiSchema['ui:options']?.defaultNamespace || undefined;
 
-
   const showRepo = uiSchema['ui:options']?.showRepo || false;
   const tryShowDisplayName = uiSchema['ui:options']?.tryShowDisplayName || false;
   const showPillarOnly = uiSchema['ui:options']?.showPillarOnly || false;
   const onlyStandalone = uiSchema['ui:options']?.onlyStandalone || false;
 
-
-
-  let loading: boolean = false;
-  let entities: Entity[] = [];
-
-  if (onlyStandalone) {
-    const zfCatalogApi = useApi(zfCatalogApiRef);
-    const { value, loading: resLoad } = useAsync(async () => {
-      const entities = await zfCatalogApi.getStandaloneEntities();
-      return entities.filter(e => (e as any).kind?.toLowerCase() !== 'location' && (e as any).kind?.toLowerCase() !== 'user');
-    });
-    loading = resLoad;
-    entities = value || [];
-  } else {
-    const catalogApi = useApi(catalogApiRef);
-    const { value, loading: resLoad } = useAsync(async () => {
-      const fields = ['metadata.name', 'metadata.namespace', 'kind', 'spec.profile.displayName', 'metadata.annotations.github.com/project-slug', 'metadata.annotations.zerofox.com/pillar', 'metadata.annotations'];
-      const { items } = await catalogApi.getEntities(
-        catalogFilter
-          ? { filter: catalogFilter, fields }
-          : { filter: undefined, fields },
-      );
-      return items;
-    });
-    loading = resLoad;
-    entities = value || [];
-  }
-
-
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const [entities, setEntities] = React.useState<Entity[]>([]);
+  const zfCatalogApi = useApi(zfCatalogApiRef);
+  const catalogApi = useApi(catalogApiRef);
 
   const allowArbitraryValues =
     uiSchema['ui:options']?.allowArbitraryValues ?? true;
+  const whitelistRefs = uiSchema['ui:options']?.whitelistRefs || [];
 
+  useMemo(() => {
+    let result: Promise<any>;
+    if (onlyStandalone) {
+      result = zfCatalogApi.getStandaloneEntities().then(entities => {
+        setEntities(
+          entities.filter(e =>
+            (e as any).kind?.toLowerCase() !== 'location' &&
+            (e as any).kind?.toLowerCase() !== 'user' &&
+            (!whitelistRefs.length || whitelistRefs.includes(stringifyEntityRef(e)))));
+      })
+    } else {
+      const fields = ['metadata.name', 'metadata.namespace', 'kind', 'spec.profile.displayName', 'metadata.annotations.github.com/project-slug', 'metadata.annotations.zerofox.com/pillar', 'metadata.annotations'];
+      result = catalogApi.getEntities(
+        catalogFilter
+          ? { filter: catalogFilter, fields }
+          : { filter: undefined, fields },
+      ).then(({ items }) => {
+        setEntities(items.filter(e => !whitelistRefs.length || whitelistRefs.includes(stringifyEntityRef(e))));
+      })
+    }
+    result.finally(() => setLoading(false));
+  }, []);
 
   const getLabelText = (entity: Entity | string) => {
     if (typeof entity === 'string') {
@@ -129,7 +125,9 @@ export const EntityPickerWithRepo = (props: EntityPickerProps) => {
       // ref can either be a string from free solo entry or
       if (typeof ref !== 'string') {
         // if ref does not exist: pass 'undefined' to trigger validation for required value
+        console.log('onchange1', onChange)
         onChange(ref ? stringifyEntityRef(ref as Entity) : undefined);
+        console.log('onchange2')
       } else {
         if (reason === 'blur' || reason === 'create-option') {
           // Add in default namespace, etc.
@@ -160,6 +158,10 @@ export const EntityPickerWithRepo = (props: EntityPickerProps) => {
   const selectedEntity =
     entities?.find(e => stringifyEntityRef(e) === formData) ??
     (allowArbitraryValues && formData ? getLabel(formData, undefined) : '');
+
+  console.log('selectedEntity', selectedEntity);
+  console.log('formData', formData);
+  console.log('formData', entities.map(e => stringifyEntityRef(e)));
 
   useEffect(() => {
     if (entities?.length === 1 && selectedEntity === '') {

@@ -2,12 +2,13 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
   name: data-line-sql-to-bq
-  title: Create a DAG to ingest data from the Monolith DB to BigQuery
+  title: Ingest data from the an RDS instance to BigQuery
   description: |
     You want to ingest data from the Monolith DB to BigQuery.
     This golden path will create a DAG in the Airflow SDK repo that will ingest data from the Monolith DB to BigQuery.
   annotations:
     backstage.io/time-saved: PT2H
+
 spec:
   owner: user:default/sebasaave
   type: Data Engineering
@@ -17,7 +18,20 @@ spec:
         - dataLineName
         - dataLineSchedule
         - dataLinePillar
+        - sourceRDSTable
       properties:
+        sourceRDSTable:
+          title: Primary data set
+          description: The primary data set to be ingested, for example entity, enterprise, etc. You will add subtables (i.e. entity_domain) later if needed
+          type: string
+          ui:field: TablePicker
+          ui:options:
+            allowArbitraryValues: false
+            allowedInstances:
+              - resource:default/platformdb-prod-b
+              - resource:default/prod-cs-takedown-api-02
+              - resource:default/prod-cs-ma-api
+        
         dataLineName:
           title: Dataline Name
           type: string

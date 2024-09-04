@@ -1,5 +1,6 @@
 import {
   ComponentEntity,
+  CompoundEntityRef,
   GroupEntity,
 } from '@backstage/catalog-model';
 import JiraApi from 'jira-client';
@@ -139,4 +140,17 @@ export interface S3API {
   getObject(options: GetS3ObjectOptions): Promise<string>;
   saveObject(options: SaveS3ObjectOptions): Promise<void>;
   listObjects(options: ListS3ObjectOptions): Promise<ListS3ObjectOutput>;
+}
+
+export type RDSDatabase = {
+  name: string;
+}
+
+export type RDSTable = {
+  name: string;
+}
+
+export type RDSAPI = {
+  getDatabases(instance: CompoundEntityRef): Promise<RDSDatabase[]>;
+  getTables(instance: CompoundEntityRef, database: string): Promise<RDSTable[]>;
 }

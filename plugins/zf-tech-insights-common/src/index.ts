@@ -10,3 +10,4 @@ export * from './api/JiraAPIClient';
 export * from './api/S3APIClient';
 export * from './pillars';
 export * from './entity';
+export * from './api/RDSAPIClient';

@@ -3,6 +3,7 @@ import { createScaffolderFieldExtension } from '@backstage/plugin-scaffolder-rea
 import { EntityPickerWithRepo } from '../scaffolder/ExtendedEntityPicker';
 import { MultipleNomadJobPicker, NomadJobPicker } from '../scaffolder/Nomad';
 import { JiraIssuePicker } from '../scaffolder/Jira';
+import { DatabasePicker, TablePicker } from '../scaffolder/RDS';
 
 export const EntityPickerWithRepoExtension = scaffolderPlugin.provide(
   createScaffolderFieldExtension({
@@ -29,5 +30,19 @@ export const JiraIssuePickeExtension = scaffolderPlugin.provide(
   createScaffolderFieldExtension({
     name: 'JiraIssuePicker',
     component: JiraIssuePicker,
+  }),
+);
+
+export const DatabasePickerExtension = scaffolderPlugin.provide(
+  createScaffolderFieldExtension({
+    name: 'DatabasePicker',
+    component: DatabasePicker,
+  }),
+);
+
+export const TablePickerExtension = scaffolderPlugin.provide(
+  createScaffolderFieldExtension({
+    name: 'TablePicker',
+    component: TablePicker,
   }),
 );

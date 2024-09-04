@@ -11,6 +11,7 @@ import ZFCatalogService from './catalog';
 import NomadProxyAPIClient from './nomadProxy';
 import { JiraProxyAPIClient } from './jiraProxy';
 import { S3Service } from './s3Service';
+import { RDSService } from './rds';
 
 
 export interface RouterOptions {
@@ -252,6 +253,41 @@ export async function createRouter(
         });
 
         res.send(objects);
+      },
+    )
+
+  // RDS API
+  router
+    .get(
+      '/rds/:instance/',
+      async (req, res) => {
+
+        const service = new RDSService(options.config, options.catalogServiceClient);
+        logger.info(`Fetching databases for RDS instance ${req.params.instance}`);
+        const databases = await service.getDatabases({
+          kind: 'resource',
+          namespace: 'default',
+          name: req.params.instance,
+        });
+
+        res.send(databases);
+      },
+    )
+
+  router
+    .get(
+      '/rds/:instance/:database/tables/',
+      async (req, res) => {
+
+        const service = new RDSService(options.config, options.catalogServiceClient);
+        logger.info(`Fetching tables for database ${req.params.database} and instance ${req.params.instance}`);
+        const databases = await service.getTables({
+          kind: 'resource',
+          namespace: 'default',
+          name: req.params.instance,
+        }, req.params.database);
+
+        res.send(databases);
       },
     )
 

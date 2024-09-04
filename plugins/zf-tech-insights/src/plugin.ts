@@ -11,6 +11,8 @@ import {
   nomadApiRef,
   jiraApiRef,
   JiraAPIClient,
+  RDSAPIClient,
+  rdsApiRef,
 } from 'backstage-plugin-zf-tech-insights-common';
 
 import {
@@ -37,6 +39,12 @@ export const zfTechInsightsPlugin = createPlugin({
       deps: { discoveryApi: discoveryApiRef },
       factory: ({ discoveryApi }) =>
         new JiraAPIClient(discoveryApi),
+    }),
+    createApiFactory({
+      api: rdsApiRef,
+      deps: { discoveryApi: discoveryApiRef },
+      factory: ({ discoveryApi }) =>
+        new RDSAPIClient({ discoveryApi }),
     }),
   ],
   routes: {

@@ -66,6 +66,7 @@ export const EntityPickerFieldSchema = makeFieldSchemaFromZod(
     showRepo: z.boolean().optional(),
     tryShowDisplayName: z.boolean().optional(),
     showPillarOnly: z.boolean().optional(),
+    whitelistRefs: z.array(z.string()).optional(),
   }),
 );
 
