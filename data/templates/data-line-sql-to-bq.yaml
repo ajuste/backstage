@@ -23,7 +23,7 @@ spec:
         sourceRDSTable:
           title: Primary data set
           description: The primary data set to be ingested, for example entity, enterprise, etc. You will add subtables (i.e. entity_domain) later if needed
-          type: string
+          type: object
           ui:field: TablePicker
           ui:options:
             allowArbitraryValues: false
