@@ -40,6 +40,7 @@ jobs:
             echo "🔴 It's the second week of the bi-weekly cycle. The action is going to be skipped." >> $GITHUB_STEP_SUMMARY
           fi
   build:
+    needs: weekindex
     if: ${{ needs.weekindex.outputs.weekindex == 0 }}
     name: PR metrics
     runs-on: ubuntu-latest
@@ -73,10 +74,11 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         SEARCH_QUERY: 'repo:riskive/${{ matrix.repo }} is:pr created:${{ env.date_range }} -author:${{ env.EXCLUDED_USERS }}'
+        HIDE_TIME_TO_ANSWER: True
 
     - name: Create issue
       uses: peter-evans/create-issue-from-file@v5
       with:
         token: ${{ secrets.ACCESS_TOKEN }}
-        title: "[${{ matrix.repo }}] Monthly PR metrics report: ${{ env.date_range }}"
+        title: "[${{ matrix.repo }}] Fortnightly PR metrics report: ${{ env.date_range }}"
         content-filepath: ./issue_metrics.md
