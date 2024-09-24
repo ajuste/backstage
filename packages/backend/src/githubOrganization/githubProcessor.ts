@@ -478,6 +478,7 @@ export class GithubProcessor implements CatalogProcessor {
     }
     const catalogEntity = await this.getEntityFromCatalog(entity);
     const catalogOwner = String(entity.spec?.owner)
+
     // Find out if the entity has owners that are different
     // from the ones set by the catalog file. that means that
     // the owners are coming from somwhere else (ie github).
@@ -489,14 +490,29 @@ export class GithubProcessor implements CatalogProcessor {
         !relation.targetRef.endsWith(catalogOwner)
     )
 
+    let shouldOverrideOwner = false
+
     if (hasOwnersFromOutsideCatalog?.length) {
+      this.logger.info(`Skipping overriding catalog owner from catalog for entity ${entity.metadata.namespace ?? 'default'}/${entity.kind}/${entity.metadata.name} as it has the same owner set by the catalog file ${catalogOwner}`)
+    } else {
+      // if the owner is a group and is coming from GitHub,
+      // double check it the team owns the repo (border case
+      // when unsetting a team as owner of a repo)
+      if (entity.kind == 'Group' && entity.metadata.annotations?.["github.com/team-slug"]) {
+        const ownerRepos = await this.getTeamOwnedRepos(entity.metadata.name);
+        if (!ownerRepos.find(repo => repo.repo == entity.metadata.annotations?.["github.com/team-slug"].split("/")[1])) {
+          this.logger.info(`Skipping overriding catalog owner from catalog for entity ${entity.metadata.namespace ?? 'default'}/${entity.kind}/${entity.metadata.name} as the team ${entity.metadata.name} does not own the repo ${entity.metadata.annotations?.["github.com/team-slug"]}`)
+        }
+      } else {
+        shouldOverrideOwner = true
+      }
+    }
+    if (shouldOverrideOwner) {
       this.logger.info(`Overriding catalog owner from file for entity ${entity.metadata.namespace ?? 'default'}/${entity.kind}/${entity.metadata.name} with ${hasOwnersFromOutsideCatalog?.map(o => o?.targetRef).join(", ")} owners that are not set by the catalog file ${catalogOwner}`)
       if (!entity.spec) {
         entity.spec = {}
       }
-      entity.spec.owner = hasOwnersFromOutsideCatalog[0].targetRef
-    } else {
-      this.logger.info(`Skipping overriding catalog owner from catalog for entity ${entity.metadata.namespace ?? 'default'}/${entity.kind}/${entity.metadata.name} as it has the same owner set by the catalog file ${catalogOwner}`)
+      entity.spec.owner = hasOwnersFromOutsideCatalog?.[0].targetRef
     }
     return entity;
   }
