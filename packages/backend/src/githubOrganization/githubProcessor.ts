@@ -492,7 +492,7 @@ export class GithubProcessor implements CatalogProcessor {
 
     let shouldOverrideOwner = false
 
-    if (hasOwnersFromOutsideCatalog?.length) {
+    if (!hasOwnersFromOutsideCatalog?.length) {
       this.logger.info(`Skipping overriding catalog owner from catalog for entity ${entity.metadata.namespace ?? 'default'}/${entity.kind}/${entity.metadata.name} as it has the same owner set by the catalog file ${catalogOwner}`)
     } else {
       // if the owner is a group and is coming from GitHub,
