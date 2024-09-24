@@ -16,7 +16,7 @@ type DBFunctionMapping = {
 };
 
 const dbFunctions: DBFunctionMapping = {
-  "mysql": {
+  "mysql2": {
     "list_databases": async (client: Knex): Promise<RDSDatabase[]> => {
       const res = await client.raw('SHOW DATABASES');
       return res[0].map((p: any) => { return { name: p.Database } });
@@ -28,8 +28,14 @@ const dbFunctions: DBFunctionMapping = {
     },
   },
   "pg": {
-    "list_databases": async (client: Knex): Promise<RDSDatabase[]> => (await client.raw('SELECT datname FROM pg_database WHERE datistemplate = false')).rows,
-    "get_tables": async (client: Knex, database: string): Promise<RDSTable[]> => (await client.raw(`SELECT table_name FROM information_schema.tables WHERE table_schema = '${database}'`)).map((row: any) => { return { name: row.table_name } }),
+    "list_databases": async (client: Knex): Promise<RDSDatabase[]> => {
+      const {rows} = await client.raw('SELECT datname FROM pg_database WHERE datistemplate = false and datname <> \'rdsadmin\' order by datname ASC');
+      return rows.map((row: any) => { return { name: row.datname } });
+    },
+    "get_tables": async (client: Knex, database: string): Promise<RDSTable[]> => {
+      const {rows} = await client.raw(`SELECT table_name FROM information_schema.tables WHERE table_catalog = '${database}' and table_type = 'BASE TABLE' and table_schema = 'public' order by table_name ASC`);
+      return rows.map((row: any) => { return { name: row.table_name } });
+    },
   }
 }
 
@@ -48,7 +54,7 @@ export class RDSService implements RDSAPI {
 
   private async getRDSClient(instance: CompoundEntityRef, database: string | undefined): Promise<Knex> {
     debugger
-    const config = this.configApi.getOptionalConfig(`rds.db.${instance.name}`);
+    const config = this.configApi.getOptionalConfig(`rds.db.${instance.name.replace(/\d/g, 'x')}`);
     if (!config) {
       throw new Error(`No configuration found for RDS instance ${stringifyEntityRef(instance)}`);
     }
@@ -63,9 +69,10 @@ export class RDSService implements RDSAPI {
     switch (engine) {
       case 'postgres':
         clientType = 'pg';
+        database = database ?? 'postgres';
         break;
       case 'mysql':
-        clientType = 'mysql';
+        clientType = 'mysql2';
         break;
       default:
         throw new Error(`Unsupported RDS engine ${engine}`);

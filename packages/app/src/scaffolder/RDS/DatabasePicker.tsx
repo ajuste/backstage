@@ -103,7 +103,7 @@ export const DatabasePicker = (props: DatabaseProps) => {
             }
           }
         }}
-        onChange={(instance: string | undefined, _1: ErrorSchema<string> | undefined, _?: string) => setInstance({ instance: instance || '', database: { name: '' } })}
+        onChange={(instance: string | undefined, _1: ErrorSchema<any> | undefined, _?: string) => setInstance({ instance: instance || '', database: { name: '' } })}
         disabled={false}
         readonly={false}
         name={'rds-source-instance'}

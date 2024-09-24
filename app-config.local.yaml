@@ -165,9 +165,14 @@ rds:
       port: 3306
       user: ${RDS_MONOLITH_PROD_USER}
       password: ${RDS_MONOLITH_PROD_PASSWORD}
-    prod-cs-takedown-api-02:
+    prod-cs-takedown-api-xx:
       host: prod-cs-takedown-api-02.cmtfynbirqqp.us-west-2.rds.amazonaws.com
       port: 5432
       user: ${RDS_CSTAKEDOWNAPI_PROD_USER}
       password: ${RDS_CSTAKEDOWNAPI_PROD_PASSWORD}
+    prod-cs-ma-api:
+      host: prod-cs-ma-api.cmtfynbirqqp.us-west-2.rds.amazonaws.com
+      port: 5432
+      user: ${RDS_CSTMAAPI_PROD_USER}
+      password: ${RDS_MAAPI_PROD_PASSWORD}
 
