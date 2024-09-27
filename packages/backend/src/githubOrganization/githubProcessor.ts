@@ -57,12 +57,12 @@ const Pillars: Record<string, { value: string, grafana: string, githubName: stri
   'datascience': {
     value: 'Data Science',
     grafana: 'data-science',
-    githubName: 'data-science-pillar',
+    githubName: 'datascience-pillar',
   },
   'foxteam': {
     value: 'FoxTeam',
     grafana: 'fox-team',
-    githubName: 'fox-team-pillar',
+    githubName: 'foxteam-pillar',
   },
 };
 
@@ -95,6 +95,8 @@ export class GithubProcessor implements CatalogProcessor {
   private readonly discovery: PluginEndpointDiscovery;
   private readonly tokenManager: TokenManager;
   private readonly logger: Logger;
+  protected getTeamOwnedReposCount: Map<string, number> = new Map();
+  protected getTeamOwnerReposResponse = new Map<string, GetGithubRepoResponse[]>();
 
   getProcessorName(): string {
     return 'GithubProcessor';
@@ -168,38 +170,55 @@ export class GithubProcessor implements CatalogProcessor {
    * @param repo The repo
    * @returns A list of repositories owned by a team
    */
-  async getTeamOwnedRepos(team: string): Promise<GithubRepo[]> {
+  async getTeamOwnedRepos(team: string, roleName: string | null = "write"): Promise<GithubRepo[]> {
 
-    const { token } = await this.getCredentials();
-    const octokit = new Octokit({
-      auth: token,
-    })
+    const fetchCount = this.getTeamOwnedReposCount.get(team) ?? 0;
+    let allRepos: GetGithubRepoResponse[] = []
+    debugger
 
-    const PageSize = 100
-    const allRepos: GetGithubRepoResponse[] = []
-    let page = 1
+    if (fetchCount % 100 === 1) {
+      this.logger.info(`Returning cached team owned repos for ${team}`)
+      allRepos = this.getTeamOwnerReposResponse.get(team) ?? []
+    } else {
 
-    while (true) {
-      const result = await octokit.request('GET /orgs/riskive/teams/{team}/repos?per_page={pageSize}&page={page}', {
-        team: team,
-        pageSize: PageSize,
-        page: page++,
-        headers: {
-          'X-GitHub-Api-Version': '2022-11-28',
-        }
+      const { token } = await this.getCredentials();
+      const octokit = new Octokit({
+        auth: token,
       })
-      if (result?.data) {
-        allRepos.push(...result.data)
+
+      const PageSize = 100
+      let page = 1
+
+      while (true) {
+        const result = await octokit.request(`GET /orgs/riskive/teams/${team}/repos?per_page=${PageSize}&page=${page}`, {
+          headers: {
+            'X-GitHub-Api-Version': '2022-11-28',
+          }
+        })
+        page++;
+        if (result?.data) {
+          allRepos.push(...result.data)
+        }
+        if (result?.data?.length !== PageSize) {
+          break;
+        }
       }
-      if (result?.data?.length !== PageSize) {
-        break;
-      }
+      this.getTeamOwnerReposResponse.set(team, allRepos)
     }
-    return allRepos
-      .filter(({ role_name }) => role_name === 'write')
+
+    this.getTeamOwnedReposCount.set(team, fetchCount + 1)
+
+    let filteredRepos = allRepos
+    if (roleName) {
+      filteredRepos = allRepos
+        .filter(({ role_name }) => role_name === roleName)
+    }
+
+    const res = filteredRepos
       .map(({ name }) => {
         return { owner: 'riskive', repo: name }
       })
+    return res
   }
 
   async getEntityFromCatalog(entity: Entity): Promise<Entity | undefined> {
@@ -256,7 +275,7 @@ export class GithubProcessor implements CatalogProcessor {
         `No github.com/project-slug annotation found for entity ${entity.metadata.name}`
       );
     }
-    const [owner, repo] = slug ? slug.split('/') : [];
+    const [owner, repo] = slug?.split('/') ?? [];
 
     // Get collaborators for the supporting-repo for this entity.
     const collaborators = await this.getCollaborators({ owner, repo });
@@ -303,7 +322,7 @@ export class GithubProcessor implements CatalogProcessor {
     }
 
     // Get team's owner repositories from Github.
-    const ownedRepos = (await this.getTeamOwnedRepos(entity.metadata.name))
+    const ownedRepos = (await this.getTeamOwnedRepos(entity.metadata.name, "write"))
 
     // Map repositories to Backstage entities.
     const ownedEntities = await this.getEntitiesByRepos(ownedRepos)
@@ -361,7 +380,7 @@ export class GithubProcessor implements CatalogProcessor {
     }
 
     // Get team's owned repositories from Github.
-    const ownedRepos = (await this.getTeamOwnedRepos(entity.metadata.name))
+    const ownedRepos = (await this.getTeamOwnedRepos(entity.metadata.name, null))
 
     // Map repositories to Backstage entities.
     const ownedEntities = await this.getEntitiesByRepos(ownedRepos)
@@ -390,7 +409,7 @@ export class GithubProcessor implements CatalogProcessor {
     }
 
     let pillarName = Object.keys(Pillars).find((pillar: string) => {
-      return Pillars[pillar].githubName === entity.metadata.name
+      return Pillars[pillar]?.githubName === entity.metadata.name
     })
 
     if (!pillarName) {
@@ -471,6 +490,16 @@ export class GithubProcessor implements CatalogProcessor {
     return !!entity.spec?.owner
   }
 
+  /**
+   * Returns true if the entity has a pillar set by a catalog file.
+   * 
+   * @param entity The entity to check
+   * @returns True if the entity has a pillar set by a catalog file
+   */
+  private hasPillarSetByCatalogFile(entity: Entity): boolean {
+    return !!entity.metadata?.annotations?.['zerofox.com/pillar']
+  }
+
   private async overrideCatalogOwner(entity: Entity): Promise<Entity> {
     if (!this.hasOwnerSetByCatalogFile(entity)) {
       this.logger.info(`Skipping overriding catalog owner from catalog for entity ${entity.metadata.namespace}/${entity.kind}/${entity.metadata.name} as it has no owner set by a catalog file`)
@@ -499,8 +528,9 @@ export class GithubProcessor implements CatalogProcessor {
       // double check it the team owns the repo (border case
       // when unsetting a team as owner of a repo)
       if (entity.kind == 'Group' && entity.metadata.annotations?.["github.com/team-slug"]) {
-        const ownerRepos = await this.getTeamOwnedRepos(entity.metadata.name);
-        if (!ownerRepos.find(repo => repo.repo == entity.metadata.annotations?.["github.com/team-slug"].split("/")[1])) {
+        const ownerRepos = await this.getTeamOwnedRepos(entity.metadata.name, "write");
+        const repoName = entity.metadata.annotations?.["github.com/team-slug"]?.split("/")?.[1]
+        if (!ownerRepos.find(repo => repo.repo == repoName)) {
           this.logger.info(`Skipping overriding catalog owner from catalog for entity ${entity.metadata.namespace ?? 'default'}/${entity.kind}/${entity.metadata.name} as the team ${entity.metadata.name} does not own the repo ${entity.metadata.annotations?.["github.com/team-slug"]}`)
         }
       } else {
@@ -517,6 +547,67 @@ export class GithubProcessor implements CatalogProcessor {
     return entity;
   }
 
+  private async overrideCatalogPillar(entity: Entity): Promise<Entity> {
+    const namespace = entity.metadata.namespace ?? 'default'
+    if (!this.hasPillarSetByCatalogFile(entity)) {
+      this.logger.info(`Skipping overriding catalog pillar from catalog for entity ${namespace}/${entity.kind}/${entity.metadata.name} as it has no pillar set by a catalog file`)
+      return entity;
+    }
+    const catalogFilePillar = String(entity.metadata?.annotations?.['zerofox.com/pillar'])
+    const entityRepo = entity.metadata.annotations?.["github.com/project-slug"]?.split("/")?.[1]
+
+    if (!entityRepo) {
+      this.logger.info(`Skipping overriding catalog pillar from catalog for entity ${namespace}/${entity.kind}/${entity.metadata.name} as it has no github.com/project-slug annotation`)
+      return entity;
+    }
+
+    let pillarToOverride: string | undefined = undefined
+
+    // First check if the pillar team being stated in the catalog file
+    // contains this repo.
+    if (catalogFilePillar) {
+      const pillarTeam = Pillars[catalogFilePillar.toLowerCase()]
+      if (pillarTeam) {
+        const ownedReposByPillar = await this.getTeamOwnedRepos(pillarTeam.githubName, null);
+
+        // The pillar team owns the repo, so we can override the pillar
+        if (ownedReposByPillar.map(repo => repo.repo).includes(entityRepo)) {
+          pillarToOverride = catalogFilePillar
+          this.logger.info(`Overriding catalog pillar from file for entity ${namespace}/${entity.kind}/${entity.metadata.name} with ${catalogFilePillar} pillar that is set by the catalog file ${catalogFilePillar}`)
+        }
+      } else {
+        this.logger.info(`Skipping overriding catalog pillar from catalog for entity ${namespace}/${entity.kind}/${entity.metadata.name} because there is not Pillar team defined for ${catalogFilePillar}`)
+      }
+    }
+
+    // If we haven't found which pillar to use
+    // no go through all the pillar teams and check
+    // if any of them own the repo.
+    if (!pillarToOverride) {
+      for (const pillar in Pillars) {
+        const pillarTeam = Pillars[pillar]
+        const ownedReposByPillar = await this.getTeamOwnedRepos(pillarTeam.githubName, null);
+        if (ownedReposByPillar.map(repo => repo.repo).includes(entityRepo)) {
+          pillarToOverride = pillar
+          this.logger.info(`Overriding catalog pillar from file for entity ${namespace}/${entity.kind}/${entity.metadata.name} with ${pillar} pillar that is set by the catalog file ${catalogFilePillar}`)
+          break;
+        }
+      }
+    }
+
+    if (pillarToOverride) {
+      this.logger.info(`Overriding catalog pillar from file for entity ${namespace ?? 'default'}/${entity.kind}/${entity.metadata.name} with ${pillarToOverride} pillar that is not set by the catalog file ${catalogFilePillar}`)
+      if (!entity.metadata.annotations) {
+        entity.metadata.annotations = {}
+      }
+      entity.metadata.annotations['zerofox.com/pillar'] = Pillars[pillarToOverride].value
+    } else {
+      this.logger.info(`Skipping overriding catalog pillar from catalog for entity ${namespace ?? 'default'}/${entity.kind}/${entity.metadata.name} as the pillar team does not own the repo ${entityRepo}`)
+    }
+    return entity;
+  }
+
+
   /**
    * Pre-processes the entity.
    * 
@@ -531,10 +622,18 @@ export class GithubProcessor implements CatalogProcessor {
     if ((this.isFromCatalogFile(originLocation) || this.isFromCatalogFile(location)) && this.hasOwnerSetByCatalogFile(entity)) {
       entity = await this.overrideCatalogOwner(entity);
     } else {
-      this.logger.info(`Skipping entity ${entity.metadata.namespace}/${entity.kind}/${entity.metadata.name} as it has no owner set by a catalog file ${originLocation?.target} ${location?.target}`)
+      this.logger.info(`Skipping override of owner for entity ${entity.metadata.namespace}/${entity.kind}/${entity.metadata.name} as it has no owner set by a catalog file ${originLocation?.target} ${location?.target}`)
+    }
+
+    if ((this.isFromCatalogFile(originLocation) || this.isFromCatalogFile(location)) && this.hasPillarSetByCatalogFile(entity)) {
+      entity = await this.overrideCatalogPillar(entity);
+    } else {
+      this.logger.info(`Skipping override of pillar for  entity ${entity.metadata.namespace}/${entity.kind}/${entity.metadata.name} as it has no pillar set by a catalog file ${originLocation?.target} ${location?.target}`)
     }
     return entity
   }
+
+  // checking = false;
 
   // Run after validateEntityKind
   async postProcessEntity(
@@ -544,6 +643,20 @@ export class GithubProcessor implements CatalogProcessor {
   ): Promise<Entity> {
 
     this.logger.debug(`Starting post process entity for ${entity.metadata.namespace}/${entity.kind}/${entity.metadata.name}`)
+
+    // if (!this.checking) {
+    //   this.checking = true
+    //   const { token } = await this.getCredentials();
+    //   const octokit = new Octokit({
+    //     auth: token,
+    //   })
+    //   const res = await octokit.request('GET /orgs/riskive/teams/protection-pillar/repos?per_page=100&page=1', {
+    //     headers: {
+    //       'X-GitHub-Api-Version': '2022-11-28',
+    //     }
+    //   })
+    //   debugger
+    // }
 
     if (this.canSyncUpOwnersOfEntity(entity)) {
       await this.syncUpOwnersOfEntity(entity, emit);

@@ -59,7 +59,7 @@ export default createBackendModule({
               teamTransformer: transform,
               logger: log,
               schedule: scheduler.createScheduledTaskRunner({
-                frequency: { minutes: 60 },
+                frequency: { minutes: 15 },
                 timeout: { minutes: 15 },
               }),
             }),
