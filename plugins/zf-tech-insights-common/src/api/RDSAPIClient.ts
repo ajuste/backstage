@@ -4,7 +4,7 @@ import {
   ApiRef,
   createApiRef,
 } from '@backstage/core-plugin-api';
-import { RDSAPI, RDSDatabase, RDSTable } from 'backstage-plugin-zf-tech-insights-common';
+import { RDSAPI, RDSDatabase, RDSInstance, RDSSchema, RDSTable } from 'backstage-plugin-zf-tech-insights-common';
 import { CompoundEntityRef } from '@backstage/catalog-model';
 
 export const rdsApiRef: ApiRef<RDSAPI> = createApiRef({
@@ -20,9 +20,9 @@ export class RDSAPIClient implements RDSAPI {
     this.discoveryApi = options.discoveryApi;
   }
 
-  async getDatabases(instance: CompoundEntityRef): Promise<RDSDatabase[]> {
+  async getInstances(): Promise<RDSInstance[]> {
     const url = await this.discoveryApi.getBaseUrl('zf-insights')
-    const resp = await fetch(`${url}/rds/${instance.name}/`);
+    const resp = await fetch(`${url}/rds/`);
     if (!resp.ok) {
       throw await ResponseError.fromResponse(resp);
     }
@@ -30,9 +30,29 @@ export class RDSAPIClient implements RDSAPI {
     return data;
   }
 
-  async getTables(instance: CompoundEntityRef, database: string): Promise<RDSTable[]> {
+  async getDatabases(instance: CompoundEntityRef): Promise<RDSDatabase[]> {
     const url = await this.discoveryApi.getBaseUrl('zf-insights')
-    const resp = await fetch(`${url}/rds/${instance.name}/${database}/tables/`);
+    const resp = await fetch(`${url}/rds/${instance.name}/databases`);
+    if (!resp.ok) {
+      throw await ResponseError.fromResponse(resp);
+    }
+    const data = await resp.json();
+    return data;
+  }
+
+  async getSchemas(database: RDSDatabase): Promise<RDSSchema[]> {
+    const url = await this.discoveryApi.getBaseUrl('zf-insights')
+    const resp = await fetch(`${url}/rds/${database.instance.name}/databases/${database.name}/schemas/`);
+    if (!resp.ok) {
+      throw await ResponseError.fromResponse(resp);
+    }
+    const data = await resp.json();
+    return data;
+  }
+
+  async getTables(schema: RDSSchema): Promise<RDSTable[]> {
+    const url = await this.discoveryApi.getBaseUrl('zf-insights')
+    const resp = await fetch(`${url}/rds/${schema.database.instance.name}/databases/${schema.database.name}/schemas/${schema.name}/tables/`);
     if (!resp.ok) {
       throw await ResponseError.fromResponse(resp);
     }

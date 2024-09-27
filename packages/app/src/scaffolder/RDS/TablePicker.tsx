@@ -1,17 +1,17 @@
 import { useApi } from '@backstage/core-plugin-api';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
-import { parseEntityRef } from '@backstage/catalog-model';
+import Link from '@material-ui/core/Link';
 import Autocomplete, {
   AutocompleteChangeReason,
 } from '@material-ui/lab/Autocomplete';
 import React, { useCallback, useEffect, useState } from 'react';
-import { rdsApiRef, RDSTable } from 'backstage-plugin-zf-tech-insights-common';
+import { rdsApiRef, RDSSchema, RDSTable } from 'backstage-plugin-zf-tech-insights-common';
 import { TableProps } from './tableSchema';
-import { DatabasePicker, Result as DatabaseResult } from './DatabasePicker';
+import { DatabaseSchemaPicker, DatabaseSchemaResult } from './DatabaseSchemaPicker';
 import { ErrorSchema } from '@rjsf/utils';
 
-type Result = DatabaseResult & { table: RDSTable }
+type Result = RDSTable & {}
 
 /**
  * @public
@@ -19,7 +19,7 @@ type Result = DatabaseResult & { table: RDSTable }
 export const TablePicker = (props: TableProps) => {
   const {
     onChange,
-    schema: { title = 'Dataset', description = 'A table from an RDS table' },
+    schema: { title = 'Table', description = 'A table from an RDS table' },
     required,
     uiSchema,
     rawErrors,
@@ -28,52 +28,50 @@ export const TablePicker = (props: TableProps) => {
     registry,
   } = props;
 
-  const [instance, setInstance] = useState<Result>(formData);
+  const [schema, setSchema] = useState<RDSSchema | null>();
+  const [table, setTable] = useState<Result | null>(formData);
   const [loading, setLoading] = useState<boolean>(false);
-  const [entries, setEntries] = useState<Result[]>([]);
+  const [entries, setEntries] = useState<RDSTable[]>([]);
   const allowArbitraryValues =
     uiSchema['ui:options']?.allowArbitraryValues ?? true;
 
   const rdsApi = useApi(rdsApiRef);
 
   useEffect((): any => {
-    if (instance?.instance && instance?.database) {
+    if (schema) {
       setLoading(true);
-      const ref = parseEntityRef(instance.instance);
       rdsApi
-        .getTables(ref, instance.database.name)
-        .then((tables) =>
-          setEntries(tables.map(table => ({ ...instance, table }))))
+        .getTables(schema)
+        .then(setEntries)
         .finally(() => setLoading(false));
+    } else {
+      setEntries([]);
     }
     return () => null
-  }, [instance]);
+  }, [schema]);
 
 
-  const getLabel = (r?: Result) => r?.table?.name || '';
-  const selectedEntry = entries?.find(e => e.table?.name === formData?.table?.name) ?? ({ ...instance, table: { name: allowArbitraryValues && formData ? getLabel(formData) : '' } });
-
-  useEffect(() => {
-    if (entries?.length === 1 && selectedEntry?.table?.name === '') {
-      onChange(instance);
-    }
-  }, [entries, selectedEntry]);
+  const getLabel = (r?: Result) => r?.displayName ?? r?.name ?? '';
+  const getEntryByName = (name: string) => entries?.find(e => e?.name === name) ?? null;
+  const selectedEntry = getEntryByName(table?.name ?? formData?.table?.name)
 
   const onSelect = useCallback(
-    (_: any, entry: Result | string | null, reason: AutocompleteChangeReason) => {
-      if (typeof entry === 'string') {
-        if (reason === 'blur' || reason === 'create-option') {
-          if (formData?.table?.name !== entry || allowArbitraryValues) {
-            onChange({ ...instance, table: { name: entry } });
-          }
-        }
-      }
-      else {
-        onChange(entry ?? undefined);
-      }
-    },
-    [onChange, formData, allowArbitraryValues],
+    (_0: any, entry: Result | string | null, _1: AutocompleteChangeReason) => {
+      setTable(typeof entry === 'string' ? getEntryByName(entry) : entry);
+    }, [],
   );
+
+  useEffect(() => { setTable(null); }, [schema]);
+  useEffect(() => { onChange(table); }, [table]);
+
+  let catalogLink = null;
+  if (selectedEntry?.catalogLink) {
+    catalogLink = (
+      <div style={{ paddingBottom: '1rem' }}>
+        <Link target='blank' href={selectedEntry?.catalogLink}>Check '{selectedEntry.name}' table details</Link>
+      </div>
+    );
+  }
 
   return (
     <FormControl
@@ -81,12 +79,12 @@ export const TablePicker = (props: TableProps) => {
       required={required}
       error={rawErrors?.length > 0 && !formData}
     >
-      <DatabasePicker
+      <DatabaseSchemaPicker
         idSchema={{} as any}
         required={true}
         schema={{
-          title: "Source database",
-          description: "The database / schema you are ingesting data from",
+          title: "Source shema",
+          description: "The schema you are ingesting data from",
         }}
         uiSchema={{
           "ui:options": {
@@ -94,17 +92,16 @@ export const TablePicker = (props: TableProps) => {
             allowedInstances: uiSchema['ui:options']?.allowedInstances,
           }
         }}
-        onChange={(database: DatabaseResult | undefined, _1: ErrorSchema<DatabaseResult> | undefined, _?: string) => setInstance((prevState: Result) => ({ ...prevState, ...database, table: { name: '' } }))}
+        onChange={(schema: DatabaseSchemaResult | null, _1: ErrorSchema<DatabaseSchemaResult> | undefined, _?: string) => setSchema(schema)}
         disabled={false}
         readonly={false}
         name={'rds-source-instance'}
         rawErrors={[]}
         registry={registry as any}
-        formData={instance}
+        formData={schema}
         onBlur={(_0: string, _1: any) => void 0}
         onFocus={(_0: string, _1: any) => void 0} />
       <Autocomplete
-        disabled={entries?.length === 1}
         id={idSchema?.$id}
         value={selectedEntry}
         loading={loading}
@@ -113,7 +110,7 @@ export const TablePicker = (props: TableProps) => {
         getOptionLabel={(option: any) => getLabel(option)}
         autoSelect
         freeSolo={allowArbitraryValues}
-        renderInput={params => (instance ?
+        renderInput={params => (schema ?
           <TextField
             {...params}
             label={title}
@@ -126,6 +123,7 @@ export const TablePicker = (props: TableProps) => {
           /> : null
         )}
       />
+      {catalogLink}
     </FormControl >
   );
 };

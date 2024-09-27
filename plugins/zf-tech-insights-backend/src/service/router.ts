@@ -259,14 +259,25 @@ export async function createRouter(
   // RDS API
   router
     .get(
-      '/rds/:instance/',
+      '/rds/',
+      async (_, res) => {
+        debugger
+        const service = new RDSService(options.config, options.catalogServiceClient);
+        logger.info(`Fetching instances`);
+        const instances = await service.getInstances();
+
+        res.send(instances);
+      },
+    )
+
+  router
+    .get(
+      '/rds/:instance/databases/',
       async (req, res) => {
 
         const service = new RDSService(options.config, options.catalogServiceClient);
         logger.info(`Fetching databases for RDS instance ${req.params.instance}`);
         const databases = await service.getDatabases({
-          kind: 'resource',
-          namespace: 'default',
           name: req.params.instance,
         });
 
@@ -276,18 +287,40 @@ export async function createRouter(
 
   router
     .get(
-      '/rds/:instance/:database/tables/',
+      '/rds/:instance/databases/:database/schemas/',
       async (req, res) => {
 
         const service = new RDSService(options.config, options.catalogServiceClient);
-        logger.info(`Fetching tables for database ${req.params.database} and instance ${req.params.instance}`);
-        const databases = await service.getTables({
-          kind: 'resource',
-          namespace: 'default',
-          name: req.params.instance,
-        }, req.params.database);
+        logger.info(`Fetching databases for RDS instance ${req.params.instance} and database ${req.params.database}`);
+        const schemas = await service.getSchemas({
+          instance: {
+            name: req.params.instance,
+          },
+          name: req.params.database,
+        });
 
-        res.send(databases);
+        res.send(schemas);
+      },
+    )
+
+  router
+    .get(
+      '/rds/:instance/databases/:database/schemas/:schema/tables/',
+      async (req, res) => {
+
+        const service = new RDSService(options.config, options.catalogServiceClient);
+        logger.info(`Fetching tables for RDS instance ${req.params.instance} and schema ${req.params.schema} and database ${req.params.database}`);
+        const schemas = await service.getTables({
+          database: {
+            instance: {
+              name: req.params.instance,
+            },
+            name: req.params.database,
+          },
+          name: req.params.schema,
+        });
+
+        res.send(schemas);
       },
     )
 

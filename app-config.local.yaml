@@ -117,7 +117,7 @@ catalog:
       target: ../../data/templates/standard-doc-generate-for-service.yaml
     
     - type: file
-      target: ../../data/templates/data-line-sql-to-bq.yaml
+      target: ../../data/templates/data-ingestion-sql-to-bq.yaml
 
     - type: file
       target: ../../data/templates/onboard-generic-repo.yaml
@@ -159,20 +159,8 @@ qeta:
     region: us-west-2
 
 rds:
-  db:
-    platformdb-prod-b:
-      host: platformdb-prod-b.cmtfynbirqqp.us-west-2.rds.amazonaws.com
-      port: 3306
-      user: ${RDS_MONOLITH_PROD_USER}
-      password: ${RDS_MONOLITH_PROD_PASSWORD}
-    prod-cs-takedown-api-xx:
-      host: prod-cs-takedown-api-02.cmtfynbirqqp.us-west-2.rds.amazonaws.com
-      port: 5432
-      user: ${RDS_CSTAKEDOWNAPI_PROD_USER}
-      password: ${RDS_CSTAKEDOWNAPI_PROD_PASSWORD}
-    prod-cs-ma-api:
-      host: prod-cs-ma-api.cmtfynbirqqp.us-west-2.rds.amazonaws.com
-      port: 5432
-      user: ${RDS_CSTMAAPI_PROD_USER}
-      password: ${RDS_MAAPI_PROD_PASSWORD}
+  catalog:
+    apiBaseUrl: https://data-catalog-server-qa.zerofox.com/api/v1
+    baseUrl: https://data-catalog-server-qa.zerofox.com
+    token: ${DATA_CATALOG_TOKEN}
 

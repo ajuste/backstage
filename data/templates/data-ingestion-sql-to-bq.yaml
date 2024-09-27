@@ -1,49 +1,37 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: data-line-sql-to-bq
+  name: data-ingestion-sql-to-bq
   title: Ingest data from the an RDS instance to BigQuery
   description: |
-    You want to ingest data from the Monolith DB to BigQuery.
-    This golden path will create a DAG in the Airflow SDK repo that will ingest data from the Monolith DB to BigQuery.
+    You want to ingest data from a RDS (Postgres, MySql, etc) instance to BigQuery.
   annotations:
-    backstage.io/time-saved: PT2H
+    backstage.io/time-saved: PT4H
 
 spec:
   owner: user:default/sebasaave
   type: Data Engineering
   parameters:
-    - title: Dataline Details
+    - title: Basic details
       required:
-        - dataLineName
-        - dataLineSchedule
-        - dataLinePillar
-        - sourceRDSTable
+        - name
+        - schedule
+        - pillar
+        - slackAlertChannel
       properties:
-        sourceRDSTable:
-          title: Primary data set
-          description: The primary data set to be ingested, for example entity, enterprise, etc. You will add subtables (i.e. entity_domain) later if needed
-          type: object
-          ui:field: TablePicker
-          ui:options:
-            allowArbitraryValues: false
-            allowedInstances:
-              - resource:default/platformdb-prod-b
-              - resource:default/prod-cs-takedown-api-02
-              - resource:default/prod-cs-ma-api
         
-        dataLineName:
-          title: Dataline Name
+        name:
+          title: Ingestion name
           type: string
-          description: Name of the DAG
+          description: Name your ingestion so it can be easily identified
 
-        dataLineSchedule:
-          title: Dataline Schedule
+        schedule:
+          title: Ingestion schedule
           type: string
           description: CRON expression for the schedule
 
-        dataLineSlackAlertChannel:
-          title: Slack Alert Channel
+        slackAlertChannel:
+          title: Slack channel to notify
           type: string
           description: Slack channel to send alerts to in case of failure
           enum:
@@ -61,7 +49,7 @@ spec:
             - '#t-data-engineering'
             - '#t-data-health-prod'
 
-        dataLinePillar:
+        pillar:
           title: Dataline Pillar
           type: string
           description: Pillar that the dataline belongs to
@@ -72,64 +60,55 @@ spec:
             catalogFilter:
               spec.type: pillar
               kind: Component
-
-    - title: Data Task Details
+    
+    - title: Source details
       required:
-        - dataTaskName
-        - dataTaskDescription
-        - dataTaskSourceSchema
-        - dataTaskSourceTable
-        - dataTaskQuery
-        - dataTaskBqTableDDL
-        - dataTaskBqSchema
-        - dataTaskBqTable
+        - sourceRDSTable
       properties:
-        dataTaskName:
-          title: Data Task Name
-          type: string
-          description: Name of the task (how it will appear in the DAG)
-          ui:widget: text
+        sourceRDSTable:
+          title: Primary table
+          description: The primary table to be ingested, for example entity, enterprise, etc. You will add subtables (i.e. entity_domain) later if needed
+          type: object
+          ui:field: TablePicker
+          ui:options:
+            allowArbitraryValues: false
+            allowedInstances:
+              - resource:default/platformdb-prod-b
+              - resource:default/prod-cs-takedown-api-02
+              - resource:default/prod-cs-ma-api
+              - resource:default/managed-services-qa
 
-        dataTaskDescription:
-          title: Data Task Description
-          type: string
-          description: Description of the task
-          ui:widget: text
+    - title: Extraction and load details
+      required:
+        - query
+        - ddl
+        - bqSchema
+        - bqTable
+        - dataTaskMode
+      properties:
 
-        dataTaskSourceSchema:
-          title: Data Task Source Schema
+        query:
+          title: Extraction query
           type: string
-          description: Schema of the source data
-          ui:widget: text
-
-        dataTaskSourceTable:
-          title: Data Task Source Table
-          type: string
-          description: Table of the source data
-          ui:widget: text
-
-        dataTaskQuery:
-          title: Data Task Query
-          type: string
-          description: Query to be executed in the monolith
+          description: Query used for extracting data from the source RDS table
           ui:widget: textarea
         
-        dataTaskBqTableDDL:
-          title: BigQuery Table DDL
+        ddl:
+          title: Target BigQuery table DDL
           type: string
-          description: BigQuery table DDL to be used
+          description: Provide the DDl for the target BigQuery table
           ui:widget: textarea
         
-        dataTaskBqSchema:
-          title: BigQuery Schema
+        bqSchema:
+          title: Target BigQuery Schema
           type: string
-          description: BigQuery schema to be used (csdataanalysis)
+          description: BigQuery schema where target table will be located (ie. csdataanalysis)
           ui:widget: text
 
-        dataTaskBqTable:
-          title: BigQuery Table
+        bqTable:
+          title: Target BigQuery Table
           type: string
-          description: BigQuery table to be used
+          description: Name of the target BigQuery table where data will be loaded
           ui:widget: text
 
         dataTaskMode:
@@ -147,9 +126,9 @@ spec:
 
     - title: Pull Request Details
       required:
-        - dataTaskJiraTicketUrl
+        - jiraTicket
       properties:
-        dataTaskJiraTicketUrl:
+        jiraTicket:
           title: JIRA Ticket URL
           type: string
           description: Ticket to be used in the PR description
@@ -200,14 +179,14 @@ spec:
 
     - id: create-data-line-directories
       name: Create dataline directories
-      action: zf:createDatalineDirectories:dataLine
+      action: zf:dataLine:createDatalineDirectories
       input:
         basePath: ${{ steps["workspace"].output.path }}/dags/data_lines 
         dataLineName: ${{ steps["format-names"].output.snake_case_data_line_name }}
 
     - id: create-data-line-file
       name: Create dataline file
-      action: zf:createDatalineFile:dataLine
+      action: zf:dataLine:createDatalineFile
       input:
         dataLineDir: ${{ steps["create-data-line-directories"].output.dataLineDir }}  # This should reference the correct base path
         templatePath: ${{ steps["workspace"].output.path }}/dags/data_lines/sql_to_bq/monolith_db/templates/data_line/data_line.py.template
@@ -219,7 +198,7 @@ spec:
 
     - id: create-data-task-factory
       name: Create dataline factory
-      action: zf:createDataTaskFactory:dataLine
+      action: zf:dataLine:createDataTaskFactory
       input:
         ingestionDir: ${{ steps["create-data-line-directories"].output.dataLineDir }}/ingestion  # Reference the ingestion directory
         templatePath: ${{ steps["workspace"].output.path }}/dags/data_lines/sql_to_bq/monolith_db/templates/data_line/data_task_factory.py.template
@@ -228,7 +207,7 @@ spec:
 
     - id: create-sql-files
       name: Create SQL files
-      action: zf:createDataTaskSQLFiles:dataTask
+      action: zf:dataTask:createDataTaskSQLFiles
       input:
         ddlDir: ${{ steps["create-data-line-directories"].output.ddlDir }}
         sqlDir: ${{ steps["create-data-line-directories"].output.sqlDir }}
@@ -243,7 +222,7 @@ spec:
 
     - id: add-data-task
       name: Add dataline task
-      action: zf:addDataTask:dataTask
+      action: zf:dataTask:addDataTask
       input:
         ingestionDir: ${{ steps["create-data-line-directories"].output.ingestionDir }}/data_tasks
         templatePath: ${{ steps["workspace"].output.path }}/dags/data_lines/sql_to_bq/monolith_db/templates/data_task/data_task.py.template
@@ -258,7 +237,7 @@ spec:
     
     - id: generate-pullrequest-texts
       name: Generate pull request texts
-      action: zf:generatePRTexts:dataLine
+      action: zf:dataLine:generatePRTexts
       input:
         githubAuthor: ${{ steps["current-user"].output.githubUser }}
         jiraTicket: ${{ parameters.dataTaskJiraTicketUrl }}

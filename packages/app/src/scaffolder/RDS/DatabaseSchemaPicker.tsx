@@ -1,27 +1,25 @@
 import { useApi } from '@backstage/core-plugin-api';
 import TextField from '@material-ui/core/TextField';
-
-import Link from '@material-ui/core/Link';
 import FormControl from '@material-ui/core/FormControl';
+import Link from '@material-ui/core/Link';
 import Autocomplete, {
   AutocompleteChangeReason,
 } from '@material-ui/lab/Autocomplete';
 import React, { useCallback, useEffect, useState } from 'react';
-import { rdsApiRef, RDSDatabase, RDSInstance } from 'backstage-plugin-zf-tech-insights-common';
-import { DatabaseProps } from './databaseSchema';
-import { InstancePicker, InstanceResult } from './InstancePicker';
+import { rdsApiRef, RDSDatabase, RDSSchema } from 'backstage-plugin-zf-tech-insights-common';
+import { DatabaseSchemaProps } from './databaseSchemaSchema';
+import { DatabasePicker, Result as DatabaseResult } from './DatabasePicker';
 import { ErrorSchema } from '@rjsf/utils';
 
-
-export type Result = RDSDatabase & {}
+export type DatabaseSchemaResult = RDSSchema & {}
 
 /**
  * @public
  */
-export const DatabasePicker = (props: DatabaseProps) => {
+export const DatabaseSchemaPicker = (props: DatabaseSchemaProps) => {
   const {
     onChange,
-    schema: { title = 'Database', description = 'A database from an instance RDS' },
+    schema: { title = 'Schema', description = 'A RDS schema' },
     required,
     uiSchema,
     rawErrors,
@@ -30,45 +28,47 @@ export const DatabasePicker = (props: DatabaseProps) => {
     registry,
   } = props;
 
-  const [instance, setInstance] = useState<RDSInstance | null>();
-  const [database, setDatabase] = useState<Result | null>(formData);
+  const [database, setDatabase] = useState<RDSDatabase | null>();
+  const [schema, setSchema] = useState<DatabaseSchemaResult | null>(formData);
   const [loading, setLoading] = useState<boolean>(false);
-  const [entries, setEntries] = useState<Result[]>([]);
+  const [entries, setEntries] = useState<RDSSchema[]>([]);
   const allowArbitraryValues =
     uiSchema['ui:options']?.allowArbitraryValues ?? true;
+
   const rdsApi = useApi(rdsApiRef);
 
   useEffect((): any => {
-    if (instance) {
+    if (database) {
       setLoading(true);
       rdsApi
-        .getDatabases(instance)
+        .getSchemas(database)
         .then(setEntries)
         .finally(() => setLoading(false));
     } else {
       setEntries([]);
     }
     return () => null
-  }, [instance]);
+  }, [database]);
 
-  const getLabel = (r?: Result) => r?.displayName ?? r?.name ?? '';
+
+  const getLabel = (r?: DatabaseSchemaResult) => r?.displayName ?? r?.name ?? '';
   const getEntryByName = (name: string) => entries?.find(e => e?.name === name) ?? null;
-  const selectedEntry = getEntryByName(database?.name ?? formData?.table?.name)
-  
+  const selectedEntry = getEntryByName(schema?.name ?? formData?.table?.name)
+
   const onSelect = useCallback(
-    (_0: any, entry: Result | string | null, _1: AutocompleteChangeReason) => {
-      setDatabase(typeof entry === 'string' ? getEntryByName(entry) : entry);
+    (_0: any, entry: DatabaseSchemaResult | string | null, _1: AutocompleteChangeReason) => {
+      setSchema(typeof entry === 'string' ? getEntryByName(entry) : entry);
     }, [],
   );
 
-  useEffect(() => { setDatabase(null); }, [instance]);
-  useEffect(() => { onChange(database); }, [database]);
-
+  useEffect(() => { setSchema(null); }, [database]);
+  useEffect(() => { onChange(schema); }, [schema]);
+  
   let catalogLink = null;
   if (selectedEntry?.catalogLink) {
     catalogLink = (
       <div style={{ paddingBottom: '1rem' }}>
-        <Link target='blank' href={selectedEntry?.catalogLink}>Check '{selectedEntry.name}' database details</Link>
+        <Link target='blank' href={selectedEntry?.catalogLink}>Check '{selectedEntry.name}' schema details</Link>
       </div>
     );
   }
@@ -79,12 +79,12 @@ export const DatabasePicker = (props: DatabaseProps) => {
       required={required}
       error={rawErrors?.length > 0 && !formData}
     >
-      <InstancePicker
+      <DatabasePicker
         idSchema={{} as any}
         required={true}
         schema={{
-          title: "Source schema",
-          description: "The schema you are ingesting data from",
+          title: "Source database",
+          description: "The database you are ingesting data from",
         }}
         uiSchema={{
           "ui:options": {
@@ -92,13 +92,13 @@ export const DatabasePicker = (props: DatabaseProps) => {
             allowedInstances: uiSchema['ui:options']?.allowedInstances,
           }
         }}
-        onChange={(instance: InstanceResult | undefined, _1: ErrorSchema<InstanceResult> | undefined, _?: string) => setInstance(instance)}
+        onChange={(database: DatabaseResult | null, _1: ErrorSchema<DatabaseResult> | undefined, _?: string) => setDatabase(database)}
         disabled={false}
         readonly={false}
         name={'rds-source-instance'}
         rawErrors={[]}
         registry={registry as any}
-        formData={instance}
+        formData={database}
         onBlur={(_0: string, _1: any) => void 0}
         onFocus={(_0: string, _1: any) => void 0} />
       <Autocomplete
@@ -110,7 +110,7 @@ export const DatabasePicker = (props: DatabaseProps) => {
         getOptionLabel={(option: any) => getLabel(option)}
         autoSelect
         freeSolo={allowArbitraryValues}
-        renderInput={params => (instance ?
+        renderInput={params => (database ?
           <TextField
             {...params}
             label={title}
