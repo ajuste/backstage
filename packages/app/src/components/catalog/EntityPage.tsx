@@ -264,6 +264,12 @@ const serviceEntityPage = (
         title="Service discoverability"
         description="Items required for service to be discoverable"
       />
+    </EntityLayout.Route><EntityLayout.Route path="/score" title="Service Assessment">
+      <Grid container spacing={3} alignItems="stretch">
+        <Grid item xs={12}>
+          <EntityScoreCardContent />
+        </Grid>
+      </Grid>
     </EntityLayout.Route>
   </EntityLayoutWrapper>
 );
@@ -300,6 +306,14 @@ const websiteEntityPage = (
     <EntityLayout.Route path="/docs" title="Docs">
       {techdocsContent}
     </EntityLayout.Route>
+
+    <EntityLayout.Route path="/score" title="Service Assessment">
+      <Grid container spacing={3} alignItems="stretch">
+        <Grid item xs={12}>
+          <EntityScoreCardContent />
+        </Grid>
+      </Grid>
+    </EntityLayout.Route>
   </EntityLayout>
 );
 
@@ -323,9 +337,17 @@ const defaultEntityPage = (
     <EntityLayout.Route path="/health" title="Health" if={isGrafanaAvailable}>
       <HealthContent />
     </EntityLayout.Route>
-    
+
     <EntityLayout.Route path="/code-coverage" title="Code Coverage">
       <EntityCodeCoverageContent />
+    </EntityLayout.Route>
+
+    <EntityLayout.Route path="/score" title="Service Assessment">
+      <Grid container spacing={3} alignItems="stretch">
+        <Grid item xs={12}>
+          <EntityScoreCardContent />
+        </Grid>
+      </Grid>
     </EntityLayout.Route>
   </EntityLayoutWrapper>
 );
@@ -414,6 +436,14 @@ const apiPage = (
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <EntityApiDefinitionCard />
+        </Grid>
+      </Grid>
+    </EntityLayout.Route>
+
+    <EntityLayout.Route path="/score" title="Service Assessment">
+      <Grid container spacing={3} alignItems="stretch">
+        <Grid item xs={12}>
+          <EntityScoreCardContent />
         </Grid>
       </Grid>
     </EntityLayout.Route>

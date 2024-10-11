@@ -35,7 +35,7 @@ spec:
           title: Subsystem Being Assessed
           description: You will have to submit one assessment for each subsystem that may live on a repo. Try to be as specific as possible.
           type: string
-          default: gp2
+          default: angular
           enum:
             - angular
             - django
@@ -222,8 +222,8 @@ spec:
           enumNames:
             - 'Service downtime is acceptable.'
             - 'Service downtime requires a hotfix deploy within 5 days.'
-            - 'Service downtime requires a hotfix deploy within 1 day.'
             - 'Service is critical and downtime requires a hotfix deploy as soon as possible.'
+            - 'Service downtime requires a hotfix deploy within 1 day.'
     
     - title: Infrastructure
       description: How much does the build system enforce good safety and practices before merging pull requests? How much of the deployment process is automated and reproducible locally?
