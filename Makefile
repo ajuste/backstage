@@ -53,7 +53,7 @@ run-load-credentials:
 	export DATA_CATALOG_SECRET=$$(curl -s --request GET --header "X-Vault-Token: $$(echo $$VAULT_TOKEN)" https://vault-qa.zerofox.com/v1/secret/backstage-local/datacatalog) && \
 	echo "DATA_CATALOG_TOKEN=\"$$(echo $$DATA_CATALOG_SECRET | jq -r '.data.token')\"" >> .env && \
 	echo "$(BLUE)> Get Nomad secrets$(NC)" && \
-	export NOMAD_TOKEN_SECRET=$$(curl -s --request GET --header "X-Vault-Token: $$(echo $$VAULT_TOKEN)" https://vault-qa.zerofox.com/v1/nomad/creds/backstage-local) && \
+	export NOMAD_TOKEN_SECRET=$$(curl -s --request GET --header "X-Vault-Token: $$(echo $$VAULT_TOKEN)" https://vault-qa.zerofox.com/v1/nomad/creds/backstage) && \
 	echo "NOMAD_TOKEN=\"$$(echo $$NOMAD_TOKEN_SECRET | jq -r '.data.secret_id')\"" >> .env && \
 	echo "$(BLUE)> Loading GitHub secrets$(NC)" && \
 	export GITHUB_SECRETS=$$(curl -s --request GET --header "X-Vault-Token: $$(echo $$VAULT_TOKEN)" https://vault-qa.zerofox.com/v1/secret/backstage-local/github) && \
@@ -61,11 +61,11 @@ run-load-credentials:
 	echo "AUTH_GITHUB_CLIENT_ID=\"$$(echo $$GITHUB_SECRETS | jq -r '.data.local_client_id')\"" >> .env && \
 	echo "GITHUB_CLIENT_ID=\"$$(echo $$GITHUB_SECRETS | jq -r '.data.local_client_id')\"" >> .env && \
 	echo "GITHUB_APP_ID=\"$$(echo $$GITHUB_SECRETS | jq -r '.data.local_app_id')\"" >> .env && \
-	echo "GITHUB_APP_PRIVATE_KEY=\"$$(echo $$GITHUB_SECRETS | jq -r '.data.local_private_key' | awk '{printf "%s\\n", $0}' | sed ':a;N;$!ba;s/\n/\\n/g')\"" >> .env && \
+	printf "GITHUB_APP_PRIVATE_KEY=\"$$(echo $$GITHUB_SECRETS | jq -r '.data.local_private_key' | awk '{printf "%s\\\\n", $$0}' | sed ':a;N;$$!ba;s/\n/\\\\n/g')\"\n" >> .env && \
 	echo "GITHUB_APP_SECRET=\"$$(echo $$GITHUB_SECRETS | jq -r '.data.local_client_secret')\"" >> .env
 
 run-local-docker: run-load-credentials
-	docker compose up local
+	@docker compose up local
 
 run-local: run-load-credentials
-	env $(grep -v '^#' .env | xargs) && env && yarn dev
+	@source .env && env && yarn dev

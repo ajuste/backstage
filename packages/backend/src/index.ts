@@ -19,6 +19,7 @@ async function main() {
   // Catalog
   backend.add(import('@backstage/plugin-catalog-backend/alpha'));
   backend.add(import('./modules/githubOrgProviderTransformers'));
+  backend.add(import('@backstage/plugin-catalog-backend-module-github/alpha'));
   backend.add(import('@backstage/plugin-catalog-backend-module-github-org'));
 
   // Search

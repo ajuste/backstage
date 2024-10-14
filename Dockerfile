@@ -107,7 +107,7 @@ RUN yarn link 'plugin-grafana'
 
 RUN export NODE_OPTIONS=--max_old_space_size=16192
 WORKDIR /builder
-RUN yarn install --frozen-lockfile --network-timeout 300000
+RUN yarn install --frozen-lockfile
 RUN yarn tsc
 RUN yarn build:backend
 
@@ -116,10 +116,11 @@ WORKDIR /app
 RUN cp /builder/yarn.lock /builder/package.json /builder/packages/backend/dist/skeleton.tar.gz ./
 RUN tar xzf skeleton.tar.gz && rm skeleton.tar.gz
 
-RUN yarn install --frozen-lockfile --production --network-timeout 300000
+RUN yarn install --frozen-lockfile --production --network-timeout 300000 && rm -rf "$(yarn cache dir)"
 RUN cp /builder/packages/backend/dist/bundle.tar.gz /builder/app-config*.yaml ./
 COPY ./data ./data
 RUN tar xzf bundle.tar.gz && rm bundle.tar.gz
+RUN rm -rf /builder
 
 EXPOSE 7007
 EXPOSE 3000
