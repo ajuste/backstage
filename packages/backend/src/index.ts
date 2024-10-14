@@ -70,12 +70,7 @@ async function main() {
 
   // Nomad
   backend.add(legacyPlugin('nomad', import('./plugins/nomad')));
-
-  // IA - Allow on every env except in local, except local with pg; otherwise
-  // won't be able to crate vector store on mysqlite.
-  if (process.env?.env === 'local') {
-    backend.add(legacyPlugin('rag-ai', import('./plugins/ia')));
-  }
+  backend.add(legacyPlugin('rag-ai', import('./plugins/ia')));
 
   return backend.start();
 }

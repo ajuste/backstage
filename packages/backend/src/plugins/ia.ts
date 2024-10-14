@@ -1,3 +1,4 @@
+import Router from 'express-promise-router';
 import { createApiRoutes as initializeRagAiBackend } from '@roadiehq/rag-ai-backend';
 import { PluginEnvironment } from '../types';
 import { initializeOpenAiEmbeddings } from '@roadiehq/rag-ai-backend-embeddings-openai';
@@ -16,6 +17,10 @@ export default async function createPlugin({
   const catalogApi = new CatalogClient({
     discoveryApi: discovery,
   });
+  const dbClient = config.getOptionalString('backend.database.client');
+  if (dbClient !== 'pg') {
+    return Router()
+  }
 
   const vectorStore = await createRoadiePgVectorStore({ logger, database, config });
   const augmentationIndexer = await initializeOpenAiEmbeddings({
@@ -41,6 +46,5 @@ export default async function createPlugin({
     model,
     config,
   });
-
   return ragAi.router;
 }
