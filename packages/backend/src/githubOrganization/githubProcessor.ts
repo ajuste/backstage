@@ -572,7 +572,7 @@ export class GithubProcessor implements CatalogProcessor {
 
         // The pillar team owns the repo, so we can override the pillar
         if (ownedReposByPillar.map(repo => repo.repo).includes(entityRepo)) {
-          pillarToOverride = catalogFilePillar
+          pillarToOverride = catalogFilePillar.toLowerCase()
           this.logger.info(`Overriding catalog pillar from file for entity ${namespace}/${entity.kind}/${entity.metadata.name} with ${catalogFilePillar} pillar that is set by the catalog file ${catalogFilePillar}`)
         }
       } else {
