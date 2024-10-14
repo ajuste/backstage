@@ -137,13 +137,15 @@ export const isPillarTeam = (entity: Entity): boolean => {
     return entity.metadata?.name?.endsWith('-pillar')
 }
 
+/**
+ * 
+ */
 export const transformTream = async (team: GithubTeam, ctx: TransformerContext, logger: Logger, discovery: DiscoveryService): Promise<Entity | undefined> => {
     logger.info(`Transforming team ${team.slug}`)
     const entity = await defaultOrganizationTeamTransformer(team, ctx);
     if (!entity) {
         return
     }
-
 
     const catalogClient = new CatalogClient({
         discoveryApi: discovery,

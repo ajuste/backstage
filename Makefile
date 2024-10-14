@@ -41,6 +41,7 @@ run-load-credentials:
 	echo "BACKEND_BUCKET=\"qa-backstage\"" >> .env && \
 	echo "NOMAD_ALLOC_INDEX=0" >>.env && \
 	echo "BADGES_BUCKET=\"zf-dashboard-media-qa\"" >>.env && \
+	echo "BADGES_BUCKET_REGION=\"us-west-2\"" >>.env && \
 	echo "AWS_REGION=\"us-west-2\"" >>.env && \
 	echo "$(BLUE)> Log into aws$(NC)" && \
 	vt aws login --aws-role aws-s3-developer && \
@@ -61,11 +62,19 @@ run-load-credentials:
 	echo "AUTH_GITHUB_CLIENT_ID=\"$$(echo $$GITHUB_SECRETS | jq -r '.data.local_client_id')\"" >> .env && \
 	echo "GITHUB_CLIENT_ID=\"$$(echo $$GITHUB_SECRETS | jq -r '.data.local_client_id')\"" >> .env && \
 	echo "GITHUB_APP_ID=\"$$(echo $$GITHUB_SECRETS | jq -r '.data.local_app_id')\"" >> .env && \
+<<<<<<< HEAD
 	printf "GITHUB_APP_PRIVATE_KEY=\"$$(echo $$GITHUB_SECRETS | jq -r '.data.local_private_key' | awk '{printf "%s\\\\n", $$0}' | sed ':a;N;$$!ba;s/\n/\\\\n/g')\"\n" >> .env && \
+=======
+	echo "GITHUB_APP_PRIVATE_KEY=\"$$(echo $$GITHUB_SECRETS | jq -r '.data.local_private_key' | sed -e ':a' -e 'N' -e '$$!ba' -e 's/\n/\\\\n/g' | tr -d '\n')\"" >> .env && \
+>>>>>>> 1705b8fcd6 (Fix Pillar not found on github entity)
 	echo "GITHUB_APP_SECRET=\"$$(echo $$GITHUB_SECRETS | jq -r '.data.local_client_secret')\"" >> .env
 
 run-local-docker: run-load-credentials
 	@docker compose up local
 
 run-local: run-load-credentials
+<<<<<<< HEAD
 	@source .env && env && yarn dev
+=======
+	@export $(shell cat .env) && yarn dev
+>>>>>>> 1705b8fcd6 (Fix Pillar not found on github entity)
