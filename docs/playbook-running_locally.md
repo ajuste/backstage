@@ -34,7 +34,7 @@
 This suits most of the use-cases when developing, its pretty straightforward and fast. If your change requires database alterations you can perform a final verification using docker-compose (explained below).
 
   * A memory DB is used.
-  * In this case its suggested to run `yarn dev` directly on the root of the repo.
+  * In this case its suggested to run `make run-local` directly on the root of the repo.
     This way you get hot reloads for changes on the react application.
 
 ### 🐘 Postgres database
@@ -43,19 +43,11 @@ Backstage runs in non local environment using pgsql database.
 In case you need to test with a real instance you can follow these steps:
 
 #### 🚢 docker-compose
-
-1. If you are running on ARM architecture then run:
-
-    `> brew install FiloSottile/musl-cross/musl-cross`
-
-1. Login into ECR after installing [vt](https://github.com/riskive/vt):
-
-    `vt aws ecr-login`
-
+1. Run `make tools build`
+  This will take 10 minutes approximaltely and is needed only once or
+  when installing new dependencies into backstage.
 1. Finally we can run docker-compose (make sure to use the right ssh key)
-
-    `> SSH_PRIVATE_KEY="$(< ~/.ssh/id_ed25519)" docker-compose up local`
-
+  `make run-local-docker`
 
 #### Run trusted mode (Backstage's db user has access to everything)
 * Run docker compose following instructions from docker-compose section.

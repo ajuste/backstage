@@ -2,8 +2,6 @@ FROM node:18-bullseye-slim
 
 ARG SSH_PRIVATE_KEY
 
-# RUN dpkg --add-architecture amd64 
-
 # (libsqlite3-dev, curl, ca-certificates, gnupg, lsb-release, update && apt-get install -y python3 python3-pip) can be removed when dropping docker (used for POC only)
 RUN apt-get update && \
     apt-get install -y --no-install-recommends libsqlite3-dev python3 build-essential procps make python3-pip git curl && \
@@ -22,7 +20,7 @@ RUN apt-get update && \
 # for arm64 we need to install some additional packages, otherwise we get errors when building the image on yarn install
 RUN set -eux; \
     ARCH="$(dpkg --print-architecture)"; \
-    if [ "$ARCH" = "arm64" ]; then \
+    if [ "$ARCH" = "arm64" ] || [ "$ARCH" = "darwin-arm64" ]; then \
         apt-get update && apt-get install -y \
         build-essential \
         libcairo2-dev \
@@ -42,7 +40,7 @@ RUN curl -o go.tar.gz https://dl.google.com/go/go1.22.2.linux-amd64.tar.gz && \
 # install backstage-zf-cli
 RUN set -eux; \
     ARCH="$(dpkg --print-architecture)"; \
-    if [ "$ARCH" = "arm64" ]; then \
+    if [ "$ARCH" = "arm64" ] || [ "$ARCH" = "darwin-arm64" ]; then \
         CC=x86_64-linux-gnu-gcc CGO_ENABLED=0 GOPRIVATE=github.com/riskive /usr/local/go/bin/go install github.com/riskive/backstage-zf-cli@latest; \
     else \
         GOPRIVATE=github.com/riskive /usr/local/go/bin/go install github.com/riskive/backstage-zf-cli@latest; \
@@ -109,19 +107,19 @@ RUN yarn link 'plugin-grafana'
 
 RUN export NODE_OPTIONS=--max_old_space_size=16192
 WORKDIR /builder
-RUN yarn install
+RUN yarn install --frozen-lockfile --network-timeout 300000
 RUN yarn tsc
 RUN yarn build:backend
 
 WORKDIR /app
+#RUN yarn install --frozen-lockfile --production --network-timeout 300000
 RUN cp /builder/yarn.lock /builder/package.json /builder/packages/backend/dist/skeleton.tar.gz ./
 RUN tar xzf skeleton.tar.gz && rm skeleton.tar.gz
 
-RUN yarn install --frozen-lockfile --production --network-timeout 300000 --network-concurrency 5 && rm -rf "$(yarn cache dir)"
+RUN yarn install --frozen-lockfile --production --network-timeout 300000
 RUN cp /builder/packages/backend/dist/bundle.tar.gz /builder/app-config*.yaml ./
 COPY ./data ./data
 RUN tar xzf bundle.tar.gz && rm bundle.tar.gz
-RUN rm -rf /builder
 
 EXPOSE 7007
 EXPOSE 3000

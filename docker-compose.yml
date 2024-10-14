@@ -1,14 +1,6 @@
 version: '3.8'
 
 services:
-  base:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        LOCAL_DEV: 'true'
-        SSH_PRIVATE_KEY: ${SSH_PRIVATE_KEY}
-    image: backstage:latest
 
   db:
     environment:
@@ -25,11 +17,15 @@ services:
       - 5432:5432
 
   local:
-    image: backstage:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        LOCAL_DEV: 'true'
+        SSH_PRIVATE_KEY: ${SSH_PRIVATE_KEY}
     command: yarn dev
     depends_on:
       - db
-      - base
     ports:
       - '7007:7007'
       - '3003:3003'
