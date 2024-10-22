@@ -23,54 +23,46 @@ import { Octokit } from "octokit";
 import { Logger } from 'winston';
 import { getPillarForEntity, isFeatureTeam } from './githubEntityProvider'
 
-const Pillars: Record<string, { value: string, grafana: string, githubName: string, collaborators: Collaborator[] }> = {
+const Pillars: Record<string, { value: string, grafana: string, githubName: string }> = {
   'attacksurface': {
     value: 'Attack Surface',
     grafana: 'attack surface',
     githubName: 'attacksurface-pillar',
-    collaborators: [],
   },
   'disruption': {
     value: 'Disruption',
     grafana: 'disruption',
     githubName: 'disruption-pillar',
-    collaborators: [],
   },
   'intelligence': {
     value: 'Intelligence',
     grafana: 'intelligence',
     githubName: 'intelligence-pillar',
-    collaborators: [],
   },
   'protection': {
     value: 'Protection',
     grafana: 'protection',
     githubName: 'protection-pillar',
-    collaborators: [],
   },
   'response': {
     value: 'Response',
     grafana: 'response',
     githubName: 'response-pillar',
-    collaborators: [],
   },
   'sustaining': {
     value: 'Sustaining',
     grafana: 'sustaining',
     githubName: 'sustaining-pillar',
-    collaborators: [],
   },
   'datascience': {
     value: 'Data Science',
     grafana: 'data-science',
     githubName: 'datascience-pillar',
-    collaborators: [],
   },
   'foxteam': {
     value: 'FoxTeam',
     grafana: 'fox-team',
     githubName: 'foxteam-pillar',
-    collaborators: [],
   },
 };
 
@@ -84,6 +76,8 @@ type Collaborator = {
 type GithubRepo = {
   owner: string;
   repo: string;
+  id?: number;
+  slug?: string;
 }
 
 type GetGithubRepoResponse = {
@@ -110,7 +104,7 @@ export class GithubProcessor implements CatalogProcessor {
   protected getCollaboratorsCount: Map<string, number> = new Map();
   protected getCollaboratorsResponse = new Map<string, Promise<any>>();
 
-  protected getTeamCollaboratorCount: Map<string, number> = new Map();
+  protected getTeamCollaboratorLastFetch: Map<string, Date> = new Map();
   protected getTeamCollaboratorResponse = new Map<string, Promise<any>>();
 
   getProcessorName(): string {
@@ -160,7 +154,9 @@ export class GithubProcessor implements CatalogProcessor {
    * Returns a list of collaborators for a given repo.
    * 
    * It will cache the collaborators for a given repo and return the cached
-   * if they are a pillar under Pillar
+   * if they are a pillar under Pillar.
+   * 
+   * It will also exclude team leads.
    * 
    * @param repository The repo
    * @returns A list of collaborators for a given repo
@@ -216,24 +212,80 @@ export class GithubProcessor implements CatalogProcessor {
     return data
   }
 
+  async getTeamByName(owner: string, team: string): Promise<GithubRepo> {
+    const { token } = await this.getCredentials();
+    const octokit = new Octokit({
+      auth: token,
+    })
+    const url = `GET /orgs/${owner}/teams/${team}`
+    this.logger.info(`Fetching team ${owner}/${team} with url ${url}`)
+    const result = await octokit.request(url, {
+      headers: {
+        'X-GitHub-Api-Version': '2022-11-28'
+      }
+    })
+    return result.data
+  }
+
+  async getChildrenTeams(owner: string, team: string): Promise<GithubRepo[]> {
+    const { token } = await this.getCredentials();
+    const octokit = new Octokit({
+      auth: token,
+    })
+    const teamDetails = await this.getTeamByName(owner, team)
+    const url = `GET /orgs/${owner}/team/${teamDetails.id}/teams`
+    this.logger.info(`Fetching child teams for ${owner}/${team} with url ${url}`)
+    const result = await octokit.request(url, {
+      headers: {
+        'X-GitHub-Api-Version': '2022-11-28'
+      }
+    })
+    return result.data
+  }
+
+  /**
+   * Get team members excluding children members that are not maintainer.
+   * 
+   * Github API does not provide a way to get members that are maintainer
+   * only for a team (it does include members from children teams). This
+   * method will get all members for children team and then exclude members that
+   * are not maintainers of the team.
+   * 
+   * @param owner 
+   * @param team 
+   * @returns 
+   */
+  async getTeamMembersExcludeNotMaintainerChildren(owner: string, team: string): Promise<Collaborator[]> {
+    const children = await this.getChildrenTeams(owner, team);
+    debugger
+    // Get all children members that have role "member". This will NOT include maintainers
+    // from parent teams, which are the leads of the pillar.
+    const childrenMembers = (await Promise.all(children.map(async (child: GithubRepo) => this.getTeamMembers(owner, child.slug ?? '', "member")))).reduce((acc, val) => acc.concat(val), [])
+    const pillarMembers = await this.getTeamMembers(owner, team)
+    debugger
+    return pillarMembers.filter((pillarMember) => {
+      return !childrenMembers.find((childMember) => childMember.login === pillarMember.login)
+    });
+  }
+
   /**
    * Returns a list of team members for a given team.
    * @param owner The owner
    * @param team The team
    * @returns A list of team members for a given team
    */
-  async getTeamMembers(owner: string, team: string): Promise<Collaborator[]> {
+  async getTeamMembers(owner: string, team: string, role: string = "all"): Promise<Collaborator[]> {
 
-    const pillar = Object.keys(Pillars).find(pillar => Pillars[pillar].githubName === team)
-    const pillarDetails = Pillars[pillar ?? '']
-    const fetchCount = this.getCollaboratorsCount.get(team) ?? 0;
-    const pullFromCache = fetchCount % 50 !== 0 && pillarDetails
+    const cacheKey = `${owner}/${team}/${role}`
+    const TeamMembersCacheDuration = 1000 * 60 * 10; // 10 minutes
+    const lastFetch = this.getTeamCollaboratorLastFetch.get(cacheKey) ?? Date.now() - TeamMembersCacheDuration - 1
+    const pullFromCache = lastFetch.valueOf() > (Date.now() - TeamMembersCacheDuration)
     let promise: Promise<any>;
 
     this.logger.info(`Fetching team memebers for ${owner}/${team}`)
 
     if (pullFromCache) {
-      promise = this.getTeamCollaboratorResponse.get(team) ?? Promise.resolve([])
+      promise = this.getTeamCollaboratorResponse.get(cacheKey) ?? Promise.resolve([])
     } else {
       promise = new Promise(async (resolve, reject) => {
         try {
@@ -241,33 +293,26 @@ export class GithubProcessor implements CatalogProcessor {
           const octokit = new Octokit({
             auth: token,
           })
-          const url = `GET /orgs/${owner}/teams/${team}/members`
+          const url = `GET /orgs/${owner}/teams/${team}/members?role=${role}`
           this.logger.info(`Fetching team members for ${owner}/${team} with url ${url}`)
           const result = await octokit.request(url, {
             headers: {
               'X-GitHub-Api-Version': '2022-11-28'
             }
           })
-          const { data } = result;
-          if (pillar) {
-            this.logger.info(`Setting team members cache for pillar ${pillar} to ${data?.map((c: Collaborator) => c.login).join(", ")}`)
-          } else {
-            this.logger.info(`Not setting team members cache for ${owner}/${team} as it is not a pillar`)
-          }
-          resolve(data)
+          this.logger.info(`Got team members for ${owner}/${team} and role ${role} as follows: ${result.data?.map((c: Collaborator) => c.login).join(", ")} and status `)
+          resolve(result.data)
         } catch (error) {
           this.logger.error(`Error fetching team members for ${owner}/${team}: ${(error as any).message}`)
           reject(error)
         }
       })
-      if (pillar) {
-        this.getCollaboratorsCount.set(team, fetchCount + 1)
-        this.getTeamCollaboratorResponse.set(team, promise)
-      }
+      this.getTeamCollaboratorLastFetch.set(cacheKey, new Date())
+      this.getTeamCollaboratorResponse.set(cacheKey, promise)
     }
     const data = await promise
     if (pullFromCache) {
-      this.logger.info(`Returning cached team members for ${owner}/${team} ${data?.map((c: Collaborator) => c.login).join(", ")}`)
+      this.logger.info(`Returning cached team members for ${owner}/${team} - ${data?.map((c: Collaborator) => c.login).join(", ")} and role ${role}`)
     }
     return data
   }
@@ -323,7 +368,7 @@ export class GithubProcessor implements CatalogProcessor {
 
     const res = filteredRepos
       .map(({ name }) => {
-        return { owner: 'riskive', repo: name }
+        return { owner: 'riskive', repo: name, id: 0, slug: team }
       })
     return res
   }
@@ -388,8 +433,7 @@ export class GithubProcessor implements CatalogProcessor {
     if (!pillarDetails) {
       return []
     }
-    let { collaborators } = pillarDetails
-    return collaborators?.length ? collaborators : await this.getTeamMembers('riskive', pillarDetails.githubName)
+    return this.getTeamMembersExcludeNotMaintainerChildren("riskive", pillarDetails.githubName)
   }
 
   /**
@@ -570,7 +614,6 @@ export class GithubProcessor implements CatalogProcessor {
         value: entity.metadata.name.replaceAll('-pillar', ''),
         grafana: entity.metadata.name.replaceAll('-pillar', ''),
         githubName: entity.metadata.name,
-        collaborators: [],
       };
     }
 
@@ -649,7 +692,7 @@ export class GithubProcessor implements CatalogProcessor {
     // the owners are coming from somwhere else (ie github).
     // In that case, we want to override owner with the first
     // owner coming from outside.
-    this.logger.info(`Got catalogOwner: ${catalogOwner} ${this.getFullReference(entity)} ${entity.spec?.owner} ${catalogEntity?.relations?.map(r => r.targetRef + " " + r.type).join(", ")}`) // eslint-disable-line no-console
+    this.logger.info(`Got owner from catalog: ${catalogOwner} for '${this.getFullReference(entity)}' with other from file '${entity.spec?.owner}' and the relations [${catalogEntity?.relations?.map(r => `(${r.targetRef}, ${r.type}`).join(", ")}]`) // eslint-disable-line no-console
     const pillar = await this.getPillarForEntity(entity) ?? '';
     const pillarLeaders = (await this.getPillarLeads(pillar)).map((collaborator) => collaborator.login)
     const ownersFromOutsideCatalog = catalogEntity?.relations?.filter(
@@ -775,6 +818,11 @@ export class GithubProcessor implements CatalogProcessor {
       this.logger.error(`Error processing entity ${this.getFullReference(entity)}: ${(err as any).message}`)
       throw err
     }
+
+    if (!entity.spec) {
+      entity.spec = {};
+    }
+    delete entity.spec.domain;
     return entity
   }
 

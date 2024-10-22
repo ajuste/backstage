@@ -98,12 +98,14 @@ export class RDSService implements RDSAPI {
     const [catalogToken, catalogBaseURL, catalogAPIBaseURL] = await this.getCatalogConfig();
 
     // Make the HTTP request to the catalog
-    const {data} = (await axios.get(`${catalogAPIBaseURL}/services/databaseServices?limit=1000000`, {
+    const { data } = (await axios.get(`${catalogAPIBaseURL}/services/databaseServices?limit=1000000`, {
       headers: {
         'Authorization': `Bearer ${catalogToken}`,
         'Content-Type': 'application/json'
       }
     })).data as ListInstancesResponse;
+
+    debugger
 
     return data.filter(s => ["postgres", "mysql"].indexOf(s.serviceType.toLowerCase()) >= 0).map((service) => {
       return {
@@ -118,6 +120,7 @@ export class RDSService implements RDSAPI {
     const [catalogToken, catalogBaseURL, catalogAPIBaseURL] = await this.getCatalogConfig();
     const fullyQualifiedName = `${encodeURIComponent(instance.name)}`;
 
+
     // Make the HTTP request to the catalog
     const { data } = (await axios.get(`${catalogAPIBaseURL}/databases?limit=1000000&service=${fullyQualifiedName}`, {
       headers: {
@@ -125,6 +128,8 @@ export class RDSService implements RDSAPI {
         'Content-Type': 'application/json'
       }
     })).data as ListDatabaseResponse;
+
+    debugger
 
     return data.map((database) => {
       return {
