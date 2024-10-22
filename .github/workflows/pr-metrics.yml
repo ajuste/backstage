@@ -1,4 +1,4 @@
-name: Monthly PR metrics
+name: Fortnightly PR metrics
 on:
   workflow_dispatch:
   schedule:
@@ -82,3 +82,5 @@ jobs:
         token: ${{ secrets.ACCESS_TOKEN }}
         title: "[${{ matrix.repo }}] Fortnightly PR metrics report: ${{ env.date_range }}"
         content-filepath: ./issue_metrics.md
+        labels: metrics
+        assignees: javierhuertay, sebmaldo, MatiaVasquezOrrego
