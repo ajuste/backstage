@@ -83,4 +83,4 @@ jobs:
         title: "[${{ matrix.repo }}] Fortnightly PR metrics report: ${{ env.date_range }}"
         content-filepath: ./issue_metrics.md
         labels: metrics
-        assignees: javierhuertay, sebmaldo, MatiaVasquezOrrego
+        assignees: javierhuertay, sebmaldo, MatiasVasquezOrrego
