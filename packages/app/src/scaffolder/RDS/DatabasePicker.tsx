@@ -83,8 +83,8 @@ export const DatabasePicker = (props: DatabaseProps) => {
         idSchema={{} as any}
         required={true}
         schema={{
-          title: "Source schema",
-          description: "The schema you are ingesting data from",
+          title: "Source database instance",
+          description: "The database instance you are ingesting data from",
         }}
         uiSchema={{
           "ui:options": {

@@ -1,3 +1,7 @@
+import {
+    GithubCredentials,
+  } from '@backstage/integration';
+
 import { CatalogApi } from '@backstage/catalog-client';
 import { Config } from '@backstage/config';
 
@@ -21,6 +25,7 @@ export type ScaffolderActionFactoryOptions = {
     catalogApi: CatalogApi;
     config: Config;
     getS3Client: S3ClientGetter;
+    getGithubCredentials: () => Promise<GithubCredentials>;
 }
 
 /**

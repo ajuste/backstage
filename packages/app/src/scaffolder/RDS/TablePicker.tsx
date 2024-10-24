@@ -83,7 +83,7 @@ export const TablePicker = (props: TableProps) => {
         idSchema={{} as any}
         required={true}
         schema={{
-          title: "Source shema",
+          title: "Source schema",
           description: "The schema you are ingesting data from",
         }}
         uiSchema={{

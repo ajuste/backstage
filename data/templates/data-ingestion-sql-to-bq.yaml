@@ -50,9 +50,9 @@ spec:
             - '#t-data-health-prod'
 
         pillar:
-          title: Dataline Pillar
+          title: Pillar
           type: string
-          description: Pillar that the dataline belongs to
+          description: Pillar that the ingestion belongs to
           ui:field: ExtendedEntityPicker
           ui:options:
             showPillarOnly: true
@@ -84,7 +84,7 @@ spec:
         - ddl
         - bqSchema
         - bqTable
-        - dataTaskMode
+        - mode
       properties:
 
         query:
@@ -96,7 +96,7 @@ spec:
         ddl:
           title: Target BigQuery table DDL
           type: string
-          description: Provide the DDl for the target BigQuery table
+          description: Provide the DDL for the target BigQuery table
           ui:widget: textarea
         
         bqSchema:
@@ -111,7 +111,7 @@ spec:
           description: Name of the target BigQuery table where data will be loaded
           ui:widget: text
 
-        dataTaskMode:
+        mode:
           title: Mode
           type: string
           description: Mode to add to BQ
@@ -153,23 +153,23 @@ spec:
       name: Get pillar
       action: zf:entity:get
       input:
-        entityRef: ${{ parameters.dataLinePillar }}
+        entityRef: ${{ parameters.pillar }}
 
     - id: format-names
-      name: Format dataline and datatask names
-      action: zf:formatDataLineNames:dataLine
+      name: Format ingestion names
+      action: zf:dataIngest:formatIngestName
       input:
-        dataLineName: ${{ parameters.dataLineName }}
-        dataTaskName: ${{ parameters.dataTaskName }}
+        ingestionName: ${{ parameters.name }}
+        sourceTable: ${{ parameters.sourceRDSTable }}
 
     - id: clone-repo
       name: Clone target repository
       action: zf:execute
       input:
         command: git 
-        args: clone git@github.com:riskive/airflow-sdk.git ${{ steps["workspace"].output.path }}
+        args: clone git@github.com:riskive/airflow.git ${{ steps["workspace"].output.path }}
 
-    # note, this won't be needed when the airflow-sdk PR is merged (we will have the template at master)
+    # note, this won't be needed when the airflow PR is merged (we will have the template at master)
     - id: checkout-branch
       name: Checkout specific branch
       action: zf:execute
@@ -177,81 +177,47 @@ spec:
         command: git 
         args: -C ${{ steps["workspace"].output.path }} checkout feat/monolith-ingestion-dag-template
 
-    - id: create-data-line-directories
-      name: Create dataline directories
-      action: zf:dataLine:createDatalineDirectories
+    - id: write-code
+      name: Generate code for ingestion
+      action: zf:dataIngest:createDagFolderFromTemplate
       input:
-        basePath: ${{ steps["workspace"].output.path }}/dags/data_lines 
-        dataLineName: ${{ steps["format-names"].output.snake_case_data_line_name }}
-
-    - id: create-data-line-file
-      name: Create dataline file
-      action: zf:dataLine:createDatalineFile
-      input:
-        dataLineDir: ${{ steps["create-data-line-directories"].output.dataLineDir }}  # This should reference the correct base path
-        templatePath: ${{ steps["workspace"].output.path }}/dags/data_lines/sql_to_bq/monolith_db/templates/data_line/data_line.py.template
-        dataLineName: ${{ steps["format-names"].output.snake_case_data_line_name }}
-        dataTaskName: ${{ steps["format-names"].output.snake_case_data_task_name }}
+        basePath: ${{ steps["workspace"].output.path }}/dags/pipelines 
+        ingestionName: ${{ parameters.name }}
+        snakeCaseInstanceName: ${{ steps["format-names"].output.snakeCaseInstanceName }}
+        snakeCaseIngestionName: ${{ steps["format-names"].output.snakeCaseIngestionName }}
+        snakeCaseTaskName: ${{ steps["format-names"].output.snakeCaseTaskName }}
+        camelCaseTaskName: ${{ steps["format-names"].output.camelCaseTaskName }}
         owner: ${{ steps["fetch-pillar"].output.entity.metadata.annotations["zerofox.com/pillar"] }}
-        scheduleInterval: ${{ parameters.dataLineSchedule }}
-        slackAlertChannel: ${{ parameters.dataLineSlackAlertChannel }}
-
-    - id: create-data-task-factory
-      name: Create dataline factory
-      action: zf:dataLine:createDataTaskFactory
-      input:
-        ingestionDir: ${{ steps["create-data-line-directories"].output.dataLineDir }}/ingestion  # Reference the ingestion directory
-        templatePath: ${{ steps["workspace"].output.path }}/dags/data_lines/sql_to_bq/monolith_db/templates/data_line/data_task_factory.py.template
-        dataLineName: ${{ steps["format-names"].output.snake_case_data_line_name }}
-        dataTaskName: ${{ steps["format-names"].output.snake_case_data_task_name }}
-
-    - id: create-sql-files
-      name: Create SQL files
-      action: zf:dataTask:createDataTaskSQLFiles
-      input:
-        ddlDir: ${{ steps["create-data-line-directories"].output.ddlDir }}
-        sqlDir: ${{ steps["create-data-line-directories"].output.sqlDir }}
-        dataTaskName: ${{ steps["format-names"].output.snake_case_data_task_name }}
-        dataTaskDescription: ${{ parameters.dataTaskDescription }}
-        dataTaskSourceSchema: ${{ parameters.dataTaskSourceSchema }}
-        dataTaskSourceTable: ${{ parameters.dataTaskSourceTable }}
-        dataTaskQuery: ${{ parameters.dataTaskQuery }}
-        dataTaskBqTableDDL: ${{ parameters.dataTaskBqTableDDL }}
-        dataTaskBqSchema: ${{ parameters.dataTaskBqSchema }}
-        dataTaskBqTable: ${{ parameters.dataTaskBqTable }}
-
-    - id: add-data-task
-      name: Add dataline task
-      action: zf:dataTask:addDataTask
-      input:
-        ingestionDir: ${{ steps["create-data-line-directories"].output.ingestionDir }}/data_tasks
-        templatePath: ${{ steps["workspace"].output.path }}/dags/data_lines/sql_to_bq/monolith_db/templates/data_task/data_task.py.template
-        dataTaskName: ${{ steps["format-names"].output.snake_case_data_task_name }}
-        srcDatabase: ${{ parameters.dataTaskSourceSchema }}
-        srcTable: ${{ parameters.dataTaskSourceTable }}
-        tgtSchema: ${{ parameters.dataTaskBqSchema }}
-        tgtTable: ${{ parameters.dataTaskBqTable }}
-        mode: ${{ parameters.dataTaskMode }}
-
-
+        scheduleInterval: ${{ parameters.schedule }}
+        slackAlertChannel: ${{ parameters.slackAlertChannel }}
+        bqTable: ${{ parameters.bqTable }}
+        bqSchema: ${{ parameters.bqSchema }}
+        ddl: ${{ parameters.ddl }}
+        sql: ${{ parameters.query }}
+        mode: ${{ parameters.mode }}
+        sourceTable: ${{ parameters.sourceRDSTable }}
     
     - id: generate-pullrequest-texts
       name: Generate pull request texts
-      action: zf:dataLine:generatePRTexts
+      action: zf:generatePRTexts:newIngestion
       input:
         githubAuthor: ${{ steps["current-user"].output.githubUser }}
-        jiraTicket: ${{ parameters.dataTaskJiraTicketUrl }}
-        dataLineName: ${{ steps["format-names"].output.snake_case_data_line_name }}
+        jiraTicket: ${{ parameters.jiraTicket }}
+        ingestionName: ${{ steps["format-names"].output.snakeCaseIngestionName }}
         additionalNotes: ${{ parameters.additionalNotes }}
+
+    - id: generate-branch-name
+      name: Generate branch name
+      action: zf:util:randomBranchName
     
     - id: submit-pr
       name: Submit pull request
-      action: publish:github:pull-request
+      action: zf:github:pull-request
       input:
-        repoUrl: github.com?repo=airflow-sdk&owner=riskive
-        title: Data Line - SQL to BQ - monolith_db - ${{ parameters.dataLineName }}
+        repoUrl: github.com?repo=airflow&owner=riskive
+        title: Create sql to bq ingestion ${{ steps["format-names"].output.snakeCaseInstanceName }}.${{ steps["format-names"].output.snakeCaseDatabaseName }}.${{ steps["format-names"].output.snakeCaseSchemaName }}.${{ steps["format-names"].output.snakeCaseIngestionName }}
         description: ${{ steps["generate-pullrequest-texts"].output.description }}
-        branchName: feat/data-line-sql-to-bq-${{ steps["format-names"].output.kebab_case_data_line_name }}
+        branchName: ${{ steps["generate-branch-name"].output.branchName }}
         commitMessage: ${{ steps["generate-pullrequest-texts"].output.commitMessage }}
 
   output:

@@ -19,7 +19,7 @@ import {
   TokenManager,
 } from '@backstage/backend-common';
 import { CatalogClient } from '@backstage/catalog-client';
-import { Octokit } from "octokit";
+import { Octokit } from "@octokit/core";
 import { Logger } from 'winston';
 import { getPillarForEntity, isFeatureTeam } from './githubEntityProvider'
 
@@ -257,12 +257,10 @@ export class GithubProcessor implements CatalogProcessor {
    */
   async getTeamMembersExcludeNotMaintainerChildren(owner: string, team: string): Promise<Collaborator[]> {
     const children = await this.getChildrenTeams(owner, team);
-    debugger
     // Get all children members that have role "member". This will NOT include maintainers
     // from parent teams, which are the leads of the pillar.
     const childrenMembers = (await Promise.all(children.map(async (child: GithubRepo) => this.getTeamMembers(owner, child.slug ?? '', "member")))).reduce((acc, val) => acc.concat(val), [])
     const pillarMembers = await this.getTeamMembers(owner, team)
-    debugger
     return pillarMembers.filter((pillarMember) => {
       return !childrenMembers.find((childMember) => childMember.login === pillarMember.login)
     });

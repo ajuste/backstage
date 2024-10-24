@@ -18,7 +18,7 @@ ecr-login:
 	aws ecr get-login-password --region us-west-2
 
 reinstall-all-deps:
-	find . -name 'node_modules' -type d && yarn install
+	find . -name 'node_modules' -type d | xargs rm -rf && yarn install
 
 tools:
 	GOPRIVATE=github.com/riskive go install github.com/riskive/vt@latest && \

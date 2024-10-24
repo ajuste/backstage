@@ -261,7 +261,6 @@ export async function createRouter(
     .get(
       '/rds/',
       async (_, res) => {
-        debugger
         const service = new RDSService(options.config, options.catalogServiceClient);
         logger.info(`Fetching instances`);
         const instances = await service.getInstances();

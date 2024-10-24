@@ -105,8 +105,6 @@ export class RDSService implements RDSAPI {
       }
     })).data as ListInstancesResponse;
 
-    debugger
-
     return data.filter(s => ["postgres", "mysql"].indexOf(s.serviceType.toLowerCase()) >= 0).map((service) => {
       return {
         name: service.name,
@@ -128,8 +126,6 @@ export class RDSService implements RDSAPI {
         'Content-Type': 'application/json'
       }
     })).data as ListDatabaseResponse;
-
-    debugger
 
     return data.map((database) => {
       return {

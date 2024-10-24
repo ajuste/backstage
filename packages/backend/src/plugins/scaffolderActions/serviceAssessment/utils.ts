@@ -83,7 +83,6 @@ export const getEntries = async (getS3Client: S3ClientGetter, config: Config, ke
     for (let i = 0; i < keys.length; i += 30) {
         const batch = keys.slice(i, i + 30);
         const batchResults = await Promise.all(batch.map(key => getEntry(getS3Client, config, key)));
-        debugger
         results.push(...batchResults
             .map(result => JSON.parse(result ?? "{}")));
     }
