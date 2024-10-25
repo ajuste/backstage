@@ -28,7 +28,8 @@ spec:
         schedule:
           title: Ingestion schedule
           type: string
-          description: CRON expression for the schedule
+          description: |
+            CRON expression for the schedule. You can use `https://crontab.guru/` to aid you.
 
         slackAlertChannel:
           title: Slack channel to notify
@@ -90,26 +91,41 @@ spec:
         query:
           title: Extraction query
           type: string
-          description: Query used for extracting data from the source RDS table
           ui:widget: textarea
-        
+          description: |
+            Query used for extracting data from the source RDS table.
+            #### Keep in mind your query will be called for a specific time range, there it has to contain {start_date} and {end_date} place holders, for example:
+            ```sql
+            select id, name, create_at
+            from database_name.table
+            where created_at >= '{start_date}' and created_at <= '{end_date}'
+            ```
+            #### **Also include in your query**: 
+            1. Add the database in the `from` statement
+            1. Include single quotes around {start_date} and {end_date}
         ddl:
           title: Target BigQuery table DDL
           type: string
-          description: Provide the DDL for the target BigQuery table
           ui:widget: textarea
+          description: |
+            Provide the DDL for the target BigQuery table.
+            This will be ran by the data engineer team manually before the ingestion.
         
         bqSchema:
           title: Target BigQuery Schema
           type: string
-          description: BigQuery schema where target table will be located (ie. csdataanalysis)
           ui:widget: text
+          description: |
+            BigQuery schema (aka dataset) where target table will be located.
+            For example `alerts` or `entities` (not the project nor the table).
 
         bqTable:
           title: Target BigQuery Table
           type: string
-          description: Name of the target BigQuery table where data will be loaded
           ui:widget: text
+          description: |
+            Name of the target BigQuery table where data will be loaded.
+            For example, `entity_domain` or `entity_domain_history`.
 
         mode:
           title: Mode
@@ -131,8 +147,10 @@ spec:
         jiraTicket:
           title: JIRA Ticket URL
           type: string
-          description: Ticket to be used in the PR description
           ui:widget: text
+          description: |
+            Ticket to be used in the PR description.
+            It has to be the full URL, for example `https://zerofox.atlassian.net/browse/DE-1234`.
 
         additionalNotes:
           title: Additional Notes

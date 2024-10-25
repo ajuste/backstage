@@ -1,8 +1,10 @@
 import { CatalogProcessor, CatalogProcessorEmit, processingResult, CatalogProcessorCache } from '@backstage/plugin-catalog-node';
 
 import {
+  CompoundEntityRef,
   Entity,
   getCompoundEntityRef,
+  parseEntityRef,
   RELATION_OWNED_BY,
   RELATION_OWNER_OF,
   stringifyEntityRef,
@@ -18,7 +20,7 @@ import {
   PluginEndpointDiscovery,
   TokenManager,
 } from '@backstage/backend-common';
-import { CatalogClient } from '@backstage/catalog-client';
+import { CatalogClient, GetEntityAncestorsResponse } from '@backstage/catalog-client';
 import { Octokit } from "@octokit/core";
 import { Logger } from 'winston';
 import { getPillarForEntity, isFeatureTeam } from './githubEntityProvider'
@@ -67,6 +69,7 @@ const Pillars: Record<string, { value: string, grafana: string, githubName: stri
 };
 
 const OwningRoles: string[] = ['maintain', 'admin'];
+const RepoOwningRoles: string[] = ['write', 'maintain'];
 
 type Collaborator = {
   login: string;
@@ -280,7 +283,7 @@ export class GithubProcessor implements CatalogProcessor {
     const pullFromCache = lastFetch.valueOf() > (Date.now() - TeamMembersCacheDuration)
     let promise: Promise<any>;
 
-    this.logger.info(`Fetching team memebers for ${owner}/${team}`)
+    this.logger.info(`Fetching team members for ${owner}/${team}`)
 
     if (pullFromCache) {
       promise = this.getTeamCollaboratorResponse.get(cacheKey) ?? Promise.resolve([])
@@ -321,14 +324,15 @@ export class GithubProcessor implements CatalogProcessor {
    * @param repo The repo
    * @returns A list of repositories owned by a team
    */
-  async getTeamOwnedRepos(team: string, roleName: string | null = "write"): Promise<GithubRepo[]> {
+  async getTeamOwnedRepos(team: string, roleName: string | null | string[] = "write"): Promise<GithubRepo[]> {
 
-    const fetchCount = this.getTeamOwnedReposCount.get(team) ?? 0;
+    const cacheKey = `${team}`
+    const fetchCount = this.getTeamOwnedReposCount.get(cacheKey) ?? 0;
     let allRepos: GetGithubRepoResponse[] = []
 
     if (fetchCount % 100 === 1) {
       this.logger.info(`Returning cached team owned repos for ${team}`)
-      allRepos = this.getTeamOwnerReposResponse.get(team) ?? []
+      allRepos = this.getTeamOwnerReposResponse.get(cacheKey) ?? []
     } else {
 
       const { token } = await this.getCredentials();
@@ -353,15 +357,16 @@ export class GithubProcessor implements CatalogProcessor {
           break;
         }
       }
-      this.getTeamOwnerReposResponse.set(team, allRepos)
+      this.getTeamOwnerReposResponse.set(cacheKey, allRepos)
     }
 
-    this.getTeamOwnedReposCount.set(team, fetchCount + 1)
+    this.getTeamOwnedReposCount.set(cacheKey, fetchCount + 1)
 
     let filteredRepos = allRepos
     if (roleName) {
+      const includeRoles = Array.isArray(roleName) ? roleName : [roleName]
       filteredRepos = allRepos
-        .filter(({ role_name }) => role_name === roleName)
+        .filter(({ role_name }) => includeRoles.includes(role_name))
     }
 
     const res = filteredRepos
@@ -371,22 +376,45 @@ export class GithubProcessor implements CatalogProcessor {
     return res
   }
 
-  async getEntityFromCatalog(entity: Entity): Promise<Entity | undefined> {
+  async getEntityFromCatalog(entity: Entity | CompoundEntityRef): Promise<Entity | undefined> {
+    const catalogClient = new CatalogClient({
+      discoveryApi: this.discovery,
+    });
+    const { token } = await this.tokenManager.getToken();
+    const entityRef = 'kind' in entity ? stringifyEntityRef(entity) : entity as CompoundEntityRef;
+    const res = await catalogClient.getEntityByRef(entityRef, { token })
+    return res
+  }
+
+  async getEntityAncestors(entity: Entity): Promise<GetEntityAncestorsResponse> {
     const catalogClient = new CatalogClient({
       discoveryApi: this.discovery,
     });
     const { token } = await this.tokenManager.getToken();
     const entityRef = stringifyEntityRef(entity);
-    const res = await catalogClient.getEntityByRef(entityRef, { token })
+    const res = await catalogClient.getEntityAncestors({entityRef}, { token })
+    this.logger.info(`Got ancestors for ${entityRef} as follows: ${res.items.map((a) => this.getFullReference(a.entity)).join(", ")}`)
     return res
   }
+
+  async isFromYaml(entity: Entity): Promise<boolean> {
+    const ancestors = await this.getEntityAncestors(entity)
+    this.logger.info(`Checking if ${this.getFullReference(entity)} is from a yaml file and got the following ancestors: ${ancestors.items.map((a) => this.getFullReference(a.entity)).join(", ")}`)
+    const fromYaml = ancestors.items.filter((ancestor) =>
+      ancestor.entity?.metadata.annotations?.["backstage.io/managed-by-location"]?.endsWith(".yaml") || ancestor.entity?.metadata.annotations?.["backstage.io/managed-by-location"]?.endsWith(".yml")
+    )
+
+    this.logger.info(`Checking if ${this.getFullReference(entity)} is from a yaml file and got the following ancestors: ${fromYaml.map((a) => this.getFullReference(a.entity)).join(", ")}`)
+    return fromYaml.length > 0
+  }
+
 
   /**
    * Get entities that match the github repository slugs
    */
-  async getEntitiesByRepos(repositories: GithubRepo[]): Promise<Entity[]> {
+  async getEntitiesByRepos(repositories: GithubRepo[]): Promise < Entity[] > {
 
-    if (!repositories || repositories?.length == 0) {
+      if(!repositories || repositories?.length == 0) {
       return []
     }
     const catalogClient = new CatalogClient({
@@ -413,18 +441,19 @@ export class GithubProcessor implements CatalogProcessor {
    * @param pillar Pillar to remove leads from
    * @returns List of collaborators with leads removed
    */
-  async removePillarLeadsFromCollaborators(collaborators: Collaborator[], _: string): Promise<Collaborator[]> {
-    return collaborators;
-    // this.logger.info(`Removing pillar leads from collaborators for pillar ${pillar}`)
-    // if (!pillar?.length) {
-    //   return collaborators
-    // }
-    // const pillarLeaders = (await this.getPillarLeads(pillar)).map((collaborator) => collaborator.login)
-    // const res = collaborators.filter((collaborator) => !pillarLeaders.includes(collaborator.login))
+  async removePillarLeadsFromCollaborators(collaborators: Collaborator[], pillar: string): Promise<Collaborator[]> {
+    this.logger.info(`Removing pillar leads from collaborators for pillar ${pillar}`)
+    if (!pillar?.length) {
+      return collaborators
+    }
 
-    // this.logger.info(`Removed ${pillarLeaders?.map((l) => l).join(", ")} from collaborators for pillar ${pillar} leaving ${res.map((c) => c.login).join(", ")} from original ${collaborators.map((c) => c.login).join(", ")}`)
+    const pillarLeaders = (await this.getPillarLeads(pillar)).map((collaborator) => collaborator.login)
+    this.logger.info(`Found ${pillarLeaders?.length} pillar leads for pillar ${pillar} being ${pillarLeaders.join(", ")}`)
 
-    // return res
+    const res = collaborators.filter((collaborator) => !pillarLeaders.includes(collaborator.login))
+    this.logger.info(`Removed ${pillarLeaders?.map((l) => l).join(", ")} from collaborators for pillar ${pillar} leaving ${res.map((c) => c.login).join(", ")} from original ${collaborators.map((c) => c.login).join(", ")}`)
+
+    return res
   }
 
   async getPillarLeads(pillar: string): Promise<Collaborator[]> {
@@ -512,11 +541,10 @@ export class GithubProcessor implements CatalogProcessor {
     }
 
     // Get team's owner repositories from Github.
-    const ownedRepos = (await this.getTeamOwnedRepos(entity.metadata.name, "write"))
+    const ownedRepos = (await this.getTeamOwnedRepos(entity.metadata.name, RepoOwningRoles))
 
     // Map repositories to Backstage entities.
     const ownedEntities = await this.getEntitiesByRepos(ownedRepos)
-
     this.logger.info(`Found ${ownedEntities?.length} entities owned by team ${entity.metadata.name}`)
 
     // Emit relations.
@@ -685,21 +713,33 @@ export class GithubProcessor implements CatalogProcessor {
     }
     const catalogEntity = await this.getEntityFromCatalog(entity);
     const catalogOwner = String(entity.spec?.owner)
+    this.logger.info(`Got owner from catalog: ${catalogOwner} for '${this.getFullReference(entity)}' with other from file '${entity.spec?.owner}' and the relations [${catalogEntity?.relations?.map(r => `(${r.targetRef}, ${r.type})`).join(", ")}]`) // eslint-disable-line no-console
 
     // Find out if the entity has owners that are different
     // from the ones set by the catalog file. that means that
     // the owners are coming from somwhere else (ie github).
     // In that case, we want to override owner with the first
     // owner coming from outside.
-    this.logger.info(`Got owner from catalog: ${catalogOwner} for '${this.getFullReference(entity)}' with other from file '${entity.spec?.owner}' and the relations [${catalogEntity?.relations?.map(r => `(${r.targetRef}, ${r.type}`).join(", ")}]`) // eslint-disable-line no-console
     const pillar = await this.getPillarForEntity(entity) ?? '';
-    const pillarLeaders = (await this.getPillarLeads(pillar)).map((collaborator) => collaborator.login)
-    const ownersFromOutsideCatalog = catalogEntity?.relations?.filter(
-      relation => relation.type === RELATION_OWNED_BY &&
-        !relation.targetRef.endsWith(catalogOwner)
-    ).filter(relation => !pillarLeaders.findIndex(leader => relation.targetRef.endsWith(leader)))
-    let shouldOverrideOwner = false
+    this.logger.info(`Found pillar ${pillar} for entity ${this.getFullReference(entity)}`)
 
+    const pillarLeaders = (await this.getPillarLeads(pillar)).map((collaborator) => collaborator.login)
+    this.logger.info(`Found ${pillarLeaders?.length} pillar leads for pillar ${pillar}`)
+    
+    const relatedOwners = catalogEntity?.relations?.filter(relation => relation.type === RELATION_OWNED_BY) ?? []
+    this.logger.info(`Found ${relatedOwners?.length} owners for entity ${this.getFullReference(entity)} with relation ${RELATION_OWNED_BY}`)
+      
+    const relatedOwnersEntities = (await Promise.all(relatedOwners.map(({targetRef}) => this.getEntityFromCatalog(parseEntityRef(targetRef ?? ''))))).filter(entity => entity) as Entity[]
+    this.logger.info(`Fetched ${relatedOwnersEntities?.length} owners for entity ${this.getFullReference(entity)} from the catalog being: ${relatedOwnersEntities?.map(o => stringifyEntityRef(o)).join(", ")}`)
+
+    const ownersFromOutsideCatalog = (await Promise.all(relatedOwnersEntities
+      .map(async (entity) => this.isFromYaml(entity))))
+      .map((isFromYaml, index) => [isFromYaml, relatedOwnersEntities[index]] as [boolean, Entity])
+      .filter(([isFromYaml]) => !isFromYaml)
+      .map(([_, entity]) => entity)
+    this.logger.info(`Found ${ownersFromOutsideCatalog?.length} owners for entity ${this.getFullReference(entity)} that are not set by the catalog file ${catalogOwner}`)
+    
+    let shouldOverrideOwner = false
     if (!ownersFromOutsideCatalog?.length) {
       this.logger.info(`Skipping overriding catalog owner from catalog for entity ${this.getFullReference(entity)} as it has the same owner set by the catalog file ${catalogOwner}`)
     } else {
@@ -707,7 +747,7 @@ export class GithubProcessor implements CatalogProcessor {
       // double check it the team owns the repo (border case
       // when unsetting a team as owner of a repo)
       if (entity.kind == 'Group' && entity.metadata.annotations?.["github.com/team-slug"]) {
-        const ownerRepos = await this.getTeamOwnedRepos(entity.metadata.name, "write");
+        const ownerRepos = await this.getTeamOwnedRepos(entity.metadata.name, RepoOwningRoles);
         const repoName = entity.metadata.annotations?.["github.com/team-slug"]?.split("/")?.[1]
         if (!ownerRepos.find(repo => repo.repo == repoName)) {
           this.logger.info(`Skipping overriding catalog owner from catalog for entity ${this.getFullReference(entity)} as the team ${entity.metadata.name} does not own the repo ${entity.metadata.annotations?.["github.com/team-slug"]}`)
@@ -717,11 +757,11 @@ export class GithubProcessor implements CatalogProcessor {
       }
     }
     if (shouldOverrideOwner) {
-      this.logger.info(`Overriding catalog owner from file for entity ${this.getFullReference(entity)} with ${ownersFromOutsideCatalog?.map(o => o?.targetRef).join(", ")} owners that are not set by the catalog file ${catalogOwner}`)
+      this.logger.info(`Overriding catalog owner from file for entity ${this.getFullReference(entity)} with ${ownersFromOutsideCatalog?.map(o => stringifyEntityRef(o)).join(", ")} owners that are not set by the catalog file ${catalogOwner}`)
       if (!entity.spec) {
         entity.spec = {}
       }
-      entity.spec.owner = ownersFromOutsideCatalog?.[0].targetRef
+      entity.spec.owner = stringifyEntityRef(ownersFromOutsideCatalog?.[0])
     }
     return entity;
   }
@@ -786,7 +826,7 @@ export class GithubProcessor implements CatalogProcessor {
   }
 
   getFullReference(entity: Entity): string {
-    return `${entity.metadata.namespace ?? 'default'}/${entity.kind}/${entity.metadata.name}`
+    return stringifyEntityRef(entity)
   }
 
 
@@ -821,7 +861,6 @@ export class GithubProcessor implements CatalogProcessor {
     if (!entity.spec) {
       entity.spec = {};
     }
-    entity.spec.domain = ''
     return entity
   }
 

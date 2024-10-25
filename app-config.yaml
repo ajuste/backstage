@@ -240,6 +240,9 @@ catalog:
 
     - type: file
       target: ./data/templates/onboard-generic-repo.yaml
+    
+    - type: file
+      target: ./data/templates/data-ingestion-sql-to-bq.yaml
 
     - type: file
       target: ./data/templates/standard-doc-generate-for-service.yaml
@@ -249,6 +252,9 @@ catalog:
 
     - type: file
       target: ./data/templates/standard-doc-generate-for-library.yaml
+
+    - type: file
+      target: ./data/templates/data-ingestion-sql-to-bq.yaml
 
 codeCoverage:
   bodySizeLimit: 5mb # Defaults to 100kb, see https://www.npmjs.com/package/body-parser#limit

@@ -106,3 +106,9 @@ scaffolderActions:
     user: ${JIRA_USER}
     password: ${JIRA_PASSWORD}
     addr: zf.atlassian.net
+
+rds:
+  catalog:
+    apiBaseUrl: https://data-catalog-server-qa.zerofox.com/api/v1
+    baseUrl: https://data-catalog-server-qa.zerofox.com
+    token: ${DATA_CATALOG_TOKEN}

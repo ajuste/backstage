@@ -6,6 +6,9 @@ import path from 'path';
 import * as Handlebars from 'handlebars';
 import { getAllFiles, } from './utils';
 
+Handlebars.registerHelper('safe', (str: string) => {
+    return new Handlebars.SafeString(str);
+});
 
 const formatDataLineNames = (_: ScaffolderActionFactoryOptions) => {
     return createTemplateAction({
@@ -185,27 +188,6 @@ const generatePullRequestTextsForDataLine = (_: ScaffolderActionFactoryOptions) 
             const { githubAuthor, jiraTicket, ingestionName, additionalNotes } = ctx.input;
 
             const description = `
-<<<<<<< HEAD
-                ## Overview
-                This PR introduces a new data ingestion DAG: \`${ingestionName}\`.
-
-                ## Reminder
-                Please ensure to update the queries with \`{start_date}\` and \`{end_date}\`.
-
-                ## Additional Notes
-                ${additionalNotes || 'N/A'}
-
-                ## Author
-                The author of this change is @${githubAuthor}.
-
-                ## JIRA Ticket
-                ${jiraTicket}
-
-                ## Review
-                This PR should be reviewed by the Data Engineering Team. Please make sure everything written makes sense or update the commit if needed. Ask for help if you need it.
-
-                Please review and merge when ready.
-=======
 ![image](https://github.com/user-attachments/assets/b377b39f-d949-4944-9afe-4fccb237b1a6)
 ## Overview
 This PR introduces a new data ingestion DAG: \`${ingestionName}\`.
@@ -226,7 +208,6 @@ ${jiraTicket}
 This PR should be reviewed by the Data Engineering Team. Please make sure everything written makes sense or update the commit if needed. Ask for help if you need it.
 
 Please review and merge when ready.
->>>>>>> e24cd53728 (Add ingestion bq to sql golden path)
             `;
 
             const commitMessage = `feat(dags/data_lines/bq_to_sql/monolith): add ${ingestionName} DAG\nRefs: ${jiraTicket}`;
