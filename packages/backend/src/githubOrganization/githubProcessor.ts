@@ -413,17 +413,18 @@ export class GithubProcessor implements CatalogProcessor {
    * @param pillar Pillar to remove leads from
    * @returns List of collaborators with leads removed
    */
-  async removePillarLeadsFromCollaborators(collaborators: Collaborator[], pillar: string): Promise<Collaborator[]> {
-    this.logger.info(`Removing pillar leads from collaborators for pillar ${pillar}`)
-    if (!pillar?.length) {
-      return collaborators
-    }
-    const pillarLeaders = (await this.getPillarLeads(pillar)).map((collaborator) => collaborator.login)
-    const res = collaborators.filter((collaborator) => !pillarLeaders.includes(collaborator.login))
+  async removePillarLeadsFromCollaborators(collaborators: Collaborator[], _: string): Promise<Collaborator[]> {
+    return collaborators;
+    // this.logger.info(`Removing pillar leads from collaborators for pillar ${pillar}`)
+    // if (!pillar?.length) {
+    //   return collaborators
+    // }
+    // const pillarLeaders = (await this.getPillarLeads(pillar)).map((collaborator) => collaborator.login)
+    // const res = collaborators.filter((collaborator) => !pillarLeaders.includes(collaborator.login))
 
-    this.logger.info(`Removed ${pillarLeaders?.map((l) => l).join(", ")} from collaborators for pillar ${pillar} leaving ${res.map((c) => c.login).join(", ")} from original ${collaborators.map((c) => c.login).join(", ")}`)
+    // this.logger.info(`Removed ${pillarLeaders?.map((l) => l).join(", ")} from collaborators for pillar ${pillar} leaving ${res.map((c) => c.login).join(", ")} from original ${collaborators.map((c) => c.login).join(", ")}`)
 
-    return res
+    // return res
   }
 
   async getPillarLeads(pillar: string): Promise<Collaborator[]> {
@@ -820,7 +821,7 @@ export class GithubProcessor implements CatalogProcessor {
     if (!entity.spec) {
       entity.spec = {};
     }
-    delete entity.spec.domain;
+    entity.spec.domain = ''
     return entity
   }
 
@@ -837,15 +838,21 @@ export class GithubProcessor implements CatalogProcessor {
 
       if (this.canSyncUpOwnersOfEntity(entity)) {
         await this.syncUpOwnersOfEntity(entity, emit);
+      } else {
+        this.logger.info(`Skipping sync up owners for entity ${this.getFullReference(entity)} as it cannot be synced up with owners`)
       }
 
       if (isFeatureTeam(entity) && this.isGithubAPI(location)) {
         await this.syncUpTeamOwnedEntities(entity, emit);
+      } else {
+        this.logger.info(`Skipping sync up team owned entities for entity ${this.getFullReference(entity)} as it is not a feature team or not a github API`)
       }
 
       if (this.isPillarTeam(entity) && this.isGithubAPI(location)) {
         await this.emitPillar(entity, emit);
         await this.setPillarToOwnedRepositories(entity, emit);
+      } else {
+        this.logger.info(`Skipping set pillar to owned repositories for entity ${this.getFullReference(entity)} as it is not a pillar team or not a github API`)
       }
 
     } catch (error) {
