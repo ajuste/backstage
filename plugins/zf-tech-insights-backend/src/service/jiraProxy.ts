@@ -17,7 +17,7 @@ export class JiraProxyAPIClient implements JiraAPI {
             protocol: 'https',
             host: this.configApi.getString('jira.addr'),
             username: this.configApi.getString('jira.user'),
-            password: this.configApi.getString('jira.password'),
+            password: this.configApi.getString('jira.bearer'),
             apiVersion: '2',
             strictSSL: true
         });

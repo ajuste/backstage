@@ -102,7 +102,7 @@ scaffolderActions:
   jira:
     proxyPath: /jira/api
     user: ${JIRA_USER}
-    password: ${JIRA_PASSWORD}
+    bearer: ${JIRA_TOKEN}
     addr: zf.atlassian.net
 
 nomad:

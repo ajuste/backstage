@@ -6,7 +6,7 @@ import path from 'path';
 import { resolveSafeChildPath } from '@backstage/backend-common';
 import { Octokit } from "@octokit/core";
 import { exec } from 'child_process';
-import { createPullRequest } from 'octokit-plugin-create-pull-request';
+import { createPullRequest, DELETE_FILE } from 'octokit-plugin-create-pull-request';
 
 const randomBranchName = (_: ScaffolderActionFactoryOptions) => {
     return createTemplateAction({
@@ -213,8 +213,10 @@ export function getChangedFiles(path: string): Promise<Change[]> {
                     reject(error);
                     return;
                 }
-                const changedFiles = stdout.trim().split('\n').filter((line: string) => line.length > 0).map((line: string) => {
-                    const [status, file] = [line.slice(0, 2).trim(), line.slice(3).trim()];
+                debugger
+                const changedFiles = stdout.trim().split('\n').map((s: string) => s.trim()).filter((line: string) => line.length > 0).map((line: string) => {
+                    const statusSep = line.indexOf(' ');
+                    const [status, file] = [line.slice(0, statusSep), line.slice(statusSep + 1)];
                     return { status, file };
                 });
                 resolve(changedFiles);
@@ -387,19 +389,26 @@ export const createPublishGithubPullRequestAction = (
                 throw new Error('No changes to commit');
             }
 
-
-            const fileContents = changeset
+            const fileContents: [string, {
+                mode: string;
+                encoding: "base64" | "utf-8";
+                content: string;
+            } | typeof DELETE_FILE][] = changeset
                 .flatMap((change: Change): [string, { mode: string, encoding: 'base64' | 'utf-8', content: string }][] => {
                     const mode = '100644';
                     const encoding = 'base64';
                     const { status, file: changePath } = change;
                     const absPath = path.join(fileRoot, changePath);
+                    debugger
                     if (status === '??' || status === 'A') {
                         const stat = fs.statSync(absPath);
                         if (stat.isDirectory()) {
                             const dirContent = getAllFilesContentInDir(absPath, fileRoot)
                             return Object.entries(dirContent).map(([path, content]) => [path, { mode, encoding, content }]);
                         }
+                    }
+                    else if (status === "D") {
+                        return [[changePath, DELETE_FILE as any]]
                     }
                     return [[changePath, { mode, encoding, content: fs.readFileSync(absPath, 'base64') }]]
                 })

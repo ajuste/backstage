@@ -56,6 +56,10 @@ run-load-credentials:
 	echo "$(BLUE)> Get Nomad secrets$(NC)" && \
 	export NOMAD_TOKEN_SECRET=$$(curl -s --request GET --header "X-Vault-Token: $$(echo $$VAULT_TOKEN)" https://vault-qa.zerofox.com/v1/nomad/creds/backstage) && \
 	echo "NOMAD_TOKEN=\"$$(echo $$NOMAD_TOKEN_SECRET | jq -r '.data.secret_id')\"" >> .env && \
+	echo "$(BLUE)> Loading JIRA secrets$(NC)" && \
+	export JIRA_SECRETS=$$(curl -s --request GET --header "X-Vault-Token: $$(echo $$VAULT_TOKEN)" https://vault-qa.zerofox.com/v1/secret/backstage-local/jira) && \
+	echo "JIRA_USER=\"$$(echo $$JIRA_SECRETS | jq -r '.data.user')\"" >> .env && \
+	echo "JIRA_TOKEN=\"$$(echo $$JIRA_SECRETS | jq -r '.data.token')\"" >> .env && \
 	echo "$(BLUE)> Loading GitHub secrets$(NC)" && \
 	export GITHUB_SECRETS=$$(curl -s --request GET --header "X-Vault-Token: $$(echo $$VAULT_TOKEN)" https://vault-qa.zerofox.com/v1/secret/backstage-local/github) && \
 	echo "AUTH_GITHUB_CLIENT_SECRET=\"$$(echo $$GITHUB_SECRETS | jq -r '.data.local_client_secret')\"" >> .env && \

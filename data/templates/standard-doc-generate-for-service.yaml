@@ -118,7 +118,7 @@ spec:
     
     - id: submit-pr
       name: Submit pull request
-      action: publish:github:pull-request
+      action: zf:github:pull-request
       input:
         repoUrl: ${{ steps["fetch-entity"].output.entity | entityToRepoUrl }}
         title: 'Standard documentation generation'
