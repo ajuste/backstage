@@ -5,6 +5,9 @@ import { techInsightsExtensions } from './plugins/techInsights'
 async function main() {
   const backend = createBackend()
 
+  // Logging
+  backend.add(import('./plugins/logging'));
+
   // App framework
   backend.add(import('@backstage/plugin-app-backend/alpha'));
 
@@ -18,7 +21,9 @@ async function main() {
 
   // Catalog
   backend.add(import('@backstage/plugin-catalog-backend/alpha'));
-  backend.add(import('./modules/githubOrgProviderTransformers'));
+  if (process.env.NOMAD_ALLOC_INDEX === '0' || !process.env.env ||  process.env.env == 'local' ) {
+    backend.add(import('./modules/githubOrgProviderTransformers'));
+  }
   backend.add(import('@backstage/plugin-catalog-backend-module-github/alpha'));
   backend.add(import('@backstage/plugin-catalog-backend-module-github-org'));
 
@@ -28,7 +33,6 @@ async function main() {
   backend.add(import('@backstage/plugin-search-backend-module-pg/alpha'))
   backend.add(import('@backstage/plugin-search-backend-module-catalog/alpha'));
   backend.add(import('@backstage/plugin-search-backend-module-techdocs/alpha'));
-
 
   // Scaffold
   backend.add(import('@backstage/plugin-scaffolder-backend/alpha'));
