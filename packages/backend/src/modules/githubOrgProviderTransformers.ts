@@ -28,43 +28,41 @@ export default createBackendModule({
           githubOrgEntityProviderTransformsExtensionPoint,
       },
       async init({ catalog, config, logger, discovery, tokenManager, scheduler }) {
-        if (process.env.NOMAD_ALLOC_INDEX === '0' || !process.env.env ||  process.env.env == 'local' ) {
-          const log = loggerToWinstonLogger(logger);
-          log.info('Registering Zerofox org Github transformers');
+        const log = loggerToWinstonLogger(logger);
+        log.info('Registering Zerofox org Github transformers');
 
-          const transform = async (team: any, ctx: any) => {
-            return transformTream(team, ctx, log, discovery);
-          }
-
-          log.info('Registering Zerofox org Github processor');
-          catalog.addProcessor(new GithubProcessor(config, discovery, tokenManager, log))
-          const integrations = ScmIntegrations.fromConfig(config);
-          const githubCredentialsProvider =
-            DefaultGithubCredentialsProvider.fromIntegrations(integrations);
-          catalog.addProcessor(
-            GithubDiscoveryProcessor.fromConfig(config, {
-              logger: log,
-              githubCredentialsProvider,
-            }),
-            GithubOrgReaderProcessor.fromConfig(config, {
-              logger: log,
-              githubCredentialsProvider,
-            }),
-          );
-          catalog.addEntityProvider(
-            GithubMultiOrgEntityProvider.fromConfig(config, {
-              id: 'production',
-              githubUrl: 'https://github.com',
-              orgs: ['riskive'],
-              teamTransformer: transform,
-              logger: log,
-              schedule: scheduler.createScheduledTaskRunner({
-                frequency: { minutes: 15 },
-                timeout: { minutes: 15 },
-              }),
-            }),
-          );
+        const transform = async (team: any, ctx: any) => {
+          return transformTream(team, ctx, log, discovery);
         }
+
+        log.info('Registering Zerofox org Github processor');
+        catalog.addProcessor(new GithubProcessor(config, discovery, tokenManager, log))
+        const integrations = ScmIntegrations.fromConfig(config);
+        const githubCredentialsProvider =
+          DefaultGithubCredentialsProvider.fromIntegrations(integrations);
+        catalog.addProcessor(
+          GithubDiscoveryProcessor.fromConfig(config, {
+            logger: log,
+            githubCredentialsProvider,
+          }),
+          GithubOrgReaderProcessor.fromConfig(config, {
+            logger: log,
+            githubCredentialsProvider,
+          }),
+        );
+        catalog.addEntityProvider(
+          GithubMultiOrgEntityProvider.fromConfig(config, {
+            id: 'production',
+            githubUrl: 'https://github.com',
+            orgs: ['riskive'],
+            teamTransformer: transform,
+            logger: log,
+            schedule: scheduler.createScheduledTaskRunner({
+              frequency: { minutes: 15 },
+              timeout: { minutes: 15 },
+            }),
+          }),
+        );
       }
     });
   }
