@@ -24,24 +24,19 @@ export const getLabelForScore = (score: number): string => {
 }
 
 /**
- * List all entries in the S3 bucket
+ * List all entries in the S3 assessment bucket 
  * @param config The config object
  * @returns The list of objects
  */
-export const listEntries = async (getS3Client: S3ClientGetter, config: Config): Promise<S3Object[]> => {
+export const listAssessmentEntries = async (getS3Client: S3ClientGetter, config: Config): Promise<S3Object[]> => {
     const client = getS3Client(config);
-    const listResults = ["system", "component", "api"].map(async (kind) => {
-        const listArgs = {
-            bucket: `${config.getOptionalString('env')}-backstage`,
-            prefix: `service_assessment/default/${kind}/`,
-        };
-        return client.listObjects(listArgs)
+
+    const bucket = `${config.getOptionalString('env')}-backstage`
+
+    const listResponses = await client.listObjects({
+        bucket, prefix: 'service_assessment/',
     })
-    const results = (await Promise.all(listResults))
-        .map((result) => result.objects ?? [])
-        .flat()
-        .filter((object) => object.key?.endsWith(".json"))
-    return results
+    return listResponses.objects.filter(({key}) => key && key.endsWith('.json') && !key.endsWith("/all.json"))
 }
 
 /**

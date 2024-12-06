@@ -2,7 +2,7 @@ import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import { z } from 'zod';
 import { _Object } from '@aws-sdk/client-s3';
 import { getLabelForScore } from './utils';
-import { listEntries, getEntries } from './utils';
+import { listAssessmentEntries, getEntries } from './utils';
 import { ScaffolderActionFactoryOptions } from '../types';
 
 /**
@@ -14,7 +14,8 @@ const generateSingleEntryForAllCatalog = (entry: Record<string, any>): object =>
     return {
         entityRef: {
             kind: entry['entityRef']['kind'],
-            name: entry['entityRef']['name']
+            name: entry['entityRef']['name'],
+            namespace: entry['entityRef']['namespace'],
         },
         scorePercent: Math.round(entry['scorePercent']),
         areaScores: entry['areaScores'].map((area: Record<string, any>) => {
@@ -51,7 +52,7 @@ const generateAllEntry = (opts: ScaffolderActionFactoryOptions) => {
         },
 
         async handler(ctx): Promise<any> {
-            const assessmentsFiles = await listEntries(opts.getS3Client, opts.config);
+            const assessmentsFiles = await listAssessmentEntries(opts.getS3Client, opts.config);
             const assessmentContents = await getEntries(opts.getS3Client, opts.config, assessmentsFiles.map((object) => object.key ?? ""));
             ctx.output('allEntry', assessmentContents.map(generateSingleEntryForAllCatalog));
         },

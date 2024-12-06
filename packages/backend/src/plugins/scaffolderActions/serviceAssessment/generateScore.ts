@@ -82,7 +82,8 @@ const generateScore = (_: ScaffolderActionFactoryOptions) => {
             const assessment = {
                 entityRef: {
                     kind: ctx.input.service.split(":")[0],
-                    name: ctx.input.service.split(":")[1].split("/")[1]
+                    name: ctx.input.service.split(":")[1].split("/")[1],
+                    namespace: ctx.input.service.split(":")[1].split("/")[0] ?? "default",
                 },
                 scorePercent,
                 areaScores,
