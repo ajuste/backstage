@@ -1,10 +1,12 @@
 import crypto from 'crypto';
+import axios from 'axios';
 import {
   createRouter,
   BadgeContext,
   BadgeFactories,
   Badge,
 } from '@backstage-community/plugin-badges-backend';
+import { TokenManager } from '@backstage/backend-common';
 
 import { Router } from 'express';
 import { PluginEnvironment } from '../types';
@@ -16,7 +18,30 @@ import { CatalogClient } from '@backstage/catalog-client';
 import { S3Service } from '@internal/plugin-zf-tech-insights-backend';
 import { S3API } from 'backstage-plugin-zf-tech-insights-common';
 
-type BadgeType = 'service_owner' | 'docs' | 'catalog';
+type BadgeType = 'service_owner' | 'docs' | 'catalog' | 'code_coverage';
+
+interface CoverageResponse {
+  entity: {
+    name: string;
+    kind: string;
+    namespace: string;
+  };
+  history: Array<{
+    timestamp: number;
+    branch: {
+      available: number;
+      covered: number;
+      missed: number;
+      percentage: number;
+    };
+    line: {
+      available: number;
+      covered: number;
+      missed: number;
+      percentage: number;
+    };
+  }>;
+}
 
 function entityUrl(context: BadgeContext): string {
   const e = context.entity!;
@@ -31,13 +56,24 @@ function entityDocsUrl(context: BadgeContext): string {
   return `docs/${entityUri}`.toLowerCase();
 }
 
+function entityCoverageUrl(context: BadgeContext): string {
+  const e = context.entity!;
+  const entityUri = `${e.metadata.namespace || 'default'}/${e.kind}/${e.metadata.name}`;
+  const apiBaseUrl = `${context.config.getString('app.baseUrl')}/catalog`;
+  return `${apiBaseUrl}/${entityUri}/code-coverage`.toLowerCase();
+}
+
+
 class BadgeConstructor {
   private readonly env: PluginEnvironment;
+  private readonly tokenManager: TokenManager;
   private ownersCache = new Map<string, string[]>();
+  private coverageCache = new Map<string, string>();
   private s3Api: S3API;
 
   constructor(env: PluginEnvironment) {
     this.env = env
+    this.tokenManager = env.tokenManager
     this.s3Api = new S3Service(env.config, { region: env.config.getString('badges.bucket_region') });
   }
 
@@ -53,10 +89,33 @@ class BadgeConstructor {
     const ownedByRelations = entity.relations?.filter(relation => relation.type === RELATION_OWNED_BY && relation.targetRef !== noownerEntityRef);
     if (!ownedByRelations) {
       return [];
-    } else {
-      const ownerEntities = await Promise.all(ownedByRelations
-        .map((relation: any) => relation.targetRef ? catalogClient.getEntityByRef(relation.targetRef) : Promise.resolve()));
-      return ownerEntities.filter(owner => owner).map(e => (e as any)?.spec?.profile?.displayName ?? e?.metadata.name ?? '');
+    }
+    const ownerEntities = await Promise.all(ownedByRelations
+      .map((relation: any) => relation.targetRef ? catalogClient.getEntityByRef(relation.targetRef) : Promise.resolve()));
+    return ownerEntities.filter(owner => owner).map(e => (e as any)?.spec?.profile?.displayName ?? e?.metadata.name ?? '');
+  }
+
+   /**
+   * Get the code coverage for an entity.
+   */
+   async getCoverageForEntity(entity: Entity, token: string): Promise<string> {
+    const scheduleLogger = this.env.logger.child({ name: 'Badge catalog creator' });
+    const noCoverageEntityRef = "0%";
+    const entityUri = `entity=${entity.kind}:${entity.metadata.namespace || 'default'}/${entity.metadata.name}`;
+    const apiBaseUrl = `${this.env.config.getString('backend.baseUrl')}/api`;
+    const coverageUrl = `${apiBaseUrl}/code-coverage/history?${entityUri}&limit=1`.toLowerCase(); // fix this
+
+    try {
+      const response = await axios.get<CoverageResponse>(coverageUrl, {
+        headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }});
+      scheduleLogger.info(`Retrieved code coverage for entity ${entity.metadata.name} -- coverage: ${response.data.history[0].line.percentage.toFixed(2)}`);
+      return response.data.history[0].line.percentage.toFixed(2);
+    } catch (error: any) {
+      scheduleLogger.error(`Failed to retrieve code coverage for entity ${entity.metadata.name} -- error:  ${error.message}`);
+      return noCoverageEntityRef;
     }
   }
 
@@ -145,7 +204,7 @@ class BadgeConstructor {
     scheduleLogger.debug(`Building badges for entities: ${entities.map(e => e.metadata.name).join(', ')}`);
 
     for (const entity of entities) {
-      for (const badgeType of ['service_owner', 'docs', 'catalog'] as BadgeType[]) {
+      for (const badgeType of ['service_owner', 'docs', 'catalog', 'code_coverage'] as BadgeType[]) {
         try {
           await this.constructBadge(entity, badgeType);
           scheduleLogger.debug(`Created badge for entity ${entity.metadata.name} and type ${badgeType}`);
@@ -166,6 +225,7 @@ class BadgeConstructor {
 
     scheduleLogger.debug("Starting cache update");
 
+    const token = await this.tokenManager.getToken();
     const catalog = new CatalogClient({ discoveryApi: this.env.discovery });
     const entities = await this.getStandAloneEntities(catalog);
     scheduleLogger.debug(`Building cache for entities: ${entities.map(e => e.metadata.name).join(', ')}`);
@@ -174,7 +234,9 @@ class BadgeConstructor {
       // Given the badge factory does not support async operations, we need to cache the owners
       // and retrieve them later when the badge is created.
       const owners = await this.getOwnersForEntity(entity, catalog);
+      const coverage = await this.getCoverageForEntity(entity, token.token);
       this.ownersCache.set(stringifyEntityRef(entity), owners);
+      this.coverageCache.set(stringifyEntityRef(entity), coverage);
 
       scheduleLogger.debug(`Cached ${owners.join(', ')} as owners for entity ${entity.metadata.name}`);
     }
@@ -200,7 +262,7 @@ class BadgeConstructor {
   async configureCacheUpdate() {
     this.env.scheduler.scheduleTask({
       id: 'update-cache',
-      frequency: { hours: 1 },
+      frequency: { minutes: 3 },
       initialDelay: { seconds: 0 },
       timeout: { minutes: 10 },
       fn: this.updateCache.bind(this),
@@ -239,6 +301,19 @@ class BadgeConstructor {
             label: 'docs',
             message: (ctx.entity as any)?.spec?.profile?.displayName ?? ctx.entity?.metadata.name ?? '',
             link: entityDocsUrl(ctx),
+          };
+        },
+      },
+      code_coverage: {
+        createBadge: (ctx: BadgeContext): Badge => {
+          let coverage = '0';
+          if (ctx.entity) {
+            coverage = `${this.coverageCache.get(stringifyEntityRef(ctx.entity)) ?? '0'}%`;
+          }
+          return {
+            label: 'coverage',
+            message: coverage,
+            link: entityCoverageUrl(ctx),
           };
         },
       },
