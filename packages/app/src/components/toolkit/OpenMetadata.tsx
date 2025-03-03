@@ -8,6 +8,6 @@ export default Tool({
         link: "https://data-catalog-server-qa.zerofox.com/",
     },{
         text: "Prod",
-        link: "https://data-catalog.zerofox.com/",
+        link: "https://data-catalog-server-prod.zerofox.com/",
     }]
 });
