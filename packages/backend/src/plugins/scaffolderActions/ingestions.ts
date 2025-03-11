@@ -133,6 +133,7 @@ const createDagFolderFromTemplate = (_: ScaffolderActionFactoryOptions) => {
                 snakeCaseIngestionName, snakeCaseTaskName, slackAlertChannel, owner, scheduleInterval,
                 snakeCaseInstanceName, taskDescription, databaseName, tableName, schemaName, instanceName, bqSchema, bqTable, ingestionName, ddl, sql, mode,
                 taskClassName: camelCaseTaskName.charAt(0).toUpperCase() + camelCaseTaskName.slice(1),
+                snakeCaseInstanceNameUpper: snakeCaseInstanceName.toUpperCase(),
             }
 
             // Get all files under new dag folder

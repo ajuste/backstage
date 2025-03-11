@@ -116,7 +116,7 @@ spec:
           type: string
           ui:widget: text
           description: |
-            BigQuery schema (aka dataset) where target table will be located.
+            BigQuery schema (aka dataset) where target table will be located without env.
             For example `alerts` or `entities` (not the project nor the table).
 
         bqTable:
@@ -193,7 +193,7 @@ spec:
       action: zf:execute
       input:
         command: git 
-        args: -C ${{ steps["workspace"].output.path }} checkout feat/monolith-ingestion-dag-template
+        args: -C ${{ steps["workspace"].output.path }} checkout master
 
     - id: write-code
       name: Generate code for ingestion
