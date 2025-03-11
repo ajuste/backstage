@@ -306,9 +306,12 @@ class BadgeConstructor {
       },
       code_coverage: {
         createBadge: (ctx: BadgeContext): Badge => {
-          let coverage = '0';
+          let coverage = '0%';
           if (ctx.entity) {
-            coverage = `${this.coverageCache.get(stringifyEntityRef(ctx.entity)) ?? '0'}%`;
+            const coverageValue = this.coverageCache.get(stringifyEntityRef(ctx.entity));
+            if (coverageValue) {
+              coverage = coverageValue;
+            }
           }
           return {
             label: 'coverage',

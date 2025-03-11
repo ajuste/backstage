@@ -69,6 +69,24 @@ const checks = [
     },
   },
   {
+    id: 'terraformVersionCheck',
+    type: JSON_RULE_ENGINE_CHECK_TYPE,
+    name: 'Stale repo check',
+    description: 'Verifies if an entity is using a unsupported Terrform version by DevOps',
+    factIds: ['githubFactRetriever'],
+    rule: {
+      conditions: {
+        all: [
+          {
+            fact: 'terraformVersion',
+            operator: 'semverGraterThanEquals',
+            value: "0.12.0",
+          },
+        ],
+      },
+    },
+  },
+  {
     id: 'ownershipCheck',
     type: JSON_RULE_ENGINE_CHECK_TYPE,
     name: 'Ownership check',

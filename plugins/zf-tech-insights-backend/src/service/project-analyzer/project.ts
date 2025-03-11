@@ -4,6 +4,7 @@ import Path from 'path';
 import { Analyzer, AnalysisMatch } from "./analyzer";
 import { TerraformVersionAnalyzer } from "./analyzerTerraformVersion";
 import { DjangoVersionAnalyzer } from "./analyzerDjangoVersion";
+import { AngularVersionAnalyzer } from "./analyzerAngularVersion";
 
 /**
  * Maximum file size to analyze.
@@ -16,6 +17,7 @@ const MAX_FILE_SIZE = 40 * 1024;  // 40KB
 const DEFAULT_ANALYZERS: Analyzer[] = [
     new TerraformVersionAnalyzer(),
     new DjangoVersionAnalyzer(),
+    new AngularVersionAnalyzer(),
 ];
 
 /**

@@ -29,6 +29,7 @@ type GithubAPIFacts = {
 type ProjectAnalysisFacts = {
     terraformVersion: string | null;
     djangoVersion: string | null;
+    angularVersion: string | null;
 }
 
 
@@ -90,6 +91,7 @@ class GithubFactRetriever {
             [
                 ["TerraformVersionAnalyzeResult", "terraformVersion"],
                 ["DjangoVersionAnalyzeResult", "djangoVersion"],
+                ["AngularVersionAnalyzeResult", "angularVersion"],
             ]);
 
         try {
@@ -284,6 +286,10 @@ const githubFactRetriever: FactRetriever = {
         djangoVersion: {
             type: 'string',
             description: 'Django version',
+        },
+        angularVersion: {
+            type: 'string',
+            description: 'Angular version',
         },
     },
     handler: async (context: FactRetrieverContext): Promise<Array<TechInsightFact>> => {

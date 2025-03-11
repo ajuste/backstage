@@ -32,9 +32,22 @@ export class TerraformVersionAnalyzer implements Analyzer {
      * @returns The analysis result with the lowest terraform version.
      */
     disambiguate(analyses: AnalysisMatch[]): Promise<AnalysisMatch> {
-        return Promise.resolve(analyses.sort((a: AnalysisMatch, b: AnalysisMatch) => {
-            return semver.compare((a.result as TerraformVersionAnalyzeResult).terraformVersion, (b.result as TerraformVersionAnalyzeResult).terraformVersion);
-        })[0]);
+        if (analyses.length === 0) {
+            return Promise.resolve(analyses[0]);
+        }
+
+        return Promise.resolve(analyses.reduce((min, current) => {
+            const minVersion = (min.result as TerraformVersionAnalyzeResult).terraformVersion;
+            const currentVersion = (current.result as TerraformVersionAnalyzeResult).terraformVersion;
+            
+            const validMin = semver.valid(minVersion);
+            const validCurrent = semver.valid(currentVersion);
+            
+            if (!validMin) return current;
+            if (!validCurrent) return min;
+            
+            return semver.lt(currentVersion, minVersion) ? current : min;
+        }));
     }
 
     /**
