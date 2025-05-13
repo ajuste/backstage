@@ -1,10 +1,21 @@
-
 import { Operator } from 'json-rules-engine';
 import semver from 'semver';
-import { JsonRulesEngineFactCheckerFactory, JSON_RULE_ENGINE_CHECK_TYPE } from '@backstage-community/plugin-tech-insights-backend-module-jsonfc';
-import { techInsightsFactCheckerFactoryExtensionPoint, techInsightsFactRetrieversExtensionPoint } from '@backstage-community/plugin-tech-insights-node';
-import { coreServices, createBackendModule } from '@backstage/backend-plugin-api';
-import { getGithubFactRetriever, getOwnershipFactRetriever } from '@internal/plugin-zf-tech-insights-backend';
+import {
+  JsonRulesEngineFactCheckerFactory,
+  JSON_RULE_ENGINE_CHECK_TYPE,
+} from '@backstage-community/plugin-tech-insights-backend-module-jsonfc';
+import {
+  techInsightsFactCheckerFactoryExtensionPoint,
+  techInsightsFactRetrieversExtensionPoint,
+} from '@backstage-community/plugin-tech-insights-node';
+import {
+  coreServices,
+  createBackendModule,
+} from '@backstage/backend-plugin-api';
+import {
+  getGithubFactRetriever,
+  getOwnershipFactRetriever,
+} from '@internal/plugin-zf-tech-insights-backend';
 
 export const techInsightsExtensions = createBackendModule({
   pluginId: 'tech-insights',
@@ -17,19 +28,25 @@ export const techInsightsExtensions = createBackendModule({
         logger: coreServices.logger,
       },
       async init({ factCheckerFactory, factRetrievers, logger }) {
-        if (process.env.NOMAD_ALLOC_INDEX === '0' || !process.env.env || process.env.env == 'local') {
+        if (
+          process.env.NOMAD_ALLOC_INDEX === '0' ||
+          !process.env.env ||
+          process.env.env == 'local'
+        ) {
           factRetrievers.addFactRetrievers(factRetrieversCatalog);
         }
-        factCheckerFactory.setFactCheckerFactory(new JsonRulesEngineFactCheckerFactory({ operators, logger, checks }));
+        factCheckerFactory.setFactCheckerFactory(
+          new JsonRulesEngineFactCheckerFactory({ operators, logger, checks }),
+        );
       },
     });
   },
 });
 
 const factRetrieversCatalog = {
-  "githubFactRetriever": getGithubFactRetriever(),
-  "ownershipFactRetriever": getOwnershipFactRetriever(),
-}
+  githubFactRetriever: getGithubFactRetriever(),
+  ownershipFactRetriever: getOwnershipFactRetriever(),
+};
 
 const operators = [
   new Operator('semverGraterThan', (factValue: any, jsonValue: any) => {
@@ -47,7 +64,7 @@ const operators = [
   new Operator('semverEquals', (factValue: any, jsonValue: any) => {
     return semver.eq(factValue, jsonValue);
   }),
-]
+];
 
 const checks = [
   {
@@ -69,10 +86,29 @@ const checks = [
     },
   },
   {
+    id: 'techDebtRatioCheck',
+    type: JSON_RULE_ENGINE_CHECK_TYPE,
+    name: 'Tech debt ratio check',
+    description: 'Verifies if an entity has a tech debt ratio',
+    factIds: ['githubFactRetriever'],
+    rule: {
+      conditions: {
+        all: [
+          {
+            fact: 'techDebtRatio',
+            operator: 'greaterThan',
+            value: 0.1,
+          },
+        ],
+      },
+    },
+  },
+  {
     id: 'terraformVersionCheck',
     type: JSON_RULE_ENGINE_CHECK_TYPE,
-    name: 'Stale repo check',
-    description: 'Verifies if an entity is using a unsupported Terrform version by DevOps',
+    name: 'Terraform version check',
+    description:
+      'Verifies if an entity is using a unsupported Terraform version by DevOps',
     factIds: ['githubFactRetriever'],
     rule: {
       conditions: {
@@ -80,7 +116,7 @@ const checks = [
           {
             fact: 'terraformVersion',
             operator: 'semverGraterThanEquals',
-            value: "0.12.0",
+            value: '0.12.0',
           },
         ],
       },

@@ -17,7 +17,7 @@ ai:
   embeddings:
     openai:
       openAIApiKey: ${OPENAI_API_KEY}
-    
+
 auth:
   providers:
     guest:
@@ -89,7 +89,7 @@ backend:
   database:
     client: better-sqlite3
     connection: ':memory:'
-  
+
   auth:
     dangerouslyDisableDefaultAuthPolicy: true
     keys:
@@ -188,7 +188,7 @@ aws:
   secretAccessKey: ${AWS_SECRET_ACCESS_KEY}
   sessionToken: ${AWS_SESSION_TOKEN}
   region: us-west-2
-  
+
 techInsights:
   factRetrievers:
     entityOwnershipFactRetriever:
@@ -201,14 +201,14 @@ techInsights:
       cadence: '0 3 * * *'
       lifecycle: { timeToLive: { weeks: 2 } }
     githubFactRetriever:
-      cadence: '0 6 * * *'
+      cadence: '0 0/4 * * *'
       lifecycle: { timeToLive: { weeks: 2 } }
-      timeout: 
+      timeout:
         hours: 2
     ownershipFactRetriever:
       cadence: '0 * * * *'
       lifecycle: { timeToLive: { weeks: 2 } }
-      timeout: 
+      timeout:
         hours: 2
 
 nomad:
@@ -240,7 +240,7 @@ catalog:
 
     - type: file
       target: ./data/templates/onboard-generic-repo.yaml
-    
+
     - type: file
       target: ./data/templates/data-ingestion-sql-to-bq.yaml
 

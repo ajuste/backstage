@@ -3,255 +3,295 @@ import os from 'os';
 import path from 'path';
 
 import {
-    FactRetriever,
-    FactRetrieverContext,
-    TechInsightFact,
+  FactRetriever,
+  FactRetrieverContext,
+  TechInsightFact,
 } from '@backstage-community/plugin-tech-insights-node';
 import { DateTime } from 'luxon';
-import { CatalogClient, CATALOG_FILTER_EXISTS } from '@backstage/catalog-client';
 import {
-    ScmIntegrations,
-    SingleInstanceGithubCredentialsProvider,
-    GithubCredentials,
+  CatalogClient,
+  CATALOG_FILTER_EXISTS,
+} from '@backstage/catalog-client';
+import {
+  ScmIntegrations,
+  SingleInstanceGithubCredentialsProvider,
+  GithubCredentials,
 } from '@backstage/integration';
 
 import { graphql } from '@octokit/graphql';
 import simpleGit from 'simple-git';
 
-
 import { Project } from '../project-analyzer';
 
 type GithubAPIFacts = {
-    lastCommit: DateTime | null;
-    msSinceLastCommit: number | null;
-}
+  lastCommit: DateTime | null;
+  msSinceLastCommit: number | null;
+  openTechDebtIssuesCount: number | null;
+  techDebtRatio: number | null;
+};
 
 type ProjectAnalysisFacts = {
-    terraformVersion: string | null;
-    djangoVersion: string | null;
-    angularVersion: string | null;
-}
-
+  terraformVersion: string | null;
+  djangoVersion: string | null;
+  angularVersion: string | null;
+};
 
 /**
  * Fetches facts from the GitHub API.
  */
 class GithubFactRetriever {
-    context: FactRetrieverContext;
-    constructor(context: FactRetrieverContext) {
-        this.context = context;
-    }
+  context: FactRetrieverContext;
+  constructor(context: FactRetrieverContext) {
+    this.context = context;
+  }
 
-    async delay(): Promise<void> {
-        return new Promise<void>(resolve => setTimeout(resolve, 2000));
-    }
+  async delay(): Promise<void> {
+    return new Promise<void>(resolve => setTimeout(resolve, 2000));
+  }
 
-    /**
-     * Clones a git repo to a destination path.
-     * 
-     * @param slug Project slug in the format of owner/repo
-     * @param destinationPath Destination path to clone the repo to
-     */
-    async cloneRepo(slug: string, destinationPath: string) {
-        const git = simpleGit();
-        const cloneUrl = `git@github.com:${slug}.git`;
-        await git.clone(cloneUrl, destinationPath);
-    }
+  /**
+   * Clones a git repo to a destination path.
+   *
+   * @param slug Project slug in the format of owner/repo
+   * @param destinationPath Destination path to clone the repo to
+   */
+  async cloneRepo(slug: string, destinationPath: string) {
+    const git = simpleGit();
+    const cloneUrl = `git@github.com:${slug}.git`;
+    await git.clone(cloneUrl, destinationPath);
+  }
 
-    /**
-     * Creates a temporary folder in the systems temporary directory.
-     * 
-     * @returns Path to the temporary folder
-     */
-    async createTempFolder(): Promise<string> {
-        const tmpDirectory = os.tmpdir();
+  /**
+   * Creates a temporary folder in the systems temporary directory.
+   *
+   * @returns Path to the temporary folder
+   */
+  async createTempFolder(): Promise<string> {
+    const tmpDirectory = os.tmpdir();
 
-        const folderName = `temp-${Date.now()}`;
-        const tempFolderPath = path.join(tmpDirectory, folderName);
+    const folderName = `temp-${Date.now()}`;
+    const tempFolderPath = path.join(tmpDirectory, folderName);
 
-        // Create the folder
-        fs.mkdirSync(tempFolderPath);
+    // Create the folder
+    fs.mkdirSync(tempFolderPath);
 
-        return tempFolderPath;
-    }
+    return tempFolderPath;
+  }
 
-    /**
-     * Fetches facts from the GitHub by cloning the repo.
-     */
-    async fetchProjectAnalysis(slug: string): Promise<ProjectAnalysisFacts> {
+  /**
+   * Fetches facts from the GitHub by cloning the repo.
+   */
+  async fetchProjectAnalysis(slug: string): Promise<ProjectAnalysisFacts> {
+    this.context.logger.info(`Fetching project analysis for ${slug}`);
 
-        this.context.logger.info(`Fetching project analysis for ${slug}`);
+    const tempFolder = await this.createTempFolder();
+    const res = {} as ProjectAnalysisFacts;
 
-        const tempFolder = await this.createTempFolder();
-        const res = {} as ProjectAnalysisFacts;
+    this.context.logger.info(
+      `Created temporary folder ${tempFolder} for analysis of ${slug} fact`,
+    );
 
-        this.context.logger.info(`Created temporary folder ${tempFolder} for analysis of ${slug} fact`);
+    const analyzerResultNameToFactName = new Map<string, string>([
+      ['TerraformVersionAnalyzeResult', 'terraformVersion'],
+      ['DjangoVersionAnalyzeResult', 'djangoVersion'],
+      ['AngularVersionAnalyzeResult', 'angularVersion'],
+    ]);
 
-        const analyzerResultNameToFactName = new Map<string, string>(
-            [
-                ["TerraformVersionAnalyzeResult", "terraformVersion"],
-                ["DjangoVersionAnalyzeResult", "djangoVersion"],
-                ["AngularVersionAnalyzeResult", "angularVersion"],
-            ]);
+    try {
+      this.context.logger.info(`Cloning repo ${slug} to ${tempFolder}`);
+      await this.cloneRepo(slug, tempFolder);
+      const project = new Project(tempFolder);
+      const analysis = await project.analyze();
 
-        try {
-            this.context.logger.info(`Cloning repo ${slug} to ${tempFolder}`);
-            await this.cloneRepo(slug, tempFolder);
-            const project = new Project(tempFolder);
-            const analysis = await project.analyze();
+      this.context.logger.info(
+        `Analysis of ${slug} finished with ${analysis.matches.length} matches`,
+      );
 
-            this.context.logger.info(`Analysis of ${slug} finished with ${analysis.matches.length} matches`)
-
-            for (const match of analysis.matches) {
-                const resultTypeName = match.result.constructor.name;
-                const factName = analyzerResultNameToFactName.get(resultTypeName);
-                if (!factName) {
-                    this.context.logger.info(`No fact name found for ${resultTypeName}`);
-                    continue;
-                }
-                const fact = (match as any).result[factName];
-                this.context.logger.info(`Found ${factName} for ${slug} with value ${fact} and analyzer result ${resultTypeName}`);
-                (res as any)[factName] = fact;
-            }
+      for (const match of analysis.matches) {
+        const resultTypeName = match.result.constructor.name;
+        const factName = analyzerResultNameToFactName.get(resultTypeName);
+        if (!factName) {
+          this.context.logger.info(`No fact name found for ${resultTypeName}`);
+          continue;
         }
-        finally {
-            fs.rmdirSync(tempFolder, { recursive: true });
-            this.context.logger.info(`Removed temporary folder ${tempFolder} after analysis`);
-        }
-        return res
+        const fact = (match as any).result[factName];
+        this.context.logger.info(
+          `Found ${factName} for ${slug} with value ${fact} and analyzer result ${resultTypeName}`,
+        );
+        (res as any)[factName] = fact;
+      }
+    } finally {
+      fs.rmdirSync(tempFolder, { recursive: true });
+      this.context.logger.info(
+        `Removed temporary folder ${tempFolder} after analysis`,
+      );
+    }
+    return res;
+  }
+
+  /**
+   * Gets the credentials for the GitHub API.
+   *
+   * @param slug Project slug in the format of owner/repo
+   */
+  private async getCredentials(slug: string): Promise<GithubCredentials> {
+    const integrations = ScmIntegrations.fromConfig(this.context.config);
+    const ghIntegration = integrations.github.byHost('github.com');
+
+    if (!ghIntegration) {
+      throw new Error('No GitHub integration config found, please add config');
+    }
+    const ghCredentialsProvider =
+      SingleInstanceGithubCredentialsProvider.create(ghIntegration.config);
+    const ghHost = ghIntegration.config.host;
+
+    const [owner, _] = slug ? slug.split('/') : [];
+    const orgUrl = `https://${ghHost}/${owner}`;
+
+    return await ghCredentialsProvider.getCredentials({
+      url: orgUrl,
+    });
+  }
+
+  /**
+   * Fetches facts from the GitHub API.
+   *
+   * @param slug Project slug in the format of owner/repo
+   * @returns Facts from the GitHub API
+   */
+  async fetchGithubAPIFacts(slug: string): Promise<GithubAPIFacts> {
+    const { headers } = await this.getCredentials(slug);
+    const [owner, repo] = slug ? slug.split('/') : [];
+
+    if (!owner || !repo) {
+      this.context.logger.warn(`Invalid slug ${slug}`);
+      return Promise.resolve({} as GithubAPIFacts);
     }
 
-    /**
-     * Gets the credentials for the GitHub API.
-     * 
-     * @param slug Project slug in the format of owner/repo
-     */
-    private async getCredentials(slug: string): Promise<GithubCredentials> {
-        const integrations = ScmIntegrations.fromConfig(this.context.config);
-        const ghIntegration = integrations.github.byHost("github.com");
-
-        if (!ghIntegration) {
-            throw new Error(
-                'No GitHub integration config found, please add config',
-            );
-        }
-        const ghCredentialsProvider = SingleInstanceGithubCredentialsProvider.create(ghIntegration.config);
-        const ghHost = ghIntegration.config.host;
-
-        const [owner, _] = slug ? slug.split('/') : [];
-        const orgUrl = `https://${ghHost}/${owner}`;
-
-        return await ghCredentialsProvider.getCredentials({
-            url: orgUrl,
-        });
-    }
-
-    /**
-     * Fetches facts from the GitHub API.
-     * 
-     * @param slug Project slug in the format of owner/repo
-     * @returns Facts from the GitHub API
-     */
-    async fetchGithubAPIFacts(slug: string): Promise<GithubAPIFacts> {
-
-        const { headers } = await this.getCredentials(slug);
-        const [owner, repo] = slug ? slug.split('/') : [];
-
-        if (!owner || !repo) {
-            this.context.logger.warn(`Invalid slug ${slug}`);
-            return Promise.resolve({} as GithubAPIFacts)
-        }
-
-        const response: any = await graphql(`
+    const response: any = await graphql(
+      `
         {
-        repository(owner: "${owner}", name: "${repo}") {
-            ref(qualifiedName: "master") {
-                target {
+          repository(owner: "${owner}", name: "${repo}") {
+            defaultBranchRef {
+              target {
                 ... on Commit {
-                    history(first: 10) {
+                  history(first: 10) {
                     pageInfo {
-                        hasNextPage
-                        endCursor
+                      hasNextPage
+                      endCursor
                     }
                     edges {
-                        node {
+                      node {
                         oid
                         messageHeadline
                         committedDate
-                        }
+                      }
                     }
-                    }
+                  }
                 }
+              }
+            }
+            issues(last: 50, labels: ["technical-debt"]) {
+              edges {
+                node {
+                  title
+                  url
+                  state
                 }
+              }
             }
-            }
+          }
         }
-        `,
-            {
-                headers,
-            });
+      `,
+      {
+        headers,
+      },
+    );
 
-        const lastCommit: string | null = response?.repository?.ref?.target?.history?.edges[0]?.node?.committedDate;
+    const lastCommit: string | null =
+      response?.repository?.defaultBranchRef?.target?.history?.edges[0]?.node
+        ?.committedDate;
+    const techDebtIssues = response?.repository?.issues?.edges;
+    const openTechDebtIssuesCount = techDebtIssues?.filter(
+      (issue: any) => issue.node.state === 'OPEN',
+    ).length;
+    const techDebtRatio = openTechDebtIssuesCount / techDebtIssues?.length;
 
-        return {
-            lastCommit: lastCommit ? DateTime.fromISO(lastCommit) : DateTime.fromMillis(0),
-            msSinceLastCommit: lastCommit ? Math.abs(DateTime.fromISO(lastCommit).diffNow().as('milliseconds')) : null,
-        }
-    }
+    return {
+      lastCommit: lastCommit
+        ? DateTime.fromISO(lastCommit)
+        : DateTime.fromMillis(0),
+      msSinceLastCommit: lastCommit
+        ? Math.abs(DateTime.fromISO(lastCommit).diffNow().as('milliseconds'))
+        : null,
+      openTechDebtIssuesCount,
+      techDebtRatio,
+    };
+  }
 
-    /**
-     * 
-     * @returns Facts for all entities that match the entity filter.
-     */
-    async fetchFacts(): Promise<TechInsightFact[]> {
+  /**
+   *
+   * @returns Facts for all entities that match the entity filter.
+   */
+  async fetchFacts(): Promise<TechInsightFact[]> {
+    const { token } = await this.context.tokenManager.getToken();
+    const catalogClient = new CatalogClient({
+      discoveryApi: this.context.discovery,
+    });
+    const entities = await catalogClient.getEntities(
+      { filter: this.context.entityFilter },
+      { token },
+    );
+    const result = Array<TechInsightFact>();
 
-        const { token } = await this.context.tokenManager.getToken();
-        const catalogClient = new CatalogClient({
-            discoveryApi: this.context.discovery,
-        });
-        const entities = await catalogClient.getEntities(
-            { filter: this.context.entityFilter },
-            { token },
+    for (const entity of entities.items) {
+      try {
+        this.context.logger.info(
+          `Fetching github facts for ${entity.metadata.name}`,
         );
-        const result = Array<TechInsightFact>();
 
-        for (const entity of entities.items) {
-            try {
-                this.context.logger.info(`Fetching github facts for ${entity.metadata.name}`);
-
-                const slug = entity.metadata.annotations?.['github.com/project-slug'];
-                if (!slug) {
-                    throw new Error(
-                        `No github.com/project-slug annotation found for entity ${entity.metadata.name}`
-                    );
-                }
-
-                const response = {
-                    entity: {
-                        namespace: entity.metadata.namespace!,
-                        kind: entity.kind,
-                        name: entity.metadata.name,
-                    },
-                    facts: {}
-                };
-
-                const githubAPIFacts = await this.fetchGithubAPIFacts(slug);
-                const projectAnalysisFacts = await this.fetchProjectAnalysis(slug);
-
-                this.context.logger.info(`Fetched github facts for ${entity.metadata.name}: ${JSON.stringify(githubAPIFacts)} ${JSON.stringify(projectAnalysisFacts)}`);
-
-                response.facts = Object.assign({}, githubAPIFacts, projectAnalysisFacts);
-
-                result.push(response);
-
-                await this.delay();
-
-            } catch (error) {
-                this.context.logger.error(`Error while fetching github facts for ${entity.metadata.name}: ${error}`)
-            }
+        const slug = entity.metadata.annotations?.['github.com/project-slug'];
+        if (!slug) {
+          throw new Error(
+            `No github.com/project-slug annotation found for entity ${entity.metadata.name}`,
+          );
         }
-        return result;
+
+        const response = {
+          entity: {
+            namespace: entity.metadata.namespace!,
+            kind: entity.kind,
+            name: entity.metadata.name,
+          },
+          facts: {},
+        };
+
+        const githubAPIFacts = await this.fetchGithubAPIFacts(slug);
+        const projectAnalysisFacts = await this.fetchProjectAnalysis(slug);
+
+        this.context.logger.info(
+          `Fetched github facts for ${entity.metadata.name}: ${JSON.stringify(
+            githubAPIFacts,
+          )} ${JSON.stringify(projectAnalysisFacts)}`,
+        );
+
+        response.facts = Object.assign(
+          {},
+          githubAPIFacts,
+          projectAnalysisFacts,
+        );
+
+        result.push(response);
+
+        await this.delay();
+      } catch (error) {
+        this.context.logger.error(
+          `Error while fetching github facts for ${entity.metadata.name}: ${error}`,
+        );
+      }
     }
+    return result;
+  }
 }
 
 /**
@@ -260,44 +300,54 @@ class GithubFactRetriever {
  * @public
  */
 const githubFactRetriever: FactRetriever = {
-    id: 'githubFactRetriever',
-    version: '0.0.3',
-    title: 'Entity Ownership',
-    description:
-        'Generates facts for entities that are pulled from github such as last commit date, etc.',
-    entityFilter: [
-        {
-            "metadata.annotations.github.com/project-slug": CATALOG_FILTER_EXISTS,
-        },
-    ],
-    schema: {
-        lastCommit: {
-            type: 'datetime',
-            description: 'Last commit date',
-        },
-        msSinceLastCommit: {
-            type: 'integer',
-            description: 'Milliseconds since last commit',
-        },
-        terraformVersion: {
-            type: 'string',
-            description: 'Terraform version',
-        },
-        djangoVersion: {
-            type: 'string',
-            description: 'Django version',
-        },
-        angularVersion: {
-            type: 'string',
-            description: 'Angular version',
-        },
+  id: 'githubFactRetriever',
+  version: '0.0.3',
+  title: 'Entity Ownership',
+  description:
+    'Generates facts for entities that are pulled from github such as last commit date, etc.',
+  entityFilter: [
+    {
+      'metadata.annotations.github.com/project-slug': CATALOG_FILTER_EXISTS,
     },
-    handler: async (context: FactRetrieverContext): Promise<Array<TechInsightFact>> => {
-        const retriever = new GithubFactRetriever(context);
-        return retriever.fetchFacts();
+  ],
+  schema: {
+    lastCommit: {
+      type: 'datetime',
+      description: 'Last commit date',
     },
+    msSinceLastCommit: {
+      type: 'integer',
+      description: 'Milliseconds since last commit',
+    },
+    openTechDebtIssuesCount: {
+      type: 'integer',
+      description: 'Open tech debt issues count',
+    },
+    techDebtRatio: {
+      type: 'float',
+      description: 'Tech debt ratio',
+    },
+    terraformVersion: {
+      type: 'string',
+      description: 'Terraform version',
+    },
+    djangoVersion: {
+      type: 'string',
+      description: 'Django version',
+    },
+    angularVersion: {
+      type: 'string',
+      description: 'Angular version',
+    },
+  },
+  handler: async (
+    context: FactRetrieverContext,
+  ): Promise<Array<TechInsightFact>> => {
+    const retriever = new GithubFactRetriever(context);
+    return retriever.fetchFacts();
+  },
 };
 
 export function getGithubFactRetriever() {
-    return githubFactRetriever;
+  return githubFactRetriever;
 }
