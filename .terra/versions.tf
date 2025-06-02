@@ -3,16 +3,24 @@ terraform {
     key = "backstage/terraform.tfstate"
   }
 
-  required_version = ">= 0.13"
+  required_version = ">= 0.14.10"
   required_providers {
     aws = {
-      source = "hashicorp/aws"
+      source  = "hashicorp/aws"
+      version = "~> 5.99.1"
     }
     nomad = {
-      source = "hashicorp/nomad"
+      source  = "hashicorp/nomad"
+      version = "~> 1.4.20"
     }
     template = {
-      source = "hashicorp/template"
+      source  = "hashicorp/template"
+      version = "~> 2.2.0"
+    }
+
+    null = {
+      source  = "hashicorp/null"
+      version = "~> 3.2.4"
     }
   }
 }
