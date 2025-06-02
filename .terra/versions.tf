@@ -3,7 +3,7 @@ terraform {
     key = "backstage/terraform.tfstate"
   }
 
-  required_version = ">= 0.13"
+  required_version = ">= 0.14.10"
   required_providers {
     aws = {
       source = "hashicorp/aws"
