@@ -31,7 +31,7 @@ backend:
   auth:
     dangerouslyDisableDefaultAuthPolicy: true
     keys:
-     - secret: '*28w:;@RUnL#@@&Z'
+     - secret: ${AUTH_SECRET}
 
 techdocs:
   builder: 'local'
