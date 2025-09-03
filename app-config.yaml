@@ -93,7 +93,7 @@ backend:
   auth:
     dangerouslyDisableDefaultAuthPolicy: true
     keys:
-     - secret: 'Q@w:;@RUnLgr@&Z'
+     - secret: ${AUTH_SECRET}
 
 scorecards:
   jsonDataUrl: /api/zf-insights/s3/qa-backstage/service_assessment/

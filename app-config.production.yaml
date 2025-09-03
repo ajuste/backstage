@@ -32,7 +32,7 @@ backend:
   auth:
     dangerouslyDisableDefaultAuthPolicy: true
     keys:
-     - secret: 'Q@w:;@RUnL#@@&Z'
+     - secret: ${AUTH_SECRET}
 
 techdocs:
   builder: 'local'
