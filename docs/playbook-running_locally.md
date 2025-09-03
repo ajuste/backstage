@@ -16,6 +16,10 @@
     yarn install
     ```
 * 🚀 Start local server
+  * Set the `AUTH_SECRET` environment variable. This is used for signing authentication tokens. For local development, you can generate a random value:
+    ```bash
+    export AUTH_SECRET=$(openssl rand -hex 32)
+    ```
   * Run `make run-local`.
   * This will start Backstage locally with an in-memory database.
   * It will automatically open a tab to `localhost:3003` in your browser.

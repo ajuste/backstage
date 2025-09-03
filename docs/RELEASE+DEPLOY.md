@@ -1,4 +1,3 @@
-
 # Release & Deployment Process for `backstage`
 
 ## Workflow
@@ -12,6 +11,11 @@ This repository uses the `Release Branch Deployment Bundle` Bundle:
 
 This methodology allows us to work on multiple features simultaneously without affecting the stability of the main branch. It also ensures that every change in the main branch is reviewed, tested, and verified in production, reducing the chances of introducing bugs into the production environment.
 
+## Environment Variables
+
+The application requires the following environment variable to be set in the deployment environments (QA and Production):
+
+- `AUTH_SECRET`: A secret key used for signing authentication tokens. This must be a securely generated, persistent secret.
 
 ## Deployment
 
