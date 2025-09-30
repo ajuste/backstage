@@ -1,13 +1,13 @@
 import React from 'react';
 import { IdentityProviders, SignInPage } from '@backstage/core-components';
 import { createSignInPageExtension, } from '@backstage/frontend-plugin-api';
-import { githubAuthApiRef } from '@backstage/core-plugin-api';
+import { oktaAuthApiRef } from '@backstage/core-plugin-api';
 
 const providers = [{
-    id: 'github-auth-provider',
-    title: 'GitHub',
-    message: 'Sign in using GitHub',
-    apiRef: githubAuthApiRef,
+    id: 'okta-auth-provider',
+    title: 'Okta',
+    message: 'Sign in using Okta',
+    apiRef: oktaAuthApiRef,
 }] as IdentityProviders;
 
 const env = process.env.NODE_ENV;
@@ -17,7 +17,7 @@ if (!env || env === 'development') {
 }
 
 export const SigninPage = createSignInPageExtension({
-    name: 'github',
+    name: 'okta',
     loader: async () => props =>
     (
         <SignInPage

@@ -22,41 +22,47 @@ auth:
   providers:
     guest:
       dangerouslyAllowOutsideDevelopment: true
-    github:
+    okta:
       development:
-        clientId: ${GITHUB_CLIENT_ID}
-        clientSecret: ${GITHUB_APP_SECRET}
+        clientId: ${AUTH_OKTA_CLIENT_ID}
+        clientSecret: ${AUTH_OKTA_CLIENT_SECRET}
+        audience: https://zerofox.okta.com
         resolvers:
           - resolver: usernameMatchingUserEntityName
         signIn:
           resolvers:
             - resolver: usernameMatchingUserEntityName
-          clientId: ${GITHUB_CLIENT_ID}
-          clientSecret: ${GITHUB_APP_SECRET}
+          clientId: ${AUTH_OKTA_CLIENT_ID}
+          clientSecret: ${AUTH_OKTA_CLIENT_SECRET}
+          audience: https://zerofox.okta.com
         guest:
           dangerouslyAllowOutsideDevelopment: true
       qa:
-        clientId: ${GITHUB_CLIENT_ID}
-        clientSecret: ${GITHUB_APP_SECRET}
+        clientId: ${AUTH_OKTA_CLIENT_ID}
+        clientSecret: ${AUTH_OKTA_CLIENT_SECRET}
+        audience: https://zerofox.okta.com
         resolvers:
           - resolver: usernameMatchingUserEntityName
         signIn:
           resolvers:
             - resolver: usernameMatchingUserEntityName
-          clientId: ${GITHUB_CLIENT_ID}
-          clientSecret: ${GITHUB_APP_SECRET}
+          clientId: ${AUTH_OKTA_CLIENT_ID}
+          clientSecret: ${AUTH_OKTA_CLIENT_SECRET}
+          audience: https://zerofox.okta.com
         guest:
           dangerouslyAllowOutsideDevelopment: true
       prod:
-        clientId: ${GITHUB_CLIENT_ID}
-        clientSecret: ${GITHUB_APP_SECRET}
+        clientId: ${AUTH_OKTA_CLIENT_ID}
+        clientSecret: ${AUTH_OKTA_CLIENT_SECRET}
+        audience: https://zerofox.okta.com
         resolvers:
           - resolver: usernameMatchingUserEntityName
         signIn:
           resolvers:
             - resolver: usernameMatchingUserEntityName
-          clientId: ${GITHUB_CLIENT_ID}
-          clientSecret: ${GITHUB_APP_SECRET}
+          clientId: ${AUTH_OKTA_CLIENT_ID}
+          clientSecret: ${AUTH_OKTA_CLIENT_SECRET}
+          audience: https://zerofox.okta.com
         guest:
           dangerouslyAllowOutsideDevelopment: true
 
